@@ -88,6 +88,39 @@
 </div>
 
 
+## 프로젝트 실행 방법
+ - **yarn 설치 방법**
+
+   1. Homebrew를 사용하는 설치
+       `$ brew install yarn`
+
+       -> Homebrew가 없다면?
+        `$ /usr/bin/ruby -e "$(crul -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+
+    3. NPM을 사용하는 설치
+      `$ npm install -g yarn`
+
+- **yarn 버전 확인** 
+   `$ yarn --version`
+
+- **프로젝트 실행**
+   `$ yarn run dev`
+
+- **프로젝트 실행 오류**
+
+> yarn run v1.22.22
+> warning ../../../package.json: No license field
+> $ next dev
+> /bin/sh: next: command not found
+> error Command failed with exit code 127.
+> info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+라는 오류 메세지가 나왔다면?
+
+-> 해당 디렉토리 터미널에서 `$ yarn install` 입력 후 
+`$ yarn run dev`로 프로젝트 실행
+
+
 ## 📑 프로젝트 규칙
 
 ### Branch Strategy
