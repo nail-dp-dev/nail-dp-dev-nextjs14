@@ -16,15 +16,15 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
-    colrs: {
+    colors: {
       '':'',
     },
     screens: {
-      'ph': [{'min': '0px', 'max': '320px'},],
-      'tb': [{'min': '320px', 'max': '600px'},],
-      'lt': [{'min': '600px', 'max': '1280px'},],
-      'dt': [{ 'min': '1280px' }],
-    }
+      'ph': [{'min': '360px', 'max': '580px'},],
+      'tb': [{'min': '581px', 'max': '1279px'},],
+      'lt': [{'min': '1280px', 'max': '1838px'},],
+      'dt': [{ 'min': '1839px' }],
+    } 
   },
   plugins: [],
 };
