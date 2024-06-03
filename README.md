@@ -138,19 +138,27 @@ Project Architecture 작성 요망.
  - **yarn 설치 방법**
 
    1. Homebrew를 사용하는 설치
+      
        `$ brew install yarn`
 
        -> Homebrew가 없다면?
+      
         `$ /usr/bin/ruby -e "$(crul -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
-    3. NPM을 사용하는 설치
-      `$ npm install -g yarn`
+    2. NPM을 사용하는 설치
+       
+        `$ npm install -g yarn`
 
-- **yarn 버전 확인** 
+- **yarn 버전 확인**
+  
    `$ yarn --version`
 
 - **프로젝트 실행**
-   `$ yarn install` 이후
+  
+   `$ yarn install`
+  
+  이후
+  
    `$ yarn run dev`
 
 <br>
@@ -178,7 +186,7 @@ Project Collaboration Tools 작성 요망.
 ### Branch Strategy
 > - main / develop 브랜치 기본 생성 
 > - main으로 직접 push 제한
-> - 개발 중에는 Devolop branch에만 PR
+> - 개발 중에는 devolop branch에만 PR
 > - PR 전 최소 1인 이상 승인 필수
 
 ### Git Convention
