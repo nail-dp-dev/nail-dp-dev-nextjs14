@@ -1,7 +1,7 @@
+---
+
 $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$  
 
-
----
 <br>
 
 ## 0. Index
@@ -15,7 +15,8 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 8. [Project Documents](#8-Project-Documents)
 
 <br>
-<br>
+
+
 
 
 ## 1. Team Member
@@ -45,7 +46,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 </div>
 
 <br>
-<br>
+
 
 
 
@@ -60,7 +61,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 ( Figma 업데이트 사진 업로드 요망 )
 
 <br>
-<br>
+
 
 
 
@@ -114,7 +115,8 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 </div>
 
 <br>
-<br>
+
+
 
 
 
@@ -128,7 +130,6 @@ Project Architecture 작성 요망.
   <br>
   <br>
 
-<br>
 <br>
 
 
@@ -153,8 +154,6 @@ Project Architecture 작성 요망.
    `$ yarn run dev`
 
 <br>
-<br>
-
 
 
 
@@ -169,7 +168,6 @@ Project Collaboration Tools 작성 요망.
   <br>
   <br>
 
-<br>
 <br>
 
 
@@ -250,7 +248,6 @@ Project Collaboration Tools 작성 요망.
 팀:팀 방식으로 해결하는 문제 => Error (사건화)
 
 <br>
-<br>
 
 
 
@@ -267,3 +264,7 @@ Project Collaboration Tools 작성 요망.
 > [📜 테이블 명세서]('기재 바람')
 >
 > [📜 화면 정의서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=809821527)
+
+<br>
+
+---
