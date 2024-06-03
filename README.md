@@ -18,7 +18,7 @@
 
 ---
 
-## 🧰 사용 스택
+## 1. 사용 스택
 
 
 ### :wrench: System Architecture
@@ -69,7 +69,7 @@
 --- 
 
 
-## :busts_in_silhouette: 팀 동료
+## 2. 팀 동료
 
 <div align="center">
 
@@ -93,7 +93,7 @@
 </div>
 
 
-## 프로젝트 실행 방법
+## 3. 프로젝트 실행 방법
  - **yarn 설치 방법**
 
    1. Homebrew를 사용하는 설치
@@ -113,7 +113,7 @@
    `$ yarn run dev`
 
 
-## 📑 프로젝트 규칙
+## 4. 프로젝트 규칙
 
 ### Branch Strategy
 > - main / dev 브랜치 기본 생성 
@@ -187,13 +187,15 @@
 1:1 Direct 방식으로 해결하는 문제 => Small Error
 팀:팀 방식으로 해결하는 문제 => Error (사건화)
 
-## :clipboard: Documents
-> [📜 API 명세서](https://docs.google.com/spreadsheets/d/17qnVAS8SIELCk1rkMk864vOAvuouq30oplqg8I7ucEw/edit#gid=1701945462)
+## 5. Documents
+> [📜 API 명세서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=1008151597)
 > 
-> [📜 요구사항 정의서](https://docs.google.com/spreadsheets/d/17qnVAS8SIELCk1rkMk864vOAvuouq30oplqg8I7ucEw/edit#gid=0)
+> [📜 기능 정의서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=0)
 > 
-> [📜 ERD](images/markdown-image-5.png)
-> 
-> [📜 테이블 명세서](https://docs.google.com/spreadsheets/d/13y8xi67UQYCzX1xgSORtlA1_vXRFq6OQuVDG2o7fhO0/edit#gid=0)
+> [📜 프론트엔드 구현사항](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=1168914712)
 >
-> [📜 화면 정의서](https://docs.google.com/spreadsheets/d/1vud5xV8rB9Y6akOIma49hSzdZsoj8DVG0-fYE4NdP_g/edit?usp=sharing)
+> [📜 백엔드 구현사항](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=584454510)
+> 
+> [📜 테이블 명세서]('기재 바람')
+>
+> [📜 화면 정의서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=809821527)
