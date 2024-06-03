@@ -204,17 +204,17 @@ Project Collaboration Tools 작성 요망.
 
 > | 접두사        | 설명                           |
 > | ------------- | ------------------------------ |
-> | Feat :     | 새로운 기능 구현               |
-> | Add :      | 에셋 파일 추가                 |
-> | Fix :      | 버그 수정                      |
-> | Docs :     | 문서 추가 및 수정              |
-> | SpreadSheet :| 스프레드 시트 추가 및 수정              |
-> | Style :    | 스타일링 작업                  |
-> | Refactor : | 코드 리팩토링 (동작 변경 없음) |
-> | Test :     | 테스트                         |
-> | Deploy :   | 배포                           |
-> | Conf :     | 빌드, 환경 설정                |
-> | Chore :    | 기타 작업                      |
+> | feat :     | 새로운 기능 구현               |
+> | add :      | 에셋 파일 추가                 |
+> | fix :      | 버그 수정                      |
+> | docs :     | 문서 추가 및 수정              |
+> | spreadSheet :| 스프레드 시트 추가 및 수정              |
+> | style :    | 스타일링 작업                  |
+> | refactor : | 코드 리팩토링 (동작 변경 없음) |
+> | test :     | 테스트                         |
+> | deploy :   | 배포                           |
+> | conf :     | 빌드, 환경 설정                |
+> | chore :    | 기타 작업                      |
 
 ### Pull Request
 > ### Title
