@@ -1,4 +1,4 @@
-$$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$  
+$$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$  
 
 
 ---
@@ -29,11 +29,14 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                            이소미                                                                            |
 
+
+
 ### FE
 
 | <a href=https://github.com/ju_jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
+
 
 ### BE
 
