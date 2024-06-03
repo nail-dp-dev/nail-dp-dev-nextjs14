@@ -28,6 +28,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 | <a href="https://github.com/FE-02-SOMI"><img src="https://avatars.githubusercontent.com/u/155217563?v=4" width=100px/><br/><sub><b>@FE-02-SOMI</b></sub></a><br/> |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                            이소미                                                                            |
+|                                                                            CEO                                                                            |
 
 
 
@@ -36,13 +37,15 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 | <a href=https://github.com/ju_jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
-
+|                                                                            Project Manager                                                                            |                                                                            Frontend Manager                                                                            ||                                                                                                                                                        |
 
 ### BE
 
-| <a href=https://github.com/minji-kim525><img src="https://avatars.githubusercontent.com/u/105044626?v=4" width=100px/><br/><sub><b>@minji-kim525</b></sub></a><br/> | <a href=https://github.com/ostar11><img src="https://avatars.githubusercontent.com/u/86510667?v=4" width=100px/><br/><sub><b>@ostar11</b></sub></a><br/> | 
+|<a href=https://github.com/minji-kim525><img src="https://avatars.githubusercontent.com/u/105044626?v=4" width=100px/><br/><sub><b>@minji-kim525</b></sub></a><br/>  |<a href=https://github.com/ostar11><img src="https://avatars.githubusercontent.com/u/86510667?v=4" width=100px/><br/><sub><b>@ostar11</b></sub></a><br/>| 
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                           김민지                                                                          |                                                                              조정완                                                                             
+|                                                                            Backend Manager                                                                            ||                                                                                                                                                      |
+
 </div>
 
 <br>
