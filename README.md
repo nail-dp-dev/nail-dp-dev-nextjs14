@@ -1,32 +1,70 @@
-## $$\color{purple}\fbox{\Huge \color{pink}{네디플}}$$  
+$$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$  
+
+
+
+
+
+## 0. Index
+1. [Team Member](#1-Team-Member)
+2. [Wireframe](#2-Wireframe)
+3. [Stack](#3-Stack)
+4. [Project Architecture](#4-Project-Architecture)
+5. [Project Execution Method](#5-Project-Execution-Method)
+6. [Project Collaboration Tools](#6-Project-Collaboration-Tools)
+7. [Project Work Rules](#7-Project-Work-Rules)
+8. [Project Documents](#8-Project-Documents)
+
+
+
+
+
+## 1. :busts_in_silhouette: Team Member
+
+<div align="center">
+
+### BD
+
+| <a href="https://github.com/FE-02-SOMI"><img src="https://avatars.githubusercontent.com/u/155217563?v=4" width=100px/><br/><sub><b>@FE-02-SOMI</b></sub></a><br/> |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                            이소미                                                                            |
+
+### FE
+
+| <a href=https://github.com/ju_jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
+
+### BE
+
+| <a href=https://github.com/ju_jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
+</div>
+
+
+
+
+
+
+## 2. Wireframe
 
 ( 네디플 사용자 제공 이미지 업로드 요망 )
 
 - 사용자에게 네일아트 이미지를 제공하는 서비스  
-## 0. 목차
-1. [사용 스택](#1-사용-스택)
-2. [팀 동료](#2-팀-동료)
-3. [프로젝트 실행 방법](#3-프로젝트-실행-방법)
-4. [프로젝트 규칙](#4-프로젝트-규칙)
-5. [Documents](#5-documents)
 
-# [Figma 바로가기](https://www.figma.com/file/e3GJ5HK0GHf8ZT2DD2bknD/%EB%84%A4%EB%94%94%ED%94%8C_oz_6%ED%8C%80?type=design&node-id=0-1&mode=design&t=Ca7E8i2RbmgKXbin-0)
+[Figma 바로가기](https://www.figma.com/file/e3GJ5HK0GHf8ZT2DD2bknD/%EB%84%A4%EB%94%94%ED%94%8C_oz_6%ED%8C%80?type=design&node-id=0-1&mode=design&t=Ca7E8i2RbmgKXbin-0)
 
 ( Figma 업데이트 사진 업로드 요망 )
 
-- OZ 2기 6조 합동프로젝트  
-
----
-
-## 1. 사용 스택
 
 
-### :wrench: System Architecture
 
-( 아키텍쳐 사진 제작 후 업로드 요망 )
 
-### FE
+
+## 3. Stack
+
 <div align=center>
+  <p>FE</p>
   <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
   <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
   <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
@@ -47,8 +85,13 @@
   <br>
 </div>
 
-### BE
+  <br>
+  <br>
+  <br>
+
+
 <div align=center> 
+  <p>BE</p>
   <img src="https://img.shields.io/badge/python-9999FF?style=for-the-badge&logo=python&logoColor=white">
   <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
   <img src="https://img.shields.io/badge/redis-D0271D?style=for-the-badge&logo=redis&logoColor=white">
@@ -67,34 +110,24 @@
 </div>
 
 
---- 
 
 
-## 2. 팀 동료
 
-<div align="center">
+## 4. Project Architecture
 
-### BD
-
-| <a href="https://github.com/FE-02-SOMI"><img src="https://avatars.githubusercontent.com/u/155217563?v=4" width=100px/><br/><sub><b>@FE-02-SOMI</b></sub></a><br/> |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                                            이소미                                                                            |
-
-### FE
-
-| <a href=https://github.com/ju-jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                                           주재훈                                                                           |                                                                              이기웅                                                                              |                                                                          이승현                                                                           |
-
-### BE
-
-구인중...
+  <br>
+  <br>
+  <br>
+Project Architecture 작성 요망.
+  <br>
+  <br>
+  <br>
 
 
-</div>
 
 
-## 3. 프로젝트 실행 방법
+
+## 5. Project Execution Method
  - **yarn 설치 방법**
 
    1. Homebrew를 사용하는 설치
@@ -114,7 +147,27 @@
    `$ yarn run dev`
 
 
-## 4. 프로젝트 규칙
+
+
+
+
+
+## 6. Project Collaboration Tools
+
+  <br>
+  <br>
+  <br>
+Project Collaboration Tools 작성 요망.
+  <br>
+  <br>
+  <br>
+
+
+
+
+
+
+## 7. Project Work Rules
 
 ### Branch Strategy
 > - main / develop 브랜치 기본 생성 
@@ -188,7 +241,12 @@
 1:1 Direct 방식으로 해결하는 문제 => Small Error
 팀:팀 방식으로 해결하는 문제 => Error (사건화)
 
-## 5. Documents
+
+
+
+
+
+## 8. Project Documents
 > [📜 API 명세서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=1008151597)
 > 
 > [📜 기능 정의서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=0)
