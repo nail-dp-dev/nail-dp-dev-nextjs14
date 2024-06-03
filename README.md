@@ -104,6 +104,7 @@
    `$ yarn --version`
 
 - **프로젝트 실행**
+   `$ yarn install` 이후
    `$ yarn run dev`
 
 - **프로젝트 실행 오류**
@@ -176,9 +177,6 @@
 > - Test 클래스는 접미사로 Test 사용(ex. memberFindTest)
 
 > FE
-> - styled-Component 변수명 S + 변수명 (ex. Swrap)
-> - styled-Component는 return문 위에 작성
-> - 크게는 styled-Component, 그 안에서 className 사용 
 > - Event handler 사용 (ex. handle ~)
 > - export방식 (ex. export default ~)
 > - 화살표 함수 사용
