@@ -3,7 +3,12 @@
 ( 네디플 사용자 제공 이미지 업로드 요망 )
 
 - 사용자에게 네일아트 이미지를 제공하는 서비스  
-
+## 0. 목차
+1. [사용 스택](#1-사용-스택)
+2. [팀 동료](#2-팀-동료)
+3. [프로젝트 실행 방법](#3-프로젝트-실행-방법)
+4. [프로젝트 규칙](#4-프로젝트-규칙)
+5. [Documents](#5-documents)
 
 # [Figma 바로가기](https://www.figma.com/file/e3GJ5HK0GHf8ZT2DD2bknD/%EB%84%A4%EB%94%94%ED%94%8C_oz_6%ED%8C%80?type=design&node-id=0-1&mode=design&t=Ca7E8i2RbmgKXbin-0)
 
