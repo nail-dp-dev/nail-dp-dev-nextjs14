@@ -5,7 +5,7 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 
 
 ## 0. Index
-1. [Team Member](#1-:busts_in_silhouette:-Team-Member)
+1. [Team Member](#1-Team-Member)
 2. [Wireframe](#2-Wireframe)
 3. [Stack](#3-Stack)
 4. [Project Architecture](#4-Project-Architecture)
@@ -18,7 +18,7 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 <br>
 
 
-## 1. :busts_in_silhouette: Team Member
+## 1. Team Member
 
 <div align="center">
 
