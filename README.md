@@ -2,7 +2,8 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 
 
 ---
-
+<br>
+<br>
 
 ## 0. Index
 1. [Team Member](#1-Team-Member)
