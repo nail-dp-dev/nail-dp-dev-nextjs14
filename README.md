@@ -8,11 +8,11 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 1. [Team Member](#1-Team-Member)
 2. [Wireframe](#2-Wireframe)
 3. [Stack](#3-Stack)
-4. [Project Architecture](#4-Project-Architecture)
-5. [Project Execution Method](#5-Project-Execution-Method)
-6. [Project Collaboration Tools](#6-Project-Collaboration-Tools)
-7. [Project Work Rules](#7-Project-Work-Rules)
-8. [Project Documents](#8-Project-Documents)
+4. [Architecture](#4-Architecture)
+5. [Execution Method](#5-Execution-Method)
+6. [Collaboration Tools](#6-Collaboration-Tools)
+7. [Work Rules](#7-Work-Rules)
+8. [Documents](#8-Documents)
 
 <br>
 
@@ -40,9 +40,9 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 
 ### BE
 
-| <a href=https://github.com/ju_jh><img src="https://avatars.githubusercontent.com/u/121030294?v=4" width=100px/><br/><sub><b>@ju_jh</b></sub></a><br/> | <a href=https://github.com/lkw9><img src="https://avatars.githubusercontent.com/u/92284361?v=4" width=100px/><br/><sub><b>@lkw9</b></sub></a><br/> | <a href=https://github.com/lsh7465><img src="https://avatars.githubusercontent.com/u/155132402?v=4" width=100px/><br/><sub><b>@lsh7465</b></sub></a><br/> |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
+| <a href=https://github.com/minji-kim525><img src="https://avatars.githubusercontent.com/u/105044626?v=4" width=100px/><br/><sub><b>@minji-kim525</b></sub></a><br/> | <a href=https://github.com/ostar11><img src="https://avatars.githubusercontent.com/u/86510667?v=4" width=100px/><br/><sub><b>@ostar11</b></sub></a><br/> | 
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                           김민지                                                                          |                                                                              조정완                                                                             
 </div>
 
 <br>
@@ -120,7 +120,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 
 
 
-## 4. Project Architecture
+## 4. Architecture
 
   <br>
   <br>
@@ -134,7 +134,7 @@ Project Architecture 작성 요망.
 
 
 
-## 5. Project Execution Method
+## 5. Execution Method
  - **yarn 설치 방법**
 
    1. Homebrew를 사용하는 설치
@@ -166,7 +166,7 @@ Project Architecture 작성 요망.
 
 
 
-## 6. Project Collaboration Tools
+## 6. Collaboration Tools
 
   <br>
   <br>
@@ -181,7 +181,7 @@ Project Collaboration Tools 작성 요망.
 
 
 
-## 7. Project Work Rules
+## 7. Work Rules
 
 ### Branch Strategy
 > - main / develop 브랜치 기본 생성 
@@ -260,7 +260,7 @@ Project Collaboration Tools 작성 요망.
 
 
 
-## 8. Project Documents
+## 8. Documents
 > [📜 API 명세서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=1008151597)
 > 
 > [📜 기능 정의서](https://docs.google.com/spreadsheets/d/1tBnF7gfM-x35g0noJxJTrOPqctfrV0TFVJ2aojSMsFE/edit#gid=0)
