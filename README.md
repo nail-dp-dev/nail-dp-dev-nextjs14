@@ -1,11 +1,11 @@
 $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$  
 
 
-
+---
 
 
 ## 0. Index
-1. [Team Member](#1-Team-Member)
+1. [Team Member](#1-:busts_in_silhouette:-Team-Member)
 2. [Wireframe](#2-Wireframe)
 3. [Stack](#3-Stack)
 4. [Project Architecture](#4-Project-Architecture)
@@ -14,8 +14,8 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 7. [Project Work Rules](#7-Project-Work-Rules)
 8. [Project Documents](#8-Project-Documents)
 
-
-
+<br>
+<br>
 
 
 ## 1. :busts_in_silhouette: Team Member
@@ -41,8 +41,8 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 |                                                                           주재훈                                                                          |                                                                              이기웅                                                                             |                                                                          이승현                                                                           |
 </div>
 
-
-
+<br>
+<br>
 
 
 
@@ -56,7 +56,8 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
 
 ( Figma 업데이트 사진 업로드 요망 )
 
-
+<br>
+<br>
 
 
 
@@ -109,7 +110,8 @@ $$\color{purple}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}$$
   <br>
 </div>
 
-
+<br>
+<br>
 
 
 
@@ -123,7 +125,8 @@ Project Architecture 작성 요망.
   <br>
   <br>
 
-
+<br>
+<br>
 
 
 
@@ -146,7 +149,8 @@ Project Architecture 작성 요망.
    `$ yarn install` 이후
    `$ yarn run dev`
 
-
+<br>
+<br>
 
 
 
@@ -162,7 +166,8 @@ Project Collaboration Tools 작성 요망.
   <br>
   <br>
 
-
+<br>
+<br>
 
 
 
@@ -241,7 +246,8 @@ Project Collaboration Tools 작성 요망.
 1:1 Direct 방식으로 해결하는 문제 => Small Error
 팀:팀 방식으로 해결하는 문제 => Error (사건화)
 
-
+<br>
+<br>
 
 
 
