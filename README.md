@@ -107,20 +107,6 @@
    `$ yarn install` 이후
    `$ yarn run dev`
 
-- **프로젝트 실행 오류**
-
-> yarn run v1.22.22
-> warning ../../../package.json: No license field
-> $ next dev
-> /bin/sh: next: command not found
-> error Command failed with exit code 127.
-> info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
-
-라는 오류 메세지가 나왔다면?
-
--> 해당 디렉토리 터미널에서 `$ yarn install` 입력 후 
-`$ yarn run dev`로 프로젝트 실행
-
 
 ## 📑 프로젝트 규칙
 
