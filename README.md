@@ -176,13 +176,33 @@ Project Architecture 작성 요망.
 
 ## 6. Collaboration Tools
 
-  <br>
-  <br>
-  <br>
-Project Collaboration Tools 작성 요망.
-  <br>
-  <br>
-  <br>
+### Discord
+> 1. 일간 회의 진행 및 code review시에 사용.
+> 2. 회의 기록 기재를 위해 사용.
+> 3. 요청 사항이 생길 시에 사용.
+> 4. 민감하지 않은 자료 공유시에 사용.
+> 5. Error 발생시 팀별로 대응하기 위해 사용.
+
+
+### Telegram
+> 1. 팀원간 긴급한 연락이 필요할 경우 사용.
+> 2. 팀원간 보안이 필요한 자료 이동의 경우 사용.
+> 3. 팀원에게 알릴 공지사항 전달 시 사용.
+
+
+### Google Sheet
+> 1. 화면정의서를 공유하기 위해 사용. (화면정의서 sheet)
+> 2. 기능정의서를 공유하기 위해 사용. (기능정의서 sheet)
+> 3. 프론트엔드 팀원간의 진행상황 공유를 위해 사용 (프론트엔드 sheet)
+> 4. 프론트엔드 팀원과 백엔드 팀원간의 api 명세서 공유를 위해 사용. (API 명세서 sheet)
+> 5. 백엔드 팀원간의 진행상황 공유를 위해 사용 (백엔드 sheet)
+> 6. ERD 다이어그램 공유를 위해 사용 (ERD sheet)
+> 7. 테이블 명세서 공유를 위해 사용 (테이블명세서 sheet)
+
+
+### GitHub Projects
+> 1. 전체적인 타임테이블을 관리하기 위해 사용.
+> 2. issue를 생성하고 contributer를 할당하고 reviewer를 등록하기 위해 사용.
 
 <br>
 
@@ -192,14 +212,16 @@ Project Collaboration Tools 작성 요망.
 ## 7. Work Rules
 
 ### Branch Strategy
-> - main / develop 브랜치 기본 생성 
-> - main으로 직접 push 제한
+> - main / develop 브랜치 기본 생성
+> - 브랜치명은 feature-기능명 으로 제작
+> - 브랜치명은 영어(소문자)만 허용
+> - main으로 PR 하는 것은 개발이 완료된 상황에만 PR
 > - 개발 중에는 devolop branch에만 PR
 > - PR 전 최소 1인 이상 승인 필수
 
 ### Git Convention
-> 1. 적절한 커밋 접두사 작성
-> 2. 커밋 메시지 내용 작성
+> 1. 적절한 커밋 접두사 작성 (영문 소문자)
+> 2. 커밋 메시지 내용 작성 (한글로 작성하되 간결하게)
 > 3. 내용 뒤에 이슈 (#이슈 번호)와 같이 작성하여 이슈 연결
 
 > | 접두사        | 설명                           |
@@ -247,6 +269,7 @@ Project Collaboration Tools 작성 요망.
 > - Event handler 사용 (ex. handle ~)
 > - export방식 (ex. export default ~)
 > - 화살표 함수 사용
+> - 반응형 웹 개발 지향
 
 ### Communication Rules
 > - Discord 활용
@@ -255,13 +278,13 @@ Project Collaboration Tools 작성 요망.
 > - 일간 회의 매일 오전 10시 (필수), 오후 16시 진행 (선택).
 > - 일간 회의 (오전 10시) - 어제까지 무엇을 했고, 금일 무엇을 계획하고 있으며, 할 예정인지 복기하는 시간.
 > - 일간 회의 (오후 16시) - 금일 오전 10시부터 진행한 사항에대해 복기를 하고, 16시 이후부터 진행할 사항 복기하는 시간.
- 
+
 ### Error Handling Rules
 > - 각 팀의 팀장에게 우선 보고하고, 상의 후 1:1 Direct 방식으로 해당 문제와 관련된 사람과 Small Error handling.
 > - 1:1 Direct 방식으로 해결이 되지 않을 시, Error로 판단 후, Issue를 먼저 생성하고 팀:팀 방식으로 해결.
 
 1:1 Direct 방식으로 해결하는 문제 => Small Error
-팀:팀 방식으로 해결하는 문제 => Error (사건화)
+팀:팀 방식으로 해결하는 문제 => Error (사건화하여 issue 생성.)
 
 <br>
 
