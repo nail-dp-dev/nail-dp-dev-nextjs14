@@ -211,6 +211,13 @@ Project Architecture 작성 요망.
 
 ## 7. Work Rules
 
+### Workflow
+> 1. Milestone 생성 (기한 기입 필수)
+> 2. Projects 에서 Draft 생성 후 issue화 (issue number 등록 및 issue milestone 연동)
+> 3. milestone 과 관련된 브랜치 생성 후 작업
+> 4. 작업 완료 후 issue 종료
+> 5. milestone 내의 모든 issue 종료 후 관련된 브랜치 develop merge
+
 ### Branch Strategy
 > - main / develop 브랜치 기본 생성
 > - 브랜치명은 feature-기능명 으로 제작
@@ -229,7 +236,7 @@ Project Architecture 작성 요망.
 > | feat :     | 새로운 기능 구현               |
 > | add :      | 에셋 파일 추가                 |
 > | fix :      | 버그 수정                      |
-> | docs :     | 문서 추가 및 수정              |
+> | docs :     | 프로젝트 내 문서 추가 및 수정              |
 > | spreadSheet :| 스프레드 시트 추가 및 수정              |
 > | style :    | 스타일링 작업                  |
 > | refactor : | 코드 리팩토링 (동작 변경 없음) |
@@ -243,17 +250,17 @@ Project Architecture 작성 요망.
 > * 제목은 '[Feat] 홈 페이지 구현'과 같이 작성합니다.
 
 > ### PR Type
-  > - [ ] FEAT: 새로운 기능 구현
-  > - [ ] ADD : 에셋 파일 추가
-  > - [ ] FIX: 버그 수정
-  > - [ ] DOCS: 문서 추가 및 수정
-  > - [ ] SPREADSHEET: 스프레드 시트 추가 및 수정
-  > - [ ] STYLE: 포맷팅 변경
-  > - [ ] REFACTOR: 코드 리팩토링
-  > - [ ] TEST: 테스트 관련
-  > - [ ] DEPLOY: 배포 관련
-  > - [ ] CONF: 빌드, 환경 설정
-  > - [ ] CHORE: 기타 작업
+  > - [FEAT] : 새로운 기능 구현
+  > - [ADD]  : 에셋 파일 추가
+  > - [FIX] : 버그 수정
+  > - [DOCS] : 프로젝트 내 문서 추가 및 수정
+  > - [SPREADSHEET] : 스프레드 시트 추가 및 수정
+  > - [STYLE] : 포맷팅 변경
+  > - [REFACTOR] : 코드 리팩토링
+  > - [TEST] : 테스트 관련
+  > - [DEPLOY] : 배포 관련
+  > - [CONF] : 빌드, 환경 설정
+  > - [CHORE] : 기타 작업
 
 ### Code Convention
 >BE
