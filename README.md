@@ -93,6 +93,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
   <br>
 
   <img src="https://img.shields.io/badge/redux-66459B?style=for-the-badge&logo=redux&logoColor=white">
+
   <img src="https://img.shields.io/badge/yarn-2C8EBB?style=for-the-badge&logo=yarn&logoColor=white">
   
   <br>
