@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          <main className="w-screen min-h-screen bg-kakaoYellow">
+          <main className="w-screen min-h-screen">
             {children}
           </main>
         </StoreProvider>
