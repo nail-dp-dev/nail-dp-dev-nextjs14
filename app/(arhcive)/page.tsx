@@ -4,9 +4,9 @@ import DownloadIcon from '../../public/assets/svg/download.svg'
 
 export default function Home() {
   return (
-    <main className="w-[100%] h-[100%] flex flex-col">
+    <section className="w-full">
       Home page 입니다.
-      <DownloadIcon fill="#04fa9a" />
-    </main>
+      {/* <DownloadIcon fill="#04fa9a" /> */} 예시
+    </section>
   );
 }
