@@ -10,7 +10,7 @@ export default function MenuBar() {
   const pathName = usePathname()
   
   return (
-    <section className='menuBarSection w-[305px] h-full p-[16px] flex flex-col items-center justify-between shadow-black shadow-menu-shadow rounded-[20px] '>
+    <section className='menuBarSection w-[305px] h-full p-[16px] flex flex-col items-center justify-between shadow-menubar-shadow rounded-[20px] '>
       <div className='w-full  flex flex-col items-center justify-start rounded-2xl'>
         <LoginInfoBox/>
         {

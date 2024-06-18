@@ -6,23 +6,65 @@ import { userData } from '../../constants/example'
 import { userPointData } from '../../constants/example'
 import { userProfileImageData } from '../../constants/example'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function LoginInfoBox() {
 
+  const [isLogined, setIsLogined] = useState<boolean>(false)
+
+  const login = () => {
+    setIsLogined(true)
+  }
+
+  const logout = () => {
+    setIsLogined(false)
+  }
+
   return (
     <div className='loginInfoContainer flex flex-col w-full h-[85px]'>
-      <div className='w-full flex items-center h-[45px] mb-[2px]'>
-        <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`}>
-          <Image src={`${userProfileImageData.photos[0]['photo_url']}`} width={40} height={40} alt={ 'profileIamge' } className='rounded-full mr-[12px]' />
-        </Link>
-        <div className='flex-1 flex flex-col items-start justify-between'>
-          <p className='font-[500] text-[16px]'>{userData.data.nickname}</p>
-          <div className='flex-1 w-full flex justify-start gap-[10px] text-[14px] font-[400]'>
-            <span>게시물 {userData.data.point}</span>
-            <span>저장됨 {userData.data.saveCount}</span>
-            <span>팔로워 {userData.data.followerCount}</span>
+      <div className='loginedDiv w-full flex items-center h-[45px] mb-[2px]'>
+        {
+          isLogined
+            ?
+          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`} className='bg-red'>
+            <div className='w-[40px] h-[40px]'>
+              <Image src={`${userProfileImageData.photos[2]['photo_url']}`} alt={'profileIamge'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full mr-[12px]' />  
+            </div>
+          </Link>
+          :
+          <Image src={'/assets/img/logoutProfileImage.png'} width={40} height={40} alt={'profileIamge'} className='rounded-full mr-[12px]' />
+        }
+        {
+          isLogined ? 
+          <div className='flex-1 flex flex-col items-start justify-between'>
+            <div className='w-full h-full flex items-center justify-between'>
+              <p className='font-[500] text-[16px]'>{userData.data.nickname}</p>
+              <button
+                onClick={() => {
+                  logout()
+                }}
+              ><span className=' text-textDarkPurple text-[12px] font-[700] underline hover:text-purple'>로그아웃</span></button>
+            </div>
+            <div className='flex-1 w-full flex justify-start gap-[10px] text-[14px] font-[400]'>
+              <span>게시물 {userData.data.point}</span>
+              <span>저장됨 {userData.data.saveCount}</span>
+              <span>팔로워 {userData.data.followerCount}</span>
+            </div>
+          </div>          
+          : 
+          <div className='flex-1 flex flex-col items-start justify-between hover:text-purple'>
+            <div className='w-full h-full flex items-center justify-between'>
+              <button
+                onClick={() => {
+                  login()
+                }}
+              ><span className='text-[16px] font-[700] underline'>로그인하기</span></button>
+            </div>
+            <div className='flex-1 w-full flex justify-start gap-[10px] text-[14px] font-[400]'>
+              <span>로그인하기를 눌러 회원가입 및 로그인</span>
+            </div>
           </div>
-        </div>
+        }
       </div>
       <div className='flex items-center w-full h-[38px] px-[8px]'>
         <Bits className='mr-[12px]' />
