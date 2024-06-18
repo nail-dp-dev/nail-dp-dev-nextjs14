@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans_KR } from 'next/font/google';
 import "./globals.css";
 import StoreProvider from '../store/StoreProvider';
 import CategoryBar from './(archive)/components/CategoryBar';
 import SearchBar from '../components/bars/SearchBar';
 import MenuBar from '../components/bars/MenuBar';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Noto_Sans_KR({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "네디플",

@@ -17,8 +17,9 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
-      }
+        "menu-shadow": "0 10px 30px -15px rgba(0, 0, 0, 0.3)",
+        "search-shadow": "4px 4px 8px 0px rgba(0, 0, 0, 0.25) ",
+      },
     },
     colors: {
       // Original
@@ -81,11 +82,11 @@ const config: Config = {
     },
 
     screens: {
-      'sm': '640px' ,
-      'md': '768px' ,
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl': '1536px'
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
     },
   },
   plugins: [],
