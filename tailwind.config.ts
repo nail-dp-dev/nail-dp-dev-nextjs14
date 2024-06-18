@@ -9,6 +9,7 @@ const config: Config = {
     "./app/(archive)/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'selector', 
   theme: {
     extend: {
       backgroundImage: {
