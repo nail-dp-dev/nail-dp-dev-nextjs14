@@ -5,8 +5,9 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/(home)/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/(archive)/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/(archive)/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -15,6 +16,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      boxShadow: {
+        'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
+      }
     },
     colors: {
       // Original

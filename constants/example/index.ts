@@ -397,3 +397,31 @@ export const posts = [
         }
     },
 ]
+
+export const userData =  {
+    "success": true,
+    "code": 200,     
+    "data" :{
+        "nickname": "string",
+        "postsCount": 1,
+        "saveCount" : 1,  
+        "followerCount" : 1,
+        "point" : 1000
+    }
+}
+
+export const userPointData = {
+    "success" : true,
+    "code" : 200,
+    "message" : "포인트 조회 성공",
+    "data" : { 
+        "point":1000
+    }
+} 
+
+export const userProfileImageData = {
+    "photos" : [
+        { "photo_url" : "https://cdn.pixabay.com/photo/2020/10/11/19/51/cat-5646889_1280.jpg"},
+        { "photo_url" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW2wrImvZ_0A_pa6G6I5oXlVimcMMiGrfXPDo-QzIbGrGS3Iofz1Vcom9zhFramVjmX6g&usqp=CAU"}
+    ] 
+}
