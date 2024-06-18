@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import slice from './slice';
 import themeReducer from "./themeSlice";
 import { useDispatch } from "react-redux";
 
@@ -7,7 +6,6 @@ export const store = () => {
   return configureStore({
     reducer: {
       // slice
-      example: slice,
       theme: themeReducer,
     },
   });
