@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { bottomMenuElements, topMenuElements } from '../../constants';
 import MenuButton from '../buttons/MenuButton';
+import LoginInfoBox from '../../components/boxes/LoginInfoBox';
 
 export default function MenuBar() {
 
@@ -11,7 +12,7 @@ export default function MenuBar() {
   return (
     <section className='menuBarSection w-[305px] h-full p-[16px] flex flex-col items-center justify-between shadow-black shadow-menu-shadow rounded-[20px] '>
       <div className='w-full  flex flex-col items-center justify-start rounded-2xl'>
-        <div className='w-full h-[100px] bg-kakaoYellow'>로그인 회원 정보 컴포넌트</div>
+        <LoginInfoBox/>
         {
           topMenuElements.map((item, index) => (
             <MenuButton

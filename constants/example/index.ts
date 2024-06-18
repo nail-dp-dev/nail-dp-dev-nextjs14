@@ -402,7 +402,7 @@ export const userData =  {
     "success": true,
     "code": 200,     
     "data" :{
-        "nickname": "string",
+        "nickname": "somi",
         "postsCount": 1,
         "saveCount" : 1,  
         "followerCount" : 1,
