@@ -26,9 +26,9 @@ export default function LoginInfoBox() {
         {
           isLogined
             ?
-          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`} className='bg-red'>
-            <div className='w-[40px] h-[40px]'>
-              <Image src={`${userProfileImageData.photos[2]['photo_url']}`} alt={'profileIamge'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full mr-[12px]' />  
+          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`}>
+            <div className='w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]'>
+              <Image src={`${userProfileImageData.photos[2]['photo_url']}`} width={40} height={40} alt={'profileIamge'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full ' />  
             </div>
           </Link>
           :
@@ -52,18 +52,18 @@ export default function LoginInfoBox() {
             </div>
           </div>          
           : 
-          <div className='flex-1 flex flex-col items-start justify-between hover:text-purple'>
-            <div className='w-full h-full flex items-center justify-between'>
-              <button
-                onClick={() => {
+          <button
+              onClick={() => {
                   login()
                 }}
-              ><span className='text-[16px] font-[700] underline'>로그인하기</span></button>
+              className='flex-1 flex flex-col items-start justify-between hover:text-purple'>
+            <div className=' h-full flex items-center justify-between'>
+              <span className='text-[16px] font-[700] underline'>로그인하기</span>
             </div>
             <div className='flex-1 w-full flex justify-start gap-[10px] text-[14px] font-[400]'>
               <span>로그인하기를 눌러 회원가입 및 로그인</span>
             </div>
-          </div>
+          </button>
         }
       </div>
       <div className='flex items-center w-full h-[38px] px-[8px]'>

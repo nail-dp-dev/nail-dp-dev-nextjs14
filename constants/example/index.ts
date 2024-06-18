@@ -423,6 +423,7 @@ export const userProfileImageData = {
     "photos" : [
         { "photo_url" : "https://cdn.pixabay.com/photo/2020/10/11/19/51/cat-5646889_1280.jpg"},
         { "photo_url" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW2wrImvZ_0A_pa6G6I5oXlVimcMMiGrfXPDo-QzIbGrGS3Iofz1Vcom9zhFramVjmX6g&usqp=CAU"},
-        { "photo_url" : "https://i.pinimg.com/originals/3c/a1/a9/3ca1a99306295859d5f66814b68e69c0.jpg"}
+        { "photo_url" : "https://i.pinimg.com/originals/3c/a1/a9/3ca1a99306295859d5f66814b68e69c0.jpg"},
+        { "photo_url" : "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"}
     ] 
 }

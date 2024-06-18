@@ -9,6 +9,7 @@ const config: Config = {
     "./app/(archive)/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'selector', 
   theme: {
     extend: {
       backgroundImage: {
@@ -17,7 +18,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        "menubar-shadow" : " 1px 4px 8px 0px rgba(0, 0, 0, 0.25)",
+        "menu-shadow": "0 10px 30px -15px rgba(0, 0, 0, 0.3)",
         "search-shadow": "4px 4px 8px 0px rgba(0, 0, 0, 0.25) ",
       },
     },
