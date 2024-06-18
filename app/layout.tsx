@@ -25,7 +25,7 @@ export default function RootLayout({
           <main className="w-screen h-screen flex py-[20px] px-[25px]">
             <MenuBar />
             <section className='contentSection flex-1 flex-col px-[20px]'>
-              <SearchBar/>
+              <SearchBar />
               <CategoryBar />
               {children}
             </section>
