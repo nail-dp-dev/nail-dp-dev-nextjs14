@@ -22,12 +22,10 @@ interface MenuElementsProps{
 export default function MenuButton({ icon , url, name, desc, isLast }: MenuElementsProps) {
 
   const path = usePathname();
-  console.log(path)
-  const rootUrl = url[0]
 
   return (
     <div className={`w-full ${!isLast && 'mb-[8px]'} group`}>
-      <Link href={rootUrl} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white`}>
+      <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white`}>
         <div className='flex items-center'>
           <div className='flex items-center justify-center w-[36px] h-[24px]'>
             {
