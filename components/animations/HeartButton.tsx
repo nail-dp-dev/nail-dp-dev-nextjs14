@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import HeartIcon from "../../public/assets/svg/heart.svg";
+import { SizeProps } from "../../constants/interface";
 
-export default function HeartButton() {
+export default function HeartButton({width,height}:SizeProps) {
   const [isClick, setIsClick] = useState(false);
   const [isAnimate, setIsAnimate] = useState(false);
-  const [isfillRule, setIsfillRule] = useState("evenodd")
+  const [isfillRule, setIsfillRule] = useState<"evenodd"|"nonzero">("evenodd")
 
   const handleClick = () => {
     setIsClick(!isClick);
@@ -31,7 +32,7 @@ export default function HeartButton() {
           cursor: "pointer" ,
         }}
       >
-        <HeartIcon fillRule={isfillRule} />
+        <HeartIcon width={width} height={height} fillRule={isfillRule} />
       </motion.div>
     </div>
   );
