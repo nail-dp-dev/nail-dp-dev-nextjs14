@@ -1,6 +1,7 @@
 import CategoryBar from '../../../components/bars/CategoryBar';
 import MenuBar from '../../../components/bars/MenuBar';
 import SearchBar from '../../../components/bars/SearchBar';
+import { archiveCategoryElements } from '../../../constants';
 
 export default function ArchiveLayout({
   children,
@@ -14,7 +15,7 @@ export default function ArchiveLayout({
       <div className="ContainerWrapper w-full h-full]">
         <div className="ContainerWrapper w-full h-full">
           <SearchBar /> 
-          <CategoryBar />
+          <CategoryBar elements={archiveCategoryElements} />
           {children}
         </div>
       </div>

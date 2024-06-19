@@ -6,25 +6,28 @@ import { userData } from '../../constants/example'
 import { userPointData } from '../../constants/example'
 import { userProfileImageData } from '../../constants/example'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { logIn, logOut, selectLoginStatus } from '../../store/slice/loginSlice'
+import { useAppDispatch } from '../../store/store'
 
 export default function LoginInfoBox() {
 
-  const [isLogined, setIsLogined] = useState<boolean>(false)
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
-  const login = () => {
-    setIsLogined(true)
-  }
-
-  const logout = () => {
-    setIsLogined(false)
-  }
+  const handleToggle = () => {
+    if (isLoggedIn) {
+      dispatch(logOut());
+      } else {
+      dispatch(logIn());
+    }
+  };
 
   return (
     <div className='loginInfoContainer flex flex-col w-full h-[85px]'>
       <div className='loginedDiv w-full flex items-center h-[45px] mb-[2px]'>
         {
-          isLogined
+          isLoggedIn
             ?
           <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`}>
             <div className='w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]'>
@@ -35,13 +38,13 @@ export default function LoginInfoBox() {
           <Image src={'/assets/img/logoutProfileImage.png'} width={40} height={40} alt={'profileIamge'} className='rounded-full mr-[12px]' />
         }
         {
-          isLogined ? 
+          isLoggedIn ? 
           <div className='flex-1 flex flex-col items-start justify-between'>
             <div className='w-full h-full flex items-center justify-between'>
               <p className='font-[500] text-[16px]'>{userData.data.nickname}</p>
               <button
                 onClick={() => {
-                  logout()
+                  handleToggle()
                 }}
               ><span className=' text-textDarkPurple text-[12px] font-[700] underline hover:text-purple'>로그아웃</span></button>
             </div>
@@ -54,7 +57,7 @@ export default function LoginInfoBox() {
           : 
           <button
               onClick={() => {
-                  login()
+                  handleToggle()
                 }}
               className='flex-1 flex flex-col items-start justify-between hover:text-purple'>
             <div className=' h-full flex items-center justify-between'>
