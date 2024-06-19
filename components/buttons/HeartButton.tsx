@@ -28,7 +28,7 @@ export default function HeartButton() {
         }
         onClick={() => handleClick()}
         style={{
-          cursor: "pointer",
+          cursor: "pointer" ,
         }}
       >
         <HeartIcon fillRule={isfillRule} />
