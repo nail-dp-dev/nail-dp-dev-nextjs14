@@ -12,6 +12,15 @@ const config: Config = {
   darkMode: 'selector',
   theme: {
     extend: {
+      keyframes: {
+        fadeInOutFloat: {
+          '0%, 100%': { opacity: '1', transform: 'translateY(0)' },
+          '50%': { opacity: '0.4', transform: 'translateY(10px)' },
+        },
+      },
+      animation: {
+        fadeInOutFloat: 'fadeInOutFloat 3s ease-in-out infinite',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
