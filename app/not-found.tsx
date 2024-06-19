@@ -1,16 +1,19 @@
-import Link from 'next/link'
-import { headers } from 'next/headers'
- 
+import Link from 'next/link';
+import { headers } from 'next/headers';
+import NailMoving from '../components/animations/NailMoving';
+
 export default async function NotFound() {
-  const headersList = headers()
-  const domain = headersList.get('host')
+  const headersList = headers();
+  const domain = headersList.get('host');
+
   return (
-    <div>
-      <h2>Not Found: {domain}</h2>
-      <p>Could not find requested resource</p>
-      <p>
-        View <Link href="/blog">all posts</Link>
-      </p>
+    <div className="w-screen h-screen flex justify-center items-center relative">
+      <NailMoving />
+      <div className=" mx-auto my-0 text-center font-bold">
+        <p className="text-10xl text-darkGray">404</p>
+        <p className="text-3xl text-darkPurple ">PAGE NOT FOUND</p>
+        <p className="text-4xl mt-9 ">페이지를 찾을 수 없습니다.</p>
+      </div>
     </div>
-  )
+  );
 }
