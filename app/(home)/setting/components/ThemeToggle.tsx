@@ -1,8 +1,8 @@
 "use client";
 
 import { useSelector } from "react-redux";
-import { selectDarkMode, toggleDarkMode } from "../../../../store/themeSlice";
 import { useAppDispatch } from "../../../../store/store";
+import { selectDarkMode, toggleDarkMode } from '../../../../store/slice/themeSlice';
 
 const ThemeToggle = () => {
   const dispatch = useAppDispatch();
