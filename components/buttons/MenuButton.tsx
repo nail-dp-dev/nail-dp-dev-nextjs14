@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 
 interface MenuElementsProps{
   icon: string;
-  url: string,
+  url: string[],
   name: string,
   desc: string,
   isLast: boolean;
@@ -23,42 +23,43 @@ export default function MenuButton({ icon , url, name, desc, isLast }: MenuEleme
 
   const path = usePathname();
   console.log(path)
+  const rootUrl = url[0]
 
   return (
     <div className={`w-full ${!isLast && 'mb-[8px]'} group`}>
-      <Link href={url} className={`${path === url ? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white`}>
+      <Link href={rootUrl} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white`}>
         <div className='flex items-center'>
           <div className='flex items-center justify-center w-[36px] h-[24px]'>
             {
               icon === 'HomeIcon' &&
-              <HomeIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <HomeIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
               }
             {
               icon === 'MyArchiveIcon' &&
-              <MyArchiveIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <MyArchiveIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path) && 'fill-black'}`} />
               }
             {
               icon === 'DesignIcon' &&
-              <DesignIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <DesignIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
               }
             {
               icon === 'ReservationIcon' &&
-              <ReservationIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <ReservationIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
               }
             { 
               icon === 'BuyIcon' &&
-              <BuyIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <BuyIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
               }
             {
               icon === 'MyPageIcon' &&
-              <MyPageIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <MyPageIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
               }
             {
               icon === 'SettingIcon' &&
-              <SettingIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${path === url && 'fill-black'}`} />
+              <SettingIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
             }
           </div>
-          <span className={` text-[14px] ${path === url ? 'font-[700]' : 'font-[500]'}`}>{name}</span>
+          <span className={` text-[14px] ${url.includes(path)? 'font-[700]' : 'font-[500]'}`}>{name}</span>
         </div>
         <span className={`text-[12px] pr-[20px] left-0 font-[700] r-0 hidden group-hover:block`}>{desc}</span>
       </Link>
