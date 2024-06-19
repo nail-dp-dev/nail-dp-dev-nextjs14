@@ -1,6 +1,3 @@
-export const home_url = '/'
-export const myArchive_url = '/my-archive'
-
 
 export const urls = {
   
@@ -12,6 +9,9 @@ export const urls = {
 
   
   // 회원가입 페이지 url
+  'SignUp_agreement': '/signup-agreement',
+  'SignUp_phone': '/signup-phone',
+  'SignUp_nickname': '/signup-nickname',
 
 
   // My Archive 페이지 url
@@ -29,41 +29,43 @@ export const urls = {
   
 
   // 상대방 혹은 본인 프로필 조회 페이지 url,
-  'profile': '/profile/{userId}',
-  'profile_posts': '/profile/{userId}',
-  'profile_archives': '/profile/archive/{userId}',
-  // basic_url/profile/{userId},
+  'Get_profile': '/profile/{userId}',
+  'Get_profile_posts': '/profile/{userId}',
+  'Get_profile_archives': '/profile/archive/{userId}',
   
   
   //게시글 작성 페이지 url
-  'post-create': '/post',
+  'Post_create': '/post/create',
   
   
   //게시글 수정 페이지 url
-  'post-edit': '/post/{postId}',
+  'Post_edit': '/post/edit/{postId}',
   
+
   // 특정 게시글 조회 페이지 url
+  'Get_post': '/post/{postId}',
+
 
   // 특정 아카이브 조회 페이지 url
-
+  'Get_archive': '/archive/{archiveId}',
 
   
   
   // ------ WireFrame 미완성
   // Design 제작 페이지 url
-  'design': '/design',
+  'Design': '/design',
   
   
   // 네일 숍 예약 페이지  url
-  'reservation': '/reservation',
+  'Reservation': '/reservation',
   
   
   // 제품 구매 페이지 url
-  'buy': '/buy',
+  'Buy': '/buy',
   
   
   // 환경설정 페이지 url
-  'setting': '/setting',
+  'Setting': '/setting',
   
   }
   
