@@ -11,7 +11,7 @@ export default function CategoryBar({elements}: CategoryBarProps) {
 
   return (
     <div className='categoryBar w-full h-[66px] flex items-center justify-between'>
-      <div className='categoryDiv w-full h-[53px] flex gap-[32px]'>
+      <div className='categoryDiv w-full h-[53px] flex gap-[32px] border-b-[1px] border-navBotSolidGray'>
         {
           elements.map((item, index)=>(
             <Link key={index} href={item.url} className={`inline-flex h-[100%] transition-all items-center justify-center ${path === item.url ? 'border-purple' : 'border-navMenuBotSolidGray' }  border-b-[3px]`}>

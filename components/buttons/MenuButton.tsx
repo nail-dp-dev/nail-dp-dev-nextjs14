@@ -25,7 +25,7 @@ export default function MenuButton({ icon , url, name, desc, isLast }: MenuEleme
 
   return (
     <div className={`w-full ${!isLast && 'mb-[8px]'} group`}>
-      <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white`}>
+      <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl group-hover:bg-purple group-hover:text-white transition-all`}>
         <div className='flex items-center'>
           <div className='flex items-center justify-center w-[36px] h-[24px]'>
             {
@@ -59,7 +59,7 @@ export default function MenuButton({ icon , url, name, desc, isLast }: MenuEleme
           </div>
           <span className={` text-[14px] ${url.includes(path)? 'font-[700]' : 'font-[500]'}`}>{name}</span>
         </div>
-        <span className={`text-[12px] pr-[20px] left-0 font-[700] r-0 hidden group-hover:block`}>{desc}</span>
+        <span className={`text-[12px] pr-[8px] left-0 font-[700] r-0 hidden group-hover:block text-white`}>{desc}</span>
       </Link>
     </div>
   );

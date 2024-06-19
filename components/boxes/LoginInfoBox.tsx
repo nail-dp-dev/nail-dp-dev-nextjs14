@@ -15,8 +15,6 @@ export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
 
-  console.log(isLoggedIn)
-
   const handleToggle = () => {
     if (isLoggedIn) {
       dispatch(logOut());
