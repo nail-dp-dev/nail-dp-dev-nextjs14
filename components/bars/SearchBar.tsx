@@ -2,6 +2,7 @@
 
 import SearchIcon from "../../public/assets/svg/search.svg";
 import { useEffect, useState } from "react";
+
 export default function Search() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -10,10 +11,9 @@ export default function Search() {
   };
 
   const handleOutsideClick = (e: MouseEvent) => {
-    if (
-      !(e.target instanceof HTMLElement) ||
-      !e.target.closest(".search-bar")
-    ) {
+    const target = e.target as HTMLElement;
+
+    if (!target.closest(".search-bar")) {
       setIsDropdownOpen(false);
     }
   };
