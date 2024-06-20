@@ -19,8 +19,8 @@ export default function ArchiveLayout({
       <MenuBar />
     </section>
     <section className="contentSection flex-1 h-screen flex-col p-[20px]">
-      <div className="contentContainer flex w-full max-h-full flex-1 ">
-        <div className="contentWrapper w-full flex flex-col">
+      <div className="contentContainer flex w-full h-full flex-1 ">
+        <div className="contentWrapper w-full h-full flex flex-col">
           <SearchBar /> 
           <CategoryBar elements={archiveCategoryElements} />
           {children}

@@ -10,9 +10,10 @@ export interface CategoryBarProps {
 export interface HeartButtonProps {
   width: string;
   height: string;
+  isClicked: boolean;
 }
 
-export interface PostBoxProps {
+export interface PostBoxNewProps {
   item: {
     "success": boolean,
     "code": number,     

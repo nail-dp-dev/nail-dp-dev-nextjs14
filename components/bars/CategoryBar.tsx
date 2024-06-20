@@ -8,7 +8,8 @@ import PlusSVG from '../../public/assets/svg/plus.svg'
 import HeartButton from '../animations/HeartButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { decreaseBoxes, selectNumberOfBoxes, increaseBoxes } from '../../store/slice/boxLayoutSlice';
+import { decreaseBoxes, selectNumberOfBoxes, increaseBoxes, setNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { useEffect } from 'react';
 
 export default function CategoryBar({elements}: CategoryBarProps) {
 
@@ -16,9 +17,15 @@ export default function CategoryBar({elements}: CategoryBarProps) {
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
 
+  useEffect(() => {
+    const storedNumberOfBoxes = localStorage.getItem('numberOfBoxes');
+    if (storedNumberOfBoxes) {
+      dispatch(setNumberOfBoxes(parseInt(storedNumberOfBoxes)));
+    }
+  }, [dispatch]);
 
   return (
-    <div className='categoryBar w-full h-[66px] flex items-start justify-between'>
+    <div className='categoryBar w-full h-[66px] flex flex-col items-start justify-between'>
       <div className='categoryDiv w-full h-[53px] flex items-center justify-between border-b-[1px] border-navBotSolidGray'>
         <div className='h-[53px] flex gap-[32px]'>
         {
@@ -36,8 +43,11 @@ export default function CategoryBar({elements}: CategoryBarProps) {
           <button onClick={() => dispatch(decreaseBoxes())} disabled={numberOfBoxes <= 3}>
             <PlusSVG />
           </button>
-          <HeartButton width='29' height='24'/>
+          <HeartButton width='29' height='24' isClicked={true} />
       </div>
+      </div>
+      <div className='w-full h-[13px]'>
+
       </div>
     </div>
   )
