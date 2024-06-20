@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themeReducer from "./slice/themeSlice";
 import loginReducer from "./slice/loginSlice"
+import boxLayoutReducer from "./slice/boxLayoutSlice"
 import { useDispatch } from "react-redux";
 
 export const store = () => {
@@ -9,6 +10,7 @@ export const store = () => {
       // slice
       theme: themeReducer,
       login: loginReducer,
+      boxLayout: boxLayoutReducer,
     },
   });
 };

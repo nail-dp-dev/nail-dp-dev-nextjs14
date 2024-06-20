@@ -29,3 +29,10 @@ export const profileCategoryElements = [
   { name: '게시물', url: '/profile/' },
   { name: '아카이브', url: '/profile/archive/' },
 ]
+
+
+export const boxWidths: { [key: number]: string } = {
+  '3': '32.86%',
+  '4': '24.46%',
+  '5': '19.44%'
+};

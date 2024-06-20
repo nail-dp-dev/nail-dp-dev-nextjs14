@@ -1,11 +1,17 @@
-import HeartButton from '../../../../components/animations/HeartButton';
+import { newPosts } from '../../../../constants/example';
+import PostBox from '../../../../components/boxes/PostBox';
 
 export default function ForYouPage() {
-
+  
   return (
-    <section className="ForYouContainer w-full h-full">
-      ForYouContainer 입니다.
-      <HeartButton width='21' height='19'/>
-    </section>
+    <div className='ForYouContainer max-h-full overflow-hidden'>
+      <div className='outBox flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll rounded-[20px] transition-all'>
+        {
+          newPosts.map((item, index) => (
+            <PostBox key={index} item={item} />
+          ))
+        }
+      </div>
+    </div>
   );
 }

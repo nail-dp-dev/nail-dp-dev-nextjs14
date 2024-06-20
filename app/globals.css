@@ -6,6 +6,10 @@
   --foreground-rgb: 20, 18, 23;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -18,3 +22,6 @@ body {
   height: 100vh;
 }
 
+.box {
+  aspect-ratio: auto 1/1;
+}

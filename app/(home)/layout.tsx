@@ -5,7 +5,7 @@ export default function HomeLayout({
 }>) {
   return (
     <main
-      className="w-screen h-screen flex py-[20px] px-[25px]
+      className="w-screen h-screen flex items-center justify-center
       bg-white dark:bg-themeDark text-textBlack dark:text-white "
     >
       {children}

@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import HeartIcon from "../../public/assets/svg/heart.svg";
-import { SizeProps } from "../../constants/interface";
+import { HeartButtonProps } from "../../constants/interface";
 
-export default function HeartButton({width,height}:SizeProps) {
+export default function HeartButton({width,height,isClicked}:HeartButtonProps) {
   const [isClick, setIsClick] = useState(false);
   const [isAnimate, setIsAnimate] = useState(false);
   const [isfillRule, setIsfillRule] = useState<"evenodd"|"nonzero">("evenodd")
@@ -19,7 +19,7 @@ export default function HeartButton({width,height}:SizeProps) {
   };
 
   return (
-    <div className="w-[21px] h-[18px]">
+    <div className={`width='${width}' height='${height}'`}>
       <motion.div
         transition={{ duration: 0.5 }}
         animate={isAnimate ? {

@@ -29,6 +29,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'helpx.adobe.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'instagram.ficn3-3.fna.fbcdn.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'instagram.ficn3-4.fna.fbcdn.net',
+      },
     ],
   },
 };
