@@ -12,9 +12,9 @@ export default function ArchiveLayout({
 }>) {
   return (
     <>
-    {/* <section className='modalSection hidden'>
+    <section className='modalSection'>
       {modal}
-    </section> */}
+    </section>
     <section className='menuSection h-screen py-[20px] pl-[20px]'>
       <MenuBar />
     </section>
