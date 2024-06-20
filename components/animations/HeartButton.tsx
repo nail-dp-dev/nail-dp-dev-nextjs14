@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import HeartIcon from "../../public/assets/svg/heart.svg";
-import { HeartButtonProps } from "../../constants/interface";
+import { IconButtonProps } from "../../constants/interface";
 
-export default function HeartButton({width,height,isClicked}:HeartButtonProps) {
+export default function HeartButton({width,height,isClicked}:IconButtonProps) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);
   const [isfillRule, setIsfillRule] = useState<"evenodd"|"nonzero">(isClicked ? "nonzero":"evenodd")

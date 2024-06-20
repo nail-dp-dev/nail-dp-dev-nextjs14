@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { PlusButtonProps } from '../../constants/interface';
+import { IconButtonProps } from '../../constants/interface';
 
-export default function PlusButton({ isClicked }: PlusButtonProps) {
+export default function PlusButton({width, height, isClicked }: IconButtonProps) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isBackGround, setIsBackGround] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);
@@ -18,10 +18,10 @@ export default function PlusButton({ isClicked }: PlusButtonProps) {
   };
 
   return (
-    <div className="w-[24px] h-[24px] mt-[10px]">
+    <div className={`width='${width}' height='${height}'`}>
       <motion.svg
-        width="25"
-        height="24"
+        width={width}
+        height={height}
         viewBox="0 0 25 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

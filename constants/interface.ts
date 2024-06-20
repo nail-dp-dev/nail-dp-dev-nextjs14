@@ -7,13 +7,9 @@ export interface CategoryBarProps {
   elements: CategoryElement[];
 }
 
-export interface HeartButtonProps {
+export interface IconButtonProps {
   width: string;
   height: string;
-  isClicked: boolean;
-}
-
-export interface PlusButtonProps {
   isClicked: boolean;
 }
 
