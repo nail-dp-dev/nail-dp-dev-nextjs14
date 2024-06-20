@@ -37,18 +37,16 @@ export default function CategoryBar({elements}: CategoryBarProps) {
         }
         </div>
         <div className='flex items-center gap-[32px]'>
-          <button onClick={() => dispatch(increaseBoxes())} disabled={numberOfBoxes >= 5}>
+          <button onClick={() => dispatch(increaseBoxes())} disabled={numberOfBoxes >= 5} className='h-[24px]'>
             <MinusSVG />
           </button>
-          <button onClick={() => dispatch(decreaseBoxes())} disabled={numberOfBoxes <= 3}>
+          <button onClick={() => dispatch(decreaseBoxes())} disabled={numberOfBoxes <= 3} className='h-[24px]'>
             <PlusSVG />
           </button>
           <HeartButton width='29' height='24' isClicked={true} />
       </div>
       </div>
-      <div className='w-full h-[13px]'>
-
-      </div>
+      <div className='w-full h-[13px]'></div>
     </div>
   )
 }

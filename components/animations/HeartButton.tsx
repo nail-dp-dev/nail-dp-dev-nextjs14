@@ -6,8 +6,8 @@ import HeartIcon from "../../public/assets/svg/heart.svg";
 import { HeartButtonProps } from "../../constants/interface";
 
 export default function HeartButton({width,height,isClicked}:HeartButtonProps) {
-  const [isClick, setIsClick] = useState(isClicked);
-  const [isAnimate, setIsAnimate] = useState(isClicked);
+  const [isClick, setIsClick] = useState(false);
+  const [isAnimate, setIsAnimate] = useState(false);
   const [isfillRule, setIsfillRule] = useState<"evenodd"|"nonzero">("evenodd")
 
   const handleClick = () => {

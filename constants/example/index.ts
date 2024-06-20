@@ -397,6 +397,7 @@ export const posts = [
         }
     },
 ]
+
 export const newPosts = [
     {
         "success": true,

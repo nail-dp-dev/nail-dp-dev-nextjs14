@@ -89,8 +89,11 @@ const config: Config = {
       // Yellow
       lightYellow: '#F9F3E7',
 
-      modalBackground: 'rgba(117, 105, 130, 0.4)',
-      transparent:'rgba(0, 0, 0, 0)',
+      // Transparent
+      transparent: 'rgba(0, 0, 0, 0)',
+      
+      // Modal Background Color
+      modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
     },
 
     screens: {
