@@ -45,7 +45,7 @@ export default function PostBox({ item }: PostBoxNewProps) {
       <button 
         onClick={handlePlusClick}
         className="absolute bottom-2 right-2 z-10">
-        <PlusButton />
+        <PlusButton width="24px" height="24px" isClicked={ false }/>
       </button>
     </div>
   );
