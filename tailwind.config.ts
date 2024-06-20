@@ -90,6 +90,7 @@ const config: Config = {
       lightYellow: '#F9F3E7',
 
       modalBackground: 'rgba(117, 105, 130, 0.4)',
+      transparent:'rgba(0, 0, 0, 0)',
     },
 
     screens: {
@@ -100,7 +101,7 @@ const config: Config = {
       '2xl': '1536px',
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/aspect-ratio'),],
 };
 
 export default config;

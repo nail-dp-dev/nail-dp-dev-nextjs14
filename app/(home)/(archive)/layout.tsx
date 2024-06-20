@@ -12,11 +12,15 @@ export default function ArchiveLayout({
 }>) {
   return (
     <>
-    {modal}
-    <MenuBar />
-    <section className="contentSection flex-1 flex-col px-[20px]">
-      <div className="containerWrapper w-full h-full]">
-        <div className="containerWrapper w-full h-full">
+    <section className='hidden'>
+      {modal}
+    </section>
+    <section className='menuSection h-screen py-[20px] pl-[20px]'>
+      <MenuBar />
+    </section>
+    <section className="contentSection flex-1 h-screen flex-col p-[20px]">
+      <div className="contentContainer flex w-full max-h-full flex-1 ">
+        <div className="contentWrapper w-full flex flex-col">
           <SearchBar /> 
           <CategoryBar elements={archiveCategoryElements} />
           {children}

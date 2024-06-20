@@ -26,9 +26,9 @@ export default function Search() {
   }, []);
 
   return (
-    <div className="relative w-full search-bar ">
-      <form className="flex items-center">
-        <div className="relative w-full m-2">
+    <div className="relative w-full h-[72px] search-bar">
+      <form className="flex items-center p-2">
+        <div className="relative w-full">
           <input
             className="py-3 px-4 pl-12 w-full  rounded-full bg-lightGray focus:outline-none placeholder:text-sm placeholder:text-darkPurple placeholder:font-normal"
             type="text"
