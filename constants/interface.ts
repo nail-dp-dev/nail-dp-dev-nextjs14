@@ -13,6 +13,10 @@ export interface HeartButtonProps {
   isClicked: boolean;
 }
 
+export interface PlusButtonProps {
+  isClicked: boolean;
+}
+
 export interface PostBoxNewProps {
   item: {
     "success": boolean,
