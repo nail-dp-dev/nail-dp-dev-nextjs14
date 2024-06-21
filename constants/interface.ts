@@ -26,3 +26,17 @@ export interface PostBoxNewProps {
     }
   };
 }
+
+export interface ProfileMiniModalProps {
+  isMiniModalShow: boolean;
+  setIsMiniModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface MenuElementsProps{
+  icon: string;
+  url: string[],
+  name: string,
+  desc: string,
+  isLast: boolean;
+  where: string;
+}

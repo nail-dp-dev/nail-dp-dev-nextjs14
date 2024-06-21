@@ -407,7 +407,7 @@ export const newPosts = [
             "photoId": 1,
             "photo_url" : "https://instagram.ficn3-3.fna.fbcdn.net/v/t51.29350-15/448060288_1218896819271903_1308071018192291608_n.heic?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE0NDAuc2RyLmYyOTM1MCJ9&_nc_ht=instagram.ficn3-3.fna.fbcdn.net&_nc_cat=103&_nc_ohc=a1Nx9KTD68kQ7kNvgHMDBi-&edm=AEhyXUkBAAAA&ccb=7-5&ig_cache_key=MzM4NTY5NjY0MzU3OTUyNDk5Mg%3D%3D.2-ccb7-5&oh=00_AYDckyDCdGefnHDAKdYnPw9okI2tkqyJdJ9SPFz8joq8xw&oe=667069AE&_nc_sid=cf751b",
             "like":false,
-            "saved":false    
+            "saved": false
         }
     },
     {
