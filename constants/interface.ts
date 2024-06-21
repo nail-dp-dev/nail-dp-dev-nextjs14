@@ -3,6 +3,10 @@ export interface CategoryElement {
   url: string;
 }
 
+export interface CategoryBarProps {
+  elements: CategoryElement[];
+}
+
 export interface IconButtonProps {
   width: string;
   height: string;
