@@ -3,16 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDarkMode, setDarkMode } from './slice/themeSlice';
+import useIsMounted from '../hooks/useIsMounted';
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   const darkMode = useSelector(selectDarkMode);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const initialDarkMode = localStorage.getItem('darkMode') === 'true';
     dispatch(setDarkMode(initialDarkMode));
-    setIsMounted(true);
   }, [dispatch]);
 
   useEffect(() => {

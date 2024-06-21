@@ -6,15 +6,12 @@ import {
   selectDarkMode,
   toggleDarkMode,
 } from '../../../../store/slice/themeSlice';
+import useIsMounted from '../../../../hooks/useIsMounted';
 
 const ThemeToggle = () => {
   const dispatch = useDispatch();
   const darkMode = useSelector(selectDarkMode);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const isMounted = useIsMounted();
 
   const handleToggle = () => {
     dispatch(toggleDarkMode());
