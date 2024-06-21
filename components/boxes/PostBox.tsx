@@ -25,7 +25,7 @@ export default function PostBox({ item }: PostBoxNewProps) {
   }
 
   return (
-    <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px]" style={{ width: boxWidths[layoutNum]}}>
+    <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-start" style={{ width: boxWidths[layoutNum]}}>
       <Link href={`post/${item.data.postId}`} className="absolute inset-0 z-0">
         <Image
           src={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'}
