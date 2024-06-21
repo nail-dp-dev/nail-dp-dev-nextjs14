@@ -24,7 +24,7 @@ export default function ArchiveLayout({
       <div className="contentContainer flex w-full h-full flex-1 ">
         <div className="contentsDiv relative w-full h-full flex flex-col">
           <SearchBar /> 
-          <CategoryBar/>
+          <CategoryBar elements={archiveCategoryElements} />
           {children}
           <LoginSuggestModal/>
         </div>
