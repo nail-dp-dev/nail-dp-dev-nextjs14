@@ -8,7 +8,7 @@ import { userProfileImageData } from '../../constants/example'
 import { useSelector } from 'react-redux'
 import { logIn, logOut, selectLoginStatus } from '../../store/slice/loginSlice'
 import { useAppDispatch } from '../../store/store'
-import ProfileMiniModal from '../modal/ProfileMiniModal'
+import ProfileMiniModal from '../modal/mini/ProfileMiniModal'
 import { useState } from 'react'
 
 export default function LoginInfoBox() {
