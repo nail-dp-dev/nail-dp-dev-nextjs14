@@ -16,6 +16,7 @@ export default function MenuBar() {
             url={item.url}
             desc={item.desc}
             isLast={item.isLast}
+            where={'top'}
           />
         ))}
       </div>
@@ -28,6 +29,7 @@ export default function MenuBar() {
             url={item.url}
             desc={item.desc}
             isLast={item.isLast}
+            where={'bottom'}
           />
         ))}
       </div>

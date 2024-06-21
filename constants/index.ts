@@ -9,8 +9,8 @@ export const topMenuElements = [
 ]
 
 export const bottomMenuElements = [
-  { icon: 'MyPageIcon', name: '마이 페이지', url:['/my-page','/my-page/reservation','/my-page/buy'] , desc: '네일아트 디자인 탐색', isLast:false},
-  { icon: 'SettingIcon', name: '환경설정', url:['/setting'] , desc: '네일아트 디자인 탐색', isLast:true},
+  { icon: 'MyPageIcon', name: '마이 페이지', url:['/my-page','/my-page/reservation','/my-page/buy'] , desc: '', isLast:false},
+  { icon: 'SettingIcon', name: '환경설정', url:['/setting'] , desc: '', isLast:true},
 ]
 
 export const archiveCategoryElements = [
