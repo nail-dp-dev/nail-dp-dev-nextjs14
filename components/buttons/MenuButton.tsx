@@ -44,11 +44,11 @@ export default function MenuButton({ icon , url, name, desc, isLast, where }: Me
               }
             {
               icon === 'MyPageIcon' &&
-              <MyPageIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
+              <MyPageIcon className={`menuIcon mr-[12px] fill-transparent ${url.includes(path)&& 'fill-black'}`} />
               }
             {
               icon === 'SettingIcon' &&
-              <SettingIcon className={`menuIcon mr-[12px] fill-transparent stroke-black fill-current group-hover:fill-white  group-hover:stroke-white ${url.includes(path)&& 'fill-black'}`} />
+              <SettingIcon className={`menuIcon mr-[12px] fill-transparent ${url.includes(path)&& 'fill-black'}`} />
             }
           </div>
           <span className={` text-[14px] ${url.includes(path)? 'font-[700]' : 'font-[500]'}`}>{name}</span>
