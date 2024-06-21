@@ -22,7 +22,7 @@ export default function ArchiveLayout({
     </section>
     <section className="contentSection flex-1 h-screen flex-col p-[20px]">
       <div className="contentContainer flex w-full h-full flex-1 ">
-        <div className="contentWrapper relative w-full h-full flex flex-col">
+        <div className="contentsDiv relative w-full h-full flex flex-col">
           <SearchBar /> 
           <CategoryBar elements={archiveCategoryElements} />
           {children}

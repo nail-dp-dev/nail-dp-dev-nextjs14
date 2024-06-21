@@ -18,6 +18,7 @@ export interface PostData {
 }
 
 export default function ForYouPage() {
+  // 의도적으로 서버 response 늦추는 local test
   const [newPosts, setNewPosts] = useState<PostData[] | null>(null);
 
   useEffect(() => {
@@ -27,16 +28,17 @@ export default function ForYouPage() {
   }, []);
   
   return (
-    <div className='ForYouContainer max-h-full overflow-hidden'>
+    <div className='ForYouContainer max-h-full overflow-hidden relative'>
       <div className='outBox flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll rounded-[20px] transition-all'>
         {
-          newPosts ? 
+          newPosts &&
           newPosts.map((item, index) => (
             <PostBox key={index} item={item} />
           ))
-            :
-          <Loading />
         }
+        {/* {
+        <Loading />
+        } */}
       </div>
     </div>
   );

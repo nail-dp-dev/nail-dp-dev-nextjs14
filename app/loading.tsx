@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className=" mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px]" >
+    <div className="absolute top-[0] left-[0px] w-full h-full flex items-center justify-center rounded-2xl overflow-hidden p-[5px] bg-red z-40" >
       <p>로딩중 ...</p>
     </div>
   )
