@@ -15,7 +15,7 @@ export default function LoginInfoBox() {
 
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
-  const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false)
+  const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
 
   const handleToggle = () => {
     if (isLoggedIn) {
@@ -27,7 +27,7 @@ export default function LoginInfoBox() {
 
   const handleMiniModalToggle = (e: any) => {
     e.stopPropagation();
-    setIsMiniModalShow(prevState => !prevState);
+    setIsMiniModalShow(prev => !prev)
   }
 
   return (
@@ -42,9 +42,11 @@ export default function LoginInfoBox() {
               className='profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]'>
               <Image src={`${userProfileImageData.photos[2]['photo_url']}`} width={40} height={40} alt={'profileIamge'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full ' />  
             </button>
-            <ProfileMiniModal isMiniModalShow={ isMiniModalShow } setIsMiniModalShow={setIsMiniModalShow}/>
+              <ProfileMiniModal
+                isMiniModalShow={isMiniModalShow}
+                setIsMiniModalShow={setIsMiniModalShow}
+              />
           </>
-                      
           :
           <Image src={'/assets/img/logoutProfileImage.png'} width={40} height={40} alt={'profileIamge'} className='rounded-full mr-[12px]' />
         }

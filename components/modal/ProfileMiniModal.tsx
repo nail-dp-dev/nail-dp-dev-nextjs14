@@ -30,7 +30,7 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      setIsMiniModalShow(false);
+      setIsMiniModalShow(false)
     }
   }, [setIsMiniModalShow]);
 
