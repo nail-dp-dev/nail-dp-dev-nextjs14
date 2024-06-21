@@ -1,25 +1,31 @@
-"use client";
+'use client';
 
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../../../store/store";
-import { selectDarkMode, toggleDarkMode } from '../../../../store/slice/themeSlice';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectDarkMode,
+  toggleDarkMode,
+} from '../../../../store/slice/themeSlice';
+import useIsMounted from '../../../../hooks/useIsMounted';
 
 const ThemeToggle = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const darkMode = useSelector(selectDarkMode);
+  const isMounted = useIsMounted();
 
   const handleToggle = () => {
-    if (darkMode) {
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-    }
     dispatch(toggleDarkMode());
   };
 
+  //"Text content does not match server-rendered HTML" 오류를 방지
+  // 주석 지울 예정
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <button onClick={handleToggle} className="p-2 bg-gray-200 dark:bg-gray-800">
-      {darkMode ? "라이트 모드로 변경" : "다크 모드로 변경"}
+      {darkMode ? '라이트 모드로 변경' : '다크 모드로 변경'}
     </button>
   );
 };
