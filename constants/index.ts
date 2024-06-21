@@ -36,3 +36,9 @@ export const boxWidths: { [key: number]: string } = {
   '4': '24.46%',
   '5': '19.44%'
 };
+
+export const profileMiniMenuElements = [
+  {name: '기본', data: 'basic'},
+  {name: '아이콘', data: 'icon'},
+  {name: '사용자 지정', data: 'custom'},
+]

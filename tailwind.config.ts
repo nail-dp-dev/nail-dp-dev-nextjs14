@@ -103,6 +103,7 @@ const config: Config = {
       
       // Modal Background Color
       modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
+      profileImageChangeModalBackgroundColor : 'rgba(255, 255, 255, 0.9)',
     },
 
     screens: {

@@ -26,3 +26,8 @@ export interface PostBoxNewProps {
     }
   };
 }
+
+export interface ProfileMiniModalProps {
+  isMiniModalShow: boolean;
+  setIsMiniModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+}

@@ -16,9 +16,8 @@ export default function CategoryBar({elements}: CategoryBarProps) {
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
 
-
   return (
-    <div className='categoryBar w-full h-[66px] flex flex-col items-start justify-between'>
+    <div className='categoryBar w-full h-[66px] flex flex-col items-start justify-between px-[5px]'>
       <div className='categoryDiv w-full h-[53px] flex items-center justify-between border-b-[1px] border-navBotSolidGray'>
         <div className='h-[53px] flex gap-[32px]'>
         {

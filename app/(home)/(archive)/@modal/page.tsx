@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 export default function SimpleModal() {
 
-  const [isModalShow, setIsModalShow] = useState<boolean>(true)
+  const [isModalShow, setIsModalShow] = useState<boolean>(false)
 
   const closeModal = () => {
     setIsModalShow(false)

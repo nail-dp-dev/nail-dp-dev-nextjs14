@@ -5,15 +5,17 @@ import Bits from '../../public/assets/svg/bits.svg'
 import { userData } from '../../constants/example'
 import { userPointData } from '../../constants/example'
 import { userProfileImageData } from '../../constants/example'
-import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { logIn, logOut, selectLoginStatus } from '../../store/slice/loginSlice'
 import { useAppDispatch } from '../../store/store'
+import ProfileMiniModal from '../modal/ProfileMiniModal'
+import { useState } from 'react'
 
 export default function LoginInfoBox() {
 
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
+  const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false)
 
   const handleToggle = () => {
     if (isLoggedIn) {
@@ -23,17 +25,26 @@ export default function LoginInfoBox() {
     }
   };
 
+  const handleMiniModalToggle = (e: any) => {
+    e.stopPropagation();
+    setIsMiniModalShow(prevState => !prevState);
+  }
+
   return (
     <div className='loginInfoContainer flex flex-col w-full h-[85px]'>
-      <div className='loginedDiv w-full flex items-center h-[45px] mb-[2px]'>
+      <div className='loginedDiv relative w-full flex items-center h-[45px] mb-[2px]'>
         {
           isLoggedIn
             ?
-          <Link href={`${process.env.NEXT_PUBLIC_API_URL}/profile_미확정_url/${userData.data.nickname}`}>
-            <div className='w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]'>
+          <>
+            <button
+              onClick={handleMiniModalToggle}
+              className='profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]'>
               <Image src={`${userProfileImageData.photos[2]['photo_url']}`} width={40} height={40} alt={'profileIamge'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full ' />  
-            </div>
-          </Link>
+            </button>
+            <ProfileMiniModal isMiniModalShow={ isMiniModalShow } setIsMiniModalShow={setIsMiniModalShow}/>
+          </>
+                      
           :
           <Image src={'/assets/img/logoutProfileImage.png'} width={40} height={40} alt={'profileIamge'} className='rounded-full mr-[12px]' />
         }
