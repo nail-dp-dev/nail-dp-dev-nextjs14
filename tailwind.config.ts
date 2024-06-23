@@ -5,8 +5,8 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/(archive)/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/(archive)/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/(root)/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/(root)/components/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'selector',

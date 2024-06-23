@@ -25,3 +25,11 @@ body {
 .box {
   aspect-ratio: auto 1/1;
 }
+
+.chatIcon2 {
+  cursor: grab;
+}
+
+/* .chattingComponent {
+  transform: translate(-240px, -500px);
+} */

@@ -40,3 +40,8 @@ export interface MenuElementsProps{
   isLast: boolean;
   where: string;
 }
+
+export interface ChattingBoxProps {
+  isChatModalShow: boolean;
+  handleCloseChatModal: (e: any) => void;
+}
