@@ -1,15 +1,8 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import { bottomMenuElements, topMenuElements } from "../../constants";
 import MenuButton from "../buttons/MenuButton";
 import LoginInfoBox from "../../components/boxes/LoginInfoBox";
-import { urls } from '../../constants/urls';
 
 export default function MenuBar() {
-  const pathName = usePathname();
-
-  console.log(urls.MyArchive)
 
   return (
     <section className="menuBarSection  w-[305px] h-full p-[16px] flex flex-col items-center justify-between shadow-black shadow-menu-shadow rounded-[20px]  ">
@@ -23,7 +16,7 @@ export default function MenuBar() {
             url={item.url}
             desc={item.desc}
             isLast={item.isLast}
-            path={pathName}
+            where={'top'}
           />
         ))}
       </div>
@@ -36,7 +29,7 @@ export default function MenuBar() {
             url={item.url}
             desc={item.desc}
             isLast={item.isLast}
-            path={pathName}
+            where={'bottom'}
           />
         ))}
       </div>

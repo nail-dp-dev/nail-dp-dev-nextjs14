@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
 import SearchIcon from "../../public/assets/svg/search.svg";
 import { useEffect, useState } from "react";
-
 export default function Search() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -11,24 +10,25 @@ export default function Search() {
   };
 
   const handleOutsideClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-
-    if (!target.closest(".search-bar")) {
+    if (
+      !(e.target instanceof HTMLElement) ||
+      !e.target.closest(".search-bar")
+    ) {
       setIsDropdownOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener('click', handleOutsideClick);
     return () => {
-      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener('click', handleOutsideClick);
     };
   }, []);
 
   return (
-    <div className="relative w-full search-bar ">
-      <form className="flex items-center">
-        <div className="relative w-full m-2">
+    <div className="relative w-full h-[72px] search-bar">
+      <form className="flex items-center p-2">
+        <div className="relative w-full">
           <input
             className="py-3 px-4 pl-12 w-full  rounded-full bg-lightGray focus:outline-none placeholder:text-sm placeholder:text-darkPurple placeholder:font-normal"
             type="text"

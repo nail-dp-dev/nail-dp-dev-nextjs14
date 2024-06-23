@@ -5,7 +5,7 @@ export default function ReservationLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="ContainerWrapper w-full h-full]">
+    <div className="ContainerWrapper w-full h-full">
       {children}
     </div>
   );
