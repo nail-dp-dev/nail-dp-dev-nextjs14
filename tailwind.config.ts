@@ -43,6 +43,9 @@ const config: Config = {
           },
         ],
       },
+      borderRadius: {
+        '2.5xl': '1.25rem', // 20px을 rem으로 변환하여 추가
+      },
     },
     colors: {
       // Original
@@ -105,7 +108,7 @@ const config: Config = {
 
       // Transparent
       transparent: 'rgba(0, 0, 0, 0)',
-      
+
       // Modal Background Color
       modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
       profileImageChangeModalBackgroundColor: 'rgba(255, 255, 255, 0.9)',
