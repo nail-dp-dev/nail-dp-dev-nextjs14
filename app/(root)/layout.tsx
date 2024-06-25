@@ -1,10 +1,8 @@
 import MessageModal from '../../components/modal/message/MessageModal';
 
 export default function HomeLayout({
-  modal,
   children,
 }: Readonly<{
-  modal: React.ReactNode;
   children: React.ReactNode;
 }>) {
   return (

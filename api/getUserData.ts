@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { UserData } from '../types/dataType';
 
 const data: UserData = {
