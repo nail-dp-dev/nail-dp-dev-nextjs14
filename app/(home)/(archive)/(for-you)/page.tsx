@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { newPosts as originalNewPosts } from '../../../../constants/example';
 import PostBox from '../../../../components/boxes/PostBox';
 import Loading from '../../../loading';
@@ -24,21 +24,19 @@ export default function ForYouPage() {
   useEffect(() => {
     setTimeout(() => {
       setNewPosts(originalNewPosts);
-    }, 2000); 
+    }, 2000);
   }, []);
-  
+
   return (
-    <div className='ForYouContainer max-h-full overflow-hidden relative'>
-      <div className='outBox flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll rounded-[20px] transition-all snap-mandatory snap-y'>
-        {
-          newPosts &&
-          newPosts.map((item, index) => (
-            <PostBox key={index} item={item} />
-          ))
-        }
-        {/* {
+    <div className="ForYouContainer max-h-full overflow-hidden relative">
+      <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll rounded-[20px] transition-all snap-mandatory snap-y">
+        <Suspense fallback={<p>Loading...</p>}>
+          {newPosts &&
+            newPosts.map((item, index) => <PostBox key={index} item={item} />)}
+          {/* {
         <Loading />
         } */}
+        </Suspense>
       </div>
     </div>
   );

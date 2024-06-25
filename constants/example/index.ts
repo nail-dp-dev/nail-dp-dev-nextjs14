@@ -870,3 +870,15 @@ export const userProfileImageData = {
         { "photo_url" : "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"}
     ] 
 }
+
+export const profileData = {
+        "success" : true,
+        "code" : 200,
+        "data" :{
+            "nickname": "somi",
+            "postsCount": 10000,
+            "saveCount" : 2,  
+            "followerCount" : 4,
+            "point" : 1000
+        }
+}
