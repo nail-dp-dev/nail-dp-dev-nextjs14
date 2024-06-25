@@ -1,8 +1,9 @@
 'use client';
 
-import SearchIcon from '../../public/assets/svg/search.svg';
-import CloseIcon from '../../public/assets/svg/close.svg';
+import SearchIcon from '../../../public/assets/svg/search.svg';
+import CloseIcon from '../../../public/assets/svg/close.svg';
 import { useEffect, useState } from 'react';
+import SearchHistory from './SearchHistory';
 
 export default function Search() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,6 +19,7 @@ export default function Search() {
     if (!target.closest('.search-bar')) {
       setIsDropdownOpen(false);
     }
+    console.log('드롭다운');
   };
 
   const handleCloseClick = () => {
@@ -25,25 +27,28 @@ export default function Search() {
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleOutsideClick);
+    const handleClick = (e: MouseEvent) => handleOutsideClick(e);
+
+    if (isDropdownOpen) {
+      document.addEventListener('click', handleClick);
+    } else {
+      document.removeEventListener('click', handleClick);
+    }
+
     return () => {
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('click', handleClick);
     };
-  }, []);
+  }, [isDropdownOpen]);
 
   return (
     <div className="relative w-full  search-bar z-20  ">
       <form className="flex items-center p-2">
         {isDropdownOpen && (
           <div
-            className="absolute top-0 left-0 w-full bg-white border-2 border-purple 
-          rounded-2xl shadow-search-shadow bg-opacity-80  "
+            className="form-container absolute top-0 left-0 w-full bg-white border-2 border-purple 
+          rounded-2xl shadow-search-shadow bg-opacity-80  min-h-[25rem] p-[10px]"
           >
-            <ul>
-              <li className="px-4 py-2 cursor-pointer">1</li>
-              <li className="px-4 py-2 cursor-pointer">2</li>
-              <li className="px-4 py-2 cursor-pointer">3</li>
-            </ul>
+            <SearchHistory />
           </div>
         )}
         <div className="relative w-full ">
