@@ -40,3 +40,19 @@ export interface MenuElementsProps{
   isLast: boolean;
   where: string;
 }
+
+export interface ProfileProps{
+  "success": boolean,
+  "code": number,  
+    "data" :{
+        "nickname": string,
+        "postsCount": number,
+        "saveCount" : number,  
+        "followerCount" : number,
+        "point" : number
+    }
+}
+
+export interface ProfileUserIdProps{
+  userid?:string
+}
