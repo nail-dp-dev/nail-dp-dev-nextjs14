@@ -1,6 +1,6 @@
 import CategoryBar from '../../../components/bars/CategoryBar';
 import MenuBar from '../../../components/bars/MenuBar';
-import SearchBar from '../../../components/bars/SearchBar';
+import SearchBar from '../../../components/bars/mainSearch/SearchBar';
 import { archiveCategoryElements } from '../../../constants';
 import LoginSuggestModal from '../../../components/modal/mini/LoginSuggestModal';
 

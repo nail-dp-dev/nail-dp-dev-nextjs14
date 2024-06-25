@@ -14,7 +14,6 @@ const data: UserData = {
 
 export const getUserData = async () => {
 
-  
   // const res = await fetch("http://localhost:3000/api/getUserData", {
   //   method: "GET",
   //   headers: {
@@ -27,5 +26,6 @@ export const getUserData = async () => {
   // }
 
   // const data = await res.json();
+
   return data;
 };

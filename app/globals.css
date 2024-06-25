@@ -38,9 +38,9 @@ body {
 
   /* 기본 버튼 레이아웃 */
   /* 색상, py 와 px 는 따로 지정 */
-  .button-layout {
+  /* .button-layout {
     @apply rounded-2.5xl font-bold text-sm;
-  }
+  } */
 
   /* transition */
   .button-tr {

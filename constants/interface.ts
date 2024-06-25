@@ -45,3 +45,18 @@ export interface ChattingBoxProps {
   isChatModalShow: boolean;
   handleCloseChatModal: (e: any) => void;
 }
+export interface ProfileProps{
+  "success": boolean,
+  "code": number,  
+    "data" :{
+        "nickname": string,
+        "postsCount": number,
+        "saveCount" : number,  
+        "followerCount" : number,
+        "point" : number
+    }
+}
+
+export interface ProfileUserIdProps{
+  userid?:string
+}
