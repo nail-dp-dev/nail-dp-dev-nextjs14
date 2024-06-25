@@ -30,6 +30,35 @@ body {
   cursor: grab;
 }
 
-/* .chattingComponent {
-  transform: translate(-240px, -500px);
-} */
+@layer components {
+  /* 많이 쓰이는 컬러만 */
+  .button-color {
+    @apply bg-purple text-white;
+  }
+
+  /* 기본 버튼 레이아웃 */
+  /* 색상, py 와 px 는 따로 지정 */
+  .button-layout {
+    @apply rounded-2.5xl font-bold text-sm;
+  }
+
+  /* transition */
+  .button-tr {
+    @apply transition duration-200 ease-in-out;
+  }
+  /* transition, hover시 tansform */
+  .button-tr-tf {
+    @apply button-tr hover:scale-[1.02];
+  }
+
+  /* 해시태그 레이아웃 */
+  /* 색상 따로 지정 */
+  .hashtag-layout {
+    @apply rounded-2xl px-4 py-[0.34rem] font-bold text-sm;
+  }
+
+  /* 해시태그 hover, active 시 bg색상 변화 */
+  .hashtag-hover-active {
+    @apply hover:bg-purple active:bg-darkPurple;
+  }
+}

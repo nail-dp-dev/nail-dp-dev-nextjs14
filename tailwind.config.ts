@@ -34,7 +34,7 @@ const config: Config = {
       boxShadow: {
         'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
         'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
-        'chat-form-shadow' : '0 10px 30px -15px rgba(0, 0, 0, 0.3)'
+        'chat-form-shadow' : '1px 0 1px 1px rgba(0, 0, 0, 0.3)'
       },
       fontSize: {
         '10xl': [
