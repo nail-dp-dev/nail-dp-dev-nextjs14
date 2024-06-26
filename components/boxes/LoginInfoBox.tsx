@@ -2,27 +2,24 @@
 
 import Image from 'next/image'
 import Bits from '../../public/assets/svg/bits.svg'
-import { userData } from '../../constants/example'
-import { userPointData } from '../../constants/example'
 import { userProfileImageData } from '../../constants/example'
 import { useSelector } from 'react-redux'
 import { logIn, logOut, selectLoginStatus } from '../../store/slice/loginSlice'
 import { useAppDispatch } from '../../store/store'
 import ProfileMiniModal from '../modal/mini/ProfileMiniModal'
 import { useState } from 'react'
+import useUserData from '../../hooks/useUserData'
+
 
 export default function LoginInfoBox() {
 
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
-  const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
+  const [ isMiniModalShow, setIsMiniModalShow ] = useState<boolean>(false);
+  const { userData, userPointData } = useUserData();
 
   const handleToggle = () => {
-    if (isLoggedIn) {
-      dispatch(logOut());
-      } else {
-      dispatch(logIn());
-    }
+    isLoggedIn ? dispatch(logOut()) : dispatch(logIn())
   };
 
   const handleMiniModalToggle = (e: any) => {
@@ -34,7 +31,7 @@ export default function LoginInfoBox() {
     <div className='loginInfoContainer flex flex-col w-full h-[85px]'>
       <div className='loginedDiv relative w-full flex items-center h-[45px] mb-[2px]'>
         {
-          isLoggedIn
+          isLoggedIn && userData
             ?
           <>
             <button
@@ -51,7 +48,7 @@ export default function LoginInfoBox() {
           <Image src={'/assets/img/logoutProfileImage.png'} width={40} height={40} alt={'profileIamge'} className='rounded-full mr-[12px]' />
         }
         {
-          isLoggedIn ? 
+          isLoggedIn ? userData &&
           <div className='flex-1 flex flex-col items-start justify-between'>
             <div className='w-full h-full flex items-center justify-between'>
               <p className='font-[500] text-[16px]'>{userData.data.nickname}</p>
@@ -84,7 +81,7 @@ export default function LoginInfoBox() {
       </div>
       <div className='flex items-center w-full h-[38px] px-[8px]'>
         <Bits className='mr-[12px]' />
-        <span className='text-[14px] text-textDarkPurple font-[700]'>{userPointData.data.point} 비츠</span>
+        <span className='text-[14px] text-textDarkPurple font-[700]'>{userPointData} 비츠</span>
       </div>
     </div>
   )

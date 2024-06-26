@@ -26,6 +26,10 @@ body {
   aspect-ratio: auto 1/1;
 }
 
+.chatIcon2 {
+  cursor: grab;
+}
+
 @layer components {
   /* 많이 쓰이는 컬러만 */
   .button-color {
@@ -34,9 +38,9 @@ body {
 
   /* 기본 버튼 레이아웃 */
   /* 색상, py 와 px 는 따로 지정 */
-  .button-layout {
+  /* .button-layout {
     @apply rounded-2.5xl font-bold text-sm;
-  }
+  } */
 
   /* transition */
   .button-tr {

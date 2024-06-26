@@ -5,8 +5,8 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/(archive)/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/(archive)/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/(root)/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/(root)/components/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   darkMode: 'selector',
@@ -33,7 +33,8 @@ const config: Config = {
       },
       boxShadow: {
         'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
-        'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25) ',
+        'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
+        'chat-form-shadow' : '1px 0 1px 1px rgba(0, 0, 0, 0.3)'
       },
       fontSize: {
         '10xl': [
@@ -42,9 +43,6 @@ const config: Config = {
             lineHeight: '1',
           },
         ],
-      },
-      borderRadius: {
-        '2.5xl': '1.25rem', // 20px을 rem으로 변환하여 추가
       },
     },
     colors: {
@@ -108,7 +106,7 @@ const config: Config = {
 
       // Transparent
       transparent: 'rgba(0, 0, 0, 0)',
-
+      
       // Modal Background Color
       modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
       profileImageChangeModalBackgroundColor: 'rgba(255, 255, 255, 0.9)',

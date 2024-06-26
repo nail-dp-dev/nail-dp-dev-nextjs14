@@ -41,6 +41,10 @@ export interface MenuElementsProps{
   where: string;
 }
 
+export interface ChattingBoxProps {
+  isChatModalShow: boolean;
+  handleCloseChatModal: (e: any) => void;
+}
 export interface ProfileProps{
   "success": boolean,
   "code": number,  

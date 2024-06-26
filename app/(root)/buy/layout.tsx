@@ -5,8 +5,8 @@ export default function BuyLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="ContainerWrapper w-full h-full">
+    <section className="ContainerWrapper w-full h-full">
       {children}
-    </div>
+    </section>
   );
 }
