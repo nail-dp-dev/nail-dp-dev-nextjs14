@@ -11,6 +11,7 @@ export default function SettingPage() {
         <ThemeToggle />
       </div>
       <div>
+        <img src="" alt="" />
         <button className="button-layout bg-purple">기본 버튼 레이아웃</button>
         <button className="button-layout py-[9.5px] px-[33px] button-tt  bg-buttonLightGray text-textBlack">
           임시 저장

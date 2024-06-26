@@ -15,10 +15,10 @@ export default function Search() {
 
   const handleOutsideClick = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-
     if (!target.closest('.search-bar')) {
       setIsDropdownOpen(false);
     }
+
     console.log('드롭다운');
   };
 
@@ -37,6 +37,12 @@ export default function Search() {
 
     return () => {
       document.removeEventListener('click', handleClick);
+      document
+        .querySelector('.form-container')
+        ?.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
     };
   }, [isDropdownOpen]);
 
