@@ -1,7 +1,7 @@
 import CategoryBar from '../../../components/bars/CategoryBar';
 import MenuBar from '../../../components/bars/MenuBar';
 import SearchBar from '../../../components/bars/mainSearch/SearchBar';
-import Profile from '../../../components/profile/Profile';
+import Profile from '../../../components/boxes/ProfileBox';
 import { myPageCategoryElements } from '../../../constants';
 
 export default function ArchiveLayout({
