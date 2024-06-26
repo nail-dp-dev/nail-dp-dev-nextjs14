@@ -42,3 +42,9 @@ export const profileMiniMenuElements = [
   {name: '아이콘', data: 'icon'},
   {name: '사용자 지정', data: 'custom'},
 ]
+
+export const easyLoginElements = [
+  {name: '카카오 로그인', data: 'kakao', color:'kakaoYellow', url: 'https://kauth.kakao.com/oauth/authorize?client_id=9b9bc77db969307e9d338f8752ff53e8&redirect_uri=http://localhost:8080/api/auth/kakao/callback&response_type=code'},
+  {name: '구글로 로그인', data: 'google', color: 'googleGray', url: ''},
+  {name: '네이버 로그인', data: 'naver', color: 'naverGreen', url: ''},
+]

@@ -71,7 +71,12 @@ export default function MessageModal() {
 
 
   return (
-    <div className='messageModal absolute w-full h-full z-50 flex items-center justify-end pointer-events-none' style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '150px'}` }}>
+    <div className='messageModal absolute w-full h-full z-40 flex items-center justify-end pointer-events-none bottom-0 right-0'>
+      <div
+        className='absolute'
+        style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '100px'}` 
+}}
+      >
       <animated.div
         ref={domTarget}
         className='chatIcon2 pointer-events-auto'
@@ -97,6 +102,7 @@ export default function MessageModal() {
           }
         </animated.div>
       </animated.div>
+      </div>
     </div>
   );
 }
