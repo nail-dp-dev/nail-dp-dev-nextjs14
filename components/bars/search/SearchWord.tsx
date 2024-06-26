@@ -11,12 +11,12 @@ export default function SearchWord() {
           key={index}
           className="relative bg-textDarkPurple p-3 overflow-hidden 
           w-full
-          sm:w-[calc(50%-10px)]
-          md:w-[calc(33.333%-10px)]
-          lg:w-[calc(25%-10px)] 
-          xl:w-[calc(20%-10px)] 
-          2xl:w-[calc(16.7%-10px)] h-[110px] 
-          rounded-2xl flex flex-col justify-center items-center bg-cover bg-center"
+          sm:w-[calc(50%-6px)]
+          md:w-[calc(33.333%-7px)]
+          lg:w-[calc(25%-8px)] 
+          xl:w-[calc(20%-8px)] 
+          2xl:w-[calc(16.7%-9px)] h-[110px] 
+          rounded-2xl flex flex-col justify-center  items-center bg-cover bg-center"
           style={{
             backgroundImage: `url(${item.data.postImageUrl})`,
           }}
