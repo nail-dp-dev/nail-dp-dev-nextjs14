@@ -1,5 +1,6 @@
 import SearchWord from '../../boxes/SearchWord';
 import HistoryButton from '../../buttons/HistoryButton';
+import SearchFollow from './SearchFollow';
 
 export default function SearchHistory() {
   return (
@@ -14,7 +15,7 @@ export default function SearchHistory() {
           최근 검색 (최대 30개까지 보관)
         </p>
         <HistoryButton />
-        <SearchWord />
+        <SearchFollow />
       </div>
     </div>
   );
