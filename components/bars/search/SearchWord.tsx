@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { posts } from '../../constants/example';
+import { posts } from '../../../constants/example';
 
 export default function SearchWord() {
   const [searchWords, setSearchWords] = useState(posts);

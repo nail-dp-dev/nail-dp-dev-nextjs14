@@ -1,3 +1,5 @@
+import LoginInfoBox from '../../boxes/LoginInfoBox';
+
 export default function SearchFollow() {
   return (
     <div className="bg-kakaoYellow">
