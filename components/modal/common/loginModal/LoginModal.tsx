@@ -50,13 +50,13 @@ export default function LoginModal() {
             <div className='w-full h-[52px] flex items-center justify-between gap-[10px]'>
               {
                 easyLoginElements.map((ele, index) => (
-                  <Link key={index} href={ele.url} className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] bg-${ele.color} rounded-[5px]`}>
+                  <Link key={index} href={ele.url} className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] ${ele.data === 'kakao' && 'bg-kakaoYellow' || ele.data === 'google' && 'bg-googleGray' || ele.data === 'naver' && 'bg-naverGreen'} rounded-[5px]`}>
                     {
                       ele.data === 'kakao' && <KakaoIcon /> ||
                       ele.data === 'google' && <GoogleIcon /> ||
                       ele.data === 'naver' && <NaverIcon />
                     }
-                    <span className={`font-[600] text-[0.875rem] ${ele.data === 'naver' && 'text-white'}`}>{ ele.name }</span>
+                    <span className={`font-[600] text-[0.875rem] ${ele.data === 'naver' && 'text-white' }`}>{ ele.name }</span>
                   </Link>
               ))
               }
