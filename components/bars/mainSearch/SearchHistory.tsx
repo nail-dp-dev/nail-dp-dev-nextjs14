@@ -1,3 +1,4 @@
+import SearchWord from '../../boxes/SearchWord';
 import HistoryButton from '../../buttons/HistoryButton';
 
 export default function SearchHistory() {
@@ -8,13 +9,12 @@ export default function SearchHistory() {
         <p>&nbsp;&nbsp;|&nbsp;&nbsp;</p>
         <p>검색기록 자동저장 끄기</p>
       </div>
-      <div className="border-2 border-red">
+      <div className="border-2 border-red ">
         <p className="text-sm font-normal text-darkPurple mt-5 ">
           최근 검색 (최대 30개까지 보관)
         </p>
-        <div className="">
-          <HistoryButton />
-        </div>
+        <HistoryButton />
+        <SearchWord />
       </div>
     </div>
   );
