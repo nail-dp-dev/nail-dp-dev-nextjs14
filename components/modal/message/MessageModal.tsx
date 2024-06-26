@@ -71,7 +71,7 @@ export default function MessageModal() {
 
 
   return (
-    <div className='messageModal absolute w-[80px] h-[80px] z-50 flex items-center justify-end pointer-events-none' style={{ bottom: '100px', right: '150px' }}>
+    <div className='messageModal absolute w-full h-full z-50 flex items-center justify-end pointer-events-none' style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '150px'}` }}>
       <animated.div
         ref={domTarget}
         className='chatIcon2 pointer-events-auto'
@@ -84,11 +84,17 @@ export default function MessageModal() {
         }}
       >
         <animated.div>
-          <ChatIcon
-            className={`buttonComponent ${false ? 'opacity-0 pointer-events-none':'opacity-100'} absolute transition-opacity duration-500`}
-            onClick={e => handleClickMessageIcon(e)}
-          />
-          <ChattingBox isChatModalShow={isChatModalShow} handleCloseChatModal={handleCloseChatModal} />
+          {
+            !isChatModalShow &&
+            <ChatIcon
+              className={`buttonIcon ${isChatModalShow ? 'opacity-0 pointer-events-none':'opacity-100'} absolute transition-opacity duration-500`}
+              onClick={e => handleClickMessageIcon(e)}
+            />
+          }
+          {
+            isChatModalShow &&
+            <ChattingBox isChatModalShow={isChatModalShow} handleCloseChatModal={handleCloseChatModal} />
+          }
         </animated.div>
       </animated.div>
     </div>

@@ -34,7 +34,7 @@ const config: Config = {
       boxShadow: {
         'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
         'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
-        'chat-form-shadow' : '1px 0 1px 1px rgba(0, 0, 0, 0.3)'
+        'chat-form-shadow' : '4px 4px 8px 0px rgba(0, 0, 0, 0.25)'
       },
       fontSize: {
         '10xl': [
@@ -43,6 +43,9 @@ const config: Config = {
             lineHeight: '1',
           },
         ],
+      },
+      borderRadius: {
+        '2.5xl': '1.25rem',
       },
     },
     colors: {
@@ -111,6 +114,7 @@ const config: Config = {
       modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
       profileImageChangeModalBackgroundColor: 'rgba(255, 255, 255, 0.9)',
       loginSuggestModal: 'rgba(185, 140, 224, 0.9)',
+      chatChooseButton: 'rgba(185, 140, 224, 0.2)',
     },
 
     screens: {

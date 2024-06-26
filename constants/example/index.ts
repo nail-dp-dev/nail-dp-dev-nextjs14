@@ -882,3 +882,12 @@ export const profileData = {
             "point" : 1000
         }
 }
+
+export const chatAllData = {
+        "success" : true,
+        "code" : 200,
+        "data": [
+
+        ]
+}
+
