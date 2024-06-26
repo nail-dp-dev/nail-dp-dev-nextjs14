@@ -16,7 +16,7 @@ export default function SearchHistory() {
         </p>
         <HistoryButton />
         <SearchWord />
-        <SearchFollow />
+        {/* <SearchFollow /> */}
       </div>
     </div>
   );

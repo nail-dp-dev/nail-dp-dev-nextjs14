@@ -418,6 +418,44 @@ export const posts = [
       tags: [{ tagName: '셀프네일' }],
     },
   },
+  {
+    success: true,
+    code: 200,
+    data: {
+      userId: '1',
+      nickname: 'somi_art_official',
+      profileUrl:
+        'https://instagram.ficn3-3.fna.fbcdn.net/v/t51.29350-15/332487720_519596447021917_1289724096935743411_n.webp?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE0NDAuc2RyLmYyOTM1MCJ9&_nc_ht=instagram.ficn3-3.fna.fbcdn.net&_nc_cat=101&_nc_ohc=T5KCc3hOo3AQ7kNvgFaXOs4&edm=AFg4Q8wBAAAA&ccb=7-5&ig_cache_key=MzA1MjEyNzM0MDE1NTcxMzkzOQ%3D%3D.2-ccb7-5&oh=00_AYAgOC9M_qkN9q6tmEdQ4PCnQ8bjbVqao9fPkRFHGkXcig&oe=6672386C&_nc_sid=cf751b',
+      followingStatus: 'false',
+      followerCount: 5,
+      postImageUrl:
+        '	https://i.pinimg.com/236x/5e/a2/e0/5ea2e03fa4435a3c1623a2cdb00b7afc.jpg',
+      postContent: '#셀프네일 아늬지쨔너무예뿌자넝💗✨️🥺',
+      likeCount: 100,
+      commentCount: 15,
+      sharedCount: 2,
+      tags: [{ tagName: '가차 네일' }],
+    },
+  },
+  {
+    success: true,
+    code: 200,
+    data: {
+      userId: '1',
+      nickname: 'somi_art_official',
+      profileUrl:
+        'https://instagram.ficn3-3.fna.fbcdn.net/v/t51.29350-15/332487720_519596447021917_1289724096935743411_n.webp?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE0NDAuc2RyLmYyOTM1MCJ9&_nc_ht=instagram.ficn3-3.fna.fbcdn.net&_nc_cat=101&_nc_ohc=T5KCc3hOo3AQ7kNvgFaXOs4&edm=AFg4Q8wBAAAA&ccb=7-5&ig_cache_key=MzA1MjEyNzM0MDE1NTcxMzkzOQ%3D%3D.2-ccb7-5&oh=00_AYAgOC9M_qkN9q6tmEdQ4PCnQ8bjbVqao9fPkRFHGkXcig&oe=6672386C&_nc_sid=cf751b',
+      followingStatus: 'false',
+      followerCount: 5,
+      postImageUrl:
+        '	https://i.pinimg.com/236x/a2/5b/51/a25b51348f255010a0240bef82c9c3ba.jpg',
+      postContent: '#셀프네일 아늬지쨔너무예뿌자넝💗✨️🥺',
+      likeCount: 100,
+      commentCount: 15,
+      sharedCount: 2,
+      tags: [{ tagName: '기린 네일' }],
+    },
+  },
 ];
 
 export const newPosts = [
