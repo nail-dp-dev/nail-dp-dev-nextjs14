@@ -15,7 +15,7 @@ export default function SearchHistory() {
           최근 검색 (최대 30개까지 보관)
         </p>
         <HistoryButton />
-        {/* <SearchWord /> */}
+        <SearchWord />
         <SearchFollow />
       </div>
     </div>
