@@ -9,31 +9,31 @@ import Image from 'next/image'
 
 export default function ChattingBox({ isChatModalShow, handleCloseChatModal }: ChattingBoxProps) {
   return (
-    <div className={`chattingComponent ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal w-[360px] h-[600px] flex flex-col items-center justify-between gap-[12px] transition-opacity rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden`} >
-      <div className='topBar w-full h-[44px] flex items-center justify-between border-b border-darkGray px-[12px]'>
-        <form className='w-[150px] h-[22px] flex items-center justify-start rounded-[20px] border-purple border-[1px] pl-[5px] gap-[5px]'>
-          <label htmlFor="searchBar"><SearchIcon /></label>
-          <input type="text" id='searchBar' className='searchBar w-[80%] border-none outline-none bg-transparent text-[11px]' placeholder='채팅방, 참여자 통합검색'/>
-        </form>
-        <div className='buttonBox flex-1 h-full  flex items-center gap-[10px] justify-end'>
-        <button 
-          className=' '
-            onClick={(e) => handleCloseChatModal(e)}>
-            <CloseChatMaxIcon/>
-        </button>
-        <button 
-          className='  '
-            onClick={(e) => handleCloseChatModal(e)}>
-            <CloseChatIcon/>
-        </button>
-        </div>
+    <div className={`chattingComponent ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal w-[360px] h-[600px] flex flex-col items-center justify-start transition-opacity rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden`} >
+      <div className='topBar w-full h-[40px] flex items-center justify-between border-b border-darkGray px-[12px]'>
+          <form className='w-[160px] h-[25px] flex items-center justify-start rounded-[20px] border-purple border-[1px] pl-[5px] gap-[5px]'>
+            <label htmlFor="searchBar"><SearchIcon /></label>
+            <input type="text" id='searchBar' className='searchBar w-[80%] border-none outline-none bg-transparent text-[11px]' placeholder='채팅방, 참여자 통합검색'/>
+          </form>
+          <div className='buttonBox w-[50px] h-full flex items-center gap-[10px] justify-end'>
+            <button 
+              className=''
+                onClick={(e) => handleCloseChatModal(e)}>
+                <CloseChatMaxIcon/>
+            </button>
+            <button 
+              className='  '
+                onClick={(e) => handleCloseChatModal(e)}>
+                <CloseChatIcon/>
+            </button>
       </div>
-      <nav className='navBar w-full h-[46px] flex items-center justify-center gap-[10px]'>
+      </div>
+      <nav className='navBar w-full h-[50px] flex items-center justify-center gap-[10px]'>
         <button className='w-[100px] h-[30px] flex items-center justify-center bg-purple text-white rounded-[20px]'><span>전체</span></button>
         <button className='w-[100px] h-[30px] flex items-center justify-center bg-purple text-white rounded-[20px]'><span>친구</span></button>
         <button className='w-[100px] h-[30px] flex items-center justify-center bg-purple text-white rounded-[20px]'><span>네일숍</span></button>
       </nav>
-      <div className='chatRowBox w-full h-fit flex flex-col items-center justify-start overflow-hidden overflow-y-scroll '>
+      <div className='chatRowBox w-full flex-1 flex flex-col items-center justify-start overflow-hidden overflow-y-scroll'>
         <ul className='w-full h-full'>
           {
             [2, 2, 2, 2, 2, 2,2,2,2,2].map((chat, index) => (

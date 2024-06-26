@@ -34,7 +34,8 @@ const config: Config = {
       boxShadow: {
         'menu-shadow': '0 10px 30px -15px rgba(0, 0, 0, 0.3)',
         'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
-        'chat-form-shadow' : '4px 4px 8px 0px rgba(0, 0, 0, 0.25)'
+        'chat-form-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
+        'login-modal-shadow':'0px 4px 4px 0px rgba(0, 0, 0, 0.6)'
       },
       fontSize: {
         '10xl': [
@@ -115,6 +116,8 @@ const config: Config = {
       profileImageChangeModalBackgroundColor: 'rgba(255, 255, 255, 0.9)',
       loginSuggestModal: 'rgba(185, 140, 224, 0.9)',
       chatChooseButton: 'rgba(185, 140, 224, 0.2)',
+      loginModal: 'rgba(255, 255, 255, 0.25)',
+
     },
 
     screens: {
