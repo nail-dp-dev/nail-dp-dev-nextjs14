@@ -1,8 +1,5 @@
-import CategoryBar from '../../../components/bars/CategoryBar';
 import MenuBar from '../../../components/bars/MenuBar';
 import SearchBar from '../../../components/bars/search/SearchBar';
-import Profile from '../../../components/boxes/ProfileBox';
-import { myPageCategoryElements } from '../../../constants';
 
 export default function ArchiveLayout({
   children,
@@ -18,8 +15,6 @@ export default function ArchiveLayout({
         <div className="contentContainer flex w-full h-full flex-1 ">
           <div className="contentWrapper w-full h-full flex flex-col">
             <SearchBar />
-            <Profile />
-            <CategoryBar elements={myPageCategoryElements} />
             {children}
           </div>
         </div>
