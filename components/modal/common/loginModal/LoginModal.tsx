@@ -56,13 +56,13 @@ export default function LoginModal() {
                       ele.data === 'google' && <GoogleIcon /> ||
                       ele.data === 'naver' && <NaverIcon />
                     }
-                    <span className={`font-[600] text-[0.875rem] ${ele.data === 'naver' && 'text-white' }`}>{ ele.name }</span>
+                    <span className={`font-[600] text-[0.875rem] ${ele.data === 'naver' && 'text-white'}`}>{ ele.name }</span>
                   </Link>
               ))
               }
             </div>
           </div>
-          <div className='w-full h-[40px] flex items-start justify-center '>
+          <div className='w-full h-[40px] flex items-start justify-center'>
             <UsedLoginPlatform
               className={`${getLoginedBefore === 'naver' && 'translate-x-[165px]' ||  getLoginedBefore === 'kakao' && 'translate-x-[-165px]'}`}
             />

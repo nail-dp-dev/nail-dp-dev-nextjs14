@@ -9,8 +9,9 @@ import { boxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { delay } from '../../lib/utils';
 
-export default function PostBox({ item }: PostBoxNewProps) {
+export default function  PostBox({ item }: PostBoxNewProps) {
 
   const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
 
