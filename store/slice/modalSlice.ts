@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface CommonModalState {
   isCommonModalShow: boolean;
@@ -14,33 +14,27 @@ const commonModalSlice = createSlice({
   name: 'commonModal',
   initialState: initialCommonModalState,
   reducers: {
-    logInCommonModalOpen: (state) => {
+    setCommonModal: (state, action: PayloadAction<string>) => {
       state.isCommonModalShow = true;
-      state.whichCommonModal = 'login';
-    },
-    fileUploadCommonModalOpen: (state) => {
-      state.isCommonModalShow = true;
-      state.whichCommonModal = 'fileUpload';
-    },
-    archiveCreateCommonModalOpen: (state) => {
-      state.isCommonModalShow = true;
-      state.whichCommonModal = 'archiveCreate';
-    },
-    confirmCommonModalOpen: (state) => {
-      state.isCommonModalShow = true;
-      state.whichCommonModal = 'confirm';
+      state.whichCommonModal = action.payload;
     },
     commonModalClose: (state) => {
       state.isCommonModalShow = false;
+      state.whichCommonModal = '';
     }
   },
 });
 
-export const { commonModalClose, logInCommonModalOpen, fileUploadCommonModalOpen, archiveCreateCommonModalOpen, confirmCommonModalOpen} = commonModalSlice.actions;
+export const { setCommonModal, commonModalClose } = commonModalSlice.actions;
 
-export const selectCommonModalStatus = (state: { commonModal: CommonModalState }) => ({
-  isCommonModalShow: state.commonModal.isCommonModalShow,
-  whichCommonModal: state.commonModal.whichCommonModal,
-});
+const selectCommonModal = (state: { commonModal: CommonModalState }) => state.commonModal;
+
+export const selectCommonModalStatus = createSelector(
+  [selectCommonModal],
+  (commonModal) => ({
+    isCommonModalShow: commonModal.isCommonModalShow,
+    whichCommonModal: commonModal.whichCommonModal
+  })
+);
 
 export default commonModalSlice.reducer;

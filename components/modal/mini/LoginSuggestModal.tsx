@@ -2,15 +2,17 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slice/loginSlice';
-import { logInCommonModalOpen } from '../../../store/slice/modalSlice';
+import { commonModalClose, setCommonModal } from '../../../store/slice/modalSlice';
 
 export default function LoginSuggestModal() {
 
   const isLoggedIn = useSelector(selectLoginStatus);
   const dispatch = useDispatch();
 
+
   const handleLoginClick = () => {
-    dispatch(logInCommonModalOpen());
+    dispatch(commonModalClose())
+    dispatch(setCommonModal('login'));
   };
   
 

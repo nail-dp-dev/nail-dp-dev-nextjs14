@@ -44,8 +44,7 @@ export const profileMiniMenuElements = [
 ]
 
 export const easyLoginElements = [
-  {name: '카카오 로그인', data: 'kakao', color:'kakaoYellow', url: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI},
-  {
-    name: '구글로 로그인', data: 'google', color: 'googleGray', url: '/sign-up'},
-  {name: '네이버 로그인', data: 'naver', color: 'naverGreen', url: ''},
+  {name: '카카오 로그인', data: 'kakao', color:'kakaoYellow', uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI},
+  {name: '구글로 로그인', data: 'google', color: 'googleGray', uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI},
+  {name: '네이버 로그인', data: 'naver', color: 'naverGreen', uri: process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI},
 ]
