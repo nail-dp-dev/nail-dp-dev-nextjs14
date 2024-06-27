@@ -7,7 +7,7 @@ export default async function NotFound() {
   const domain = headersList.get('host');
 
   return (
-    <div className=" w-screen h-screen flex justify-center items-center">
+    <div className="bg-white dark:bg-themeDark w-screen h-screen flex justify-center items-center">
       <div className="relative text-center">
         <NailMoving />
         <div className="mx-auto my-0 font-bold">
