@@ -48,7 +48,7 @@ export default function Search() {
 
   return (
     <div className="relative w-full  search-bar z-20  ">
-      <form className="flex items-center p-2">
+      <form className="flex items-center py-3">
         {isDropdownOpen && (
           <div
             className="form-container absolute top-0 left-0 w-full bg-white border-2 border-purple 
