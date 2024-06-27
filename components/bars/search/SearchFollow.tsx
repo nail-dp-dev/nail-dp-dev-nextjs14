@@ -1,17 +1,29 @@
-import LoginInfoBox from '../../boxes/LoginInfoBox';
+import React from 'react';
+import UserInfo from '../../ui/UserInfo';
+import UserImage from '../../ui/UserImage';
+import { followData } from '../../../constants/example';
 
 export default function SearchFollow() {
   return (
-    <div className="bg-kakaoYellow mt-7">
-      <div className="bg-naverGreen w-80 flex mb-3 rounded-xl">
-        <div className="bg-textDarkPurple w-1/6 rounded-full">asdf</div>
-        <div className="border-2 w-5/6 ml-3">
-          <div className="text-base font-medium">somi</div>
-          <div className="text-darkPurple text-sm font-normal">
-            게시물 0 저장됨 0 팔로워 0
+    <div>
+      {followData.map((user) => (
+        <div key={user.data.userId} className="flex items-center p-3">
+          <UserImage
+            src={user.data.photo_url}
+            alt={`${user.data.nickname}'s profile`}
+            width={40}
+            height={40}
+          />
+          <div className="ml-4">
+            <UserInfo
+              nickname={user.data.nickname}
+              postsCount={user.data.postsCount}
+              saveCount={user.data.saveCount}
+              followerCount={user.data.followerCount}
+            />
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }

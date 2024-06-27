@@ -23,7 +23,7 @@ export default function SearchWord() {
             lg:w-[calc(25%-8px)] 
             xl:w-[calc(20%-8px)] 
             2xl:w-[calc(14.444%-12px)] 2xl:grow 2xl:max-w-[13.88%] 
-            3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]  3xl:grow
+            3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]
             rounded-2xl flex flex-col justify-center  items-center bg-cover bg-center"
           style={{
             backgroundImage: `url(${item.data.postImageUrl})`,
