@@ -6,16 +6,16 @@ export default function SearchWord() {
 
   return (
     <div
-      className="bg-purple  flex flex-wrap gap-2.5 overflow-auto
+      className="flex flex-wrap gap-2.5 overflow-auto snap-y
         xs:max-h-[470px]
         sm:max-h-[470px]
-        md:max-h-[470px]
-        lg:max-h-[350px]"
+        lg:max-h-[340px]
+        xl:max-h-[240px]"
     >
       {searchWords.map((item, index) => (
         <button
           key={index}
-          className="relative bg-textDarkPurple p-3 
+          className="relative bg-textDarkPurple p-3 snap-start 
             w-full h-[110px]
             xs:w-[calc(50%-6px)]
             sm:w-[calc(50%-6px)] 
