@@ -96,6 +96,7 @@ const config: Config = {
 
       // Purple 1
       purple: '#B98CE0',
+      mainPurple: '#B98CE0',
 
       // Purple 2
       darkPurple: '#756982',

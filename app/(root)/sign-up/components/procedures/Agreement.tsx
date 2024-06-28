@@ -44,13 +44,13 @@ export default function Agreement({setProcedure}:SignUpProps) {
   return (
     <div className='w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow'>
       <div
-        className='allCheckBox w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple'
+        className='allCheckBox w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple transition-colors'
         onClick={handleAllCheck}
       >
         <button
-          className={`allCheckBtn w-[30px] h-[30px] flex items-center justify-center border-buttonDarkGray border-[2px] rounded-[12px] ${allChecked ? 'bg-purple border-none' : 'group-hover:bg-purple group-hover:border-none'}`}
+          className={`allCheckBtn w-[30px] h-[30px] flex items-center justify-center border-buttonDarkGray border-[2px] rounded-[12px] ${allChecked ? 'bg-purple border-none' : 'group-hover:bg-purple group-hover:border-none'} transition-colors`}
         >
-          {allChecked && <CheckIcon fill='white' />}
+          {allChecked ? <CheckIcon fill='white' /> : <CheckIcon fill='white'/>}
         </button>
         <span className='h-[30px] text-[1.125rem] font-[700] text-center'>
           전체 동의하기
