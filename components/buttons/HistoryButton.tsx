@@ -18,26 +18,40 @@ export default function SearchButton() {
         <button
           key={tag}
           className="bg-hashTagGray rounded-2xl border-solid border-purple border-[1px] 
-          px-4 py-[5.5px] flex items-center space-x-2"
+          pl-4 pr-2 py-[5.5px] flex items-center space-x-[2px]
+          hover:bg-darkGray  button-tr
+          "
         >
           <span className="font-bold text-sm">{tag}</span>
-          <SmallCloseIcon
-            onClick={(e) => removeTag(tag, e)}
-            className="cursor-pointer"
-          />
+          <div
+            className="hover:bg-textDarkPurple hover:bg-opacity-30 button-tr p-1 rounded-full
+                flex justify-center items-center active:scale-90 "
+          >
+            <SmallCloseIcon
+              onClick={(e) => removeTag(tag, e)}
+              className="cursor-pointer "
+            />
+          </div>
         </button>
       ))}
       {nameTags.map((tag) => (
         <button
           key={tag}
           className="bg-hashTagGray rounded-2xl border-solid border-orange border-[1px] 
-          px-4 py-[5.5px] flex items-center space-x-2"
+          pl-4 pr-2 py-[5.5px] flex items-center space-x-[2px]
+          hover:bg-darkGray  button-tr
+          "
         >
           <span className="font-bold text-sm">{tag}</span>
-          <SmallCloseIcon
-            onClick={(e) => removeTag(tag, e)}
-            className="cursor-pointer"
-          />
+          <div
+            className="hover:bg-textDarkPurple hover:bg-opacity-30 button-tr p-1 rounded-full
+                flex justify-center items-center active:scale-90 "
+          >
+            <SmallCloseIcon
+              onClick={(e) => removeTag(tag, e)}
+              className="cursor-pointer "
+            />
+          </div>
         </button>
       ))}
     </div>
