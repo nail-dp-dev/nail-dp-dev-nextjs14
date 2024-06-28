@@ -3,13 +3,13 @@
 import { redirect, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function KakaoAuth() {
+export default function GoogleAuth() {
   const searchParams = useSearchParams();
   const code = searchParams.get('code');
 
   useEffect(() => {
     if (code) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/kakao/callback?code=${code}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback?code=${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

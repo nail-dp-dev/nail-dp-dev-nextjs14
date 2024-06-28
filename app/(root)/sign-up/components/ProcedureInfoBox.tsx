@@ -1,38 +1,50 @@
 import BigNdpIcon from '../../../../public/assets/svg/big-logo.svg'
 import HeartIcon from '../../../../public/assets/svg/procedure_heart.svg'
 import LittleCircle from '../../../../public/assets/svg/procedure_circle.svg'
+import { SignUpInfoBoxProps } from '../../../../constants/interface'
 
-export default function ProcedureInfoBox() {
+
+export default function ProcedureInfoBox({ procedure }: SignUpInfoBoxProps) {
+  
+  const array = Array(3).fill(null)
+
   return (
     <div className='relative w-full h-[280px] flex flex-col items-center justify-start'>
       <div className='absolute translate-x-[-245px] z-0'>
         <BigNdpIcon />
       </div>
       <div className='w-[158px] h-[50px] flex items-start justify-center gap-[4px] mt-[50px] z-10 '>
-        <div className='flex flex-col items-center gap-[2px]'>
+        <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon />
+          <span className={`absolute font-patua ${procedure === 'agreement' && 'text-[white]' }`}>1</span>
           <div className='w-[36px] h-[24px]'>
             <span className='font-[700] text-[0.5625rem]'>약관 동의</span>
           </div>
         </div>
         <div className='flex h-[24px] items-center justify-center gap-[2px] '>
-          <LittleCircle/>
-          <LittleCircle/>
-          <LittleCircle/>
+          {
+            array.map((_,i) => (
+              <LittleCircle key={i} />
+            ))
+          }
         </div>
-        <div className='flex flex-col items-center gap-[2px]'>
+        <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon />
+          <span className='absolute font-patua'>2</span>
           <div className='w-[36px] h-[24px]'>
             <span className='font-[700] text-[0.5625rem]'>본인 인증</span>
           </div>
         </div>
         <div className='flex h-[24px] items-center justify-center gap-[2px]'>
-          <LittleCircle/>
-          <LittleCircle/>
-          <LittleCircle/>
+          {
+            array.map((_,i) => (
+              <LittleCircle key={i} />
+            ))
+          }
         </div>
         <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon />
+          <span className='absolute font-patua'>3</span>
           <div className='absolute h-[24px] translate-y-[26px]'>
             <span className='font-[700] text-[0.5625rem] whitespace-nowrap'>닉네임 설정</span>
           </div>

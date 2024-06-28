@@ -120,7 +120,6 @@ const config: Config = {
       chatChooseButton: 'rgba(185, 140, 224, 0.2)',
       loginModal: 'rgba(255, 255, 255, 0.25)',
     },
-
     screens: {
       xs: {'max': '640px'},
       sm: '640px',
