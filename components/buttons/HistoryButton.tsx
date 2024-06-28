@@ -4,6 +4,7 @@ import SmallCloseIcon from '../../public/assets/svg/small-close.svg';
 
 export default function SearchButton() {
   const [tags, setTags] = useState(['유광', '무광']);
+  const [nameTags, setNameTags] = useState(['@somi', '@mark']);
 
   const removeTag = (tag: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -17,6 +18,19 @@ export default function SearchButton() {
         <button
           key={tag}
           className="bg-hashTagGray rounded-2xl border-solid border-purple border-[1px] 
+          px-4 py-[5.5px] flex items-center space-x-2"
+        >
+          <span className="font-bold text-sm">{tag}</span>
+          <SmallCloseIcon
+            onClick={(e) => removeTag(tag, e)}
+            className="cursor-pointer"
+          />
+        </button>
+      ))}
+      {nameTags.map((tag) => (
+        <button
+          key={tag}
+          className="bg-hashTagGray rounded-2xl border-solid border-orange border-[1px] 
           px-4 py-[5.5px] flex items-center space-x-2"
         >
           <span className="font-bold text-sm">{tag}</span>

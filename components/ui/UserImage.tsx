@@ -26,7 +26,7 @@ export default function UserImage({ src, alt, width, height }: UserImageProps) {
         objectFit="cover"
         quality={100}
         priority
-        className="rounded-full"
+        className="rounded-full "
       />
     </div>
   );
