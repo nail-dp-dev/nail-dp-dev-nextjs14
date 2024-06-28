@@ -60,3 +60,11 @@ export interface ProfileProps{
 export interface ProfileUserIdProps{
   userid?:string
 }
+
+export interface SignUpProps{
+  setProcedure: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface SignUpInfoBoxProps{
+  procedure: string;
+}

@@ -30,7 +30,6 @@ export const profileCategoryElements = [
   { name: '아카이브', url: '/profile/archive/' },
 ]
 
-
 export const boxWidths: { [key: number]: string } = {
   '3': '32.86%',
   '4': '24.46%',
@@ -47,4 +46,11 @@ export const easyLoginElements = [
   {name: '카카오 로그인', data: 'kakao', color:'kakaoYellow', uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI},
   {name: '구글로 로그인', data: 'google', color: 'googleGray', uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI},
   {name: '네이버 로그인', data: 'naver', color: 'naverGreen', uri: process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI},
+]
+
+export const signUpCheckBoxLists = [
+  { name: '[필수] 네디플 이용약관 동의' , need: true },
+  { name: '[필수] 개인정보 수집 이용 동의' , need: true },
+  { name: '[필수] 전자금융거래 이용약관 동의' , need: true },
+  { name: '[선택] 개인정보 수집 이용 동의' , need: false },
 ]

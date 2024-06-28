@@ -9,3 +9,13 @@ export type UserData = {
     point: number;
   };
 };
+
+export type SignUpData = {
+    success: boolean,
+    message: string,
+    kakaoUserInfoDto: {
+        id: number,
+        email: string,
+        platform: string
+    }
+}
