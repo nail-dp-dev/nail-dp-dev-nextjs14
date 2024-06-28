@@ -7,9 +7,9 @@ export default function SearchWord() {
   return (
     <div
       className="flex flex-wrap gap-2.5 overflow-auto snap-y
-        xs:max-h-[470px]
-        sm:max-h-[470px]
-        lg:max-h-[340px]
+        xs:max-h-[480px]
+        sm:max-h-[480px]
+        lg:max-h-[360px]
         xl:max-h-[240px]"
     >
       {searchWords.map((item, index) => (
@@ -22,8 +22,8 @@ export default function SearchWord() {
             md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] 
             xl:w-[calc(20%-8px)] 
-            2xl:w-[calc(14.444%-12px)] 2xl:grow 2xl:max-w-[14%] 
-            3xl:w-[calc(14.444%-12px)] 3xl:max-w-[8.75%] 
+            2xl:w-[calc(14.444%-12px)] 2xl:grow 2xl:max-w-[13.88%] 
+            3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]
             rounded-2xl flex flex-col justify-center  items-center bg-cover bg-center"
           style={{
             backgroundImage: `url(${item.data.postImageUrl})`,
