@@ -6,8 +6,8 @@ export default function SignUpLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="contentSection flex-1 h-screen flex-col">
-      <TopBar/>
+    <section className="contentSection w-screen h-screen flex-col">
+      <TopBar />
       {children}
     </section>
   );

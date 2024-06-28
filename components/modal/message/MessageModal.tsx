@@ -5,8 +5,11 @@ import { useGesture } from "react-use-gesture";
 import { useSpring, animated } from 'react-spring';
 import { useEffect, useRef, useState } from 'react';
 import ChattingBox from '../../boxes/ChattingBox';
+import { usePathname } from 'next/navigation';
 
 export default function MessageModal() {
+
+  const path = usePathname()
 
   const [dragStartXY, setDragStartXY] = useState({
     x: 0,
@@ -71,7 +74,7 @@ export default function MessageModal() {
 
 
   return (
-    <div className='messageModal absolute w-full h-full z-40 flex items-center justify-end pointer-events-none bottom-0 right-0'>
+    <div className={`${path === '/sign-up' && 'hidden'} messageModal absolute w-full h-full z-40 flex items-center justify-end pointer-events-none bottom-0 right-0`}>
       <div
         className='absolute'
         style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '100px'}` 
