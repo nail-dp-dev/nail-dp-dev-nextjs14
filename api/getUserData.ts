@@ -14,7 +14,7 @@ const data: UserData = {
 
 export const getUserData = async () => {
 
-  // const res = await fetch("http://localhost:3000/api/getUserData", {
+  // const res = await fetch("process.env.NEXT_PUBLIC_API_URL/getUserData", {
   //   method: "GET",
   //   headers: {
   //     "Content-Type": "application/json",
