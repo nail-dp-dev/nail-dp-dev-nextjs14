@@ -9,7 +9,7 @@ export default function KakaoAuth() {
 
   useEffect(() => {
     if (code) {
-      fetch(`http://localhost:8080/api/auth/kakao/callback?code=${code}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/kakao/callback?code=${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +33,4 @@ export default function KakaoAuth() {
       });
     }
   }, [code]);
-  <div>
-
-  </div>
 }
