@@ -51,8 +51,27 @@ export default function ProcedureInfoBox({ procedure }: SignUpInfoBoxProps) {
         </div>
       </div>
       <div className='w-[444px] h-[97px] mt-[44px] whitespace-nowrap flex flex-col items-center justify-between z-10'>
-        <p className='font-[700] text-[2rem]'>네디플에 오신 걸 환영해요!</p>
-        <p className='font-[700] text-[1.75rem]'>서비스 이용과 가입을 위해 약관동의가 필요해요.</p>
+        {
+          procedure === 'agreement' &&
+          <>
+          <p className='font-[700] text-[2rem]'>네디플에 오신 걸 환영해요!</p>
+          <p className='font-[700] text-[1.75rem]'>서비스 이용과 가입을 위해 약관동의가 필요해요.</p>
+          </>
+        }
+        {
+          procedure === 'phone' &&
+          <>
+          <p className='font-[700] text-[2rem]'>안전한 서비스 이용을 위해</p>
+          <p className='font-[700] text-[1.75rem]'>본인인증을 완료해주세요.</p>
+          </>
+        }
+        {
+          procedure === 'nickname' &&
+          <>
+          <p className='font-[700] text-[2rem]'>네디플에서 사용하실</p>
+          <p className='font-[700] text-[1.75rem]'>별명은 무엇으로 할까요?</p>
+          </>
+        }
       </div>
     </div>
   )
