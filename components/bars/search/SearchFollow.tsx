@@ -5,9 +5,9 @@ import { followData } from '../../../constants/example';
 
 export default function SearchFollow() {
   return (
-    <div>
+    <div className="h-[340px] flex flex-wrap justify-between pr-32 overflow-auto">
       {followData.map((user) => (
-        <div key={user.data.userId} className="flex items-center p-3">
+        <div key={user.data.userId} className="flex flex-wrap p-3">
           <UserImage
             src={user.data.photo_url}
             alt={`${user.data.nickname}'s profile`}
