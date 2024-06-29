@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react';
-import { signUpCheckBoxLists } from '../../../../../constants'
+import { signUpConsentItems } from '../../../../../constants/index'
 import CheckIcon from '../../../../../public/assets/svg/check.svg'
 import InfoIcon from '../../../../../public/assets/svg/procedure_info.svg'
 import { SignUpProps } from '../../../../../constants/interface';
@@ -9,18 +9,19 @@ import { SignUpProps } from '../../../../../constants/interface';
 export default function Agreement({setProcedure}:SignUpProps) {
   const [allChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(
-    signUpCheckBoxLists.map(() => false)
+    signUpConsentItems.map(() => false)
   );
   const [whichInfo, setWhichInfo] = useState(0)
   const [isInfoShow, setIsInfoShow] = useState(false)
   const infoBox = useRef(null);
+  const isSubmitEnabled = checkedItems[0] && checkedItems[1] && checkedItems[2];
 
   const handleAllCheck = (e: any) => {
     e.preventDefault()
     e.stopPropagation()
     const newCheckedState = !allChecked;
     setAllChecked(newCheckedState);
-    setCheckedItems(signUpCheckBoxLists.map(() => newCheckedState));
+    setCheckedItems(signUpConsentItems.map(() => newCheckedState));
   };
 
   const handleItemCheck = (e: any, index: number) => {
@@ -35,7 +36,7 @@ export default function Agreement({setProcedure}:SignUpProps) {
   const handleItemInfoClick = (e: any, index: number) => {
     e.preventDefault()
     e.stopPropagation()
-    setWhichInfo(index + 1)
+    setWhichInfo(index)
     setIsInfoShow(true)
   }
 
@@ -56,7 +57,6 @@ export default function Agreement({setProcedure}:SignUpProps) {
     }
   }
   
-  const isSubmitEnabled = checkedItems[0] && checkedItems[1] && checkedItems[2];
 
   return (
     <div className='relative w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
@@ -74,7 +74,7 @@ export default function Agreement({setProcedure}:SignUpProps) {
         </span>
       </div>
       <div className='checkBox w-[400px] h-[144px] flex flex-col items-start justify-between'>
-        {signUpCheckBoxLists.map((list, index) => (
+        {signUpConsentItems.map((list, index) => (
           <div
             key={index}
             className='element w-[90%] mx-auto flex items-center justify-between cursor-pointer'
@@ -112,8 +112,10 @@ export default function Agreement({setProcedure}:SignUpProps) {
           className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'
           ref={infoBox}
         >
-        <div className='w-full h-dvh'>
-          동의내용...
+        <div className='w-full h-dvh p-[20px]'>
+            {
+              signUpConsentItems[whichInfo].desc
+            }
         </div>
         <button 
             className='InfoCloseBtn w-[400px] h-[60px] button-color button-layout button-tr'
