@@ -12,6 +12,7 @@ export default function Agreement({setProcedure}:SignUpProps) {
     signUpCheckBoxLists.map(() => false)
   );
   const [whichInfo, setWhichInfo] = useState(0)
+  const [isInfoShow, setIsInfoShow] = useState(false)
 
   const handleAllCheck = () => {
     const newCheckedState = !allChecked;
@@ -30,6 +31,12 @@ export default function Agreement({setProcedure}:SignUpProps) {
   const handleItemInfoClick = (e: any, index: number) => {
     e.stopPropagation()
     setWhichInfo(index + 1)
+    setIsInfoShow(true)
+  }
+
+  const handleItemInfoClose = (e: any) => {
+    e.stopPropagation()
+    setIsInfoShow(false)
   }
 
   const handleSubmit = (e: any, checkedItems:boolean[]) => {
@@ -41,8 +48,10 @@ export default function Agreement({setProcedure}:SignUpProps) {
     }
   }
   
+  const isSubmitEnabled = checkedItems[0] && checkedItems[1] && checkedItems[2];
+
   return (
-    <div className='w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow'>
+    <div className='relative w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
       <div
         className='allCheckBox w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple transition-colors'
         onClick={handleAllCheck}
@@ -67,13 +76,13 @@ export default function Agreement({setProcedure}:SignUpProps) {
               <div className={`checkBox w-[30px] h-[30px] flex items-center justify-center}`}>
                 {checkedItems[index] && <CheckIcon fill={`${checkedItems[index] ? '#b98ce0' : 'buttonDarkGray'}`} />}
               </div>
-              <span className='textBox h-[30px] text-[1rem] text-textDarkPurple font-[500]'>
+              <span className='textBox h-[30px] flex items-center text-[1rem] text-textDarkPurple font-[500]'>
                 {list.name}
               </span>
             </div>
             <button
-              className='z-20'
-              onClick={(e) => handleItemInfoClick(e, index) }
+              className='z-20 button-tr button-tr-tf'
+              onClick={(e) => handleItemInfoClick(e, index)}
             >
               <InfoIcon/>
             </button>
@@ -82,11 +91,25 @@ export default function Agreement({setProcedure}:SignUpProps) {
       </div>
       <span className='descText text-[0.6875rem] text-textDarkPurple font-[500] mb-[78px]'>개인정보 수집 이용에 동의 하시면 더 편리한 이용이 가능합니다.</span>
       <button 
-        className='submitBtn w-[400px] h-[60px] button-color button-layout button-tr button-tr-tf'
+        className={`submitBtn w-[400px] h-[60px] button-layout  ${isSubmitEnabled ? 'button-color button-tr button-tr-tf' : ' bg-buttonDarkGray'}`}
         onClick={(e)=>handleSubmit(e, checkedItems)}
+        disabled={!isSubmitEnabled}
         >
         <span className='text-[1.125rem]'>다음</span>
       </button>
+      <div className={`absolute z-30 w-[400px] h-[410px] flex flex-col ${isInfoShow ? '' : 'translate-y-[-450px]'} transition-transform `}>
+        <div className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'>
+          <div className='w-full h-dvh'>
+
+          </div>
+        <button 
+            className=' w-[400px] h-[60px] button-color button-layout button-tr '
+            onClick={(e) => handleItemInfoClose(e)}
+        >
+          확인하고 나가기
+        </button>
+        </div>
+      </div>
     </div>
   );
 }

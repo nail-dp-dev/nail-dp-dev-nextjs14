@@ -1,16 +1,23 @@
 'use client'
 
 import React, { useState } from 'react'
+import { forbiddenWords } from '../../../../../constants/forbiddenWords';
+
 
 export default function NickNameValidation() {
   const [nickname, setNickname] = useState('')
   const [nicknameError, setNicknameError] = useState('')
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false)
+  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
 
-  const validateNickname = (nickname:string) => {
+  const validateNickname = (nickname: string) => {
     const nicknameRegex = /^[가-힣a-zA-Z]{4,15}$/;
     if (!nicknameRegex.test(nickname)) {
       return '닉네임은 4~15자 한글 또는 영문 대소문자만 가능합니다.'
+    }
+    for (let word of forbiddenWords) {
+      if (nickname.toLowerCase().includes(word)) {
+        return '닉네임에 사용할 수 없는 단어가 포함되어 있습니다.'
+      }
     }
     return ''
   }
@@ -115,8 +122,9 @@ export default function NickNameValidation() {
         <p className='text-[0.875rem] text-textDarkPurple font-[700]'>다른 별명 추천받기</p>
       </div>
       <button
-        className='submitBtn w-[400px] h-[60px] button-color button-layout button-tr button-tr-tf'
+        className={`submitBtn w-[400px] h-[60px]  button-layout ${nicknameError === '' && isNicknameAvailable ? 'button-tr button-tr-tf button-color' :'bg-buttonDarkGray'}`}
         onClick={handleSubmit}
+        disabled={nicknameError !== '' || !isNicknameAvailable}
       >
         <span className='text-[1.125rem]'>가입 완료하기</span>
       </button>

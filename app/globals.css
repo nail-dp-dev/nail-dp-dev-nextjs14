@@ -62,3 +62,11 @@ body {
     @apply hover:bg-purple active:bg-darkPurple;
   }
 }
+
+@font-face {
+  font-family: 'Pattua One';
+  src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/patuaone/PatuaOne-Regular.ttf')
+    format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}

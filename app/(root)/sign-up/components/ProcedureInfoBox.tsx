@@ -16,7 +16,7 @@ export default function ProcedureInfoBox({ procedure }: SignUpInfoBoxProps) {
       <div className='w-[158px] h-[50px] flex items-start justify-center gap-[4px] mt-[50px] z-10 '>
         <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon fill={`${procedure === 'agreement'  ? '#B98CE0' : '#756982' }`} className='transition-all' />
-          <span className={`absolute font-patua ${procedure === 'agreement' ? 'text-[white]' : 'text-darkGray'} transition-colors`}>1</span>
+          <span className={`absolute font-patua ${procedure === 'agreement' ? 'text-[white]' : 'text-darkGray'} transition-colors font-PattuaOne`}>1</span>
           <div className='w-[36px] h-[24px]'>
             <span className={`font-[700] text-[0.5625rem] ${procedure === 'agreement' ? 'text-purple' : 'text-darkGray'} transition-colors`}>약관 동의</span>
           </div>
@@ -30,7 +30,7 @@ export default function ProcedureInfoBox({ procedure }: SignUpInfoBoxProps) {
         </div>
         <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon fill={`${procedure === 'phone'  ? '#B98CE0' : '#756982' }`} className='transition-all'/>
-          <span className={`absolute font-patua ${procedure === 'phone' ? 'text-[white]' : 'text-darkGray'} transition-colors`}>2</span>
+          <span className={`absolute font-patua ${procedure === 'phone' ? 'text-[white]' : 'text-darkGray'} transition-colors font-PattuaOne`}>2</span>
           <div className='w-[36px] h-[24px]'>
             <span className={`font-[700] text-[0.5625rem] ${procedure === 'phone' ? 'text-purple' : 'text-darkGray'} transition-colors`}>본인 인증</span>
           </div>
@@ -44,7 +44,7 @@ export default function ProcedureInfoBox({ procedure }: SignUpInfoBoxProps) {
         </div>
         <div className='relative flex flex-col items-center gap-[2px]'>
           <HeartIcon fill={`${procedure === 'nickname'  ? '#B98CE0' : '#756982' }`} className='transition-all' />
-          <span className={`absolute font-patua transition-colors ${procedure === 'nickname' ? 'text-[white]' : 'text-darkGray'}`}>3</span>
+          <span className={`absolute font-patua transition-colors ${procedure === 'nickname' ? 'text-[white]' : 'text-darkGray'} font-PattuaOne`}>3</span>
           <div className='absolute h-[24px] translate-y-[26px]'>
             <span className={`font-[700] text-[0.5625rem] whitespace-nowrap ${procedure === 'nickname' ? 'text-purple' : 'text-darkGray'} transition-colors`}>닉네임 설정</span>
           </div>

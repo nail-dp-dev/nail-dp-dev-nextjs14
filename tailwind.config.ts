@@ -130,6 +130,9 @@ const config: Config = {
       '2xl': '1536px',
       '3xl': '2650px',
     },
+    fontFamily: {
+      PattuaOne: ["Pattua One"],
+    },
   },
   plugins: [],
 };
