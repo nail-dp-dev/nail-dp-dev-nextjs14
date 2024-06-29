@@ -9,7 +9,7 @@ export default function GoogleAuth() {
 
   useEffect(() => {
     if (code) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback?code=${code}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google?code=${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

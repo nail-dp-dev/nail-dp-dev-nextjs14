@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { signUpCheckBoxLists } from '../../../../../constants'
 import CheckIcon from '../../../../../public/assets/svg/check.svg'
 import InfoIcon from '../../../../../public/assets/svg/procedure_info.svg'
@@ -13,14 +13,18 @@ export default function Agreement({setProcedure}:SignUpProps) {
   );
   const [whichInfo, setWhichInfo] = useState(0)
   const [isInfoShow, setIsInfoShow] = useState(false)
+  const infoBox = useRef(null);
 
-  const handleAllCheck = () => {
+  const handleAllCheck = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
     const newCheckedState = !allChecked;
     setAllChecked(newCheckedState);
     setCheckedItems(signUpCheckBoxLists.map(() => newCheckedState));
   };
 
-  const handleItemCheck = (e:any ,index: number) => {
+  const handleItemCheck = (e: any, index: number) => {
+    e.preventDefault()
     e.stopPropagation()
     const newCheckedItems = [...checkedItems];
     newCheckedItems[index] = !newCheckedItems[index];
@@ -29,17 +33,21 @@ export default function Agreement({setProcedure}:SignUpProps) {
   };
 
   const handleItemInfoClick = (e: any, index: number) => {
+    e.preventDefault()
     e.stopPropagation()
     setWhichInfo(index + 1)
     setIsInfoShow(true)
   }
 
-  const handleItemInfoClose = (e: any) => {
+  const handleItemInfoClose = (e: any, infoBox:any) => {
+    e.preventDefault()
     e.stopPropagation()
     setIsInfoShow(false)
-  }
+    infoBox.current.scrollTop = 0;
+}
 
-  const handleSubmit = (e: any, checkedItems:boolean[]) => {
+  const handleSubmit = (e: any, checkedItems: boolean[]) => {
+    e.preventDefault()
     e.stopPropagation()
     if (checkedItems[0] && checkedItems[1] && checkedItems[2]) {
       setProcedure('phone')
@@ -97,14 +105,19 @@ export default function Agreement({setProcedure}:SignUpProps) {
         >
         <span className='text-[1.125rem]'>다음</span>
       </button>
-      <div className={`absolute z-30 w-[400px] h-[410px] flex flex-col ${isInfoShow ? '' : 'translate-y-[-450px]'} transition-transform `}>
-        <div className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'>
-          <div className='w-full h-dvh'>
-
-          </div>
+      <div
+        className={`absolute z-30 w-[400px] h-[410px] flex flex-col ${isInfoShow ? '' : 'translate-y-[-450px]'} transition-transform`}
+      >
+        <div
+          className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'
+          ref={infoBox}
+        >
+        <div className='w-full h-dvh'>
+          동의내용...
+        </div>
         <button 
-            className=' w-[400px] h-[60px] button-color button-layout button-tr '
-            onClick={(e) => handleItemInfoClose(e)}
+            className='InfoCloseBtn w-[400px] h-[60px] button-color button-layout button-tr'
+            onClick={(e) => handleItemInfoClose(e, infoBox)}
         >
           확인하고 나가기
         </button>

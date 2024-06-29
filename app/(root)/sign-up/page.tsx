@@ -14,15 +14,10 @@ export default function AgreementPage() {
     <div className="BuyContainer w-full h-dvh flex flex-col items-center justify-start">
       <ProcedureInfoBox procedure={procedure} />
       {
-        procedure === 'agreement' && <Agreement setProcedure={setProcedure} />
-      }
-      {
-        procedure === 'phone' && <PhoneNumberValidation setProcedure={setProcedure} />
-      }
-      {
+        procedure === 'agreement' && <Agreement setProcedure={setProcedure} /> ||
+        procedure === 'phone' && <PhoneNumberValidation setProcedure={setProcedure} /> ||
         procedure === 'nickname' && <NickNameValidation />
       }
-
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { redirect, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { SignUpData } from '../../../../types/dataType';
 
 export default function KakaoAuth() {
   const searchParams = useSearchParams();

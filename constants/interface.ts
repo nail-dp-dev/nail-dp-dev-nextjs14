@@ -68,3 +68,10 @@ export interface SignUpProps{
 export interface SignUpInfoBoxProps{
   procedure: string;
 }
+
+export interface ProcedureUIProps {
+  now_procedure: string,
+  this_procedure: string,
+  number: number,
+  name: string
+}

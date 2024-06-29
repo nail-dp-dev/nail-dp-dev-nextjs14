@@ -9,7 +9,7 @@ export default function NaverAuth() {
 
   useEffect(() => {
     if (code) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/naver/callback?code=${code}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/naver?code=${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -54,3 +54,18 @@ export const signUpCheckBoxLists = [
   { name: '[필수] 전자금융거래 이용약관 동의' , need: true },
   { name: '[선택] 개인정보 수집 이용 동의' , need: false },
 ]
+
+export const signUpProcedureLists = [
+  { procedure: 'agreement', name: '약관 동의', number: 1 },
+  { procedure: 'phone', name: '본인 인증', number: 2 },
+  { procedure: 'nickname', name: '닉네임 설정', number: 3 },
+]
+  
+export const signUpDescTextLists = [
+  { procedure:'agreement', fisrtDesc:'네디플에 오신 걸 환영해요!', secondDesc: '서비스 이용과 가입을 위해 약관동의가 필요해요.'},
+  { procedure:'phone', fisrtDesc:'안전한 서비스 이용을 위해', secondDesc: '본인인증을 완료해주세요.'},
+  { procedure:'nickname', fisrtDesc:'네디플에서 사용하실', secondDesc: '별명은 무엇으로 할까요?'},
+]
+
+export const circleNumberArray = Array(3).fill(null)
+
