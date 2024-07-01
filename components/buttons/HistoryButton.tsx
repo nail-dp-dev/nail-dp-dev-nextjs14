@@ -26,11 +26,9 @@ export default function SearchButton() {
           <div
             className="hover:bg-textDarkPurple hover:bg-opacity-30 button-tr p-1 rounded-full
                 flex justify-center items-center active:scale-90 "
+            onClick={(e) => removeTag(tag, e)}
           >
-            <SmallCloseIcon
-              onClick={(e) => removeTag(tag, e)}
-              className="cursor-pointer "
-            />
+            <SmallCloseIcon className="cursor-pointer " />
           </div>
         </button>
       ))}
@@ -46,11 +44,9 @@ export default function SearchButton() {
           <div
             className="hover:bg-textDarkPurple hover:bg-opacity-30 button-tr p-1 rounded-full
                 flex justify-center items-center active:scale-90 "
+            onClick={(e) => removeTag(tag, e)}
           >
-            <SmallCloseIcon
-              onClick={(e) => removeTag(tag, e)}
-              className="cursor-pointer "
-            />
+            <SmallCloseIcon className="cursor-pointer " />
           </div>
         </button>
       ))}
