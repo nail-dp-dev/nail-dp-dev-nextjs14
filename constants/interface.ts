@@ -51,8 +51,8 @@ export interface ProfileProps{
     }
 }
 
-export interface ProfileUserIdProps{
-  userid?:string
+export interface ProfileButtonProps{
+  nickname:string
 }
 
 export interface SignUpProps{

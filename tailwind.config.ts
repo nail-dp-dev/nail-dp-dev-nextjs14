@@ -134,7 +134,7 @@ const config: Config = {
       PattuaOne: ["Pattua One"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 
 export default config;
