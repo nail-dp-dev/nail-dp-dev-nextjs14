@@ -5,61 +5,47 @@ import CloseIcon from '../../../public/assets/svg/close.svg';
 import { useEffect, useState } from 'react';
 import SearchHistory from './SearchHistory';
 
-export default function Search() {
+export default function SearchBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleInputClick = () => {
+  const handleInputClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsDropdownOpen(true);
   };
 
-  const handleOutsideClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('.search-bar')) {
-      setIsDropdownOpen(false);
-    }
-
-    console.log('드롭다운');
-  };
-
-  const handleCloseClick = () => {
+  const handleCloseClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setSearchTerm('');
   };
 
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => handleOutsideClick(e);
-
-    if (isDropdownOpen) {
-      document.addEventListener('click', handleClick);
-    } else {
-      document.removeEventListener('click', handleClick);
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (
+      !target.closest('.dropdown-container') &&
+      !target.closest('.search-input')
+    ) {
+      setIsDropdownOpen(false);
     }
+    console.log('드롭다운');
+  };
 
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClick);
-      document
-        .querySelector('.form-container')
-        ?.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        });
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, []);
 
   return (
-    <div className="relative w-full  search-bar z-20  ">
-      <form className="flex items-center p-2">
-        {isDropdownOpen && (
-          <div
-            className="form-container absolute top-0 left-0 w-full bg-white border-2 border-purple 
-          rounded-2xl shadow-search-shadow bg-opacity-80  min-h-[25rem] p-[10px]"
-          >
-            <SearchHistory />
-          </div>
-        )}
-        <div className="relative w-full ">
+    <div className="relative w-full z-20">
+      <form
+        className="flex items-center p-2 relative z-30"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative w-full">
           <input
-            className={` py-3 px-4 pl-12 w-full rounded-full focus:outline-none placeholder:text-sm placeholder:text-darkPurple placeholder:font-normal 
+            className={`search-input py-3 px-4 pl-12 w-full rounded-full focus:outline-none placeholder:text-sm placeholder:text-darkPurple placeholder:font-normal 
             ${isDropdownOpen ? 'bg-purple bg-opacity-20' : 'bg-lightGray'}`}
             type="text"
             value={searchTerm}
@@ -67,12 +53,9 @@ export default function Search() {
             onClick={handleInputClick}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button
-            className="absolute inset-y-0 left-0 pl-4 flex items-center"
-            type="submit"
-          >
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center">
             <SearchIcon />
-          </button>
+          </div>
           {isDropdownOpen && (
             <button
               className="absolute inset-y-0 right-0 pr-4 flex items-center"
@@ -84,6 +67,15 @@ export default function Search() {
           )}
         </div>
       </form>
+      {isDropdownOpen && (
+        <div
+          className="form-container absolute top-0 left-0 w-full bg-white border-2 border-purple 
+          rounded-2xl shadow-search-shadow bg-opacity-80 min-h-[25rem] p-[10px] dropdown-container z-10"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <SearchHistory />
+        </div>
+      )}
     </div>
   );
 }
