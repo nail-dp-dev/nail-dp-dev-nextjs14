@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation';
-
 export const getKakaoAuthCode = async (code:string, router:any) => {
 
   await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/kakao?code=${code}`, {
