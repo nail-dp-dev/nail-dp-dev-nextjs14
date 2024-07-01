@@ -96,6 +96,7 @@ const config: Config = {
 
       // Purple 1
       purple: '#B98CE0',
+      mainPurple: '#B98CE0',
 
       // Purple 2
       darkPurple: '#756982',
@@ -128,6 +129,9 @@ const config: Config = {
       xl: '1280px',
       '2xl': '1536px',
       '3xl': '2650px',
+    },
+    fontFamily: {
+      PattuaOne: ["Pattua One"],
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],
