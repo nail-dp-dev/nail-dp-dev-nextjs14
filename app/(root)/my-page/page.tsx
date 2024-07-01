@@ -5,13 +5,15 @@ import { newPosts, userMyPageData } from '../../../constants/example';
 import PostCreat from '../../../components/animations/PostCreateIcon';
 import CategoryBar from '../../../components/bars/CategoryBar';
 import { myPageCategoryElements } from '../../../constants';
-import { useEffect, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import UserImage from '../../../components/ui/UserImage';
 import UserInfo from '../../../components/ui/UserInfo';
+
 
 export default function MyPagePage() {
   const [isScroll, setIsScroll] = useState(false);
 
+ 
   useEffect(() => {
     function handleScroll() {
       const element1 = document.getElementById('scroll1');
@@ -45,7 +47,7 @@ export default function MyPagePage() {
           width={128}
           height={128}
         />
-        <div className='flex-1 ml-[16px]'>
+        <div className="flex-1 ml-[16px]">
           <UserInfo
             nickname={userMyPageData.data.nickname}
             postsCount={userMyPageData.data.postsCount}
@@ -69,8 +71,7 @@ export default function MyPagePage() {
         >
           <PostCreat />
           {newPosts &&
-            newPosts.map((item, index) => <PostBox key={index} item={item} />)}
-        </div>
+            newPosts.map((item, index) => <PostBox key={index} postId={item.data.postId} photoId={item.data.photoId} photo_url={item.data.photo_url} like={item.data.like} saved={item.data.saved} />)}        </div>
       </section>
     </div>
   );
