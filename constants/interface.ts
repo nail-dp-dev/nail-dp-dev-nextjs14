@@ -14,17 +14,11 @@ export interface IconButtonProps {
 }
 
 export interface PostBoxNewProps {
-  item: {
-    "success": boolean,
-    "code": number,     
-    "data": {
-        "postId": number,
-        "photoId": number,
-        "photo_url" : string,
-        "like":boolean,
-        "saved":boolean 
-    }
-  };
+  postId: number,
+  photoId: number,
+  photo_url : string,
+  like:boolean,
+  saved:boolean 
 }
 
 export interface ProfileMiniModalProps {

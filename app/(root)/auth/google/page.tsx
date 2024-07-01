@@ -1,36 +1,17 @@
 'use client'
 
-import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { getGoogleAuthCode } from '../../../../api/auth/getGoogleAuthCode';
 
 export default function GoogleAuth() {
   const searchParams = useSearchParams();
+  const router = useRouter()
   const code = searchParams.get('code');
 
   useEffect(() => {
     if (code) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google?code=${code}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .then(
-        redirect('/sign-up')
-      )
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      getGoogleAuthCode(code, router)
     }
-  }, [code]);
+  }, [code, router]);
 }

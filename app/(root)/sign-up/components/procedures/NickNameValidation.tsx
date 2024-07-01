@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { forbiddenWords } from '../../../../../constants/forbiddenWords';
 
 
 export default function NickNameValidation() {
   const [nickname, setNickname] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
+  const forbiddenWords = (process.env.NEXT_PUBLIC_FORBIDDENWORDS ?? '').split(',').map(word => word.trim());
 
   const validateNickname = (nickname: string) => {
     const nicknameRegex = /^[가-힣a-zA-Z]{4,15}$/;

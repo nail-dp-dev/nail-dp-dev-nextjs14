@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { UserData } from '../types/dataType';
-import { getUserData } from '../api/getUserData';
+import { getUserData } from '../api/user/getUserData';
 
 
 const useUserData = () => {
