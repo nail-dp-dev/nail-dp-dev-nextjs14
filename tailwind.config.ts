@@ -130,7 +130,7 @@ const config: Config = {
       '3xl': '2650px',
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 
 export default config;

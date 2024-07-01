@@ -1145,3 +1145,16 @@ export const chatAllData = {
   code: 200,
   data: [],
 };
+
+export const userMyPageData = {
+  success: true,
+  code: 200,
+  data: {
+    nickname: 'somi',
+    postsCount: 1,
+    saveCount: 1,
+    followerCount: 1,
+    followCount: 1,
+    point: 1000,
+  },
+};
