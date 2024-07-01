@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { boxWidths } from '../../constants';
+import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
@@ -20,7 +20,7 @@ export default function CreatePost() {
   return (
     <div
       className="box relative mb-[16px] rounded-2xl overflow-hidden transition-all duration-500 border-[5px] border-dashed border-purple p-[5px] snap-start"
-      style={{ width: boxWidths[layoutNum] }}
+      style={{ width: postBoxWidths[layoutNum] }}
     >
       <Link href={`/post/create`} className="absolute inset-0 z-0">
         <div

@@ -14,17 +14,11 @@ export interface IconButtonProps {
 }
 
 export interface PostBoxNewProps {
-  item: {
-    "success": boolean,
-    "code": number,     
-    "data": {
-        "postId": number,
-        "photoId": number,
-        "photo_url" : string,
-        "like":boolean,
-        "saved":boolean 
-    }
-  };
+  postId: number,
+  photoId: number,
+  photo_url : string,
+  like:boolean,
+  saved:boolean 
 }
 
 export interface ProfileMiniModalProps {
@@ -67,4 +61,11 @@ export interface SignUpProps{
 
 export interface SignUpInfoBoxProps{
   procedure: string;
+}
+
+export interface ProcedureUIProps {
+  now_procedure: string,
+  this_procedure: string,
+  number: number,
+  name: string
 }

@@ -1,36 +1,17 @@
 'use client'
 
-import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { getNaverAuthCode } from '../../../../api/auth/getNaverAuthCode';
 
 export default function NaverAuth() {
   const searchParams = useSearchParams();
+  const router = useRouter()
   const code = searchParams.get('code');
 
   useEffect(() => {
     if (code) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/naver/callback?code=${code}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .then(
-        redirect('/sign-up')
-      )
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+      getNaverAuthCode(code, router)
     }
-  }, [code]);
+  }, [code, router]);
 }
