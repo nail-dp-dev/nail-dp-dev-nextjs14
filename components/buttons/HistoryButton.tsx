@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import SmallCloseIcon from '../../public/assets/svg/small-close.svg';
 
-export default function SearchButton() {
+export default function HistoryButton() {
   const [tags, setTags] = useState(['유광', '무광']);
   const [nameTags, setNameTags] = useState(['@somi', '@mark']);
 
