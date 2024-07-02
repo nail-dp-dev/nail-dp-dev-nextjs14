@@ -24,7 +24,7 @@ export default function SearchRecent({
 }: SearchRecentProps) {
   return (
     <div className="relative mt-[3.5rem]">
-      <div className="topContainer flex justify-between items-center">
+      <div className="topContainer flex items-center justify-between">
         {isSearchRecentEnabled && (
           <div className="flex items-center">
             <p className="text-14px-normal-dP">
@@ -32,7 +32,7 @@ export default function SearchRecent({
             </p>
           </div>
         )}
-        <div className="flex items-center text-14px-normal-dP ml-auto">
+        <div className="text-14px-normal-dP ml-auto flex items-center">
           {isSearchRecentEnabled && (
             <>
               <button onClick={clearRecent}>전체삭제</button>
@@ -49,7 +49,7 @@ export default function SearchRecent({
       <div className="mt-2 min-h-[60px]">
         {isSearchRecentEnabled ? (
           tags.length === 0 ? (
-            <p className="text-sm text-darkPurple font-semibold flex justify-center pt-5 ">
+            <p className="flex justify-center pt-5 text-sm font-semibold text-darkPurple ">
               최근 검색어 내역이 없습니다.
             </p>
           ) : (
@@ -60,7 +60,7 @@ export default function SearchRecent({
             />
           )
         ) : (
-          <p className="text-sm text-darkPurple font-semibold text-center flex justify-center pt-5">
+          <p className="flex justify-center pt-5 text-center text-sm font-semibold text-darkPurple">
             검색어 저장 기능이 꺼져 있습니다.
           </p>
         )}

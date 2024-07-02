@@ -29,7 +29,7 @@ export default function SearchFollow({
 
   return (
     <div
-      className="max-h-[210px] flex flex-col flex-wrap overflow-auto snap-y overflow-x-hidden
+      className="flex max-h-[210px] snap-y flex-col flex-wrap overflow-auto overflow-x-hidden
         xs:max-h-[410px]
         sm:max-h-[410px]
         md:max-h-[340px]
@@ -52,11 +52,11 @@ export default function SearchFollow({
               3xl:w-1/4"
           >
             <button
-              className="group w-[310px] flex items-center p-2 rounded-2xl 
-                active:bg-opacity-10 active:bg-darkPurple button-tr snap-end "
+              className="button-tr group flex w-[310px] snap-end items-center 
+                rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10 "
               onClick={() => onTagClick(`@${user.data.nickname}`)}
             >
-              <div className="group-hover:brightness-75 button-tr">
+              <div className="button-tr group-hover:brightness-75">
                 <UserImage
                   src={user.data.photo_url}
                   alt={`${user.data.nickname}'s profile`}

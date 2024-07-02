@@ -26,15 +26,15 @@ export default function RecentButton({
         <button
           key={tag}
           onClick={() => onTagClick(tag)}
-          className={`bg-hashTagGray rounded-2xl border-solid ${
+          className={`rounded-2xl border-solid bg-hashTagGray ${
             tag.startsWith('@') ? 'border-orange' : 'border-purple'
-          } border-[1px] pl-4 pr-2 py-[5.5px] flex items-center space-x-[2px]
-          hover:bg-darkGray button-tr`}
+          } button-tr flex items-center space-x-[2px] border-[1px] py-[5.5px] pl-4
+          pr-2 hover:bg-darkGray`}
         >
-          <span className="font-bold text-sm">{tag}</span>
+          <span className="text-sm font-bold">{tag}</span>
           <div
-            className="hover:bg-textDarkPurple hover:bg-opacity-30 button-tr p-1 rounded-full
-              flex justify-center items-center active:scale-90"
+            className="button-tr flex items-center justify-center rounded-full
+              p-1 hover:bg-textDarkPurple hover:bg-opacity-30 active:scale-90"
             onClick={(e) => removeTag(tag, e)}
           >
             <SmallCloseIcon className="cursor-pointer" />
