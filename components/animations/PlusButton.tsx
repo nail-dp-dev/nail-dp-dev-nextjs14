@@ -50,7 +50,7 @@ export default function PlusButton({width, height, isClicked }: IconButtonProps)
           animate={{ scale: isClick ? 0 : 1 }}
           transition={{ duration: 0.3 }}
         />
-        {isAnimate ? (
+        {isAnimate || isBackGround ? (
           <motion.path
             fill="#B98CE0"
             fillRule="evenodd"
