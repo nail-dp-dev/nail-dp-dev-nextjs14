@@ -65,7 +65,7 @@ body {
   /* 
 font-size: 14px;
 font-weight: 400;
-colot: #756982
+color: #756982
  */
   .text-14px-normal-dP {
     @apply text-sm font-normal text-darkPurple;
