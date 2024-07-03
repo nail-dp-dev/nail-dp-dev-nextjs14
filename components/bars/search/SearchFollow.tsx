@@ -3,10 +3,33 @@ import UserInfo from '../../ui/UserInfo';
 import UserImage from '../../ui/UserImage';
 import { followData } from '../../../constants/example';
 
-export default function SearchFollow() {
+type SearchFollowProps = {
+  searchTerm: string;
+  onTagClick: (tag: string) => void;
+};
+
+// 사용자 검색 결과 컴포넌트
+export default function SearchFollow({
+  searchTerm,
+  onTagClick,
+}: SearchFollowProps) {
+  const filteredFollow =
+    searchTerm.startsWith('@') && searchTerm.length > 1
+      ? followData.filter(
+          (user) =>
+            user.data.nickname
+              .toLowerCase()
+              .includes(searchTerm.slice(1).toLowerCase()) ||
+            searchTerm
+              .slice(1)
+              .toLowerCase()
+              .includes(user.data.nickname.toLowerCase()),
+        )
+      : [];
+
   return (
     <div
-      className="max-h-[210px] mt-6  flex flex-col flex-wrap overflow-auto snap-y overflow-x-hidden
+      className="flex max-h-[210px] snap-y flex-col flex-wrap overflow-auto overflow-x-hidden
         xs:max-h-[410px]
         sm:max-h-[410px]
         md:max-h-[340px]
@@ -16,7 +39,7 @@ export default function SearchFollow() {
         3xl:max-h-[210px]"
     >
       <div className="flex flex-wrap ">
-        {followData.map((user) => (
+        {filteredFollow.map((user) => (
           <div
             key={user.data.userId}
             className="w-1/3 p-1 
@@ -29,10 +52,11 @@ export default function SearchFollow() {
               3xl:w-1/4"
           >
             <button
-              className="group w-[310px] flex items-center p-2 rounded-2xl 
-                active:bg-opacity-10 active:bg-darkPurple button-tr snap-end "
+              className="button-tr group flex w-[310px] snap-end items-center 
+                rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10 "
+              onClick={() => onTagClick(`@${user.data.nickname}`)}
             >
-              <div className="group-hover:brightness-75 button-tr">
+              <div className="button-tr group-hover:brightness-75">
                 <UserImage
                   src={user.data.photo_url}
                   alt={`${user.data.nickname}'s profile`}
