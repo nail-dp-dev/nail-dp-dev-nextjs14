@@ -14,23 +14,24 @@ const tempData: UserData = {
 
 export const getUserData = async () => {
 
-  // await fetch(`${process.env.NEXT_PUBLIC_API_URL}/getUserData`, {
+  // await
+  //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/getUserData`, {
   //         method: "GET",
   //         headers: {
   //           "Content-Type": "application/json",
   //         },
   //         credentials: 'include',
-  //       })
-  //       .then(response => {
-  //         if (!response.ok) {
-  //           throw new Error(`HTTP error! Status: ${response.status}`);
-  //         }
-  //         return response.json();
-  //       })
-  //       .then(data => {
-  //         console.log('Success:', data);
-  //         localStorage.setItem('signupData', JSON.stringify(data));
-  //       })
+  //   })
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(data => {
+  //     console.log('Success:', data);
+  //     localStorage.setItem('signupData', JSON.stringify(data));
+  //   })
 
   return tempData;
 };

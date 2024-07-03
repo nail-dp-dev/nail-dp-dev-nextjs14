@@ -65,14 +65,14 @@ export default function MyPagePage() {
       >
         <CategoryBar elements={myPageCategoryElements} />
       </div>
-      <section className="MyPageContainer max-h-full ">
+      <div className="MyPageContainer max-h-full ">
         <div
           className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
         >
           <PostCreat />
           {newPosts &&
             newPosts.map((item, index) => <PostBox key={index} postId={item.data.postId} photoId={item.data.photoId} photo_url={item.data.photo_url} like={item.data.like} saved={item.data.saved} />)}        </div>
-      </section>
+      </div>
     </div>
   );
 }

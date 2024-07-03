@@ -1,9 +1,14 @@
 'use client'
 
 import React, { useState } from 'react'
+import { SignUpNickNameProps } from '../../../../../constants/interface';
+import { useRouter } from 'next/navigation';
+import { getIsNickNameExist } from '../../../../../api/auth/getIsNIckNameExist';
+import { postSignUpMember } from '../../../../../api/auth/postSignUpMember';
 
 
-export default function NickNameValidation() {
+export default function NickNameValidation({ finalAgreement, finalPhoneNumber }: SignUpNickNameProps) {
+  const router = useRouter()
   const [nickname, setNickname] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
@@ -22,23 +27,6 @@ export default function NickNameValidation() {
     return ''
   }
 
-  const checkNicknameAvailability = async (nickname:string) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/nickname/check`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nickname }),
-      })
-      const data = await response.json()
-      return data.isAvailable
-    } catch (error) {
-      console.error('Error checking nickname availability', error)
-      return false
-    }
-  }
-
 
   const handleNicknameChange = async (e:any) => {
     const value = e.target.value
@@ -52,7 +40,7 @@ export default function NickNameValidation() {
     }
 
     setNicknameError('')
-    const available = await checkNicknameAvailability(value)
+    const available = await getIsNickNameExist(value)
     setIsNicknameAvailable(available)
   }
 
@@ -64,24 +52,7 @@ export default function NickNameValidation() {
       alert('닉네임을 다시 확인해주세요.')
       return
     }
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ nickname }),
-      })
-      const data = await response.json()
-      if (data.success) {
-        alert('회원가입이 완료되었습니다!')
-      }
-    } catch (error) {
-      console.error('Error signing up', error)
-      alert('회원가입 중 오류가 발생했습니다.')
-    }
+    postSignUpMember({nickname, finalPhoneNumber, finalAgreement, router})
   }
 
   return (
