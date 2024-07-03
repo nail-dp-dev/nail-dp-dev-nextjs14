@@ -55,8 +55,19 @@ export interface ProfileButtonProps{
   nickname:string
 }
 
-export interface SignUpProps{
+
+export interface SignUpAgreementProps{
   setProcedure: React.Dispatch<React.SetStateAction<string>>;
+  setFinalAgreement: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export interface SignUpPhoneNumberProps{
+  setProcedure: React.Dispatch<React.SetStateAction<string>>;
+  setFinalPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface SignUpNickNameProps{
+  finalAgreement: boolean;
+  finalPhoneNumber: string;
 }
 
 export interface SignUpInfoBoxProps{

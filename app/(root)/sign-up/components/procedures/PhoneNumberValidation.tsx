@@ -1,10 +1,11 @@
-import { SignUpProps } from '../../../../../constants/interface';
+import { SignUpPhoneNumberProps } from '../../../../../constants/interface';
 import PhoneIcon from '../../../../../public/assets/svg/procedure_phone.svg'
 
-export default function PhoneNumberValidation({ setProcedure }: SignUpProps) {
+export default function PhoneNumberValidation({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNumberProps) {
   
   const handleVerifyBtn = (e:any, setProcedure:any) => {
     e.stopPropagation()
+    setFinalPhoneNumber('010-1234-5678')
     setProcedure('nickname')
   }
 

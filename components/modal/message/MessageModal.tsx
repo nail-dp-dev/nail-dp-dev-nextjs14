@@ -15,10 +15,12 @@ export default function MessageModal() {
     x: 0,
     y: 0
   })
+
   const [dragEndXY, setDragEndXY] = useState({
     x: 0,
     y: 0
   })
+
   const [isChatModalShow, setIsChatModalShow] = useState<boolean>(false);
 
   const handleClickMessageIcon = (e: any) => {
@@ -45,6 +47,7 @@ export default function MessageModal() {
   }, []);
 
   const domTarget = useRef(null);
+
   const [{ x, y, rotateX, rotateY, rotateZ }, api] = useSpring(
     () => ({
       rotateX: 0,
@@ -72,39 +75,31 @@ export default function MessageModal() {
     { domTarget, eventOptions: { passive: true } }
   );
 
-
   return (
     <div className={`${path === '/sign-up' && 'hidden'} messageModal absolute w-full h-full z-40 flex items-center justify-end pointer-events-none bottom-0 right-0`}>
       <div
         className='absolute'
         style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '100px'}` 
-}}
-      >
-      <animated.div
-        ref={domTarget}
-        className='chatIcon2 pointer-events-auto'
-        style={{
-          x,
-          y,
-          rotateX,
-          rotateY,
-          rotateZ,
         }}
       >
-        <animated.div>
-          {
-            !isChatModalShow &&
-            <ChatIcon
-              className={`buttonIcon ${isChatModalShow ? 'opacity-0 pointer-events-none':'opacity-100'} absolute transition-opacity duration-500`}
-              onClick={e => handleClickMessageIcon(e)}
-            />
-          }
-          {
-            isChatModalShow &&
-            <ChattingBox isChatModalShow={isChatModalShow} handleCloseChatModal={handleCloseChatModal} />
-          }
+        <animated.div
+          ref={domTarget}
+          className='chatIcon2 pointer-events-auto'
+          style={{
+            x,
+            y,
+            rotateX,
+            rotateY,
+            rotateZ,
+          }}
+        >
+          <animated.div>
+            {
+              !isChatModalShow && <ChatIcon className={`buttonIcon ${isChatModalShow ? 'opacity-0 pointer-events-none':'opacity-100'} absolute transition-opacity duration-500`} onClick={e => handleClickMessageIcon(e)} /> ||
+              isChatModalShow && <ChattingBox isChatModalShow={isChatModalShow} handleCloseChatModal={handleCloseChatModal} />
+            }
+          </animated.div>
         </animated.div>
-      </animated.div>
       </div>
     </div>
   );

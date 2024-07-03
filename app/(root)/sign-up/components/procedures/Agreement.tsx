@@ -1,12 +1,13 @@
 'use client'
 
-import { useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { signUpConsentItems } from '../../../../../constants/index'
 import CheckIcon from '../../../../../public/assets/svg/check.svg'
 import InfoIcon from '../../../../../public/assets/svg/procedure_info.svg'
-import { SignUpProps } from '../../../../../constants/interface';
+import { SignUpAgreementProps } from '../../../../../constants/interface';
+import Loading from '../../../../loading';
 
-export default function Agreement({setProcedure}:SignUpProps) {
+export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreementProps) {
   const [allChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(
     signUpConsentItems.map(() => false)
@@ -52,6 +53,7 @@ export default function Agreement({setProcedure}:SignUpProps) {
     e.stopPropagation()
     if (checkedItems[0] && checkedItems[1] && checkedItems[2]) {
       setProcedure('phone')
+      setFinalAgreement(checkedItems[3])
     } else {
       alert('필수 동의항목에 동의가 필요합니다.')
     }
@@ -59,6 +61,7 @@ export default function Agreement({setProcedure}:SignUpProps) {
   
 
   return (
+    <Suspense fallback={<Loading/>}>
     <div className='relative w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
       <div
         className='allCheckBox w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple transition-colors'
@@ -126,5 +129,6 @@ export default function Agreement({setProcedure}:SignUpProps) {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
