@@ -31,3 +31,10 @@ export type PostsData = {
     saved: boolean;
   }>;
 };
+
+export type PostSignUpData = {
+  nickname: string;
+  finalPhoneNumber: string;
+  finalAgreement: boolean;
+  router : any
+}
