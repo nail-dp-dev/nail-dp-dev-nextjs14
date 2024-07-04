@@ -33,7 +33,7 @@ export default function UserInfo({
         {postsCount !== undefined && <span>게시물 {postsCount}</span>}
         {saveCount !== undefined && <span>저장됨 {saveCount}</span>}
         {followerCount !== undefined && <span>팔로워 {followerCount}</span>}
-        {followCount !== undefined && <span>팔로우 {followCount}</span>}
+        {followCount !== undefined && <span>팔로잉 {followCount}</span>}
       </div>
     </div>
   );

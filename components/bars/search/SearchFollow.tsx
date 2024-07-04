@@ -41,7 +41,7 @@ export default function SearchFollow({
       <div className="flex flex-wrap ">
         {filteredFollow.map((user) => (
           <div
-            key={user.data.userId}
+            key={user.data.nickname}
             className="w-1/3 p-1 
               xs:w-full 
               sm:w-full 
@@ -58,7 +58,7 @@ export default function SearchFollow({
             >
               <div className="button-tr group-hover:brightness-75">
                 <UserImage
-                  src={user.data.photo_url}
+                  src={user.data.profileUrl}
                   alt={`${user.data.nickname}'s profile`}
                   width={40}
                   height={40}

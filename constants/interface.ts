@@ -10,14 +10,14 @@ export interface CategoryBarProps {
 export interface IconButtonProps {
   width: string;
   height: string;
-  isClicked: boolean;
+  isClicked?: boolean;
 }
 
 export interface PostBoxNewProps {
   postId: number,
   photoId: number,
   photo_url : string,
-  like:boolean,
+  like?:boolean,
   saved:boolean 
 }
 
