@@ -48,7 +48,7 @@ export default function SearchWord({
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
             style={{
-              backgroundImage: `url(${item.data.postImageUrl})`,
+              backgroundImage: `url(${item.data.postImageUrls[0]})`,
             }}
             onClick={() => onTagClick(item.data.tags[0].tagName)}
           >

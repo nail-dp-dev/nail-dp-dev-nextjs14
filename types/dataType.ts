@@ -11,14 +11,14 @@ export type UserData = {
 };
 
 export type SignUpData = {
-  success: boolean,
-  message: string,
+  success: boolean;
+  message: string;
   kakaoUserInfoDto: {
-      id: number,
-      email: string,
-      platform: string
-  }
-}
+    id: number;
+    email: string;
+    platform: string;
+  };
+};
 
 export type PostsData = {
   success: boolean;
@@ -36,5 +36,25 @@ export type PostSignUpData = {
   nickname: string;
   finalPhoneNumber: string;
   finalAgreement: boolean;
-  router : any
-}
+  router: any;
+};
+
+export type PostsDetailData = {
+  success: boolean;
+  code: number;
+  data: {
+    postId: number;
+    nickname: string;
+    profileUrl: string;
+    followingStatus: boolean;
+    followerCount: number;
+    postImageUrls: string[];
+    postContent: string;
+    likeCount: number;
+    commentCount: number;
+    sharedCount: number;
+    tags: {
+      tagName: string;
+    }[];
+  };
+};
