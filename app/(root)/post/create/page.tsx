@@ -4,9 +4,7 @@ import { useRef, useState } from 'react';
 import CloseIcon from '../../../../public/assets/svg/bigclose.svg';
 import HashtagArrowIcon from '../../../../public/assets/svg/hashtag-arrow.svg';
 import PlusIcon from '../../../../public/assets/svg/image-uplode-plus.svg';
-import PlusIcon1 from '../../../../public/assets/svg/close_chat.svg';
-import PlusIcon2 from '../../../../public/assets/svg/close_chat_max.svg';
-import PlusIcon3 from '../../../../public/assets/svg/small-close.svg';
+import CloseImageIcon from '../../../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -32,20 +30,28 @@ export default function PostCreate() {
     '연장',
   ]);
   // 이미지 업로드 관련
-  const [isImages, setIsImages] = useState<string[]>(["1","1","1","1","1","1","1","1","1"]);
+  const [isImages, setIsImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const imageUplodeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     fileInput?.current?.click();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const imageUplodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = URL.createObjectURL(e.target.files[0]);
-      console.log(files);
-      setIsImages([files]);
+      const file = URL.createObjectURL(e.target.files[0]);
+      const files = [...isImages, file];
+      setIsImages(files);
+      e.target.value = '';
     }
+  };
+
+  const imageUplodeRemove = (index: number) => {
+    URL.revokeObjectURL(isImages[index]);
+    const updatedImages = isImages.filter((_, i) => i !== index);
+    console.log(updatedImages);
+    setIsImages(updatedImages);
   };
 
   // 내용 작성 관련
@@ -74,6 +80,12 @@ export default function PostCreate() {
               </Link>
             </div>
             <div className="relative h-full w-full rounded-lg border-2 border-dashed border-postInputGray text-center">
+              <input
+                type="file"
+                ref={fileInput}
+                onChange={imageUplodeChange}
+                style={{ display: 'none' }}
+              />
               {isImages.length < 1 && (
                 <div className="absolute bottom-[13px] w-full">
                   <div className="text-[18px]">
@@ -82,38 +94,43 @@ export default function PostCreate() {
                   </div>
                   <button
                     className="mt-[24px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
-                    onClick={handleClick}
+                    onClick={imageUplodeClick}
                   >
                     사진 추가하기
                   </button>
-                  <input
-                    type="file"
-                    ref={fileInput}
-                    onChange={handleChange}
-                    style={{ display: 'none' }}
-                  />
                   <p className="mb-[13px] mt-[24px] text-[16px]">(최대 10장)</p>
                 </div>
               )}
               {isImages.length >= 1 && (
-                <div className="flex h-full w-full flex-wrap p-[10px] items-center gap-[0.7%] transition-all">
+                <div className="flex h-full w-full flex-wrap gap-[0.7%] p-[10px] transition-all">
                   {isImages.map((item, index) => (
                     <div
-                      className="relative flex items-center justify-center h-[49%] w-[19.4%] overflow-hidden bg-red rounded-[5px]"
+                      className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-auto overflow-hidden rounded-[5px]"
                       key={index}
                     >
-                      {/* <Image
+                      <Image
                         src={item}
                         alt={`postImage`}
                         fill
-                        className="h-full w-full object-cover"
+                        style={{
+                          objectFit: 'cover',
+                          width: '100%',
+                          height: '100%',
+                        }}
                         quality={100}
                         priority
-                      /> */}
+                        sizes="100vw, 50vw, 33vw"
+                      />
+                      <button
+                        className="absolute right-[3px] top-[3px] z-10"
+                        onClick={() => imageUplodeRemove(index)}
+                      >
+                        <CloseImageIcon />
+                      </button>
                     </div>
                   ))}
-                  <button className="relative flex items-center justify-center h-[49%] w-[19.4%] border border-addFolderGray border-dashed rounded-[5px] overflow-hidden">
-                    <PlusIcon/>
+                  <button onClick={imageUplodeClick} className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-hidden rounded-[5px] border border-dashed border-addFolderGray">
+                    <PlusIcon />
                   </button>
                 </div>
               )}
