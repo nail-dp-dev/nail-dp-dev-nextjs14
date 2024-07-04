@@ -5,15 +5,13 @@ import { newPosts, userMyPageData } from '../../../constants/example';
 import PostCreat from '../../../components/animations/PostCreateIcon';
 import CategoryBar from '../../../components/bars/CategoryBar';
 import { myPageCategoryElements } from '../../../constants';
-import { Key, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserImage from '../../../components/ui/UserImage';
 import UserInfo from '../../../components/ui/UserInfo';
-
 
 export default function MyPagePage() {
   const [isScroll, setIsScroll] = useState(false);
 
- 
   useEffect(() => {
     function handleScroll() {
       const element1 = document.getElementById('scroll1');
@@ -38,16 +36,16 @@ export default function MyPagePage() {
   return (
     <div
       id="scroll1"
-      className={`relative h-full overflow-y-scroll scrollbar-hide ${isScroll ? 'snap-mandatory snap-y mt-[66px]' : ''}`}
+      className={`relative h-full overflow-y-scroll scrollbar-hide ${isScroll ? 'mt-[66px] snap-y snap-mandatory' : ''}`}
     >
-      <div className="flex items-center min-h-[160px]">
+      <div className="flex min-h-[160px] items-center">
         <UserImage
           src="/assets/img/logoutProfileImage.png"
           alt="프로필이미지"
           width={128}
           height={128}
         />
-        <div className="flex-1 ml-[16px]">
+        <div className="ml-[16px] flex-1">
           <UserInfo
             nickname={userMyPageData.data.nickname}
             postsCount={userMyPageData.data.postsCount}
@@ -61,7 +59,7 @@ export default function MyPagePage() {
         </div>
       </div>
       <div
-        className={`${isScroll ? 'fixed w-[calc(100%_-_365px)] top-[84px] z-30 bg-white' : ''}`}
+        className={`${isScroll ? 'fixed top-[84px] z-30 w-[calc(100%_-_365px)] bg-white' : ''}`}
       >
         <CategoryBar elements={myPageCategoryElements} />
       </div>

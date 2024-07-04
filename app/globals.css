@@ -30,6 +30,17 @@ body {
   cursor: grab;
 }
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #756982;
+  border-radius: 5px;
+}
+
 @layer components {
   /* 많이 쓰이는 컬러만 */
   .button-color {
