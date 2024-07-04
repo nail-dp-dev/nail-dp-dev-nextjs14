@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { getKakaoAuthCode } from '../../../../api/auth/getKakaoAuthCode';
+import { getKakaoAuthCode } from '../../../../api/auth/code/getKakaoAuthCode';
 
 export default function KakaoAuth() {
   const searchParams = useSearchParams();

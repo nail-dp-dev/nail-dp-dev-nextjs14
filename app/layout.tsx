@@ -4,6 +4,7 @@ import './globals.css';
 import StoreProvider from '../store/StoreProvider';
 import ThemeProvider from '../store/ThemeProvider';
 import CommonModalProvider from '../store/CommonModalProvider';
+import LoginProvider from '../store/LoginProvider';
 
 const inter = Noto_Sans_KR({ subsets: ['latin'] });
 
@@ -23,12 +24,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
         <StoreProvider>
-          <ThemeProvider>
-            <CommonModalProvider>
-              {modal}
-              {children}
-            </CommonModalProvider>
-          </ThemeProvider>
+          <LoginProvider>
+            <ThemeProvider>
+              <CommonModalProvider>
+                {modal}
+                {children}
+              </CommonModalProvider>
+            </ThemeProvider>
+          </LoginProvider>
         </StoreProvider>
       </body>
     </html>

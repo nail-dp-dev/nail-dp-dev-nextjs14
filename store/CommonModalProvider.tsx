@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { commonModalClose, selectCommonModalStatus } from './slice/modalSlice';
+import { selectCommonModalStatus } from './slice/modalSlice';
 
 const CommonModalProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();

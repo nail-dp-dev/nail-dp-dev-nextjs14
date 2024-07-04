@@ -25,8 +25,10 @@ export default function UserInfo({
 }: UserInfoProps) {
   return (
     <div className="flex flex-col items-start">
-      <p className={`${nicknameStyle} ${hoverStyle}`}>{nickname}</p>
-      {children}
+      <div className='w-full flex items-center justify-between'>
+        <p className={`${nicknameStyle} ${hoverStyle}`}>{nickname}</p>
+        {children}
+      </div>
       <div
         className={`flex flex-wrap gap-2 text-darkPurple  ${statsStyle} ${hoverStyle}`}
       >
