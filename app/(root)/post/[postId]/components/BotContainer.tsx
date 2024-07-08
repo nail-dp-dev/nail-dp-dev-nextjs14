@@ -2,9 +2,9 @@ import React from 'react';
 import PostChatIcon from './icons/PostChatIcon';
 import PostHeartIcon from './icons/PostHeartIcon';
 import PostShareIcon from './icons/PostShareIcon';
-import ChattingBox from './Bot/ChattingBox';
-import ChattingBar from './Bot/ChattingBar';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
+import ChattingBox from './bot/ChattingBox';
+import ChattingBar from './bot/ChattingBar';
 
 interface UserDetail {
   post: PostsDetailData['data'];

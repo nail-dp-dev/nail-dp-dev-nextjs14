@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function MidContainer() {
   return (
-    <div className="flex min-h-[570px] items-center ">
-      <div className="mx-auto my-0 flex w-full max-w-[1200px] justify-center pb-[50px]  pt-5">
+    <div className="flex h-[605px] items-center bg-kakaoYellow">
+      <div className="mx-auto my-0  flex w-full max-w-[1200px] justify-center bg-red pb-[50px]  pt-5">
         <div
           className="aspect-square min-w-[300px] max-w-[535px] 
         flex-shrink flex-grow bg-darkPurple"
