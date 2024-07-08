@@ -25,6 +25,8 @@ export const postsDetail: PostsDetailData[] = [
         { tagName: '네일추천' },
         { tagName: '젤네일' },
         { tagName: '네일아트' },
+        { tagName: '가을네일' },
+        { tagName: '따뜻한네일' },
       ],
     },
   },

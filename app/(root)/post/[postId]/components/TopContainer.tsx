@@ -3,18 +3,21 @@ import UserImage from '../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../types/dataType';
 
-interface TopContainerProps {
+interface userProps {
   user: PostsDetailData['data'];
 }
 
-export default function TopContainer({ user }: TopContainerProps) {
+export default function TopContainer({ user }: userProps) {
   if (!user) {
     return <div>사용자를 찾을 수 없습니다.</div>;
   }
 
   return (
-    <div className="flex max-h-[92px] flex-wrap items-center justify-between p-4">
-      <div className="wrap-left flex flex-wrap items-center gap-4">
+    <div
+      className="flex max-h-[92px] flex-wrap
+      items-center justify-between bg-white  p-4"
+    >
+      <div className="wrap-left flex flex-wrap items-center gap-4 ">
         <UserImage
           src={user.profileUrl}
           alt={`${user.nickname}'s profile`}
