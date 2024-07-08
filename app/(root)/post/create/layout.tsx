@@ -12,7 +12,7 @@ export default function PostCreateLayout({
       </section>
       <section className="contentSection flex-1 h-screen flex-col p-[20px]">
         <div className="contentContainer flex w-full h-full flex-1 ">
-          <div className="contentWrapper w-full h-full flex flex-col">
+          <div className="contentWrapper w-full h-full flex flex-col border-none">
             {children}
           </div>
         </div>

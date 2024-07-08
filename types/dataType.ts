@@ -58,3 +58,19 @@ export type PostsDetailData = {
     }[];
   };
 };
+
+export type PostCreateData = {
+    postContent: string,
+    tags: { tagName: string}[],
+    tempSave: boolean,
+    boundary:string,
+    photos : {media_file:string}[]
+};
+
+export type TempPostCreateData = {
+  postContent?: string,
+  tags?: { tagName: string}[],
+  tempSave: boolean,
+  boundary:string,
+  photos?: {media_file:string}[]
+};
