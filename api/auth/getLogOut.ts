@@ -1,24 +1,28 @@
-import { logIn, logOut } from '../../../store/slice/loginSlice';
-import { AppDispatch } from '../../../store/store';
+import { logOut } from '../../store/slice/loginSlice';
+import { AppDispatch } from '../../store/store';
 
-export const getCookieValid = async (dispatch: AppDispatch) => {
-  
+export const getLogOut = async (dispatch: AppDispatch) => {
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/cookie`, {
-      method: "GET",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: 'include',
-    })
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
     if (data.code === 2000) {
-      dispatch(logIn())
-    } else {
+      document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       dispatch(logOut())
+    } else if (data.code === 4001) {
+      console.log('로그아웃 실패')
+    } else {
+      console.log('Response Error:', data.message)
+      return false
     }
   } catch (error) {
     if (error instanceof TypeError) {

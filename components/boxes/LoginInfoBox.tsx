@@ -10,6 +10,9 @@ import { useState } from 'react';
 import useUserData from '../../hooks/useUserData';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
+import { getLogOut } from '../../api/auth/getLogOut';
+import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
+import Loading from '../../app/loading';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -18,13 +21,12 @@ export default function LoginInfoBox() {
   const { userData, userPointData } = useUserData();
 
   const handleLogin = () => {
-    console.log('login')
-
+    dispatch(commonModalClose())
+    dispatch(setCommonModal('login'));
   };
 
   const handleLogout = () => {
-    console.log('logout')
-    document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    getLogOut(dispatch)
   }
 
   const handleMiniModalToggle = (e: any) => {
@@ -32,10 +34,12 @@ export default function LoginInfoBox() {
     setIsMiniModalShow((prev) => !prev);
   };
 
+
   return (
     <div className="loginInfoContainer flex flex-col w-full h-[85px]">
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
-        {isLoggedIn && userData ? (
+        {isLoggedIn && userData &&
+          (
           <>
             <button
               onClick={handleMiniModalToggle}
@@ -48,9 +52,18 @@ export default function LoginInfoBox() {
               setIsMiniModalShow={setIsMiniModalShow}
             />
           </>
-        ) : (
-          <UserImage src={'/assets/img/logoutProfileImage.png'} alt={'profileIamge'} width={40} height={40}/>
-        )}
+        )
+        }
+        {
+          isLoggedIn && !userData && 
+          <Loading/>
+        }
+        {
+          !isLoggedIn && 
+          (
+            <UserImage src={'/assets/img/logoutProfileImage.png'} alt={'profileIamge'} width={40} height={40}/>
+          )
+        }
         {isLoggedIn ? (
           userData && (
             <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
@@ -70,7 +83,7 @@ export default function LoginInfoBox() {
             onClick={() => {
               handleLogin();
             }}
-            className="flex-1 flex flex-col items-start justify-between  hover:text-purple"
+            className="flex-1 flex flex-col items-start justify-between  hover:text-purple pl-[10px]"
           >
             <div className=" h-full flex items-center justify-between">
               <span className="text-[16px] font-[700] underline">

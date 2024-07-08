@@ -3,8 +3,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import StoreProvider from '../store/StoreProvider';
 import ThemeProvider from '../store/ThemeProvider';
-import CommonModalProvider from '../store/CommonModalProvider';
-import LoginProvider from '../store/LoginProvider';
+import LoggedInProvider from '../store/LoggedInProvider';
 
 const inter = Noto_Sans_KR({ subsets: ['latin'] });
 
@@ -24,14 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
         <StoreProvider>
-          <LoginProvider>
+          <LoggedInProvider>
             <ThemeProvider>
-              <CommonModalProvider>
-                {modal}
-                {children}
-              </CommonModalProvider>
+              {modal}
+              {children}
             </ThemeProvider>
-          </LoginProvider>
+          </LoggedInProvider>
         </StoreProvider>
       </body>
     </html>

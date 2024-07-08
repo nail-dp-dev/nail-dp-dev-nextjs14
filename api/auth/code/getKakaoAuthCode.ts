@@ -1,4 +1,7 @@
-export const getKakaoAuthCode = async (code: string, router: any) => {
+import { logIn } from '../../../store/slice/loginSlice';
+import { AppDispatch } from '../../../store/store';
+
+export const getKakaoAuthCode = async (code: string, router: any, dispatch: AppDispatch) => {
   
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/kakao?code=${code}`, {
@@ -15,6 +18,7 @@ export const getKakaoAuthCode = async (code: string, router: any) => {
 
     if (data.code === 2000) {
       alert(data.message)
+      dispatch(logIn());
       router.push('/');
     } else if (data.code === 2001) {
       router.push('/sign-up');
