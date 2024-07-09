@@ -3,49 +3,56 @@
 import {
   ChangeEvent,
   MouseEvent,
+  useEffect,
   useRef,
   useState,
 } from 'react';
 import CloseIcon from '../../../../../public/assets/svg/bigclose.svg';
-import PlusIcon from '../../../../../public/assets/svg/image-uplode-plus.svg';
+import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function ImageUplodeContainer({ onImageChange }:any) {
+export default function ImageUploadContainer({ onImageChange }:any) {
   // 이미지 업로드 관련
   const [isImages, setIsImages] = useState<string[]>([]);
+  const [isOriginImages, setIsOriginImages] = useState<File[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const imageUplodeClick = (e: MouseEvent) => {
+  useEffect(() => {
+    onImageChange(isOriginImages);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOriginImages]);
+
+  const imageUploadClick = (e: MouseEvent) => {
     e.preventDefault();
     fileInput?.current?.click();
   };
 
-  const imageUplodeChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const imageUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files) {
       const file = e.target.files[0];
       const reader = new FileReader();
-
+      setIsOriginImages([...isOriginImages, e.target.files[0]]);
       reader.onload = (event) => {
         const result = event.target?.result as string;
         const files = [...isImages, result];
         setIsImages(files);
-        onImageChange(files);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const imageUplodeRemove = (
+  const imageUploadRemove = (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
     e.preventDefault();
     const updateImages = isImages.filter((_, i) => i !== index);
+    const updateFormImages = isOriginImages.filter((_, i) => i !== index);
     setIsImages(updateImages);
-    onImageChange(updateImages);
+    setIsOriginImages(updateFormImages);
   };
 
   return (
@@ -62,7 +69,7 @@ export default function ImageUplodeContainer({ onImageChange }:any) {
         <input
           type="file"
           ref={fileInput}
-          onChange={imageUplodeChange}
+          onChange={imageUploadChange}
           style={{ display: 'none' }}
           accept=".gif, .jpg, .jpeg, .png, .mp4"
         />
@@ -74,7 +81,7 @@ export default function ImageUplodeContainer({ onImageChange }:any) {
             </div>
             <button
               className="mt-[24px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
-              onClick={imageUplodeClick}
+              onClick={imageUploadClick}
             >
               사진 추가하기
             </button>
@@ -110,7 +117,7 @@ export default function ImageUplodeContainer({ onImageChange }:any) {
                 )}
                 <button
                   className="absolute right-[3px] top-[3px] z-10"
-                  onClick={(e) => imageUplodeRemove(e, index)}
+                  onClick={(e) => imageUploadRemove(e, index)}
                 >
                   <CloseImageIcon />
                 </button>
@@ -118,7 +125,7 @@ export default function ImageUplodeContainer({ onImageChange }:any) {
             ))}
             {isImages.length != 10 && (
               <button
-                onClick={imageUplodeClick}
+                onClick={imageUploadClick}
                 className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-hidden rounded-[5px] border border-dashed border-addFolderGray"
               >
                 <PlusIcon />

@@ -1,13 +1,22 @@
-export const tempPostCreate = async (formData: FormData) => {
+export const tempPostCreate = async (formData: {
+  postContent: string;
+  tags: { tagName: string }[];
+  tempSave: boolean;
+  boundary: string;
+  photos: { mediaFile: FormData }[];
+}) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/temp`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/posts/temp`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ formData }),
       },
-      credentials: 'include',
-      body:formData,
-    });
+    );
     
   } catch (error) {
     if (error instanceof TypeError) {

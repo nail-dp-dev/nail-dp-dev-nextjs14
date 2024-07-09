@@ -1,23 +1,23 @@
 'use client';
 
 import { FormEvent, SetStateAction, useState } from 'react';
-import ImageUplodeContainer from './components/ImageUplodeContainer';
+import ImageUploadContainer from './components/ImageUploadContainer';
 import ContentContainer from './components/ContentContainer';
 import HashTagContainer from './components/HashTagContainer';
 import PrivacySettingContainer from './components/PrivacySettingContainer';
 import { postCreate } from '../../../../api/post/postCreate';
 import { tempPostCreate } from '../../../../api/post/tempPostCreate';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
-  const [isImages, setIsImages] = useState<string[]>([]);
-  const [isBoundary, setIsBoundary] = useState('');
+  const [isImages, setIsImages] = useState<File[]>([]);
+  const [isBoundary, setIsBoundary] = useState('ALL');
   const [isUserHashTags, setIsUserHashTags] = useState<string[]>([]);
   const [isTemp, setIsTemp] = useState<boolean>(true);
   const router = useRouter();
 
-  const handleImageChange = (images: SetStateAction<string[]>) => {
+  const handleImageChange = (images: SetStateAction<File[]>) => {
     setIsImages(images);
   };
   const handleContentChange = (content: SetStateAction<string>) => {
@@ -38,35 +38,23 @@ export default function PostCreate() {
     event.preventDefault();
     const formData = new FormData();
 
-    formData.append('postContent', isContent);
-    formData.append('tempSave', 'true');
-    formData.append('boundary', isBoundary);
-
-    isImages.forEach((item, index) => {
-      if (typeof item === 'string' && item.startsWith('data:image')) {
-        const blob = base64ToBlob(item);
-        formData.append(`photos[${index}][media_file]`, blob);
-      } else {
-        formData.append(`photos[${index}][media_file]`, item);
-      }
-    });
-
-    function base64ToBlob(base64String: string) {
-      const byteString = atob(base64String.split(',')[1]);
-      const mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
-      return new Blob([ab], { type: mimeString });
-    }
+    const postData = {
+      postContent: isContent,
+      tags: isUserHashTags.map((tag) => ({ tagName: tag.replace('#', '') })),
+      tempSave: isTemp,
+      boundary: isBoundary,
+      photos: isImages.map((file) => {
+        const formData = new FormData();
+        formData.append('mediaFile', file);
+        return { mediaFile: formData };
+      }),
+    };
 
     if (temp) {
-      tempPostCreate(formData);
+      tempPostCreate(postData);
       router.push('/my-page');
     } else {
-      postCreate(formData);
+      postCreate(postData);
       router.push('/my-page');
     }
   };
@@ -87,7 +75,7 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple`}
+            className={`'border-2 mr-[12px] h-[40px] w-[124px] rounded-full border-purple bg-purple text-white hover:bg-white hover:text-purple`}
           >
             업로드
           </button>
@@ -98,7 +86,7 @@ export default function PostCreate() {
           onSubmit={(e) => handleSubmit(e, isTemp)}
         >
           {/* 이미지 */}
-          <ImageUplodeContainer onImageChange={handleImageChange} />
+          <ImageUploadContainer onImageChange={handleImageChange} />
           {/* 내용 */}
           <ContentContainer onContentChange={handleContentChange} />
           {/* 해시태그 */}
