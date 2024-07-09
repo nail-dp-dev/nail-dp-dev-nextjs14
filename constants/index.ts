@@ -62,3 +62,8 @@ export const signUpConsentItems = [
   { name: '[선택] 개인정보 수집 이용 동의' , need: false , desc: '이 내용은 개인정보 수집 이용 동의 에 관한 내용입니다.' },
 ]
 
+// export const postIcons = [
+//   {icon: "HeartIcon", number: 1},
+//   {icon: "chatIcon", number: 1},
+//   {icon: "ShareIcon", number: 1},
+// ]

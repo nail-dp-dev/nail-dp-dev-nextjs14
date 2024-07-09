@@ -58,6 +58,19 @@ export type PostsDetailData = {
     }[];
   };
 };
+export type CommentData = {
+  success: boolean;
+  code: number;
+  postId: number;
+  data: {
+    commentId: number;
+    profileUrl: string;
+    commentUserNickname: string;
+    commentDate: string;
+    commentContent: string;
+    likeCount: number;
+  }[];
+};
 
 export type PostCreateData = {
     postContent: string,

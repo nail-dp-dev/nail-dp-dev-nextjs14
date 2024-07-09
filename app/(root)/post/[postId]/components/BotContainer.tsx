@@ -1,9 +1,22 @@
-import HeartButton from '../../../../../components/animations/HeartButton';
+import React from 'react';
+import { CommentData, PostsDetailData } from '../../../../../types/dataType';
+import ChattingBar from './bot/ChattingBar';
 
-export default function BotContainer() {
+interface UserDetail {
+  post: PostsDetailData['data'];
+  comments: CommentData['data'];
+}
+
+interface userProps {
+  userDetail: UserDetail;
+}
+
+export default function BotContainer({ userDetail }: userProps) {
+  const { post, comments } = userDetail;
+
   return (
-    <div className="">
-      sdf
-    </div>
+    <>
+      <ChattingBar />
+    </>
   );
 }
