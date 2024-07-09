@@ -3,7 +3,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import StoreProvider from '../store/StoreProvider';
 import ThemeProvider from '../store/ThemeProvider';
-import CommonModalProvider from '../store/CommonModalProvider';
+import LoggedInProvider from '../store/LoggedInProvider';
 
 const inter = Noto_Sans_KR({ subsets: ['latin'] });
 
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: '네디플',
   description: '네일아트 디자인 플랫폼',
 };
+
 
 export default function RootLayout({
   modal,
@@ -22,13 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <StoreProvider>
-          <ThemeProvider>
-            <CommonModalProvider>
+        <StoreProvider>          
+          <LoggedInProvider>
+            <ThemeProvider>
               {modal}
               {children}
-            </CommonModalProvider>
-          </ThemeProvider>
+            </ThemeProvider>
+          </LoggedInProvider>
         </StoreProvider>
       </body>
     </html>

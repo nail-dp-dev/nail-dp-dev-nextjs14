@@ -1,7 +1,7 @@
-export const getKakaoAuthCode = async (code: string, router: any) => {
+export const getGoogleAuthCode = async (code: string, router: any) => {
   
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/kakao?code=${code}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google?code=${code}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
