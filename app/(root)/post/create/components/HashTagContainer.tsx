@@ -57,7 +57,6 @@ export default function HashTagContainer({onHashTagChange}:any) {
     if (e.key === 'Enter') {
       e.preventDefault();
       if (e.nativeEvent.isComposing === false && isTagValue.trim() !== '') {
-        console.log(isTagValue);
         setIsUserHashTags([...isUserHashTags, `#${isTagValue.trim()}`]);
         onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`])
         setIsTagValue('');
@@ -105,13 +104,13 @@ export default function HashTagContainer({onHashTagChange}:any) {
             className={`group mr-[15px] h-[13px] w-[21px] ${isHashTagButton ? '' : 'hidden'}`}
           >
             <HashtagArrowIcon
-              className={`fill-current ${isHashTagState ? 'fill-buttonDarkGray' : 'fill-purple'} group-hover:fill-purple`}
+              className={`fill-current ${isHashTagState ? 'fill-purple' : 'fill-buttonDarkGray'} group-hover:fill-purple`}
             />
           </button>
         </div>
       </div>
       {isHashTagButton && (
-        <div className="felx p-[12px]">
+        <div className="flex p-[12px]">
           {isUserHashTags.map((item, index) => (
             <button
               onClick={(e) => addUserHashTagClick(e, item)}
