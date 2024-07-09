@@ -17,7 +17,6 @@ export const getKakaoAuthCode = async (code: string, router: any, dispatch: AppD
     const data = await response.json();
 
     if (data.code === 2000) {
-      alert(data.message)
       dispatch(logIn());
       router.push('/');
     } else if (data.code === 2001) {

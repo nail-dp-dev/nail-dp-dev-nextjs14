@@ -16,7 +16,7 @@ export const getLogOut = async (dispatch: AppDispatch) => {
     }
     const data = await response.json();
     if (data.code === 2000) {
-      document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      console.log('로그아웃 api response 완료...!')
       dispatch(logOut())
     } else if (data.code === 4001) {
       console.log('로그아웃 실패')
