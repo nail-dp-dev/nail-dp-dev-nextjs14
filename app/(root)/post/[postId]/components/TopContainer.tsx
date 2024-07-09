@@ -14,8 +14,8 @@ export default function TopContainer({ user }: userProps) {
 
   return (
     <div
-      className="flex max-h-[92px] flex-wrap
-      items-center justify-between bg-white  p-4"
+      className="flex  flex-wrap
+      items-center justify-between bg-white  p-2"
     >
       <div className="wrap-left flex flex-wrap items-center gap-4 ">
         <UserImage

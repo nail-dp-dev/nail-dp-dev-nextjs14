@@ -1,3 +1,4 @@
+import React, { useRef } from 'react';
 import Toggle from '../../../../../../components/buttons/Toggle';
 import UserImage from '../../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../../components/ui/UserInfo';
@@ -9,12 +10,22 @@ interface userProps {
 }
 
 export default function ChattingBox({ user }: userProps) {
+  const commentBoxRef = useRef<HTMLDivElement>(null);
+
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    const element = event.currentTarget;
+    element.scrollTop += event.deltaY;
+  };
+
   if (!user) {
     return <div>댓글을 찾을 수 없습니다.</div>;
   }
+
   return (
     <>
-      <div className="flex items-center py-2 pl-4 ">
+      <div className="flex items-center py-2 pl-4">
         <div>
           <p className="mr-5 text-lg font-bold">댓글</p>
         </div>
@@ -26,13 +37,13 @@ export default function ChattingBox({ user }: userProps) {
       </div>
 
       <div
-        className="max-h-[207px] w-full overflow-auto rounded-2.5xl
-        bg-purple bg-opacity-20"
+        className=" w-full overflow-auto rounded-2.5xl bg-purple bg-opacity-20"
+        onWheel={handleWheel}
+        ref={commentBoxRef}
       >
         {user.map((item, index) => (
           <div
-            className="comment-box button-tr test-hover:block group mx-4 mb-4 mt-[10px] flex
-            justify-between rounded-2.5xl border-2 hover:bg-darkPurple hover:bg-opacity-20 "
+            className="comment-box button-tr test-hover:block group mx-4 mb-4 mt-[10px] flex justify-between rounded-2.5xl border-2 hover:bg-darkPurple hover:bg-opacity-20"
             key={index}
           >
             <div className="flex">
@@ -45,17 +56,17 @@ export default function ChattingBox({ user }: userProps) {
                 />
               </div>
 
-              <div className="border-2  leading-4">
-                <div className="flex ">
+              <div className="border-2 leading-4">
+                <div className="flex">
                   <UserInfo
                     nickname={item.commentUserNickname}
-                    nicknameStyle="text-sm font-bold "
+                    nicknameStyle="text-sm font-bold"
                   />
                   <p className="commentDate text-14px-normal-dP ml-3">
                     {item.commentDate}
                   </p>
                 </div>
-                <p className="comment text-sm  font-normal">
+                <p className="comment text-sm font-normal">
                   {item.commentContent}
                 </p>
                 <div className="mt-[8.5px] flex items-center gap-2 border-2">
@@ -67,7 +78,7 @@ export default function ChattingBox({ user }: userProps) {
               </div>
             </div>
 
-            <div className="mr-3 mt-3 hidden h-full group-hover:block ">
+            <div className="mr-3 mt-3 hidden h-full group-hover:block">
               <Toggle />
             </div>
           </div>

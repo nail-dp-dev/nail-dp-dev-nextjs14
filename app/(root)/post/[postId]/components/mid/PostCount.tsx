@@ -8,9 +8,9 @@ interface PostCountProps {
   post: PostsDetailData['data'];
 }
 
-export default function PostCount({ post }: PostCountProps) {
+export default function PostCount({ post}: PostCountProps) {
   return (
-    <div className="flex justify-between  py-4">
+    <div className="flex justify-between py-4">
       <div className="flex gap-[44px] pr-[54px] text-[0.8125rem] font-bold text-darkPurple">
         <div className="flex items-center">
           <PostHeartIcon className="mr-2 fill-darkPurple hover:fill-red" />
