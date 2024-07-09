@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { SignUpNickNameProps } from '../../../../../constants/interface';
 import { useRouter } from 'next/navigation';
 import { postSignUpMember } from '../../../../../api/auth/postSignUpMember';
-import { getIsNickNameExist } from '../../../../../api/auth/getIsNickNameExist';
+import { getIsNickNameExist } from '../../../../../api/auth/getIsNIckNameExist';
 
 
 export default function NickNameValidation({ finalAgreement, finalPhoneNumber }: SignUpNickNameProps) {

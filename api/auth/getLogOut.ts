@@ -9,6 +9,7 @@ export const getLogOut = async (dispatch: AppDispatch) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include'
     });
 
     if (!response.ok) {
@@ -16,7 +17,6 @@ export const getLogOut = async (dispatch: AppDispatch) => {
     }
     const data = await response.json();
     if (data.code === 2000) {
-      console.log('로그아웃 api response 완료...!')
       dispatch(logOut())
     } else if (data.code === 4001) {
       console.log('로그아웃 실패')

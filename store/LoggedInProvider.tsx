@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import Loading from '../app/loading';
 import { getCookieValid } from '../api/auth/validation/getCookieValid';
 import { getCookie } from '../lib/getCookie';
+import { logOut } from './slice/loginSlice';
 
 
 const LoggedInProvider = ({ children }: { children: React.ReactNode}) => {
@@ -16,6 +17,8 @@ const LoggedInProvider = ({ children }: { children: React.ReactNode}) => {
       const cookie = getCookie('Authorization');
       if (cookie) {
         getCookieValid(dispatch);
+      } else {
+        dispatch(logOut())
       }
       setLoading(false);
     };

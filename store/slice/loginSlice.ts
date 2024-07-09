@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface LoginState {
-  isLoggedIn: boolean;
+  isLoggedIn: string;
 }
 
 const initialLoginState: LoginState = {
-  isLoggedIn: false,
+  isLoggedIn: 'pending',
 };
 
 const loginSlice = createSlice({
@@ -13,18 +13,15 @@ const loginSlice = createSlice({
   initialState: initialLoginState,
   reducers: {
     logIn: (state) => {
-      state.isLoggedIn = true;
+      state.isLoggedIn = 'loggedIn';
     },
     logOut: (state) => {
-      state.isLoggedIn = false;
-    },
-    setLoginStatus: (state, action: PayloadAction<boolean>) => {
-      state.isLoggedIn = action.payload;
+      state.isLoggedIn = 'loggedOut';
     },
   },
 });
 
-export const { logIn, logOut, setLoginStatus } = loginSlice.actions;
+export const { logIn, logOut } = loginSlice.actions;
 
 export const selectLoginStatus = (state: { login: LoginState }) => state.login.isLoggedIn;
 
