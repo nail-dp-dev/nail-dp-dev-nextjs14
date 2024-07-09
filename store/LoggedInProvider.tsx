@@ -4,18 +4,29 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Loading from '../app/loading';
 import { getCookieValid } from '../api/auth/validation/getCookieValid';
+import { getCookie } from '../lib/getCookie';
 
 
-const LoggedInProvider = ({ children }: { children: React.ReactNode }) => {
+const LoggedInProvider = ({ children }: { children: React.ReactNode}) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getCookieValid(dispatch)
-    setLoading(false);
+    const checkCookie = async () => {
+      const cookie = getCookie('Authorization');
+      if (cookie) {
+        getCookieValid(dispatch);
+      }
+      setLoading(false);
+    };
+
+    checkCookie();
   }, [dispatch]);
+
   if (loading) {
-    return <Loading/>;
+    return <Loading />;
   }
+  
   return <>{children}</>;
 };
 

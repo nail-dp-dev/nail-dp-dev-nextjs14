@@ -38,7 +38,7 @@ export default function LoginInfoBox() {
   return (
     <div className="loginInfoContainer flex flex-col w-full h-[85px]">
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
-        {isLoggedIn && userData &&
+        {isLoggedIn && userData && 
           (
           <>
             <button
@@ -64,21 +64,24 @@ export default function LoginInfoBox() {
             <UserImage src={'/assets/img/logoutProfileImage.png'} alt={'profileIamge'} width={40} height={40}/>
           )
         }
-        {isLoggedIn ? (
-          userData && (
-            <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                  }}
-                >
-                  <span className=" text-textDarkPurple text-[12px] font-[700] underline hover:text-purple">
-                    로그아웃
-                  </span>
-                </button>
-            </UserInfo>
-          )
-        ) : (
+        {
+          isLoggedIn && userData &&
+
+          <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
+              <button
+                onClick={() => {
+                  handleLogout();
+                }}
+              >
+                <span className=" text-textDarkPurple text-[12px] font-[700] underline hover:text-purple">
+                  로그아웃
+                </span>
+              </button>
+          </UserInfo>
+        }
+        {
+          !isLoggedIn && userData &&
+
           <button
             onClick={() => {
               handleLogin();
@@ -93,8 +96,9 @@ export default function LoginInfoBox() {
             <div className="flex-1 w-full flex justify-start gap-[10px] text-sm font-normal">
               <span>로그인하기를 눌러 회원가입 및 로그인</span>
             </div>
-          </button>
-        )}
+          </button> 
+        }
+        
       </div>
       <div className="flex items-center w-full h-[38px] px-[8px]">
         <Bits className="mr-[12px]" />
