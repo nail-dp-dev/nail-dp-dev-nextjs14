@@ -29,7 +29,7 @@ export default function CategoryBar({elements}: CategoryBarProps) {
         }
         </div>
         <div className='flex items-center gap-[32px]'>
-          <button onClick={() => dispatch(increaseBoxes())} disabled={numberOfBoxes >= 5} className='h-[24px]'>
+          <button onClick={() => dispatch(increaseBoxes())} disabled={numberOfBoxes >= 7} className='h-[24px]'>
             <MinusSVG />
           </button>
           <button onClick={() => dispatch(decreaseBoxes())} disabled={numberOfBoxes <= 3} className='h-[24px]'>
