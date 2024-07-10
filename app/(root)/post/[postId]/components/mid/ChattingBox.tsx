@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Toggle from '../../../../../../components/buttons/Toggle';
 import UserImage from '../../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../../components/ui/UserInfo';
@@ -9,19 +9,13 @@ interface userProps {
   user: CommentData['data'];
 }
 
-export default function ChattingBox({ user }: userProps) {
-  const commentBoxRef = useRef<HTMLDivElement>(null);
-
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-
-    const element = event.currentTarget;
-    element.scrollTop += event.deltaY;
-  };
-
+export default function ChattingBox({ user,}: userProps) {
   if (!user) {
     return <div>댓글을 찾을 수 없습니다.</div>;
   }
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+  };
 
   return (
     <>
@@ -37,14 +31,14 @@ export default function ChattingBox({ user }: userProps) {
       </div>
 
       <div
-        className=" w-full overflow-auto rounded-2.5xl bg-purple bg-opacity-20"
-        onWheel={handleWheel}
-        ref={commentBoxRef}
+        className={`w-full overflow-y-hidden rounded-2.5xl bg-purple bg-opacity-20
+          transition-all duration-300`}
       >
         {user.map((item, index) => (
           <div
             className="comment-box button-tr test-hover:block group mx-4 mb-4 mt-[10px] flex justify-between rounded-2.5xl border-2 hover:bg-darkPurple hover:bg-opacity-20"
             key={index}
+            onWheel={handleWheel}
           >
             <div className="flex">
               <div className="mr-3 border-2">

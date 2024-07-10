@@ -14,7 +14,7 @@ export default function TopContainer({ user }: userProps) {
 
   return (
     <div
-      className="flex  flex-wrap
+      className="flex  flex-wrap snap-y snap-end
       items-center justify-between bg-white  p-2"
     >
       <div className="wrap-left flex flex-wrap items-center gap-4 ">
