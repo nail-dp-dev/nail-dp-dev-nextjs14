@@ -12,7 +12,6 @@ import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { getLogOut } from '../../api/auth/getLogOut';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
-import Loading from '../../app/loading';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -67,7 +66,7 @@ export default function LoginInfoBox() {
         {
           isLoggedIn === 'loggedIn' && userData &&
 
-          <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
+          <UserInfo nickname={userData.data.nickname} postsCount={userData.data.postsCount} saveCount={userData.data.saveCount} followerCount={userData.data.followerCount}>
               <button
                 onClick={() => {
                   handleLogout();
