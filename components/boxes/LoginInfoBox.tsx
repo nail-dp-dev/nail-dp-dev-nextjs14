@@ -10,8 +10,8 @@ import { useState } from 'react';
 import useUserData from '../../hooks/useUserData';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
-import { getLogOut } from '../../api/auth/getLogOut';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
+import { getLogOut } from '../../api/auth/secure/getLogOut';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
