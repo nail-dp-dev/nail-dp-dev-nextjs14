@@ -24,7 +24,7 @@ export default function UserInfo({
   children,
 }: UserInfoProps) {
   return (
-    <div className="flex flex-col items-start">
+    <div className="flex-1 flex flex-col items-start">
       <div className='w-full flex items-center justify-between'>
         <p className={`${nicknameStyle} ${hoverStyle}`}>{nickname}</p>
         {children}
