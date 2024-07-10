@@ -9,7 +9,7 @@ interface userProps {
   user: CommentData['data'];
 }
 
-export default function ChattingBox({ user,}: userProps) {
+export default function ChattingBox({ user }: userProps) {
   if (!user) {
     return <div>댓글을 찾을 수 없습니다.</div>;
   }
