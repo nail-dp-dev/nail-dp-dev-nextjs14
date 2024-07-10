@@ -19,7 +19,7 @@ export default function LoginModal() {
     dispatch(commonModalClose());
   };
 
-  let getLoginedBefore = 'naver'
+  let getLoginedBefore = localStorage.getItem('loggedInPlatform')
   
 
   return (

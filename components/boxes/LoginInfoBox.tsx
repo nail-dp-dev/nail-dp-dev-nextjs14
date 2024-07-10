@@ -12,7 +12,6 @@ import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { getLogOut } from '../../api/auth/getLogOut';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
-import Loading from '../../app/loading';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -38,7 +37,7 @@ export default function LoginInfoBox() {
   return (
     <div className="loginInfoContainer flex flex-col w-full h-[85px]">
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
-        {isLoggedIn && userData && 
+        {isLoggedIn === 'loggedIn' && userData && 
           (
           <>
             <button
@@ -55,19 +54,19 @@ export default function LoginInfoBox() {
         )
         }
         {
-          isLoggedIn && !userData && 
-          <Loading/>
+          isLoggedIn === 'pending' && !userData && 
+          <></>
         }
         {
-          !isLoggedIn && 
+          isLoggedIn === 'loggedOut' && 
           (
             <UserImage src={'/assets/img/logoutProfileImage.png'} alt={'profileIamge'} width={40} height={40}/>
           )
         }
         {
-          isLoggedIn && userData &&
+          isLoggedIn === 'loggedIn' && userData &&
 
-          <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
+          <UserInfo nickname={userData.data.nickname} postsCount={userData.data.postsCount} saveCount={userData.data.saveCount} followerCount={userData.data.followerCount}>
               <button
                 onClick={() => {
                   handleLogout();
@@ -80,7 +79,7 @@ export default function LoginInfoBox() {
           </UserInfo>
         }
         {
-          !isLoggedIn && userData &&
+          isLoggedIn === 'loggedOut' && userData &&
 
           <button
             onClick={() => {
