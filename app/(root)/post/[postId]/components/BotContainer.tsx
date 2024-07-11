@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
-import ChattingBar from './Bot/ChattingBar';
+import ChattingBar from './bot/ChattingBar';
 
 interface UserDetail {
   post: PostsDetailData['data'];
