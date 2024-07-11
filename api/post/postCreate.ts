@@ -1,18 +1,35 @@
-export const postCreate = async (formData: {
+export const postCreate = async (postData: {
   postContent: string;
   tags: { tagName: string }[];
   tempSave: boolean;
   boundary: string;
-  photos: { mediaFile: FormData }[];
+  photos: File[];
 }) => {
   try {
+    const multipartFormData = new FormData();
+    multipartFormData.append(
+      'content',
+      new Blob(
+        [
+          JSON.stringify({
+            postContent: postData.postContent,
+            tags: postData.tags,
+            tempSave: postData.tempSave,
+            boundary: postData.boundary,
+          }),
+        ],
+        { type: 'application/json' },
+      ),
+    );
+    postData.photos.forEach((file) => {
+      const blob = new Blob([file], { type: file.type });
+      multipartFormData.append('photos', blob, file.name);
+    });
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
-      body: JSON.stringify({ formData }),
+      body: multipartFormData,
     });
     const data = await response.json();
     if (data.code === 2001) {
