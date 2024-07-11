@@ -20,7 +20,6 @@ export default function TopContainer({ user }: userProps) {
     }
   }, [userData, user.nickname]);
 
-  
   const handleFollowToggle = () => {
     if (isFollowing) {
       setFollowerCount(followerCount - 1);
@@ -82,7 +81,7 @@ export default function TopContainer({ user }: userProps) {
               게시글 설정
             </button>
             <button
-              className="button-layout button-color over:button-hover 
+              className="button-layout button-color hover:button-hover 
             active:button-click ml-4 px-[22.5px] py-[5.5px]"
             >
               게시글 수정
