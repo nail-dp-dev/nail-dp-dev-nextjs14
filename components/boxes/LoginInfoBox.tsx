@@ -66,8 +66,8 @@ export default function LoginInfoBox() {
         }
         {
           isLoggedIn === 'loggedIn' && userData &&
-
-          <UserInfo nickname={'somi'} postsCount={10} saveCount={4} followerCount={30}>
+          // statsStyle='text-14px-normal-dP'
+          <UserInfo nickname={'somi'}  postsCount={10} saveCount={4} followerCount={30}>
               <button
                 onClick={() => {
                   handleLogout();

@@ -9,7 +9,6 @@ import { getPostsData } from '../../../../../../api/post/getPostsData';
 interface PostCountProps {
   post: PostsDetailData['data'];
   toggleScroll: () => void;
-  user: PostsDetailData['data'];
 }
 
 export default function PostCount({ post, toggleScroll }: PostCountProps) {

@@ -35,7 +35,7 @@ export default function TopContainer({ user }: userProps) {
 
   return (
     <div
-      className="flex snap-y snap-end flex-wrap
+      className="flex flex-wrap
       items-center justify-between bg-white p-2"
     >
       <div className="wrap-left flex flex-wrap items-center gap-4">

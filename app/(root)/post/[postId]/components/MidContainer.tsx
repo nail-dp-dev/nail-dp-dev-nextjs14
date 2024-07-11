@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ChattingBox from './mid/ChattingBox';
+import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
+import TopContainer from './TopContainer';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -126,7 +127,7 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
             <PostTags post={post} />
           </div>
           <div ref={chatBoxRef}>
-            <ChattingBox user={comments} />
+            <CommentWrap user={comments} />
           </div>
         </div>
       </div>

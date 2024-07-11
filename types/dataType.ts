@@ -71,6 +71,19 @@ export type CommentData = {
     likeCount: number;
   }[];
 };
+export type ReplyData = {
+  success: boolean;
+  code: number;
+  commentId: number;
+  data: {
+    commentId: number;
+    profileUrl: string;
+    commentUserNickname: string;
+    commentDate: string;
+    commentContent: string;
+    likeCount: number;
+  }[];
+};
 
 export type PostCreateData = {
     postContent: string,

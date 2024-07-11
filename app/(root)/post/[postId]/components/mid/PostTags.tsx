@@ -45,8 +45,8 @@ export default function PostTags({ post }: PostTagsProps) {
   return (
     <div
       className="relative 
-      sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[600px] 2xl:max-w-[800px] 
-      overflow-x-hidden bg-red"
+      overflow-x-hidden  sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] 
+      xl:max-w-[600px] 2xl:max-w-[800px]"
       onWheel={handleWheel}
       ref={scrollContainerRef}
       onMouseDown={handleMouseDown}

@@ -14,7 +14,7 @@ export default function PostDetailPage() {
   }
 
   return (
-    <div className="overflow-auto hide-scrollbar ">
+    <div className="hide-scrollbar overflow-auto ">
       <TopContainer user={userDetail.post} />
       <MidContainer
         post={userDetail.post}
