@@ -12,8 +12,6 @@ export const metadata: Metadata = {
   description: '네일아트 디자인 플랫폼',
 };
 
-
-
 export default function RootLayout({
   modal,
   children,

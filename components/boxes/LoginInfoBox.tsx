@@ -66,7 +66,7 @@ export default function LoginInfoBox() {
         {
           isLoggedIn === 'loggedIn' && userData &&
 
-          <UserInfo nickname={userData.data.nickname} postsCount={userData.data.postsCount} saveCount={userData.data.saveCount} followerCount={userData.data.followerCount}>
+          <UserInfo isMenuBar={true} nickname={userData.data.nickname} postsCount={userData.data.postsCount} saveCount={userData.data.saveCount} followerCount={userData.data.followerCount}>
               <button
                 onClick={() => {
                   handleLogout();
