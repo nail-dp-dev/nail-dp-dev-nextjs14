@@ -5,15 +5,14 @@ import { getAllPostsData } from '../api/post/getAllPostsData';
 import { AllPostsData } from '../types/dataType';
 
 
-const useAllPosts = () => {
+const useAllPosts = (category: string, page: number, size: number) => {
 
   const [postsData, setPostsData] = useState<AllPostsData | null>(null);
   
   useEffect(() => {
-
     const getData = async () => {
       try {
-        const data = await getAllPostsData('NEW');
+        const data = await getAllPostsData(category, page, size);
         if (data) {
           setPostsData(data);
         }
@@ -23,7 +22,7 @@ const useAllPosts = () => {
     };
 
     getData();
-  }, []);
+  }, [category, page, size]);
 
   return postsData;
 }

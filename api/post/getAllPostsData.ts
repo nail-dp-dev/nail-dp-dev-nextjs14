@@ -1,8 +1,8 @@
 
-export const getAllPostsData = async (category: string, pageNumber = 1) => {
+export const getAllPostsData = async (category: string, pageNumber?: number, size?: number, lastPostId?: number) => {
 
   try {
-    const response = await fetch(`http://localhost:8080/home?choice=NEW&page=1`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}&page=${pageNumber}&size=${size}&lastPostId=${lastPostId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -13,8 +13,11 @@ export const getAllPostsData = async (category: string, pageNumber = 1) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data)
-    return data
+    if (data.code === 2000) {
+      return data
+    } else {
+      return null
+    }
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);

@@ -6,17 +6,9 @@ import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 
-export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
+export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate, layoutNum }: PostBoxNewProps) {
 
-  const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
-
-  let layoutNum = numberOfBoxes
-
-  console.log(photoUrl)
   const handleHeartClick = () => {
     console.log('Click...Heart!')
   }
