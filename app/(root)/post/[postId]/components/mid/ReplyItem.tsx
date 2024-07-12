@@ -1,6 +1,7 @@
 import Toggle from '../../../../../../components/buttons/Toggle';
 import UserImage from '../../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../../components/ui/UserInfo';
+import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 import { ReplyData } from '../../../../../../types/dataType';
 import ReplyIcon from '../icons/ReplyIcon';
 import ThumbsUpCount from './ThumbsUpCount';
@@ -32,7 +33,7 @@ export default function ReplyItem({ item }: ReplyItemProps) {
               nicknameStyle="text-sm font-bold"
             />
             <p className="commentDate text-14px-normal-dP ml-3">
-              {item.commentDate}
+              {formatTimeAgo(item.commentDate)}
             </p>
           </div>
           <p className="comment text-sm font-normal">{item.commentContent}</p>

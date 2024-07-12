@@ -8,6 +8,7 @@ import Toggle from '../../../../../../components/buttons/Toggle';
 import { CommentData } from '../../../../../../types/dataType';
 import ReplyItem from './ReplyItem';
 import { repliesDetail } from '../../../../../../api/post/getRepliesDetailData';
+import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 
 type CommentItemProps = {
   item: CommentData['data'][number];
@@ -23,7 +24,6 @@ export default function CommentItem({ item }: CommentItemProps) {
     setIsRotated(!isRotated);
   };
 
-  // 해당 commentId에 해당하는 replies를 필터링
   const replyData =
     repliesDetail.find((reply) => reply.commentId === item.commentId)?.data ||
     [];
@@ -57,7 +57,7 @@ export default function CommentItem({ item }: CommentItemProps) {
                   nicknameStyle="text-sm font-bold"
                 />
                 <p className="commentDate text-14px-normal-dP ml-3">
-                  {item.commentDate}
+                  {formatTimeAgo(item.commentDate)}
                 </p>
               </div>
               <p className="comment text-sm font-normal">
