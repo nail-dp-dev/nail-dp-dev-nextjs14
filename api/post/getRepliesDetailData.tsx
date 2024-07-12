@@ -33,6 +33,24 @@ export const repliesDetail: ReplyData[] = [
         commentContent: '이 네일 디자인 정말 독특하네요!',
         likeCount: 4,
       },
+      {
+        commentId: 2,
+        profileUrl:
+          'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
+        commentUserNickname: 'jake',
+        commentDate: '20240701',
+        commentContent: '저도 이 디자인 좋아해요. 특별한 날에 딱이에요.',
+        likeCount: 1,
+      },
+      {
+        commentId: 3,
+        profileUrl:
+          'https://i.pinimg.com/736x/cc/58/c8/cc58c82cb5b49433fa23701b5fe2ed10.jpg',
+        commentUserNickname: 'lisa',
+        commentDate: '20240701',
+        commentContent: '이 네일 디자인 정말 독특하네요!',
+        likeCount: 4,
+      },
     ],
   },
   {

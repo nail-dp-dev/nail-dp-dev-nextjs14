@@ -31,13 +31,15 @@ export default function CommentItem({ item }: CommentItemProps) {
   return (
     <div>
       <div
-        className={`comment-wrap button-tr test-hover:block group/toggle mx-2 mb-4 mt-[10px]
+        className={`comment-wrap button-tr   mx-2 mb-4 mt-[10px]
           rounded-xl transition-all duration-300
           ${isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}
           `}
       >
-        <div className="comment-box button-tr flex justify-between rounded-xl
-         pb-[10px] pl-[10px] pt-[10px] hover:bg-darkPurple hover:bg-opacity-20">
+        <div
+          className="comment-box button-tr group/toggle flex justify-between
+          rounded-xl pb-[10px] pl-[10px] pt-[10px] hover:bg-darkPurple hover:bg-opacity-20"
+        >
           <div className="flex ">
             <div className="mr-3 ">
               <UserImage

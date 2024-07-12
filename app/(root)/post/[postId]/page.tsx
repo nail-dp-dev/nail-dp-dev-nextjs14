@@ -20,7 +20,7 @@ export default function PostDetailPage() {
         post={userDetail.post}
         comments={userDetail.comments}
       />{' '}
-      <BotContainer userDetail={userDetail} />
+      <BotContainer />
     </div>
   );
 }

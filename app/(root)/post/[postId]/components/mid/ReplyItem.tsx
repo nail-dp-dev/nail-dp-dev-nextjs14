@@ -11,8 +11,10 @@ type ReplyItemProps = {
 
 export default function ReplyItem({ item }: ReplyItemProps) {
   return (
-    <div className="reply-box button-tr ml-14 flex justify-between rounded-xl group/toggle2
-    pb-[10px] pl-[10px] pt-[10px] hover:bg-darkPurple hover:bg-opacity-20">
+    <div
+      className="reply-box button-tr group/toggle2 ml-14 flex justify-between rounded-xl
+    pb-[10px] pl-[10px] pt-[10px] hover:bg-darkPurple hover:bg-opacity-20"
+    >
       <div className="flex ">
         <div className="mr-3 ">
           <UserImage
@@ -33,9 +35,7 @@ export default function ReplyItem({ item }: ReplyItemProps) {
               {item.commentDate}
             </p>
           </div>
-          <p className="comment text-sm font-normal">
-            {item.commentContent}
-          </p>
+          <p className="comment text-sm font-normal">{item.commentContent}</p>
           <div className="mt-[8.5px] flex items-center ">
             <ThumbsUpCount item={item} />
             <ReplyIcon className="ml-[10px] mr-[2px] fill-darkPurple hover:fill-purple " />
