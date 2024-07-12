@@ -35,7 +35,7 @@ export default function LoginInfoBox() {
 
 
   return (
-    <div className="loginInfoContainer flex flex-col w-full h-[85px]">
+    <div className={`loginInfoContainer flex flex-col w-full ${isLoggedIn === 'loggedIn' ? 'h-[85px]' : 'h-[60px]'} transition-all`}>
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
         {isLoggedIn === 'loggedIn' && userData && 
           (
@@ -99,12 +99,15 @@ export default function LoginInfoBox() {
         }
         
       </div>
-      <div className="flex items-center w-full h-[38px] px-[8px]">
-        <Bits className="mr-[12px]" />
-        <span className="text-[14px] text-textDarkPurple font-[700]">
-          {userPointData} 비츠
-        </span>
-      </div>
+      {
+        isLoggedIn === 'loggedIn' &&
+        <div className="flex items-center w-full h-[38px] px-[8px]">
+          <Bits className="mr-[12px]" />
+          <span className="text-[14px] text-textDarkPurple font-[700]">
+            {userPointData} 비츠
+          </span>
+        </div>
+      }
     </div>
   );
 }
