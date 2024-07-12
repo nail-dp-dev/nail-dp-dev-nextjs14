@@ -10,12 +10,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 
-export default function  PostBox({postId, photoId, photo_url, like, saved }: PostBoxNewProps) {
+export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
 
   const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
 
   let layoutNum = numberOfBoxes
 
+  console.log(photoUrl)
   const handleHeartClick = () => {
     console.log('Click...Heart!')
   }
@@ -28,9 +29,9 @@ export default function  PostBox({postId, photoId, photo_url, like, saved }: Pos
     <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-start" style={{ width: postBoxWidths[layoutNum]}}>
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
         <Image
-          src={`https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg`}
+          src={photoUrl}
           alt={`postImage`}
-          id={`${photoId}`}
+          id={postId.toString()}
           fill
           style={{objectFit: 'cover', width: '100%', height: '100%'}}
           quality={100}

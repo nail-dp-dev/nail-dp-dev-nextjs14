@@ -20,6 +20,47 @@ export type SignUpData = {
   };
 };
 
+export type AllPostsData = {
+    "code" : number,
+    "message": string,
+    "data": {
+        "totalPages":number,
+        "totalElements":number,
+        "first":boolean,
+        "last":boolean,
+        "size":number,
+        "content": [ 
+            {
+                "postId":number,
+                "photoId":number,
+                "photoUrl":string,
+                "like":boolean,
+                "saved":boolean
+            },
+        ],
+        "number":number,
+        "sort": {
+            "empty":boolean,
+            "sorted":boolean,
+            "unsorted":boolean
+        },
+        "numberOfElements":number,
+        "pageable":{
+            "pageNumber":number,
+            "pageSize":number,
+            "sort":{
+                "empty":boolean,
+                "sorted":boolean,
+                "unsorted":boolean
+            },
+            "offset":number,
+            "paged":boolean,
+            "unpaged":boolean
+        },
+        "empty":boolean
+    }
+}
+
 export type PostsData = {
   success: boolean;
   code: number;

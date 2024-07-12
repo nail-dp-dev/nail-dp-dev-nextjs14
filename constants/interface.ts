@@ -16,9 +16,10 @@ export interface IconButtonProps {
 export interface PostBoxNewProps {
   postId: number,
   photoId: number,
-  photo_url : string,
+  photoUrl : string,
   like?:boolean,
-  saved:boolean 
+  saved: boolean 
+  createdDate: any,
 }
 
 export interface ProfileMiniModalProps {
