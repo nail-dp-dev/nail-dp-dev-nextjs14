@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CommentData } from '../../../../../../types/dataType';
 import CommentItem from './CommentItem';
 
@@ -8,16 +8,17 @@ interface UserProps {
 
 export default function CommentWrap({ user }: UserProps) {
   const [sortType, setSortType] = useState<'latest' | 'popular'>('latest');
+  const [comments, setComments] = useState<CommentData['data']>([]);
   const [sortedComments, setSortedComments] = useState<CommentData['data']>([]);
 
-  useEffect(() => {
-    const sorted = [...user].sort((a, b) => {
-      if (sortType === 'latest') {
+  const sortComments = useCallback((comments: CommentData['data'], type: 'latest' | 'popular') => {
+    return [...comments].sort((a, b) => {
+      if (type === 'latest') {
         return (
           new Date(b.commentDate).getTime() - new Date(a.commentDate).getTime()
         );
       }
-      if (sortType === 'popular') {
+      if (type === 'popular') {
         if (b.likeCount === a.likeCount) {
           return (
             new Date(b.commentDate).getTime() -
@@ -28,8 +29,25 @@ export default function CommentWrap({ user }: UserProps) {
       }
       return 0;
     });
-    setSortedComments(sorted);
-  }, [sortType, user]);
+  }, []);
+
+  useEffect(() => {
+    setComments(user);
+  }, [user]);
+
+  useEffect(() => {
+    setSortedComments(sortComments(comments, sortType));
+  }, [sortType, comments, sortComments]);
+
+  const handleLike = (commentId: number, increment: number) => {
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.commentId === commentId
+          ? { ...comment, likeCount: comment.likeCount + increment }
+          : comment
+      )
+    );
+  };
 
   return (
     <>
@@ -54,10 +72,11 @@ export default function CommentWrap({ user }: UserProps) {
         </div>
       </div>
 
-      <div className="w-full overflow-y-hidden rounded-2.5xl bg-purple bg-opacity-20 transition-all duration-300">
+      <div className="w-full overflow-y-hidden rounded-2.5xl bg-purple bg-opacity-20 
+      transition-all duration-300">
         {sortedComments.map((item) => (
           <div key={item.commentId}>
-            <CommentItem item={item} />
+            <CommentItem item={item} onLike={handleLike} />
           </div>
         ))}
       </div>

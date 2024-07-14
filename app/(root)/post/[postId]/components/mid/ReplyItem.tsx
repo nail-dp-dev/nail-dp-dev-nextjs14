@@ -8,9 +8,10 @@ import ThumbsUpCount from './ThumbsUpCount';
 
 type ReplyItemProps = {
   item: ReplyData['data'][number];
+  onLike: (commentId: number, increment: number) => void;
 };
 
-export default function ReplyItem({ item }: ReplyItemProps) {
+export default function ReplyItem({ item, onLike }: ReplyItemProps) {
   return (
     <div
       className="reply-box button-tr group/toggle2 ml-14 flex justify-between rounded-xl
@@ -38,7 +39,7 @@ export default function ReplyItem({ item }: ReplyItemProps) {
           </div>
           <p className="comment text-sm font-normal">{item.commentContent}</p>
           <div className="mt-[8.5px] flex items-center ">
-            <ThumbsUpCount item={item} />
+            <ThumbsUpCount item={item} onLike={onLike} />
             <ReplyIcon className="ml-[10px] mr-[2px] fill-darkPurple hover:fill-purple " />
           </div>
         </div>

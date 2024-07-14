@@ -13,7 +13,7 @@ export const commentsDetail: CommentData[] = [
           'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
         commentDate: '20240701',
         commentContent: '디자인이 정말 독특하네요!',
-        likeCount: 5,
+        likeCount: 8,
       },
       {
         commentId: 2,

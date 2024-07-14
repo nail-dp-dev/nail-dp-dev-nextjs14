@@ -12,9 +12,10 @@ import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 
 type CommentItemProps = {
   item: CommentData['data'][number];
+  onLike: (commentId: number, increment: number) => void;
 };
 
-export default function CommentItem({ item }: CommentItemProps) {
+export default function CommentItem({ item, onLike }: CommentItemProps) {
   const [isRotated, setIsRotated] = useState(false);
 
   const handleRotatedToggle = (
@@ -24,6 +25,7 @@ export default function CommentItem({ item }: CommentItemProps) {
     setIsRotated(!isRotated);
   };
 
+  // 해당 commentId에 해당하는 replies를 필터링
   const replyData =
     repliesDetail.find((reply) => reply.commentId === item.commentId)?.data ||
     [];
@@ -31,17 +33,17 @@ export default function CommentItem({ item }: CommentItemProps) {
   return (
     <div>
       <div
-        className={`comment-wrap button-tr   mx-2 mb-4 mt-[10px]
-          rounded-xl transition-all duration-300
-          ${isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}
-          `}
+        className={`comment-wrap button-tr mx-2 mb-4 mt-[10px] 
+        rounded-xl transition-all duration-300
+        ${isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
       >
         <div
-          className="comment-box button-tr group/toggle flex justify-between
-          rounded-xl pb-[10px] pl-[10px] pt-[10px] hover:bg-darkPurple hover:bg-opacity-20"
+          className="comment-box button-tr group/toggle flex justify-between 
+          rounded-xl pb-[10px] pl-[10px] pt-[10px] 
+          hover:bg-darkPurple hover:bg-opacity-20"
         >
-          <div className="flex ">
-            <div className="mr-3 ">
+          <div className="flex">
+            <div className="mr-3">
               <UserImage
                 src={item.profileUrl}
                 alt="임시이미지"
@@ -50,7 +52,7 @@ export default function CommentItem({ item }: CommentItemProps) {
               />
             </div>
 
-            <div className="leading-4 ">
+            <div className="leading-4">
               <div className="flex">
                 <UserInfo
                   nickname={item.commentUserNickname}
@@ -63,21 +65,26 @@ export default function CommentItem({ item }: CommentItemProps) {
               <p className="comment text-sm font-normal">
                 {item.commentContent}
               </p>
-              <div className="mt-[8.5px] flex items-center ">
-                <ThumbsUpCount item={item} />
-                <ReplyIcon className="ml-[10px] mr-[2px] fill-darkPurple hover:fill-purple " />
+              <div className="mt-[8.5px] flex items-center">
+                <ThumbsUpCount item={item} onLike={onLike} />
+                <ReplyIcon className="ml-[10px] mr-[2px] fill-darkPurple 
+                hover:fill-purple" />
                 {replyData.length > 0 && (
                   <div
-                    className="button-tr group/item peer flex items-center rounded-2.5xl px-2 py-[2px] hover:bg-darkPurple hover:bg-opacity-20 hover:text-purple"
+                    className="button-tr group/item peer flex items-center 
+                    rounded-2.5xl px-2 py-[2px] hover:bg-darkPurple 
+                    hover:bg-opacity-20 hover:text-purple"
                     key={item.commentId}
                     onClick={handleRotatedToggle}
                     onTouchStart={handleRotatedToggle}
                   >
-                    <p className="text-14px-normal-dP button-tr select-none group-hover/item:text-purple">
+                    <p className="text-14px-normal-dP button-tr select-none 
+                    group-hover/item:text-purple">
                       답글 {replyData.length}개
                     </p>
                     <PostToggleIcon
-                      className={`ml-[7px] fill-darkPurple group-hover/item:fill-purple ${isRotated ? 'rotate-180' : ''}`}
+                      className={`ml-[7px] fill-darkPurple 
+                      group-hover/item:fill-purple ${isRotated ? 'rotate-180' : ''}`}
                     />
                   </div>
                 )}
@@ -91,7 +98,7 @@ export default function CommentItem({ item }: CommentItemProps) {
         {isRotated &&
           replyData.map((replyItem) => (
             <div key={replyItem.commentId}>
-              <ReplyItem key={replyItem.commentId} item={replyItem} />
+              <ReplyItem key={replyItem.commentId} item={replyItem} onLike={onLike} />
             </div>
           ))}
       </div>

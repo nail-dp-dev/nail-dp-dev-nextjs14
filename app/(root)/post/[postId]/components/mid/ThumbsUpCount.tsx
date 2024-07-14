@@ -1,29 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ThumbsUpIcon from '../icons/ThumbsUpIcon';
-import { PostsDetailData } from '../../../../../../types/dataType';
 
 type Item = {
+  commentId: number;
   likeCount: number;
 };
 
 type ThumbsUpCountProps = {
   item: Item;
+  onLike: (commentId: number, increment: number) => void;
 };
 
-export default function ThumbsUpCount({ item }: ThumbsUpCountProps) {
+export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
   const [isThumbsUpStatus, setIsThumbsUpStatus] = useState(false);
   const [isThumbsUpCount, setIsThumbsUpCount] = useState(item.likeCount);
+
+  useEffect(() => {
+    setIsThumbsUpCount(item.likeCount);
+  }, [item.likeCount]);
 
   const handleThumbsUp = (
     e: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>,
   ) => {
     e.stopPropagation();
-    if (isThumbsUpStatus) {
-      setIsThumbsUpCount(isThumbsUpCount - 1);
-    } else {
-      setIsThumbsUpCount(isThumbsUpCount + 1);
-    }
+    const increment = isThumbsUpStatus ? -1 : 1;
+    setIsThumbsUpCount(isThumbsUpCount + increment);
     setIsThumbsUpStatus(!isThumbsUpStatus);
+    onLike(item.commentId, increment);
   };
 
   return (
