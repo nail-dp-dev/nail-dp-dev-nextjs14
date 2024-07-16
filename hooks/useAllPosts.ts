@@ -2,29 +2,42 @@
 
 import { useEffect, useState } from 'react';
 import { getAllPostsData } from '../api/post/getAllPostsData';
-import { AllPostsData } from '../types/dataType';
+import { PostArray } from '../types/dataType';
+import { useSelector } from 'react-redux';
+import { selectNumberOfBoxes } from '../store/slice/boxLayoutSlice';
 
+const useAllPosts = (category: string, size: number) => {
 
-const useAllPosts = (category: string, page: number, size: number) => {
+  const [postsData, setPostsData] = useState<PostArray[]>([]);
+  const [oldestPostId, setOldestPostId] = useState<number | null>(null);
+  let layoutNum = useSelector(selectNumberOfBoxes);
 
-  const [postsData, setPostsData] = useState<AllPostsData | null>(null);
-  
   useEffect(() => {
     const getData = async () => {
       try {
-        const data = await getAllPostsData(category, page, size);
+        let data;
+        if (oldestPostId !== null) {
+          data = await getAllPostsData(category, size, oldestPostId);
+        } else {
+          data = await getAllPostsData(category, size);
+        }
+
         if (data) {
-          setPostsData(data);
+          setPostsData(data.data.postSummaryList.content);
+          setOldestPostId(data.data.oldestPostId);
+          console.log('Data fetched:', data);
+        } else {
+          console.log('No data received');
         }
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching data:', error);
       }
     };
 
     getData();
-  }, [category, page, size]);
+  }, [oldestPostId, category, size, layoutNum]);
 
-  return postsData;
+  return {postsData};
 }
 
 export default useAllPosts

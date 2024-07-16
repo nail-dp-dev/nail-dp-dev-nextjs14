@@ -1,8 +1,15 @@
 
-export const getAllPostsData = async (category: string, pageNumber?: number, size?: number, lastPostId?: number) => {
+export const getAllPostsData = async (category: string, size?: number, oldestPostId?: number) => {
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}&page=${pageNumber}&size=${size}&lastPostId=${lastPostId}`, {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
+    if (size) {
+      url += `&size=${size}`
+    }
+    if (oldestPostId) {
+      url += `&oldestPostId=${oldestPostId}`
+    }
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

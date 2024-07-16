@@ -62,7 +62,7 @@ export default function LoginModal() {
               }
             </div>
           </div>
-          <div className='w-full h-[40px] flex items-start justify-center'>
+          <div className='w-full h-[40px] flex items-start justify-center animate-easeInOnly '>
             <UsedLoginPlatform
               className={`${getLoginedBefore === 'naver' && 'translate-x-[165px]' ||  getLoginedBefore === 'kakao' && 'translate-x-[-165px]'}`}
             />

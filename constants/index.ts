@@ -68,13 +68,15 @@ export const signUpConsentItems = [
 //   {icon: "ShareIcon", number: 1},
 // ]
 
-export const getPostsNumber = [
-  { state: 3 , number: 9},
-  { state: 4 , number: 16},
-  { state: 5 , number: 25},
-  { state: 6 , number: 26},
-  { state: 7 , number: 42},
-]
+export const getPostsNumber: {
+  [key: number]: { number: number }
+} = {
+  3: { number: 15 },
+  4: { number: 20 },
+  5: { number: 25 },
+  6: { number: 30 },
+  7: { number: 35 },
+};
 
 export const getArchivePath: {
   '/': { result: string },
