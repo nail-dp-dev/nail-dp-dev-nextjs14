@@ -81,3 +81,9 @@ export interface ProcedureUIProps {
   number: number,
   name: string
 }
+
+export interface PostCreateModalProps {
+  isOverFileType:string,
+  isOverFileMemory:number,
+  setIsModal:React.Dispatch<React.SetStateAction<boolean>>;
+}
