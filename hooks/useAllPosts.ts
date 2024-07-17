@@ -25,7 +25,6 @@ const useAllPosts = (category: string, size: number) => {
       if (data) {
         setPostsData(prev => [...prev, ...data.data.postSummaryList.content]);
         setOldestPostId(data.data.oldestPostId);
-        console.log(data.data.oldestPostId);
         setIsLast(data.data.postSummaryList.last);
       } else {
         console.log('No data received');
@@ -43,7 +42,7 @@ const useAllPosts = (category: string, size: number) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
-  return { postsData, fetchMorePosts };
+  return { postsData, fetchMorePosts, isLast };
 };
 
 export default useAllPosts;
