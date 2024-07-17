@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useAllPosts from '../../hooks/useAllPosts';
 import PostBox from './PostBox';
 import Loading from '../../app/loading';
@@ -14,15 +14,13 @@ export default function PostsBox() {
   const category = getArchivePath[path].result;
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
-  const { postsData, fetchMorePosts } = useAllPosts(category, size);
+  const { postsData, fetchMorePosts, isLast } = useAllPosts(category, size);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log('layoutNum changed:', layoutNum);
     const currentRef = bottomRef.current;
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        console.log('Bottom ref is intersecting', entries);
+      if (entries[0].isIntersecting && !isLast) {
         fetchMorePosts();
       }
     }, {
@@ -31,23 +29,22 @@ export default function PostsBox() {
 
     if (currentRef) {
       observer.observe(currentRef);
-      console.log('Observer started observing', currentRef);
     }
 
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
-        console.log('Observer stopped observing', currentRef);
       }
     };
-  }, [fetchMorePosts, layoutNum]);
+  }, [fetchMorePosts, layoutNum, isLast]);
 
-  const itemsToRender = postsData ? postsData.slice(0, postsData.length - (postsData.length % layoutNum)) : [];
+  const itemsToRender = postsData 
+    ? (postsData.length <= layoutNum ? postsData : postsData.slice(0, postsData.length - (postsData.length % layoutNum))) 
+    : [];
 
   return (
     <div
       className='outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all'
-      onScroll={() => console.log('Scrolling...')}
     >
       {postsData ?
         itemsToRender.map((item, index) => (
@@ -64,7 +61,7 @@ export default function PostsBox() {
         :
         <Loading />
       }
-      <div ref={bottomRef} className='bottom-0 h-[2px] w-full'></div>
+      <div ref={bottomRef} className='bottom-0 h-[1px] w-full'></div>
     </div>
   );
 }
