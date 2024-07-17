@@ -1,15 +1,9 @@
 'use client';
 
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  MouseEvent,
-  useState,
-} from 'react';
+import { ChangeEvent, KeyboardEvent, MouseEvent, useState } from 'react';
 import HashtagArrowIcon from '../../../../../public/assets/svg/hashtag-arrow.svg';
 
-
-export default function HashTagContainer({onHashTagChange}:any) {
+export default function HashTagContainer({ onHashTagChange }: any) {
   //태그 관련
   const [isTagList, setIsTagList] = useState([
     '#유광',
@@ -49,16 +43,16 @@ export default function HashTagContainer({onHashTagChange}:any) {
       }
     } else {
       setIsUserHashTags([...isUserHashTags, i]);
-      onHashTagChange([...isUserHashTags, i])
+      onHashTagChange([...isUserHashTags, i]);
     }
   };
 
   const addUserHashTagKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (e.nativeEvent.isComposing === false && isTagValue.trim() !== '') {
         setIsUserHashTags([...isUserHashTags, `#${isTagValue.trim()}`]);
-        onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`])
+        onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`]);
         setIsTagValue('');
         setIsHashTagButton(true);
         if (isHashTagButton != isHashTagState) {
@@ -81,18 +75,13 @@ export default function HashTagContainer({onHashTagChange}:any) {
     <>
       {/* 해시태그 */}
       <div className="flex flex-col px-[16px] py-[12px]">
-        <div className="pb-[8px] text-[16px]">
+        <div className="pb-[8px] text-[1rem]">
           <span className="font-bold">해시태그</span>
-          {/* 값에 따라 없어지고 나타남 */}
-          <span
-            className={`text-red ${isUserHashTags.length > 0 ? 'hidden' : ''}`}
-          >
-            *
-          </span>
+          <span className="text-red">*</span>
         </div>
         <div className="flex h-[56px] w-full items-center rounded-lg border border-postInputGray text-center focus-within:border-purple">
           <input
-            className="flex-1 rounded-lg p-[15px] text-[16px] focus:outline-none"
+            className="flex-1 rounded-lg p-[15px] text-[1rem] focus:outline-none"
             type="text"
             placeholder="게시물에 해당하는 해시태그 아래에서 선택 후 추가로 입력해 주세요."
             value={isTagValue}
@@ -129,7 +118,7 @@ export default function HashTagContainer({onHashTagChange}:any) {
         </div>
       )}
       {isHashTagState && (
-        <div className="felx px-[12px] pb-[28px] pt-[12px]">
+        <div className="px-[12px] pb-[28px] pt-[12px]">
           {isTagList.map((item, index) => (
             <button
               onClick={(e) => addUserHashTagClick(e, item)}
