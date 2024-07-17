@@ -9,11 +9,11 @@ const useAllPosts = (category: string, size: number) => {
   const [oldestPostId, setOldestPostId] = useState<number | null>(null);
   const [isLast, setIsLast] = useState<Boolean | false>(false);
   const [loading, setLoading] = useState(false);
-
   const fetchMorePosts = useCallback(async () => {
     if (loading || isLast) return;
 
     setLoading(true);
+
     try {
       let data;
       if (oldestPostId !== null && !isLast) {
