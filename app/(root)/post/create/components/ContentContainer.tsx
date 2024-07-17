@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useState } from 'react';
 
-export default function ContentContainer({onContentChange}:any) {
+export default function ContentContainer({ onContentChange }: any) {
   // 내용 작성 관련
   const [isContent, setIsContent] = useState('');
 
@@ -12,12 +12,9 @@ export default function ContentContainer({onContentChange}:any) {
   };
 
   return (
-    <div className="flex flex-col min-h-[156px] h-[23vh] px-[16px] py-[12px]">
+    <div className="flex h-[23vh] min-h-[156px] flex-col px-[16px] py-[12px]">
       <div className="pb-[8px] text-[16px]">
         <span className="font-bold">내용</span>
-        <span className={`text-red ${isContent.length > 0 ? 'hidden' : ''}`}>
-          *
-        </span>
       </div>
       <div className="h-full w-full overflow-hidden rounded-lg border border-postInputGray focus-within:border-purple">
         <textarea

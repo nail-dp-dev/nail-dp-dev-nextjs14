@@ -1,15 +1,9 @@
 'use client';
 
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  MouseEvent,
-  useState,
-} from 'react';
+import { ChangeEvent, KeyboardEvent, MouseEvent, useState } from 'react';
 import HashtagArrowIcon from '../../../../../public/assets/svg/hashtag-arrow.svg';
 
-
-export default function HashTagContainer({onHashTagChange}:any) {
+export default function HashTagContainer({ onHashTagChange }: any) {
   //태그 관련
   const [isTagList, setIsTagList] = useState([
     '#유광',
@@ -49,16 +43,16 @@ export default function HashTagContainer({onHashTagChange}:any) {
       }
     } else {
       setIsUserHashTags([...isUserHashTags, i]);
-      onHashTagChange([...isUserHashTags, i])
+      onHashTagChange([...isUserHashTags, i]);
     }
   };
 
   const addUserHashTagKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (e.nativeEvent.isComposing === false && isTagValue.trim() !== '') {
         setIsUserHashTags([...isUserHashTags, `#${isTagValue.trim()}`]);
-        onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`])
+        onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`]);
         setIsTagValue('');
         setIsHashTagButton(true);
         if (isHashTagButton != isHashTagState) {
@@ -83,12 +77,7 @@ export default function HashTagContainer({onHashTagChange}:any) {
       <div className="flex flex-col px-[16px] py-[12px]">
         <div className="pb-[8px] text-[16px]">
           <span className="font-bold">해시태그</span>
-          {/* 값에 따라 없어지고 나타남 */}
-          <span
-            className={`text-red ${isUserHashTags.length > 0 ? 'hidden' : ''}`}
-          >
-            *
-          </span>
+          <span className="text-red">*</span>
         </div>
         <div className="flex h-[56px] w-full items-center rounded-lg border border-postInputGray text-center focus-within:border-purple">
           <input
