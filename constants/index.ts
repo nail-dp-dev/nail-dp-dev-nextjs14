@@ -71,11 +71,11 @@ export const signUpConsentItems = [
 export const getPostsNumber: {
   [key: number]: { number: number }
 } = {
-  3: { number: 15 },
-  4: { number: 20 },
-  5: { number: 25 },
-  6: { number: 30 },
-  7: { number: 35 },
+  3: { number: 30 },
+  4: { number: 40 },
+  5: { number: 50 },
+  6: { number: 60 },
+  7: { number: 70 },
 };
 
 export const getArchivePath: {

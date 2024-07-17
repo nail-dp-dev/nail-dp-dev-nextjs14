@@ -62,11 +62,12 @@ export type AllPostsData = {
 }
 
 export type PostArray = {
-  postId:number,
-  photoId:number,
-  photoUrl:string,
-  like:boolean,
-  saved:boolean
+  postId: number;
+  photoId: number;
+  photoUrl: string;
+  like: boolean;
+  saved: boolean;
+  createdDate: any;
 }
 
 export type PostsData = {

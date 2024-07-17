@@ -20,7 +20,6 @@ export interface PostBoxNewProps {
   like?:boolean,
   saved: boolean 
   createdDate: any,
-  layoutNum: number,
 }
 
 export interface ProfileMiniModalProps {
