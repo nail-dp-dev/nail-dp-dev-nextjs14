@@ -6,7 +6,7 @@ import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../../../../../components/modal/common/postCreatemodal/PostCreateModal';
+import PostCreateModal from '../../../../../components/modal/common/postCreateModal/PostCreateModal';
 
 export default function ImageUploadContainer({ onImageChange }: any) {
   const [isImages, setIsImages] = useState<string[]>([]);
@@ -25,7 +25,6 @@ export default function ImageUploadContainer({ onImageChange }: any) {
 
   useEffect(() => {
     const totalMemory = isFileMemory.reduce((acc, cur) => acc + cur, 0);
-    console.log(totalMemory);
     const maxMemory = Math.ceil(totalMemory * 10) / 10;
     setIsMaxFileMemory(maxMemory);
   }, [isFileMemory]);
@@ -85,7 +84,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
   return (
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
-        <p className="flex-1 text-center text-[24px] font-bold">
+        <p className="flex-1 text-center text-[1.5rem] font-bold">
           새 게시글 작성
         </p>
         <Link href={`/my-page`}>
@@ -102,7 +101,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
         />
         {isImages.length < 1 && (
           <div className="flex h-full w-full flex-col items-center justify-center">
-            <div className="text-[18px]">
+            <div className="text-[1.1rem]">
               <span>네일아트 디자인을 업로드해 보세요.</span>
               <span className="text-red">*</span>
             </div>
@@ -112,7 +111,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
             >
               사진 추가하기
             </button>
-            <p className="mb-[13px] mt-[24px] text-[16px]">
+            <p className="mb-[13px] mt-[24px] text-[1rem]">
               (최대 10장 50M까자입니다.)
             </p>
           </div>
@@ -172,7 +171,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
         className={`flex items-center ${isMaxFileMemory < 100 ? 'justify-end' : 'justify-between'} px-[8.5px] text-darkPurple`}
       >
         <p
-          className={`${isMaxFileMemory < 100 && 'hidden'} left-0 text-[11px] text-red`}
+          className={`${isMaxFileMemory < 100 && 'hidden'} left-0 text-[0.6875rem] text-red`}
         >
           * 업로드 가능한 최대 용량은 100MB 입니다.
         </p>

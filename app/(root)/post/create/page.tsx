@@ -47,10 +47,10 @@ export default function PostCreate() {
 
     if (temp) {
       tempPostCreate(postData);
-      router.push('/my-page');
+      // router.push('/my-page');
     } else {
       postCreate(postData);
-      router.push('/my-page');
+      // router.push('/my-page');
     }
   };
 
