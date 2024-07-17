@@ -1,5 +1,6 @@
-import { logOut } from '../../store/slice/loginSlice';
-import { AppDispatch } from '../../store/store';
+import { logOut } from '../../../store/slice/loginSlice';
+import { AppDispatch } from '../../../store/store';
+
 
 export const getLogOut = async (dispatch: AppDispatch) => {
 

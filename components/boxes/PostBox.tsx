@@ -7,14 +7,11 @@ import Image from 'next/image';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 
-export default function  PostBox({postId, photoId, photo_url, like, saved }: PostBoxNewProps) {
+export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
 
-  const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
-
-  let layoutNum = numberOfBoxes
+  const layoutNum = useSelector(selectNumberOfBoxes);
 
   const handleHeartClick = () => {
     console.log('Click...Heart!')
@@ -25,18 +22,20 @@ export default function  PostBox({postId, photoId, photo_url, like, saved }: Pos
   }
 
   return (
-    <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-start" style={{ width: postBoxWidths[layoutNum]}}>
+    <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-end" style={{ width: postBoxWidths[layoutNum]}}>
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
         <Image
-          src={`https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg`}
-          alt={`postImage`}
-          id={`${photoId}`}
+          src={photoUrl}
+          alt={createdDate}
+          id={postId.toString()}
           fill
           style={{objectFit: 'cover', width: '100%', height: '100%'}}
           quality={100}
           priority
-          sizes='100vw, 50vw, 33vw' 
-        />
+          sizes='100vw, 50vw, 33vw'
+          blurDataURL="https://image-component.nextjs.gallery/placeholder"
+          placeholder='blur'
+          />
       </Link>
       <button
         onClick={handleHeartClick}

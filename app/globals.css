@@ -79,6 +79,9 @@ body {
   .button-tr-tf {
     @apply button-tr hover:scale-[1.02];
   }
+  .button-tr-tf2 {
+    @apply button-tr hover:scale-[1.1];
+  }
 
   /* 해시태그 레이아웃 */
   /* 색상 따로 지정 */

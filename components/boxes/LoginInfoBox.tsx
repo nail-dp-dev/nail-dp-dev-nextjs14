@@ -10,9 +10,8 @@ import { useState } from 'react';
 import useUserData from '../../hooks/useUserData';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
-import { getLogOut } from '../../api/auth/getLogOut';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
-import Loading from '../../app/loading';
+import { getLogOut } from '../../api/auth/secure/getLogOut';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -36,7 +35,7 @@ export default function LoginInfoBox() {
 
 
   return (
-    <div className="loginInfoContainer flex flex-col w-full h-[85px]">
+    <div className={`loginInfoContainer flex flex-col w-full ${isLoggedIn === 'loggedIn' ? 'h-[85px]' : 'h-[60px]'} transition-all`}>
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
         {isLoggedIn === 'loggedIn' && userData && 
           (
@@ -66,8 +65,8 @@ export default function LoginInfoBox() {
         }
         {
           isLoggedIn === 'loggedIn' && userData &&
-          // statsStyle='text-14px-normal-dP'
-          <UserInfo nickname={'somi'}  postsCount={10} saveCount={4} followerCount={30}>
+
+          <UserInfo isMenuBar={true} nickname={userData.data.nickname} postsCount={userData.data.postsCount} saveCount={userData.data.saveCount} followerCount={userData.data.followerCount}>
               <button
                 onClick={() => {
                   handleLogout();
@@ -100,12 +99,15 @@ export default function LoginInfoBox() {
         }
         
       </div>
-      <div className="flex items-center w-full h-[38px] px-[8px]">
-        <Bits className="mr-[12px]" />
-        <span className="text-[14px] text-textDarkPurple font-[700]">
-          {userPointData} 비츠
-        </span>
-      </div>
+      {
+        isLoggedIn === 'loggedIn' &&
+        <div className="flex items-center w-full h-[38px] px-[8px]">
+          <Bits className="mr-[12px]" />
+          <span className="text-[14px] text-textDarkPurple font-[700]">
+            {userPointData} 비츠
+          </span>
+        </div>
+      }
     </div>
   );
 }

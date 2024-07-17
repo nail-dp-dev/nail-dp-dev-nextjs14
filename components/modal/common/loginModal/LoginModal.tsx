@@ -19,7 +19,7 @@ export default function LoginModal() {
     dispatch(commonModalClose());
   };
 
-  let getLoginedBefore = 'naver'
+  let getLoginedBefore = localStorage.getItem('loggedInPlatform')
   
 
   return (
@@ -50,7 +50,7 @@ export default function LoginModal() {
             <div className='w-full h-[52px] flex items-center justify-between gap-[10px]'>
               {
                 easyLoginElements.map((ele, index) => (
-                  <Link key={index} href={`${ele.uri}`} className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] button-tr button-tr-tf ${ele.data === 'kakao' && 'bg-kakaoYellow' || ele.data === 'google' && 'bg-googleGray' || ele.data === 'naver' && 'bg-naverGreen'} rounded-[5px]`}>
+                  <Link key={index} href={`${ele.uri}`} className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] button-tr button-tr-tf2 ${ele.data === 'kakao' && 'bg-kakaoYellow' || ele.data === 'google' && 'bg-googleGray' || ele.data === 'naver' && 'bg-naverGreen'} rounded-[5px]`}>
                     {
                       ele.data === 'kakao' && <KakaoIcon /> ||
                       ele.data === 'google' && <GoogleIcon /> ||
@@ -62,7 +62,7 @@ export default function LoginModal() {
               }
             </div>
           </div>
-          <div className='w-full h-[40px] flex items-start justify-center'>
+          <div className='w-full h-[40px] flex items-start justify-center animate-easeInOnly '>
             <UsedLoginPlatform
               className={`${getLoginedBefore === 'naver' && 'translate-x-[165px]' ||  getLoginedBefore === 'kakao' && 'translate-x-[-165px]'}`}
             />

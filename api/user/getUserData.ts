@@ -8,7 +8,7 @@ const tempData: UserData = {
     "postsCount": 1,
     "saveCount": 1,
     "followerCount": 1,
-    "point": 1000,
+    "point": 12400,
     "profileUrl": "https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg" 
   }
 };
