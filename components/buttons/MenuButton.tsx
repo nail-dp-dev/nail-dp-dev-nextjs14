@@ -11,14 +11,17 @@ import SettingIcon from '../../public/assets/svg/setting.svg'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MenuElementsProps } from '../../constants/interface'
+import { useSelector } from 'react-redux'
+import { selectLoginStatus } from '../../store/slice/loginSlice'
 
 
 export default function MenuButton({ icon , url, name, desc, isLast, where }: MenuElementsProps) {
 
   const path = usePathname();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   return (
-    <div className={`w-full ${!isLast && 'mb-[8px]'} group`}>
+    <div className={`w-full ${!isLast && 'mb-[8px]'} group ${isLoggedIn !== 'loggedIn' && (name === '마이 페이지' || name === '환경설정') && 'hidden'}`}>
       <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-full h-[40px] flex items-center justify-between py-[12px] px-[8px] rounded-2xl ${where === 'top' ? 'group-hover:bg-purple group-hover:text-white' : 'group-hover:text-purple'}   transition-all`}>
         <div className='flex items-center'>
           <div className='flex items-center justify-center w-[36px] h-[24px]'>

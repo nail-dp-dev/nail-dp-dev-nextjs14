@@ -8,7 +8,7 @@ const tempData: UserData = {
     "postsCount": 1,
     "saveCount": 1,
     "followerCount": 1,
-    "point": 1000
+    "point": 12400
   }
 };
 
