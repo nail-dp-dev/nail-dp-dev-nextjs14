@@ -12,8 +12,10 @@ const useUserData = () => {
     const getData = async () => {
       try {
         const data = await getUserData();
-        setUserData(data);
-        setUserPointData(data.data.point);
+        if (data) {
+          setUserData(data);
+          setUserPointData(data.data.point);
+        }
       } catch (error) {
         console.error(error);
       }

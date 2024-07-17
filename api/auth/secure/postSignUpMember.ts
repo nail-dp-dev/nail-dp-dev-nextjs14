@@ -1,4 +1,4 @@
-import { PostSignUpData } from '../../types/dataType'
+import { PostSignUpData } from '../../../types/dataType'
 
 export const postSignUpMember = async ({ nickname, finalPhoneNumber, finalAgreement, router }:PostSignUpData) => {
   

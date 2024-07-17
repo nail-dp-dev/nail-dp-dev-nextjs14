@@ -1,4 +1,7 @@
-export const getNaverAuthCode = async (code: string, router: any) => {
+import { logIn } from '../../../store/slice/loginSlice';
+import { AppDispatch } from '../../../store/store';
+
+export const getNaverAuthCode = async (code: string, router: any, dispatch: AppDispatch) => {
   
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/naver?code=${code}`, {
@@ -14,7 +17,8 @@ export const getNaverAuthCode = async (code: string, router: any) => {
     const data = await response.json();
 
     if (data.code === 2000) {
-      alert(data.message)
+      dispatch(logIn());
+      localStorage.setItem('loggedInPlatform', 'naver')
       router.push('/');
     } else if (data.code === 2001) {
       router.push('/sign-up');

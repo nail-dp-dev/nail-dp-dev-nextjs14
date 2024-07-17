@@ -21,7 +21,8 @@ export default function MenuBar() {
         ))}
       </div>
       <div className="w-full rounded-2xl">
-        {bottomMenuElements.map((item, index) => (
+        {
+          bottomMenuElements.map((item, index) => (
           <MenuButton
             key={index}
             icon={item.icon}
@@ -31,7 +32,8 @@ export default function MenuBar() {
             isLast={item.isLast}
             where={'bottom'}
           />
-        ))}
+          ))
+        }
       </div>
     </section>
   );
