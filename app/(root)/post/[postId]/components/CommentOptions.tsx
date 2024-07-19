@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import useUserData from '../../../../../hooks/useUserData';
+import useLoggedInUserData from '../../../../../hooks/auth/useLoggedInUserData';
 
 interface CommentOptionsProps {
   onEditClick: () => void;
@@ -18,7 +18,7 @@ export default function CommentOptions({
   onClose,
   commentUserNickname,
 }: CommentOptionsProps) {
-  const { userData } = useUserData();
+  const { userData } = useLoggedInUserData();
   const optionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

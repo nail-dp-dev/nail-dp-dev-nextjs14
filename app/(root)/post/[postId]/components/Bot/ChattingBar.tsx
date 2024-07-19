@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import UserImage from '../../../../../../components/ui/UserImage';
 import EmoticonIcon from '../../../../../../public/assets/svg/emoticon.svg';
-import useUserData from '../../../../../../hooks/useUserData';
 import { AddCommentType } from '../../../../../../hooks/useComments';
 import ReplyBar from './ReplyBar';
+import useLoggedInUserData from '../../../../../../hooks/auth/useLoggedInUserData';
+import { selectLoginStatus } from '../../../../../../store/slice/loginSlice';
+import { useSelector } from 'react-redux';
 
 type ChattingBarProps = {
   onAddComment: (newComment: AddCommentType) => void;
@@ -18,9 +20,10 @@ export default function ChattingBar({
   replyUser,
   onCancelReply,
 }: ChattingBarProps) {
-  const { userData } = useUserData();
+  const { userData } = useLoggedInUserData();
   const [commentContent, setCommentContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     if (replyUser.name) {
@@ -31,12 +34,14 @@ export default function ChattingBar({
     }
   }, [replyUser]);
 
+  console.log(userData);
+
   const handlePostComment = () => {
-    if (commentContent.trim()) {
+    if (commentContent.trim() && userData) {
       const newComment: AddCommentType = {
-        commentUserNickname: userData?.data.nickname || '익명',
+        commentUserNickname: userData.data.nickname || '익명',
         profileUrl:
-          userData?.data.profileUrl || '/assets/img/logoutProfileImage.png',
+          userData.data.profileUrl || '/assets/img/logoutProfileImage.png',
         commentDate: new Date().toISOString(),
         commentContent,
         likeCount: 0,
@@ -69,14 +74,16 @@ export default function ChattingBar({
         />
       )}
       <div className="flex items-center gap-3">
-        <UserImage
-          src={
-            userData?.data.profileUrl || '/assets/img/logoutProfileImage.png'
-          }
-          alt={'profileImage'}
-          width={40}
-          height={40}
-        />
+        {isLoggedIn === 'loggedIn' && userData && (
+          <UserImage
+            src={
+              userData.data.profileUrl || '/assets/img/logoutProfileImage.png'
+            }
+            alt={'profileImage'}
+            width={40}
+            height={40}
+          />
+        )}
         <form className="relative h-12 w-full ">
           <textarea
             ref={textareaRef}
@@ -88,7 +95,7 @@ export default function ChattingBar({
             onKeyPress={handleKeyPress}
           />
           <div className="absolute right-0 top-1/2 flex -translate-y-1/2 transform items-center">
-            <EmoticonIcon />
+            {/* <EmoticonIcon /> */}
             <button
               type="button"
               className="button-layout button-color ml-[22px] mr-2 px-[26px] py-[5.5px] text-sm font-medium"

@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import UserImage from '../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../types/dataType';
-import useUserData from '../../../../../hooks/useUserData';
+import useLoggedInUserData from '../../../../../hooks/auth/useLoggedInUserData';
+
 
 interface userProps {
   user: PostsDetailData['data'];
 }
 
 export default function TopContainer({ user }: userProps) {
-  const { userData } = useUserData();
+  const { userData } = useLoggedInUserData();
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);
   const [followerCount, setFollowerCount] = useState(user.followerCount);
   const [isOwner, setIsOwner] = useState(false);
