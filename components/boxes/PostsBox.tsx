@@ -14,7 +14,7 @@ export default function PostsBox() {
   const category = getArchivePath[path].result;
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
-  const { postsData, fetchMorePosts, isLast } = useAllPosts(category, size);
+  const { postsData, fetchMorePosts, isLast, message } = useAllPosts(category, size);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
