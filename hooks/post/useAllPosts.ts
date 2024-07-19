@@ -29,17 +29,24 @@ const useAllPosts = (category: string, size: number) => {
         setPostsData(prev => [...prev, ...data.data.postSummaryList.content]);
         setOldestPostId(data.data.oldestPostId);
         setIsLast(data.data.postSummaryList.last);
+        setMessage('');
+        setLoading(false);
         setMessage(data.data.message);
       } else {
+        setLoading(false);
+        setIsLast(true);
+        setMessage('No more posts available.');
         setMessage('No data recieved from server...')
       }
+
     } catch (error) {
       console.error('Error fetching data:', error);
+      setMessage('Error fetching data');
     } finally {
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, oldestPostId, isLast, loading]);
+  }, [category, oldestPostId, isLast]);
 
   useEffect(() => {
     fetchMorePosts();
