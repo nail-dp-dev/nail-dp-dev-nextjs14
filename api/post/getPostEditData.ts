@@ -51,7 +51,7 @@ const editData = [
           fileName: '23a45e0c7b5c4e08653bd1862b0ede97.gif',
           fileSize: 2071805,
           fileUrl:
-            'https://ndpdevs3.s3.ap-northeast-2.amazonaws.com/398c4083-5361-4093-8a35-b365cfe32c9a.gif',
+            'https://ndpdevs3.s3.ap-northeast-2.amazonaws.com/84d11ccc-5c7a-4986-b366-726b3aacd137.png',
         },
       ],
       boundary: 'ALL',

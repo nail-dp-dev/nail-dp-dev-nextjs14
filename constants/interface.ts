@@ -16,9 +16,10 @@ export interface IconButtonProps {
 export interface PostBoxNewProps {
   postId: number,
   photoId: number,
-  photo_url : string,
+  photoUrl : string,
   like?:boolean,
-  saved:boolean 
+  saved: boolean 
+  createdDate: any,
 }
 
 export interface ProfileMiniModalProps {
@@ -79,4 +80,10 @@ export interface ProcedureUIProps {
   this_procedure: string,
   number: number,
   name: string
+}
+
+export interface PostCreateModalProps {
+  isOverFileType:string,
+  isOverFileMemory:number,
+  setIsModal:React.Dispatch<React.SetStateAction<boolean>>;
 }

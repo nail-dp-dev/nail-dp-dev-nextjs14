@@ -27,7 +27,7 @@ export default function PrivacySettingContainer({
 
   return (
     <div className="px-[16px] pb-[50px] pt-[12px]">
-      <p className="pb-[8px] text-[16px] font-bold">공개 범위 설정</p>
+      <p className="pb-[8px] text-[1rem] font-bold">공개 범위 설정</p>
       <div className="flex">
         <div className="mr-[16px] flex items-center hover:border-purple">
           <input
@@ -39,7 +39,7 @@ export default function PrivacySettingContainer({
             onChange={boundaryChange}
             checked={isBoundary === 'ALL'}
           />
-          <label className="text-[14px] font-bold" htmlFor="public-1">
+          <label className="text-[0.875rem] font-bold" htmlFor="public-1">
             공개
           </label>
         </div>
@@ -53,7 +53,7 @@ export default function PrivacySettingContainer({
             onChange={boundaryChange}
             checked={isBoundary === 'NONE'}
           />
-          <label className="text-[14px] font-bold" htmlFor="public-2">
+          <label className="text-[0.875rem] font-bold" htmlFor="public-2">
             비공개
           </label>
         </div>
@@ -67,7 +67,7 @@ export default function PrivacySettingContainer({
             onChange={boundaryChange}
             checked={isBoundary === 'FOLLOW'}
           />
-          <label className="text-[14px] font-bold" htmlFor="public-3">
+          <label className="text-[0.875rem] font-bold" htmlFor="public-3">
             팔로워 공개
           </label>
         </div>

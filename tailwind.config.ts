@@ -21,10 +21,15 @@ const config: Config = {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(10px)' },
         },
+        easeInOnly: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(3px)' },
+        }
       },
       animation: {
         fadeInOutFloat: 'fadeInOutFloat 3s ease-in-out infinite',
         justFloat: 'justFloat 3s ease-in-out infinite',
+        easeInOnly: 'easeInOnly 0.8s linear infinite',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

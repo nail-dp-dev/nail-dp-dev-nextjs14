@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   description: '네일아트 디자인 플랫폼',
 };
 
-
 export default function RootLayout({
   modal,
   children,
@@ -22,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/favicon.ico" sizes="any" />
       <body className={inter.className} suppressHydrationWarning={true}>
         <StoreProvider>          
           <LoggedInProvider>

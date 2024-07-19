@@ -67,3 +67,23 @@ export const signUpConsentItems = [
 //   {icon: "chatIcon", number: 1},
 //   {icon: "ShareIcon", number: 1},
 // ]
+
+export const getPostsNumber: {
+  [key: number]: { number: number }
+} = {
+  3: { number: 30 },
+  4: { number: 40 },
+  5: { number: 50 },
+  6: { number: 60 },
+  7: { number: 70 },
+};
+
+export const getArchivePath: {
+  '/': { result: string },
+  '/new': { result: string },
+  '/trending': { result: string }
+} = {
+  '/': { result: 'FORYOU' },
+  '/new': { result: 'NEW' },
+  '/trending': { result: 'TRENDING' },
+}

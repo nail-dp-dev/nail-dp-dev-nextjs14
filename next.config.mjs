@@ -40,7 +40,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ndpdevs3.s3.ap-northeast-2.amazonaws.com',
-      }
+      },
     ],
   },
 };

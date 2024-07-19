@@ -18,6 +18,7 @@ export const getKakaoAuthCode = async (code: string, router: any, dispatch: AppD
 
     if (data.code === 2000) {
       dispatch(logIn());
+      localStorage.setItem('loggedInPlatform', 'kakao')
       router.push('/');
     } else if (data.code === 2001) {
       router.push('/sign-up');

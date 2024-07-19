@@ -36,19 +36,14 @@ export default function PostCreate() {
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
-    const formData = new FormData();
 
     const postData = {
       postContent: isContent,
       tags: isUserHashTags.map((tag) => ({ tagName: tag.replace('#', '') })),
       tempSave: isTemp,
       boundary: isBoundary,
-      photos: isImages.map((file) => {
-        const formData = new FormData();
-        formData.append('mediaFile', file);
-        return { mediaFile: formData };
-      }),
-    };
+      photos: isImages,
+  }
 
     if (temp) {
       tempPostCreate(postData);
