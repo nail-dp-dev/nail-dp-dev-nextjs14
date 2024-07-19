@@ -27,13 +27,14 @@ const useAllPosts = (category: string, size: number) => {
           return;
         }
       }
-      
       if (data && data.data.postSummaryList.content.length > 0) {
         setPostsData(prev => [...prev, ...data.data.postSummaryList.content]);
         setOldestPostId(data.data.oldestPostId);
         setIsLast(data.data.postSummaryList.last);
-        setMessage(data.data.message);
+        setMessage('');
+        setLoading(false);
       } else {
+        setLoading(false);
         setIsLast(true);
         setMessage('No more posts available.');
       }
@@ -41,12 +42,9 @@ const useAllPosts = (category: string, size: number) => {
     } catch (error) {
       console.error('Error fetching data:', error);
       setMessage('Error fetching data');
-
-    } finally {
-      setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, oldestPostId, isLast, loading]);
+  }, [category, oldestPostId, isLast]);
 
   useEffect(() => {
     fetchMorePosts();

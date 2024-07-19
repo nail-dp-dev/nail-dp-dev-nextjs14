@@ -13,7 +13,7 @@ export const commentsDetail: CommentData[] = [
           'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
         commentDate: '20240701',
         commentContent: '디자인이 정말 독특하네요!',
-        likeCount: 5,
+        likeCount: 8,
       },
       {
         commentId: 2,
@@ -885,7 +885,8 @@ export const commentsDetail: CommentData[] = [
         profileUrl:
           'https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg',
         commentDate: '20240701',
-        commentContent: '이 네일 정말 예뻐요!',
+        commentContent:
+          '이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요! 이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!이 네일 정말 예뻐요!',
         likeCount: 20,
       },
       {
