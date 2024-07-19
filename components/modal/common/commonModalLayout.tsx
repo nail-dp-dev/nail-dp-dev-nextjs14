@@ -1,4 +1,5 @@
 'use client'
+
 import { useSelector } from 'react-redux';
 import LoginModal from './loginModal/LoginModal';
 import { selectCommonModalStatus } from '../../../store/slice/modalSlice';

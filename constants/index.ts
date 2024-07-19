@@ -34,7 +34,6 @@ export const postBoxWidths: { [key: number]: string } = {
   '5': '19.44%',
   '6': '16.08%',
   '7': '13.68%'
-
 };
 
 export const profileMiniMenuElements = [

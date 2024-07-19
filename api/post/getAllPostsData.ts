@@ -1,5 +1,6 @@
+import { PostsDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async (category: string, size?: number, oldestPostId?: number) => {
+export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataProps)  => {
 
   try {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
@@ -20,7 +21,7 @@ export const getAllPostsData = async (category: string, size?: number, oldestPos
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    if (data.code === 2000) {
+    if (data.code === 2000 || data.code === 4005) {
       return data
     } else {
       return null

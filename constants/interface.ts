@@ -83,7 +83,19 @@ export interface ProcedureUIProps {
 }
 
 export interface PostCreateModalProps {
-  isOverFileType:string,
-  isOverFileMemory:number,
-  setIsModal:React.Dispatch<React.SetStateAction<boolean>>;
+  isOverFileType: string,
+  isOverFileMemory: number,
+  setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface PostsDataProps {
+  category: string,
+  size: number,
+  oldestPostId ?: number
+}
+
+export interface VideoProps {
+  src: string;
+  width: string;
+  height: string;
 }
