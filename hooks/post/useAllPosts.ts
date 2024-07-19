@@ -12,7 +12,7 @@ const useAllPosts = (category: string, size: number) => {
   const [message, setMessage] = useState('');
 
   const fetchMorePosts = useCallback(async () => {
-    if (loading || isLast) return;
+    if (loading || isLast ) return;
 
     setLoading(true);
 
@@ -22,21 +22,26 @@ const useAllPosts = (category: string, size: number) => {
       if (oldestPostId !== null && !isLast) {
         data = await getAllPostsData({category, size, oldestPostId});
       } else if (oldestPostId === null && !isLast) {
-        data = await getAllPostsData({category, size});
+        data = await getAllPostsData({ category, size });
+        if (data.data === null) {
+          return;
+        }
       }
       
       if (data && data.data.postSummaryList.content.length > 0) {
         setPostsData(prev => [...prev, ...data.data.postSummaryList.content]);
         setOldestPostId(data.data.oldestPostId);
         setIsLast(data.data.postSummaryList.last);
-        setMessage('');
+        setMessage(data.data.message);
       } else {
         setIsLast(true);
         setMessage('No more posts available.');
       }
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setMessage('Error fetching data');
+
     } finally {
       setLoading(false);
     }
