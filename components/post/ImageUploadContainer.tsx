@@ -1,15 +1,33 @@
 'use client';
 
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import CloseIcon from '../../../../../public/assets/svg/bigclose.svg';
-import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
-import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
+import CloseIcon from '../../public/assets/svg/bigclose.svg';
+import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
+import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../../../../../components/modal/common/postCreateModal/PostCreateModal';
+import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal';
 
-export default function ImageUploadContainer({ onImageChange }: any) {
+type ImageData = {
+  fileName: string;
+  fileSize: number;
+  fileUrl: string;
+};
+
+export interface editData {
+  editImages?: ImageData[];
+  onImageChange: React.Dispatch<React.SetStateAction<File[]>>;
+  onDeleteImageChange?: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function ImageUploadContainer({
+  editImages,
+  onImageChange,
+  onDeleteImageChange,
+}: editData) {
+  // 이미지 업로드 관련
   const [isImages, setIsImages] = useState<string[]>([]);
+  const [isDeleteImages, setIsDeleteImages] = useState<string[]>([]);
   const [isOriginImages, setIsOriginImages] = useState<File[]>([]);
   const [isFileMemory, setIsFileMemory] = useState<number[]>([]);
   const [isMaxFileMemory, setIsMaxFileMemory] = useState<number>(0);
@@ -19,15 +37,32 @@ export default function ImageUploadContainer({ onImageChange }: any) {
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    onImageChange(isOriginImages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOriginImages]);
+    if (editImages !== undefined) {
+      setIsImages(editImages.map((item: { fileUrl: string }) => item.fileUrl));
+      setIsFileMemory(
+        editImages.map(
+          (item: { fileSize: number }) =>
+            item.fileSize / (1024 * 1024),
+        ),
+      );
+    }
+  }, [editImages]);
 
   useEffect(() => {
     const totalMemory = isFileMemory.reduce((acc, cur) => acc + cur, 0);
-    const maxMemory = Math.ceil(totalMemory * 10) / 10;
+    const maxMemory = parseFloat(totalMemory.toFixed(1));
     setIsMaxFileMemory(maxMemory);
   }, [isFileMemory]);
+
+  useEffect(() => {
+    onImageChange(isOriginImages);
+  }, [isOriginImages, onImageChange]);
+
+  useEffect(() => {
+    if (onDeleteImageChange) {
+      onDeleteImageChange(isDeleteImages);
+    }
+  }, [isDeleteImages, onDeleteImageChange]);
 
   const imageUploadClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -76,6 +111,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
     const updateImages = isImages.filter((_, i) => i !== index);
     const updateFormImages = isOriginImages.filter((_, i) => i !== index);
     const updateFile = isFileMemory.filter((_, i) => i !== index);
+    setIsDeleteImages([...isDeleteImages, isImages[index]]);
     setIsImages(updateImages);
     setIsOriginImages(updateFormImages);
     setIsFileMemory(updateFile);
@@ -151,7 +187,7 @@ export default function ImageUploadContainer({ onImageChange }: any) {
                     <CloseImageIcon className="fill-current fill-black hover:fill-white" />
                   </button>
                   <p className="hidden group-hover:block">
-                    {Math.ceil(isFileMemory[index] * 10) / 10}MB
+                    {parseFloat(isFileMemory[index].toFixed(1))}MB
                   </p>
                 </div>
               </div>
@@ -178,9 +214,8 @@ export default function ImageUploadContainer({ onImageChange }: any) {
         <div className="flex">
           <p>현재 파일 용량 :</p>
           <p
-            className={`${isMaxFileMemory > 100 && 'text-red'} pl-[1px] pr-[10px]`}
+            className={`${isMaxFileMemory > 100 && 'text-red'} pl-[4px] pr-[10px]`}
           >
-            {' '}
             {isMaxFileMemory}MB
           </p>
           <p>
