@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import useAllPosts from '../../hooks/useAllPosts';
 import PostBox from './PostBox';
 import Loading from '../../app/loading';
 import { usePathname } from 'next/navigation';
 import { getArchivePath, getPostsNumber } from '../../constants';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import { useSelector } from 'react-redux';
+import useAllPosts from '../../hooks/post/useAllPosts';
 
 export default function PostsBox() {
   const path = usePathname() as '/' | '/new' | '/trending';

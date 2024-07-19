@@ -7,6 +7,7 @@ export type UserData = {
     saveCount: number;
     followerCount: number;
     point: number;
+    profileUrl: string,
   };
 };
 
