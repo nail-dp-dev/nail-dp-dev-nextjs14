@@ -11,7 +11,7 @@ type UserDetail = {
   comments: CommentData['data'];
 };
 
-export default function useUser() {
+export default function usePostDetail() {
   const { postId } = useParams();
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
 

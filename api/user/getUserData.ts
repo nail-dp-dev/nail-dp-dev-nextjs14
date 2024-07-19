@@ -1,3 +1,18 @@
+import { UserData } from '../../types/dataType';
+
+const tempData: UserData = {
+  "success": true,
+  "code": 200,     
+  "data": {
+    "nickname": "somi",
+    "postsCount": 1,
+    "saveCount": 1,
+    "followerCount": 1,
+    "point": 12400,
+    "profileUrl": "https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg" 
+  }
+};
+
 export const getUserData = async () => {
 
   try {

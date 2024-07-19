@@ -113,15 +113,35 @@ export type CommentData = {
   success: boolean;
   code: number;
   postId: number;
-  data: {
-    commentId: number;
-    profileUrl: string;
-    commentUserNickname: string;
-    commentDate: string;
-    commentContent: string;
-    likeCount: number;
-  }[];
+  data: Comment[];
 };
+
+export type Comment = {
+  commentId: number;
+  profileUrl: string;
+  commentUserNickname: string;
+  commentDate: string;
+  commentContent: string;
+  likeCount: number;
+  replies?: Reply[];
+};
+
+export type Reply = {
+  commentId: number;
+  profileUrl: string;
+  commentUserNickname: string;
+  commentDate: string;
+  commentContent: string;
+  likeCount: number;
+};
+
+export type ReplyData = {
+  success: boolean;
+  code: number;
+  commentId: number;
+  data: Reply[];
+};
+
 
 export type PostCreateData = {
     postContent: string,

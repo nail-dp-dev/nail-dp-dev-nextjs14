@@ -1,11 +1,15 @@
-interface IconProps {
+type IconProps = {
   className?: string;
-}
+  onClick?: (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  onTouchStart?: (e: React.TouchEvent<SVGSVGElement>) => void;
+};
 
-export default function ThumbsUpIcon({ className }: IconProps) {
+export default function ThumbsUpIcon({ className, onClick, onTouchStart }: IconProps) {
   return (
     <svg
       className={`${className}`}
+      onClick={onClick}
+      onTouchStart={onTouchStart}
       width="18"
       height="17"
       viewBox="0 0 18 17"

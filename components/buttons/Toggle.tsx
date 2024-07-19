@@ -1,6 +1,11 @@
-export default function Toggle() {
+type ToggleProps = {
+  onClick: () => void;
+};
+
+const Toggle = ({ onClick }: ToggleProps) => {
   return (
     <svg
+      onClick={onClick}
       width="4"
       height="20"
       viewBox="0 0 4 20"
@@ -13,4 +18,6 @@ export default function Toggle() {
       <circle cx="2" cy="18" r="2" />
     </svg>
   );
-}
+};
+
+export default Toggle;

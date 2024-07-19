@@ -1,30 +1,86 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ChattingBox from './mid/ChattingBox';
+import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
+import { AddCommentType } from '../../../../../hooks/useComments';
 
 interface MidContainerProps {
-  post: PostsDetailData['data'];
+  post: any;
   comments: CommentData['data'];
+  onAddComment: (newComment: AddCommentType) => void;
+  onAddReply: (parentId: number, newComment: AddCommentType) => void;
+  onLike: (commentId: number, increment: number) => void;
+  onReply: (id: number, name: string) => void;
+  onSaveEdit: (
+    commentId: number,
+    parentId: number | null,
+    newContent: string,
+  ) => void;
+  onDelete: (commentId: number, parentId: number | null) => void;
 }
 
-export default function MidContainer({ post, comments }: MidContainerProps) {
+
+export default function MidContainer({
+  post,
+  comments,
+  onAddComment,
+  onAddReply,
+  onLike,
+  onReply,
+  onSaveEdit,
+  onDelete,
+}: MidContainerProps) {
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
-  const [imageBoxWidth, setImageBoxWidth] = useState(MAX_WIDTH);
+  const INITIAL_WIDTH = MAX_WIDTH;
+  const [imageBoxWidth, setImageBoxWidth] = useState(INITIAL_WIDTH);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
   const startY = useRef(0);
 
+  const adjustBoxSize = (deltaY: number) => {
+    const newWidth = Math.max(
+      MIN_WIDTH,
+      Math.min(MAX_WIDTH, imageBoxWidth - deltaY * 0.7),
+    );
+    setImageBoxWidth(newWidth);
+  };
+
+  const toggleScroll = () => {
+    if (containerRef.current) {
+      const scrollAmount = 240;
+      const scrollDownTarget = containerRef.current.scrollTop + scrollAmount;
+      const scrollUpTarget = 0;
+      const scrollTarget = isScrolledDown ? scrollUpTarget : scrollDownTarget;
+
+      adjustBoxSize(scrollAmount);
+
+      if (isScrolledDown && imageBoxWidth < INITIAL_WIDTH) {
+        setIsScrolledDown(false);
+        setImageBoxWidth(INITIAL_WIDTH);
+      }
+
+      containerRef.current.scrollTo({
+        top: scrollTarget,
+        behavior: 'smooth',
+      });
+
+      setIsScrolledDown(!isScrolledDown);
+    }
+  };
+
   useEffect(() => {
-    // 휠 감지
-    const handleWheel = (event: WheelEvent) => {
-      const newWidth = Math.max(
-        MIN_WIDTH,
-        Math.min(MAX_WIDTH, imageBoxWidth - event.deltaY * 0.7),
-      );
-      setImageBoxWidth(newWidth);
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setIsScrolledDown(containerRef.current.scrollTop > 0);
+      }
     };
-    // 터치 시작 감지
+
+    const handleWheel = (event: WheelEvent) => {
+      adjustBoxSize(event.deltaY);
+    };
+
     const handleTouchStart = (event: TouchEvent) => {
       startY.current = event.touches[0].clientY;
     };
@@ -36,14 +92,20 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
         Math.min(MAX_WIDTH, imageBoxWidth - deltaY * 0.7),
       );
       setImageBoxWidth(newWidth);
-      startY.current = event.touches[0].clientY; // 업데이트 터치 시작 위치
+      startY.current = event.touches[0].clientY;
     };
 
+    if (containerRef.current) {
+      containerRef.current.addEventListener('scroll', handleScroll);
+    }
     window.addEventListener('wheel', handleWheel);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
     return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
@@ -51,29 +113,40 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
   }, [imageBoxWidth]);
 
   return (
-    <div className=" h-screen overflow-auto ">
-      <div className="mx-auto my-0 flex  w-full flex-col justify-center">
-        <div className="BoxWrap relative mb-[50px] mt-5  flex justify-center">
+    <div ref={containerRef} className="h-screen overflow-y-scroll ">
+      <div className="mx-auto my-0 flex w-full flex-col justify-center">
+        <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center">
           <div
-            className={`ImageBox aspect-square bg-darkPurple transition-all duration-300 
-            ${imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'}`}
+            className={`ImageBox aspect-square bg-darkPurple transition-all 
+            duration-300 ${
+              imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'
+            }`}
           >
             1231
           </div>
           <div
-            className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 pt-[10px] text-sm font-light text-black transition-all duration-300 
-            ${imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'}`}
+            className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 
+            pt-[10px] text-sm font-light text-black transition-all duration-300 
+            ${
+              imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'
+            }`}
           >
             123asdasdaadsdasadsadsdas
           </div>
         </div>
         <div>
-          <div className="postInfo  flex flex-wrap items-center justify-between border-2">
-            <PostCount post={post} />
+          <div className="postInfo flex flex-wrap items-center justify-between ">
+            <PostCount post={post} toggleScroll={toggleScroll} />
             <PostTags post={post} />
           </div>
           <div>
-            <ChattingBox user={comments} />
+            <CommentWrap
+              user={comments}
+              onLike={onLike}
+              onReply={onReply}
+              onSaveEdit={onSaveEdit}
+              onDelete={onDelete}
+            />
           </div>
         </div>
       </div>
