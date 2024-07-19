@@ -148,8 +148,8 @@ export default function ReplyItem({
                   ref={textarea}
                   rows={1}
                   onInput={handleResizeHeight}
-                  className="comment-edit  hide-scrollbar w-full min-w-[800px] resize-none overflow-hidden
-                    rounded-xl bg-purple bg-opacity-20 px-[10px] py-[5px] text-sm 
+                  className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none
+                    overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm 
                     font-normal outline-none"
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}

@@ -42,6 +42,7 @@ const config: Config = {
         'chat-form-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
         'login-modal-shadow': '0px 4px 4px 0px rgba(0, 0, 0, 0.6)',
         'signup-modal-shadow': '2px 4px 8px 0px rgba(0, 0, 0, 0.25)',
+        'option-modal-shadow': '2px 2px 4px 0px rgba(0, 0, 0, 0.25)',
       },
       fontSize: {
         '10xl': [
