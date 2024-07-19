@@ -8,6 +8,7 @@ import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import Video from '../ui/Video';
 
 export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
 
@@ -21,9 +22,14 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
     console.log('Click...Plus!')
   }
 
+  const isPhoto = photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif');
+  const isVideo = photoUrl.endsWith('.mp4');
+
   return (
     <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-end" style={{ width: postBoxWidths[layoutNum]}}>
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
+      {
+        isPhoto &&          
         <Image
           src={photoUrl}
           alt={createdDate}
@@ -35,7 +41,16 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
           sizes='100vw, 50vw, 33vw'
           blurDataURL="https://image-component.nextjs.gallery/placeholder"
           placeholder='blur'
-          />
+        />
+      }
+      {
+        isVideo && 
+        <Video
+          src={photoUrl}
+          width={'100%'}
+          height={'100%'}
+        />
+      }
       </Link>
       <button
         onClick={handleHeartClick}

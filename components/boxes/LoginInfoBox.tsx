@@ -1,23 +1,22 @@
 'use client';
 
 import Bits from '../../public/assets/svg/bits.svg';
-import { userProfileImageData } from '../../constants/example';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../store/slice/loginSlice';
 import { useAppDispatch } from '../../store/store';
 import ProfileMiniModal from '../modal/mini/ProfileMiniModal';
 import { useState } from 'react';
-import useUserData from '../../hooks/useUserData';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
 import { getLogOut } from '../../api/auth/secure/getLogOut';
+import useLoggedInUserData from '../../hooks/auth/useLoggedInUserData';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
-  const { userData, userPointData } = useUserData();
+  const { userData, userPointData } = useLoggedInUserData();
 
   const handleLogin = () => {
     dispatch(commonModalClose())
@@ -44,7 +43,7 @@ export default function LoginInfoBox() {
               onClick={handleMiniModalToggle}
               className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
             >
-              <UserImage src={`${userProfileImageData.photos[2]['photo_url']}`} alt={'profileIamge'} width={40} height={40}/>
+              <UserImage src={userData.data.profileUrl} alt={'profileIamge'} width={40} height={40}/>
             </button>
             <ProfileMiniModal
               isMiniModalShow={isMiniModalShow}
@@ -79,7 +78,7 @@ export default function LoginInfoBox() {
           </UserInfo>
         }
         {
-          isLoggedIn === 'loggedOut' && userData &&
+          isLoggedIn === 'loggedOut' &&
 
           <button
             onClick={() => {
