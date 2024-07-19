@@ -41,8 +41,7 @@ export default function ImageUploadContainer({
       setIsImages(editImages.map((item: { fileUrl: string }) => item.fileUrl));
       setIsFileMemory(
         editImages.map(
-          (item: { fileSize: number }) =>
-            item.fileSize / (1024 * 1024),
+          (item: { fileSize: number }) => item.fileSize / (1024 * 1024),
         ),
       );
     }
@@ -117,6 +116,8 @@ export default function ImageUploadContainer({
     setIsFileMemory(updateFile);
   };
 
+  console.log(isImages);
+
   return (
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
@@ -133,7 +134,7 @@ export default function ImageUploadContainer({
           ref={fileInput}
           onChange={imageUploadChange}
           style={{ display: 'none' }}
-          accept=".gif, .jpg, .jpeg, .png, .mp4"
+          accept=".gif, .jpg, .jpeg, .png, .mp4, .mov"
         />
         {isImages.length < 1 && (
           <div className="flex h-full w-full flex-col items-center justify-center">
@@ -159,10 +160,12 @@ export default function ImageUploadContainer({
                 className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-auto overflow-hidden rounded-[5px]"
                 key={index}
               >
-                {item.startsWith('data:video/mp4;base64,') ? (
+                {
+                item.startsWith('data:video/mp4;base64,') ? (
                   <video
                     src={item}
                     autoPlay
+                    muted
                     className="h-full w-full object-cover"
                   />
                 ) : (
