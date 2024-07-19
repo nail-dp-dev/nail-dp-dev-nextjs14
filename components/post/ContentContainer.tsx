@@ -1,10 +1,21 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-export default function ContentContainer({ onContentChange }: any) {
+export interface editData{
+  editContent?:string, 
+  onContentChange: React.Dispatch<React.SetStateAction<string>>
+}
+
+export default function ContentContainer({ editContent,onContentChange }:editData) {
   // 내용 작성 관련
-  const [isContent, setIsContent] = useState('');
+  const [isContent, setIsContent] = useState("");
+  
+  useEffect(() => {
+    if (editContent !== undefined) {
+      setIsContent(editContent);
+    }
+  }, [editContent]);
 
   const hashContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setIsContent(e.target.value);
