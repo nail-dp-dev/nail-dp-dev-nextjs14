@@ -26,13 +26,17 @@ export default function UserInfo({
   isMenuBar,
 }: UserInfoProps) {
   return (
-    <div className="flex-1 flex flex-col items-start">
-      <div className='w-full flex items-center justify-between'>
-        <p className={`${nicknameStyle} ${hoverStyle} ${isMenuBar && 'font-[500]'}`}>{nickname}</p>
+    <div className="flex flex-1 flex-col items-start">
+      <div className="flex w-full items-center justify-between">
+        <p
+          className={`${nicknameStyle} ${hoverStyle} ${isMenuBar && 'font-[500]'}`}
+        >
+          {nickname}
+        </p>
         {children}
       </div>
       <div
-        className={`flex flex-wrap gap-2 text-darkPurple  ${statsStyle} ${hoverStyle} ${isMenuBar && 'font-[400] text-[0.875rem]'}`}
+        className={`flex flex-wrap gap-2 text-darkPurple  ${statsStyle} ${hoverStyle} ${isMenuBar && 'text-[0.875rem] font-[400]'}`}
       >
         {postsCount !== undefined && <span>게시물 {postsCount}</span>}
         {saveCount !== undefined && <span>저장됨 {saveCount}</span>}

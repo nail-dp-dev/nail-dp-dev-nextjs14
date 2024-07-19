@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import UserImage from '../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../types/dataType';
-import useUserData from '../../../../../hooks/useUserData'; // useUserData 훅을 가져옵니다.
+import useUserData from '../../../../../hooks/useUserData';
 
 interface userProps {
   user: PostsDetailData['data'];

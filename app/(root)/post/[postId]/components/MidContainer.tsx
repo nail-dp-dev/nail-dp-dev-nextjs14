@@ -3,25 +3,42 @@ import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
-import TopContainer from './TopContainer';
+import { AddCommentType } from '../../../../../hooks/useComments';
 
 interface MidContainerProps {
-  post: PostsDetailData['data'];
+  post: any;
   comments: CommentData['data'];
+  onAddComment: (newComment: AddCommentType) => void;
+  onAddReply: (parentId: number, newComment: AddCommentType) => void;
+  onLike: (commentId: number, increment: number) => void;
+  onReply: (id: number, name: string) => void;
+  onSaveEdit: (
+    commentId: number,
+    parentId: number | null,
+    newContent: string,
+  ) => void;
+  onDelete: (commentId: number, parentId: number | null) => void;
 }
 
-export default function MidContainer({ post, comments }: MidContainerProps) {
-  // 최대, 최소 박스 크기 및 초기 크기 설정
+
+export default function MidContainer({
+  post,
+  comments,
+  onAddComment,
+  onAddReply,
+  onLike,
+  onReply,
+  onSaveEdit,
+  onDelete,
+}: MidContainerProps) {
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
-  const INITIAL_WIDTH = MAX_WIDTH; // 초기 박스 크기 저장
-  const [imageBoxWidth, setImageBoxWidth] = useState(INITIAL_WIDTH); // 박스 크기 상태
-  const containerRef = useRef<HTMLDivElement>(null); // 컨테이너 참조
-  const chatBoxRef = useRef<HTMLDivElement>(null); // 채팅 박스 참조
-  const [isScrolledDown, setIsScrolledDown] = useState(false); // 스크롤 상태
-  const startY = useRef(0); // 터치 시작 위치
+  const INITIAL_WIDTH = MAX_WIDTH;
+  const [imageBoxWidth, setImageBoxWidth] = useState(INITIAL_WIDTH);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+  const startY = useRef(0);
 
-  // 박스 크기를 조정하는 함수
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
       MIN_WIDTH,
@@ -29,50 +46,45 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
     );
     setImageBoxWidth(newWidth);
   };
-  // 스크롤 토글 함수
+
   const toggleScroll = () => {
-    if (containerRef.current && chatBoxRef.current) {
-      const scrollAmount = 240; // 스크롤 양
-      const scrollDownTarget = containerRef.current.scrollTop + scrollAmount; // 아래로 스크롤 목표
-      const scrollUpTarget = 0; // 위로 스크롤 목표
-      const scrollTarget = isScrolledDown ? scrollUpTarget : scrollDownTarget; // 목표 스크롤 위치 설정
+    if (containerRef.current) {
+      const scrollAmount = 240;
+      const scrollDownTarget = containerRef.current.scrollTop + scrollAmount;
+      const scrollUpTarget = 0;
+      const scrollTarget = isScrolledDown ? scrollUpTarget : scrollDownTarget;
 
       adjustBoxSize(scrollAmount);
 
-      // 초기 크기로 복원
       if (isScrolledDown && imageBoxWidth < INITIAL_WIDTH) {
+        setIsScrolledDown(false);
         setImageBoxWidth(INITIAL_WIDTH);
       }
 
-      // 스크롤 수행
       containerRef.current.scrollTo({
         top: scrollTarget,
         behavior: 'smooth',
       });
 
-      // 스크롤 상태 토글
       setIsScrolledDown(!isScrolledDown);
     }
   };
 
   useEffect(() => {
-    // 스크롤 이벤트 핸들러
     const handleScroll = () => {
       if (containerRef.current) {
         setIsScrolledDown(containerRef.current.scrollTop > 0);
       }
     };
 
-    // 휠 이벤트 핸들러
     const handleWheel = (event: WheelEvent) => {
       adjustBoxSize(event.deltaY);
     };
 
-    // 터치 시작 이벤트 핸들러
     const handleTouchStart = (event: TouchEvent) => {
       startY.current = event.touches[0].clientY;
     };
-    // 터치 이동 이벤트 핸들러
+
     const handleTouchMove = (event: TouchEvent) => {
       const deltaY = startY.current - event.touches[0].clientY;
       const newWidth = Math.max(
@@ -83,7 +95,6 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
       startY.current = event.touches[0].clientY;
     };
 
-    // 이벤트 리스너 추가
     if (containerRef.current) {
       containerRef.current.addEventListener('scroll', handleScroll);
     }
@@ -91,7 +102,6 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
-    // 클린업: 이벤트 리스너 제거
     return () => {
       if (containerRef.current) {
         containerRef.current.removeEventListener('scroll', handleScroll);
@@ -103,18 +113,21 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
   }, [imageBoxWidth]);
 
   return (
-    <div ref={containerRef} className="h-screen overflow-y-scroll">
+    <div ref={containerRef} className="h-screen overflow-y-scroll ">
       <div className="mx-auto my-0 flex w-full flex-col justify-center">
         <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center">
           <div
-            className={`ImageBox aspect-square bg-darkPurple transition-all duration-300 ${
+            className={`ImageBox aspect-square bg-darkPurple transition-all 
+            duration-300 ${
               imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'
             }`}
           >
             1231
           </div>
           <div
-            className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 pt-[10px] text-sm font-light text-black transition-all duration-300 ${
+            className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 
+            pt-[10px] text-sm font-light text-black transition-all duration-300 
+            ${
               imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'
             }`}
           >
@@ -122,12 +135,18 @@ export default function MidContainer({ post, comments }: MidContainerProps) {
           </div>
         </div>
         <div>
-          <div className="postInfo flex flex-wrap items-center justify-between border-2">
+          <div className="postInfo flex flex-wrap items-center justify-between ">
             <PostCount post={post} toggleScroll={toggleScroll} />
             <PostTags post={post} />
           </div>
-          <div ref={chatBoxRef}>
-            <CommentWrap user={comments} />
+          <div>
+            <CommentWrap
+              user={comments}
+              onLike={onLike}
+              onReply={onReply}
+              onSaveEdit={onSaveEdit}
+              onDelete={onDelete}
+            />
           </div>
         </div>
       </div>

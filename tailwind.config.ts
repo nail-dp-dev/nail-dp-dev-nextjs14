@@ -24,7 +24,7 @@ const config: Config = {
         easeInOnly: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(3px)' },
-        }
+        },
       },
       animation: {
         fadeInOutFloat: 'fadeInOutFloat 3s ease-in-out infinite',
@@ -41,8 +41,7 @@ const config: Config = {
         'search-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
         'chat-form-shadow': '4px 4px 8px 0px rgba(0, 0, 0, 0.25)',
         'login-modal-shadow': '0px 4px 4px 0px rgba(0, 0, 0, 0.6)',
-        'signup-modal-shadow': '2px 4px 8px 0px rgba(0, 0, 0, 0.25)'
-
+        'signup-modal-shadow': '2px 4px 8px 0px rgba(0, 0, 0, 0.25)',
       },
       fontSize: {
         '10xl': [
@@ -102,6 +101,7 @@ const config: Config = {
       // Purple 1
       purple: '#B98CE0',
       mainPurple: '#B98CE0',
+      commentPurple: '#EBE4F2',
 
       // Purple 2
       darkPurple: '#756982',
@@ -118,7 +118,7 @@ const config: Config = {
 
       // Transparent
       transparent: 'rgba(0, 0, 0, 0)',
-      
+
       // Modal Background Color
       modalBackgroundColor: 'rgba(117, 105, 130, 0.4)',
       profileImageChangeModalBackgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -127,7 +127,7 @@ const config: Config = {
       loginModal: 'rgba(255, 255, 255, 0.25)',
     },
     screens: {
-      xs: {'max': '640px'},
+      xs: { max: '640px' },
       sm: '640px',
       md: '768px',
       lg: '1024px',
@@ -136,10 +136,10 @@ const config: Config = {
       '3xl': '2650px',
     },
     fontFamily: {
-      PattuaOne: ["Pattua One"],
+      PattuaOne: ['Pattua One'],
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [require('tailwind-scrollbar-hide')],
 };
 
 export default config;
