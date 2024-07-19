@@ -1,28 +1,48 @@
 'use client';
 
-import {
-  ChangeEvent,
-  MouseEvent,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import CloseIcon from '../../../../../public/assets/svg/bigclose.svg';
-import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
-import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import CloseIcon from '../../public/assets/svg/bigclose.svg';
+import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
+import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function ImageUploadContainer({ onImageChange }:any) {
+type ImageData = {
+  fileName: string;
+  fileSize: number;
+  fileUrl: string;
+};
+
+export interface editData {
+  editImages?: ImageData[];
+  onImageChange: React.Dispatch<React.SetStateAction<File[]>>;
+  onDeleteImageChange?: React.Dispatch<React.SetStateAction<string[]>>
+}
+
+export default function ImageUploadContainer({
+  editImages,
+  onImageChange,
+  onDeleteImageChange
+}: any) {
   // 이미지 업로드 관련
   const [isImages, setIsImages] = useState<string[]>([]);
+  const [isDeleteImages, setIsDeleteImages] = useState<string[]>([]);
   const [isOriginImages, setIsOriginImages] = useState<File[]>([]);
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    if (editImages !== undefined) {
+      setIsImages(editImages.map((item: { fileUrl: string; }) => item.fileUrl))
+    }
+  },[editImages])
+
+  useEffect(() => {
     onImageChange(isOriginImages);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOriginImages]);
+
+  useEffect(() => {
+    onDeleteImageChange(isDeleteImages)
+  }, [isDeleteImages]);
 
   const imageUploadClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -51,12 +71,13 @@ export default function ImageUploadContainer({ onImageChange }:any) {
     e.preventDefault();
     const updateImages = isImages.filter((_, i) => i !== index);
     const updateFormImages = isOriginImages.filter((_, i) => i !== index);
+    setIsDeleteImages([...isDeleteImages,isImages[index]])
     setIsImages(updateImages);
     setIsOriginImages(updateFormImages);
   };
 
   return (
-    <div className="flex flex-col min-h-[250px] h-[36vh] px-[16px] py-[12px]">
+    <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[24px] font-bold">
           새 게시글 작성

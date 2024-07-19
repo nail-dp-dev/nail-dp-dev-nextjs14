@@ -4,37 +4,53 @@ import {
   ChangeEvent,
   KeyboardEvent,
   MouseEvent,
+  useEffect,
   useState,
 } from 'react';
-import HashtagArrowIcon from '../../../../../public/assets/svg/hashtag-arrow.svg';
+import HashtagArrowIcon from '../../public/assets/svg/hashtag-arrow.svg';
 
+export interface editData {
+  editUserHashTags?: string[];
+  onHashTagChange: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-export default function HashTagContainer({onHashTagChange}:any) {
+export default function HashTagContainer({
+  editUserHashTags,
+  onHashTagChange,
+}: editData) {
   //태그 관련
   const [isTagList, setIsTagList] = useState([
-    '#유광',
-    '#무광',
-    '#짧은손톱',
-    '#긴손톱',
-    '#케어',
-    '#글러터',
-    '#스퀘어',
-    '#라운드스퀘어',
-    '#아몬드',
-    '#스탈레토',
-    '#발레리나',
-    '#라운드',
-    '#오벌',
-    '#오벌라운드',
-    '#코핀',
-    '#아크릴',
-    '#연장',
+    '유광',
+    '무광',
+    '짧은손톱',
+    '긴손톱',
+    '케어',
+    '글러터',
+    '스퀘어',
+    '라운드스퀘어',
+    '아몬드',
+    '스탈레토',
+    '발레리나',
+    '라운드',
+    '오벌',
+    '오벌라운드',
+    '코핀',
+    '아크릴',
+    '연장',
   ]);
 
   const [isTagValue, setIsTagValue] = useState('');
   const [isUserHashTags, setIsUserHashTags] = useState<string[]>([]);
   const [isHashTagState, setIsHashTagState] = useState(true);
   const [isHashTagButton, setIsHashTagButton] = useState(false);
+
+  useEffect(() => {
+    if (editUserHashTags !== undefined) {
+      setIsUserHashTags(editUserHashTags)
+      setIsHashTagButton(true)
+      setIsHashTagState(false)
+    }
+  }, [editUserHashTags]);
 
   const addUserHashTagClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -43,13 +59,14 @@ export default function HashTagContainer({onHashTagChange}:any) {
     e.preventDefault();
     if (isUserHashTags.includes(i)) {
       setIsUserHashTags(isUserHashTags.filter((tag) => tag !== i));
+      onHashTagChange(isUserHashTags.filter((tag) => tag !== i))
       if (isUserHashTags.length == 1) {
         setIsHashTagState(true);
         setIsHashTagButton(false);
       }
     } else {
       setIsUserHashTags([...isUserHashTags, i]);
-      onHashTagChange([...isUserHashTags, i])
+      onHashTagChange([...isUserHashTags, i]);
     }
   };
 
@@ -57,8 +74,8 @@ export default function HashTagContainer({onHashTagChange}:any) {
     if (e.key === 'Enter') {
       e.preventDefault();
       if (e.nativeEvent.isComposing === false && isTagValue.trim() !== '') {
-        setIsUserHashTags([...isUserHashTags, `#${isTagValue.trim()}`]);
-        onHashTagChange([...isUserHashTags, `#${isTagValue.trim()}`])
+        setIsUserHashTags([...isUserHashTags, `${isTagValue.trim()}`]);
+        onHashTagChange([...isUserHashTags, `${isTagValue.trim()}`]);
         setIsTagValue('');
         setIsHashTagButton(true);
         if (isHashTagButton != isHashTagState) {
@@ -79,16 +96,10 @@ export default function HashTagContainer({onHashTagChange}:any) {
 
   return (
     <>
-      {/* 해시태그 */}
       <div className="flex flex-col px-[16px] py-[12px]">
         <div className="pb-[8px] text-[16px]">
           <span className="font-bold">해시태그</span>
-          {/* 값에 따라 없어지고 나타남 */}
-          <span
-            className={`text-red ${isUserHashTags.length > 0 ? 'hidden' : ''}`}
-          >
-            *
-          </span>
+          <span className="text-red">*</span>
         </div>
         <div className="flex h-[56px] w-full items-center rounded-lg border border-postInputGray text-center focus-within:border-purple">
           <input
@@ -118,7 +129,7 @@ export default function HashTagContainer({onHashTagChange}:any) {
                 ${isTagList.includes(item) ? '' : 'text-white'}`}
               key={index}
             >
-              {item}
+              #{item}
             </button>
           ))}
         </div>
@@ -129,7 +140,7 @@ export default function HashTagContainer({onHashTagChange}:any) {
         </div>
       )}
       {isHashTagState && (
-        <div className="felx px-[12px] pb-[28px] pt-[12px]">
+        <div className="px-[12px] pb-[28px] pt-[12px]">
           {isTagList.map((item, index) => (
             <button
               onClick={(e) => addUserHashTagClick(e, item)}
@@ -137,7 +148,7 @@ export default function HashTagContainer({onHashTagChange}:any) {
                   ${isUserHashTags.includes(item) ? 'bg-purple' : ''}`}
               key={index}
             >
-              {item}
+              #{item}
             </button>
           ))}
         </div>

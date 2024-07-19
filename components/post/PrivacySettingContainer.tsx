@@ -1,10 +1,24 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-export default function PrivacySettingContainer({onBoundaryChange}:any) {
+export interface editData {
+  editBoundary?: string;
+  onBoundaryChange: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function PrivacySettingContainer({
+  editBoundary,
+  onBoundaryChange,
+}: editData) {
   // 공개 관련
   const [isBoundary, setIsBoundary] = useState('ALL');
+  
+  useEffect(() => {
+    if (editBoundary !== undefined) {
+      setIsBoundary(editBoundary);
+    }
+  },[editBoundary]);
 
   const boundaryChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsBoundary(e.target.value);
@@ -23,7 +37,7 @@ export default function PrivacySettingContainer({onBoundaryChange}:any) {
             id="public-1"
             value="ALL"
             onChange={boundaryChange}
-            defaultChecked
+            checked={isBoundary === 'ALL'}
           />
           <label className="text-[14px] font-bold" htmlFor="public-1">
             공개
@@ -37,6 +51,7 @@ export default function PrivacySettingContainer({onBoundaryChange}:any) {
             id="public-2"
             value="NONE"
             onChange={boundaryChange}
+            checked={isBoundary === 'NONE'}
           />
           <label className="text-[14px] font-bold" htmlFor="public-2">
             비공개
@@ -50,6 +65,7 @@ export default function PrivacySettingContainer({onBoundaryChange}:any) {
             id="public-3"
             value="FOLLOW"
             onChange={boundaryChange}
+            checked={isBoundary === 'FOLLOW'}
           />
           <label className="text-[14px] font-bold" htmlFor="public-3">
             팔로워 공개
