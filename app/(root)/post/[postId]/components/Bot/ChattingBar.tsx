@@ -89,8 +89,8 @@ export default function ChattingBar({
             ref={textareaRef}
             placeholder="댓글 추가..."
             className="placeholder:text-14px-normal-dP h-full w-full resize-none overflow-hidden rounded-3xl
-            bg-lightGray py-3 pl-4 text-base font-normal 
-              text-textBlack outline-purple"
+            bg-lightGray py-3 pb-4 pl-4 pt-[14px] text-base font-normal  leading-5 text-textBlack 
+            focus:bg-white focus:outline focus:outline-1 focus:outline-purple "
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
             onKeyPress={handleKeyPress}
