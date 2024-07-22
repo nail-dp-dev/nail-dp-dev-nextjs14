@@ -9,6 +9,7 @@ import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import Video from '../ui/Video';
+import Toggle from '../buttons/Toggle';
 
 export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
 
@@ -26,7 +27,7 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
   const isVideo = photoUrl.endsWith('.mp4');
 
   return (
-    <div className="box relative mb-[16px] flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-end" style={{ width: postBoxWidths[layoutNum]}}>
+    <div className="box relative mb-[16px  flex items-center justify-center rounded-2xl overflow-hidden transition-all duration-500  border-[5px] border-transparent hover:border-purple p-[5px] snap-end" style={{ width: postBoxWidths[layoutNum]}}>
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
       {
         isPhoto &&          
@@ -61,6 +62,10 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
         onClick={handlePlusClick}
         className="absolute bottom-2 right-2 z-10">
         <PlusButton width="24px" height="24px" isClicked={ saved }/>
+      </button>
+      <button 
+        className="absolute top-2 left-2 z-10">
+        <Toggle width="4px" height="20px"/>
       </button>
     </div>
   );

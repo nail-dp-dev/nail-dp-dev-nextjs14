@@ -1,13 +1,15 @@
 type ToggleProps = {
-  onClick: () => void;
+  onClick?: () => void;
+  width?: string; 
+  height?: string;
 };
 
-const Toggle = ({ onClick }: ToggleProps) => {
+const Toggle = ({ onClick, width = "4", height = "20" }: ToggleProps) => { 
   return (
     <svg
       onClick={onClick}
-      width="4"
-      height="20"
+      width={width}
+      height={height}
       viewBox="0 0 4 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

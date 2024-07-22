@@ -1,12 +1,15 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
+import ImageSlider from './ImageSlider'; // ImageSlider 컴포넌트 경로를 적절하게 수정
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
 import { AddCommentType } from '../../../../../hooks/useComments';
 
 interface MidContainerProps {
-  post: any;
+  post: PostsDetailData['data'];
   comments: CommentData['data'];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
@@ -19,7 +22,6 @@ interface MidContainerProps {
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
 }
-
 
 export default function MidContainer({
   post,
@@ -113,29 +115,25 @@ export default function MidContainer({
   }, [imageBoxWidth]);
 
   return (
-    <div ref={containerRef} className="h-screen overflow-y-scroll ">
+    <div ref={containerRef} className="h-screen overflow-y-scroll">
       <div className="mx-auto my-0 flex w-full flex-col justify-center">
-        <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center">
+        <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center ">
           <div
-            className={`ImageBox aspect-square bg-darkPurple transition-all 
-            duration-300 ${
-              imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'
-            }`}
+            className={`ImageBox aspect-square  rounded-2.5xl bg-textLightYellow transition-all 
+            duration-300 ${imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'}`}
           >
-            1231
+            <ImageSlider files={post.files} />
           </div>
           <div
             className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 
             pt-[10px] text-sm font-light text-black transition-all duration-300 
-            ${
-              imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'
-            }`}
+            ${imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'}`}
           >
-            123asdasdaadsdasadsadsdas
+            {post.postContent}
           </div>
         </div>
         <div>
-          <div className="postInfo flex flex-wrap items-center justify-between ">
+          <div className="postInfo flex flex-wrap items-center justify-between">
             <PostCount post={post} toggleScroll={toggleScroll} />
             <PostTags post={post} />
           </div>
