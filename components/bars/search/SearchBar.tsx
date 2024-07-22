@@ -151,7 +151,7 @@ export default function SearchBar() {
               type="button"
               onClick={handleCloseClick}
             >
-              <CloseIcon />
+              <CloseIcon className='fill-darkPurple'/>
             </button>
           )}
         </div>

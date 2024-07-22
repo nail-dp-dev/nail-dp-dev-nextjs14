@@ -6,7 +6,7 @@ export const postsDetail: PostsDetailData[] = [
     code: 200,
     data: {
       postId: 1,
-      nickname: 'somi',
+      nickname: '안녕하세',
       profileUrl:
         'https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg',
       followingStatus: false,

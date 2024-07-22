@@ -66,10 +66,10 @@ export default function ChattingBar({
   };
 
   return (
-    <div className="z-9 sticky bottom-0 flex flex-col gap-3  bg-white p-4">
+    <div className="z-9 sticky bottom-0  flex flex-col gap-3  bg-white p-4">
       {replyUser.name && (
         <ReplyBar
-          replyTo={`${replyUser.name}님에게 댓글 작성중...`}
+          replyTo={`@${replyUser.name} 님에게 댓글 남기는 중...`}
           onCancelReply={onCancelReply}
         />
       )}
@@ -87,9 +87,10 @@ export default function ChattingBar({
         <form className="relative h-12 w-full ">
           <textarea
             ref={textareaRef}
-            placeholder="Add a comment"
-            className="h-full w-full resize-none overflow-hidden rounded-2.5xl bg-lightGray py-3 pl-4 text-base font-normal text-darkPurple
-              outline-none placeholder:text-darkPurple"
+            placeholder="댓글 추가..."
+            className="placeholder:text-14px-normal-dP h-full w-full resize-none overflow-hidden rounded-3xl
+            bg-lightGray py-3 pl-4 text-base font-normal 
+              text-textBlack outline-purple"
             value={commentContent}
             onChange={(e) => setCommentContent(e.target.value)}
             onKeyPress={handleKeyPress}
