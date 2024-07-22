@@ -27,14 +27,18 @@ export default function PostEdit() {
   const parm = useParams();
   const postId = Array.isArray(parm.postid) ? parm.postid[0] : parm.postid;
 
+  console.log(isImages);
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPostEditData(+postId);
-      setIsUrlImages(data.data.photos);
-      setIsContent(data.data.postContent);
-      setIsBoundary(data.data.boundary);
-      setIsTemp(data.data.tempSave);
-      setIsUserHashTags(data.data.tags);
+      if (data) {        
+        setIsUrlImages(data.data.photos);
+        setIsContent(data.data.postContent);
+        setIsBoundary(data.data.boundary);
+        setIsTemp(data.data.tempSave);
+        setIsUserHashTags(data.data.tags);
+      }
     };
     fetchData();
   }, [postId]);
@@ -70,7 +74,7 @@ export default function PostEdit() {
     };
     
     postEdit(postData);
-    router.push('/my-page');
+    // router.push('/my-page');
   };
 
   return (

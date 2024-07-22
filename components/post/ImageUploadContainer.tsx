@@ -55,7 +55,7 @@ export default function ImageUploadContainer({
 
   useEffect(() => {
     onImageChange(isOriginImages);
-  }, [isOriginImages, onImageChange]);
+  }, [isOriginImages]);
 
   useEffect(() => {
     if (onDeleteImageChange) {
@@ -63,19 +63,37 @@ export default function ImageUploadContainer({
     }
   }, [isDeleteImages, onDeleteImageChange]);
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('FileReader result is not a string'));
+        }
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const imageUploadClick = (e: MouseEvent) => {
     e.preventDefault();
     fileInput?.current?.click();
   };
 
-  const imageUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const imageUploadChange = async(e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const fileSizeMB = file.size / (1024 * 1024);
+      const base64String = await fileToBase64(file);
 
       const imageTypes = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'];
-      const videoTypes = ['video/mp4'];
+      const videoTypes = ['video/mp4', 'video/mov'];
       const imageMaxSize = 5;
       const videoMaxSize = 10;
 
@@ -91,32 +109,32 @@ export default function ImageUploadContainer({
         return;
       }
       setIsFileMemory([...isFileMemory, fileSizeMB]);
-      const reader = new FileReader();
       setIsOriginImages([...isOriginImages, e.target.files[0]]);
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        const files = [...isImages, result];
-        setIsImages(files);
-      };
-      reader.readAsDataURL(file);
+      setIsImages([...isImages, base64String]);
     }
   };
 
-  const imageUploadRemove = (
+  const imageUploadRemove = async(
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
     e.preventDefault();
+    const base64OriginImages = await Promise.all(
+      isOriginImages.map((item) => fileToBase64(item))
+    );
+    const originIndex = base64OriginImages.indexOf(isImages[index])
+
     const updateImages = isImages.filter((_, i) => i !== index);
-    const updateFormImages = isOriginImages.filter((_, i) => i !== index);
+    const updateFormImages = isOriginImages.filter((_, i) => i !== originIndex);
     const updateFile = isFileMemory.filter((_, i) => i !== index);
-    setIsDeleteImages([...isDeleteImages, isImages[index]]);
+
+    if (isImages[index].startsWith('http')) {
+      setIsDeleteImages([...isDeleteImages, isImages[index]]);
+    }
     setIsImages(updateImages);
     setIsOriginImages(updateFormImages);
     setIsFileMemory(updateFile);
   };
-
-  console.log(isImages);
 
   return (
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
@@ -160,8 +178,9 @@ export default function ImageUploadContainer({
                 className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-auto overflow-hidden rounded-[5px]"
                 key={index}
               >
-                {
-                item.startsWith('data:video/mp4;base64,') ? (
+                {item.startsWith('data:video') ||
+                item.endsWith('.mov') ||
+                item.endsWith('.mp4') ? (
                   <video
                     src={item}
                     autoPlay
