@@ -78,7 +78,7 @@ export default function useComments(postId: number | null) {
   // 댓글 내용 수정
   const handleSaveEdit = useCallback(
     (commentId: number, parentId: number | null, newContent: string) => {
-      dispatch(saveEdit({ commentId, parentId, newContent }));
+      dispatch(saveEdit({ commentId, parentId, newContent, edited: true })); 
     },
     [dispatch],
   );
@@ -96,11 +96,11 @@ export default function useComments(postId: number | null) {
   );
 
   return {
-    comments,           
-    handleAddComment,   
-    handleAddReply,     
-    handleLike,         
-    handleSaveEdit,     
-    handleDelete,       
+    comments,
+    handleAddComment,
+    handleAddReply,
+    handleLike,
+    handleSaveEdit,
+    handleDelete,
   };
 }
