@@ -127,6 +127,7 @@ export type Comment = {
   commentContent: string;
   likeCount: number;
   replies?: Reply[];
+  edited?: boolean;
 };
 
 export type Reply = {
@@ -136,6 +137,7 @@ export type Reply = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
+  edited?: boolean;
 };
 
 export type ReplyData = {

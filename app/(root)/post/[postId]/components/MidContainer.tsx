@@ -127,8 +127,9 @@ export default function MidContainer({
           <div
             className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 
             pt-[10px] text-sm font-light text-black transition-all duration-300 
-            ${imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'}`}
-          >
+            ${imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'}
+            ${post.postContent ? 'block' : 'hidden'}`
+              }>
             {post.postContent}
           </div>
         </div>

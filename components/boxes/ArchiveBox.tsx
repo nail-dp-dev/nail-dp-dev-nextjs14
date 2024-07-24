@@ -4,7 +4,7 @@ import Link from 'next/link';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
-import { PostBoxNewProps } from '../../constants/interface';
+import { ArchiveBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
@@ -13,14 +13,14 @@ import Toggle from '../buttons/Toggle';
 import { useEffect, useRef, useState } from 'react';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 
-export default function PostBox({
-  postId,
+export default function ArchiveBox({
+  archiveId,
   photoId,
   photoUrl,
   like,
   saved,
   createdDate,
-}: PostBoxNewProps) {
+}: ArchiveBoxNewProps) {
   const [showGeneralAction, setShowGeneralAction] = useState(false);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const boxRef = useRef<HTMLDivElement>(null);
@@ -36,6 +36,7 @@ export default function PostBox({
   const handleToggleClick = () => {
     setShowGeneralAction(!showGeneralAction);
   };
+  
   const handleClickOutside = (event: MouseEvent) => {
     if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
       setShowGeneralAction(false);
@@ -62,12 +63,12 @@ export default function PostBox({
       className="box relative mb-[16px] flex snap-end items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
-      <Link href={`post/${postId}`} className="absolute inset-0 z-0">
+      <Link href={`archive/${archiveId}`} className="absolute inset-0 z-0">
         {isPhoto && (
           <Image
             src={photoUrl}
             alt={createdDate}
-            id={postId.toString()}
+            id={archiveId.toString()}
             fill
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             quality={100}
@@ -93,7 +94,7 @@ export default function PostBox({
       </button>
       <button
         onClick={handleToggleClick}
-        className="absolute left-2 top-2 z-10 p-2"
+        className="absolute left-2 top-2 z-10"
       >
         <Toggle
           width="4px"
@@ -103,7 +104,7 @@ export default function PostBox({
       </button>
       {showGeneralAction && (
         <div className="absolute left-5 top-0 z-20">
-          <GeneralAction type="post" />
+          <GeneralAction type="archive" />
         </div>
       )}
     </div>

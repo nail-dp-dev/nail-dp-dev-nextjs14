@@ -34,8 +34,6 @@ export default function ChattingBar({
     }
   }, [replyUser]);
 
-  console.log(userData);
-
   const handlePostComment = () => {
     if (commentContent.trim() && userData) {
       const newComment: AddCommentType = {
