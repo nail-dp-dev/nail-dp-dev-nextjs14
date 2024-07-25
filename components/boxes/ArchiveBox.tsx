@@ -1,17 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import HeartButton from '../animations/HeartButton';
-import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
 import { ArchiveBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import Video from '../ui/Video';
-import Toggle from '../buttons/Toggle';
-import { useEffect, useRef, useState } from 'react';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
+import BoxCommonButton from '../ui/BoxCommonButton';
+import { useGeneralAction } from '../../hooks/useGeneralAction';
 
 export default function ArchiveBox({
   archiveId,
@@ -21,34 +19,8 @@ export default function ArchiveBox({
   saved,
   createdDate,
 }: ArchiveBoxNewProps) {
-  const [showGeneralAction, setShowGeneralAction] = useState(false);
+  const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
-  const boxRef = useRef<HTMLDivElement>(null);
-
-  const handleHeartClick = () => {
-    console.log('Click...Heart!');
-  };
-
-  const handlePlusClick = () => {
-    console.log('Click...Plus!');
-  };
-
-  const handleToggleClick = () => {
-    setShowGeneralAction(!showGeneralAction);
-  };
-  
-  const handleClickOutside = (event: MouseEvent) => {
-    if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-      setShowGeneralAction(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const isPhoto =
     photoUrl.endsWith('.jpg') ||
@@ -80,28 +52,15 @@ export default function ArchiveBox({
         )}
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
       </Link>
-      <button
-        onClick={handleHeartClick}
-        className="absolute right-2 top-2 z-10"
-      >
-        <HeartButton width="21px" height="19px" isClicked={like} />
-      </button>
-      <button
-        onClick={handlePlusClick}
-        className="absolute bottom-2 right-2 z-10"
-      >
-        <PlusButton width="24px" height="24px" isClicked={saved} />
-      </button>
-      <button
+      <BoxCommonButton
+        type="toggle"
         onClick={handleToggleClick}
-        className="absolute left-2 top-2 z-10"
-      >
-        <Toggle
-          width="4px"
-          height="20px"
-          className={`${showGeneralAction ? 'fill-purple' : 'fill-white'}`}
-        />
-      </button>
+        width="4px"
+        height="20px"
+        showGeneralAction={showGeneralAction}
+        position="top-left"
+        className="p-2"
+      />
       {showGeneralAction && (
         <div className="absolute left-5 top-0 z-20">
           <GeneralAction type="archive" />

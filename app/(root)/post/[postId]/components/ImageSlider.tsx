@@ -36,7 +36,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ files }) => {
           <img
             src={files[currentIndex].fileUrl}
             alt={`slide-${currentIndex}`}
-            className="h-full w-full rounded-2.5xl object-cover"
+            className="h-full w-full rounded-2xl object-cover"
           />
         ) : (
           <Video src={files[currentIndex].fileUrl} width="100%" height="100%" />

@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import Video from '../ui/Video';
 import Toggle from '../buttons/Toggle';
-import { useEffect, useRef, useState } from 'react';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
+import { useGeneralAction } from '../../hooks/useGeneralAction';
 
 export default function PostBox({
   postId,
@@ -21,9 +21,8 @@ export default function PostBox({
   saved,
   createdDate,
 }: PostBoxNewProps) {
-  const [showGeneralAction, setShowGeneralAction] = useState(false);
+  const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
-  const boxRef = useRef<HTMLDivElement>(null);
 
   const handleHeartClick = () => {
     console.log('Click...Heart!');
@@ -32,22 +31,6 @@ export default function PostBox({
   const handlePlusClick = () => {
     console.log('Click...Plus!');
   };
-
-  const handleToggleClick = () => {
-    setShowGeneralAction(!showGeneralAction);
-  };
-  const handleClickOutside = (event: MouseEvent) => {
-    if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-      setShowGeneralAction(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const isPhoto =
     photoUrl.endsWith('.jpg') ||
@@ -79,22 +62,13 @@ export default function PostBox({
         )}
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
       </Link>
-      <button
-        onClick={handleHeartClick}
-        className="absolute right-2 top-2 z-10"
-      >
+      <button onClick={handleHeartClick} className="absolute right-2 top-2 z-10">
         <HeartButton width="21px" height="19px" isClicked={like} />
       </button>
-      <button
-        onClick={handlePlusClick}
-        className="absolute bottom-2 right-2 z-10"
-      >
+      <button onClick={handlePlusClick} className="absolute bottom-2 right-2 z-10">
         <PlusButton width="24px" height="24px" isClicked={saved} />
       </button>
-      <button
-        onClick={handleToggleClick}
-        className="absolute left-2 top-2 z-10 p-2"
-      >
+      <button onClick={handleToggleClick} className="absolute left-2 top-2 z-10 p-2">
         <Toggle
           width="4px"
           height="20px"

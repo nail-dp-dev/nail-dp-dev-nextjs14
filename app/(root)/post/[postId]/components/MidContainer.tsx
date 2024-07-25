@@ -4,9 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
-import ImageSlider from './ImageSlider'; // ImageSlider 컴포넌트 경로를 적절하게 수정
+import ImageSlider from './ImageSlider';
 import { CommentData, PostsDetailData } from '../../../../../types/dataType';
 import { AddCommentType } from '../../../../../hooks/useComments';
+import BoxCommonButton from '../../../../../components/ui/BoxCommonButton';
+import GeneralAction from '../../../../../components/buttons/option-menu/GeneralAction';
+import { useGeneralAction } from '../../../../../hooks/useGeneralAction';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -114,22 +117,51 @@ export default function MidContainer({
     };
   }, [imageBoxWidth]);
 
+  const {
+    showGeneralAction,
+    handleToggleClick,
+    boxRef,
+  } = useGeneralAction();
+
   return (
     <div ref={containerRef} className="h-screen overflow-y-scroll">
       <div className="mx-auto my-0 flex w-full flex-col justify-center">
-        <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center ">
+        <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center">
           <div
-            className={`ImageBox aspect-square  rounded-2.5xl bg-textLightYellow transition-all 
+            ref={boxRef}
+            className={`ImageBox relative aspect-square rounded-2xl bg-textLightYellow transition-all 
             duration-300 ${imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'}`}
           >
             <ImageSlider files={post.files} />
+            <BoxCommonButton
+              onClick={handleToggleClick}
+              type="toggle"
+              width="4px"
+              height="20px"
+              position="top-left"
+              className="p-2"
+              showGeneralAction={showGeneralAction}
+            />
+            {showGeneralAction && (
+              <div className="absolute left-5 top-0 z-20">
+                <GeneralAction type="post" />
+              </div>
+            )}
+            <BoxCommonButton
+              onClick={() => console.log('Plus Clicked')}
+              type="plus"
+              width="36px"
+              height="36px"
+              position="bottom-right"
+              className="p-2"
+            />
           </div>
           <div
-            className={`ContentBox ml-[15px] rounded-2.5xl bg-lightGray px-3 
+            className={`ContentBox ml-[15px] rounded-2xl bg-lightGray px-3 
             pt-[10px] text-sm font-light text-black transition-all duration-300 
             ${imageBoxWidth >= 500 ? 'w-[300px]' : 'min-w-[500px]'}
-            ${post.postContent ? 'block' : 'hidden'}`
-              }>
+            ${post.postContent ? 'block' : 'hidden'}`}
+          >
             {post.postContent}
           </div>
         </div>
