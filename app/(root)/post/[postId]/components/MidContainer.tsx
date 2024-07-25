@@ -43,6 +43,7 @@ export default function MidContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const startY = useRef(0);
+  const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
@@ -117,18 +118,11 @@ export default function MidContainer({
     };
   }, [imageBoxWidth]);
 
-  const {
-    showGeneralAction,
-    handleToggleClick,
-    boxRef,
-  } = useGeneralAction();
-
   return (
     <div ref={containerRef} className="h-screen overflow-y-scroll">
       <div className="mx-auto my-0 flex w-full flex-col justify-center">
         <div className="BoxWrap sticky mb-[50px] mt-5 flex justify-center">
           <div
-            ref={boxRef}
             className={`ImageBox relative aspect-square rounded-2xl bg-textLightYellow transition-all 
             duration-300 ${imageBoxWidth >= 500 ? 'min-w-[550px]' : 'min-w-[300px]'}`}
           >
@@ -143,7 +137,7 @@ export default function MidContainer({
               showGeneralAction={showGeneralAction}
             />
             {showGeneralAction && (
-              <div className="absolute left-5 top-0 z-20">
+              <div ref={boxRef} className=" absolute left-5 top-0 z-20">
                 <GeneralAction type="post" />
               </div>
             )}

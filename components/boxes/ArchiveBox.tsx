@@ -11,6 +11,7 @@ import GeneralAction from '../buttons/option-menu/GeneralAction';
 import BoxCommonButton from '../ui/BoxCommonButton';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 
+// 내아카이브 박스(임시)
 export default function ArchiveBox({
   archiveId,
   photoId,
@@ -31,7 +32,6 @@ export default function ArchiveBox({
 
   return (
     <div
-      ref={boxRef}
       className="box relative mb-[16px] flex snap-end items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
@@ -62,7 +62,7 @@ export default function ArchiveBox({
         className="p-2"
       />
       {showGeneralAction && (
-        <div className="absolute left-5 top-0 z-20">
+        <div ref={boxRef} className="absolute left-5 top-0 z-20">
           <GeneralAction type="archive" />
         </div>
       )}
