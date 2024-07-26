@@ -9,13 +9,13 @@ type ReplyBarProps = {
 export default function ReplyBar({ replyTo, onCancelReply }: ReplyBarProps) {
   return (
     <div
-      className="absolute bottom-[70px] left-16  flex  w-fit  items-center justify-between
-    rounded-3xl border-2 bg-purple bg-opacity-90 py-[10px] px-[15px]  
+      className="absolute bottom-[70px] left-16 flex  w-fit  items-center  justify-between rounded-3xl
+    border-none bg-purple bg-opacity-90 px-[15px] py-[10px]  
     text-sm font-normal text-white"
     >
       <span>{replyTo}</span>
       <button onClick={onCancelReply}>
-        <CloseIcon className="fill-white ml-1" />
+        <CloseIcon className="ml-1 fill-white" />
       </button>
     </div>
   );

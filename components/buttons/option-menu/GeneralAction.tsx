@@ -17,10 +17,8 @@ interface GeneralActionProps {
 // 메뉴 게시물/아카이브
 export default function GeneralAction({
   type,
-  onSettingClick = () => console.log('설정 클릭됨'),
   onCopyClick = () => console.log('복제 클릭됨'),
   onEditClick = () => console.log('수정 클릭됨'),
-  onShareClick = () => console.log('공유 클릭됨'),
   onDeleteClick = () => console.log('삭제 클릭됨'),
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
@@ -28,10 +26,12 @@ export default function GeneralAction({
 
   const handleSettingClick = () => {
     setShowSetting(true);
+    console.log('설정 클릭됨');
   };
 
   const handleShareClick = () => {
     setShowShareMenu(true);
+    console.log('공유 클릭됨');
   };
 
   const handleBackClick = () => {
@@ -59,7 +59,7 @@ export default function GeneralAction({
 
   return (
     <div
-      className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
+      className="text-14px-normal-dP absolute z-10 ml-2 mt-3 w-[120px] 
     whitespace-nowrap rounded-xl bg-white bg-opacity-90  py-[13px]
     shadow-option-modal-shadow"
     >
