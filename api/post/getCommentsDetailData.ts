@@ -974,25 +974,31 @@ export const commentsDetail: CommentData[] = [
   },
 ];
 
-export const getCommentData = async () => {
-  // await
-  //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/getCommentData`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials: 'include',
-  //   })
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(data => {
-  //     console.log('Success:', data);
-  //     localStorage.setItem('signupData', JSON.stringify(data));
-  //   })
+export const getCommentData = async (): Promise<CommentData[]> => {
+  // try {
+  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/{postId}/comment`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     credentials: 'include',
+  //   });
 
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+
+  //   const data = await response.json();
+  //   return data;
+  // } catch (error) {
+  //   if (error instanceof TypeError) {
+  //     console.error('Network error or invalid JSON:', error);
+  //   } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
+  //     console.error('Server returned an error response:', error);
+  //   } else {
+  //     console.error('Unexpected error:', error);
+  //   }
+  //   return commentsDetail;
+  // }
   return commentsDetail;
 };
