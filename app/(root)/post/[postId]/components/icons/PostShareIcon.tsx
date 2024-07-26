@@ -1,11 +1,13 @@
 interface IconProps {
   className?: string;
+  onClick?: () => void; 
 }
 
-export default function PostShareIcon({ className }: IconProps) {
+export default function PostShareIcon({ className,onClick }: IconProps) {
   return (
     <svg
       className={`${className}`}
+      onClick={onClick}
       width="18"
       height="20"
       viewBox="0 0 18 20"

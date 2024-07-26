@@ -99,7 +99,10 @@ export type PostsDetailData = {
     profileUrl: string;
     followingStatus: boolean;
     followerCount: number;
-    postImageUrls: string[];
+    files: {
+      fileUrl: string;
+      fileExtension: 'photo' | 'video';
+    }[];
     postContent: string;
     likeCount: number;
     commentCount: number;
@@ -124,6 +127,7 @@ export type Comment = {
   commentContent: string;
   likeCount: number;
   replies?: Reply[];
+  edited?: boolean;
 };
 
 export type Reply = {
@@ -133,6 +137,7 @@ export type Reply = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
+  edited?: boolean;
 };
 
 export type ReplyData = {
