@@ -5,7 +5,7 @@ export const urls = {
   'Home': '/',
   'Archive_for_you': '/',
   'Archive_new': '/new',
-  'Archive_trending': '/treding',
+  'Archive_trending': '/trending',
 
   
   // 회원가입 페이지 url
@@ -18,7 +18,7 @@ export const urls = {
   'MyArchive': '/my-archive',
   'MyArchive_archives' : '/my-archive',
   'MyArchive_built' : '/my-archive/built',
-  'MyArchive_follwing' : '/my-archive/following',
+  'MyArchive_following' : '/my-archive/following',
 
 
   // My Page 페이지 url

@@ -3,13 +3,14 @@ import UserImage from '../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../types/dataType';
 import useLoggedInUserData from '../../../../../hooks/auth/useLoggedInUserData';
-
+import Link from 'next/link';
 
 interface userProps {
   user: PostsDetailData['data'];
+  postId: number;
 }
 
-export default function TopContainer({ user }: userProps) {
+export default function TopContainer({ user, postId }: userProps) {
   const { userData } = useLoggedInUserData();
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);
   const [followerCount, setFollowerCount] = useState(user.followerCount);
@@ -35,10 +36,7 @@ export default function TopContainer({ user }: userProps) {
   }
 
   return (
-    <div
-      className="flex flex-wrap
-      items-center justify-between bg-white p-2"
-    >
+    <div className="flex flex-wrap items-center justify-between bg-white p-2">
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <UserImage
           src={user.profileUrl}
@@ -59,12 +57,11 @@ export default function TopContainer({ user }: userProps) {
         {!isOwner && (
           <div className="flex flex-wrap gap-2">
             <button
-              className={`button-layout px-[22.5px] py-[5.5px] 
-                ${
-                  isFollowing
-                    ? 'border-2 border-darkPurple bg-white text-darkPurple'
-                    : 'button-color hover:button-hover active:button-click '
-                }`}
+              className={`button-layout px-[22.5px] py-[5.5px] ${
+                isFollowing
+                  ? 'border-2 border-darkPurple bg-white text-darkPurple'
+                  : 'button-color hover:button-hover active:button-click'
+              }`}
               onClick={handleFollowToggle}
             >
               {isFollowing ? '팔로잉' : '팔로우'}
@@ -75,12 +72,11 @@ export default function TopContainer({ user }: userProps) {
       <div className="wrap-right flex flex-wrap">
         {isOwner && (
           <>
-            <button
-              className="button-layout button-color hover:button-hover 
-            active:button-click ml-4 px-[22.5px] py-[5.5px]"
-            >
-              게시글 수정
-            </button>
+            <Link href={`/post/edit/${postId}`}>
+              <button className="button-layout button-color hover:button-hover active:button-click ml-4 px-[22.5px] py-[5.5px]">
+                게시글 수정
+              </button>
+            </Link>
           </>
         )}
       </div>

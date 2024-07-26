@@ -21,6 +21,14 @@ export interface PostBoxNewProps {
   saved: boolean 
   createdDate: any,
 }
+export interface ArchiveBoxNewProps {
+  archiveId: number,
+  photoId: number,
+  photoUrl : string,
+  like?:boolean,
+  saved: boolean 
+  createdDate: any,
+}
 
 export interface ProfileMiniModalProps {
   isMiniModalShow: boolean;
