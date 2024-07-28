@@ -1,17 +1,10 @@
-import { PostsDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataProps)  => {
+export const deletePostLike = async (postId:number)  => {
 
   try {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
-    if (size) {
-      url += `&size=${size}`
-    }
-    if (oldestPostId !== 0) {
-      url += `&oldestPostId=${oldestPostId}`
-    }
-    const response = await fetch(url, {
-      method: "GET",
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/likes`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
@@ -21,7 +14,7 @@ export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataP
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    if (data.code === 2000 || data.code === 4005) {
+    if (data.code === 2001) {
       return data
     } else {
       return null

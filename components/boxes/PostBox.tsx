@@ -4,22 +4,25 @@ import Link from 'next/link';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
+import Video from '../ui/Video';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
-import Video from '../ui/Video';
+import { postPostLike } from '../../api/post/postPostLike';
+import { deletePostLike } from '../../api/post/deletePostLike';
 
-export default function  PostBox({postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
-
+export default function PostBox({ postId, photoId, photoUrl, like, saved, createdDate }: PostBoxNewProps) {
+    
   const layoutNum = useSelector(selectNumberOfBoxes);
 
-  const handleHeartClick = () => {
-    console.log('Click...Heart!')
+  const handleHeartClick = (postId: number) => {
+    deletePostLike(postId)
+    postPostLike(postId)
   }
 
-  const handlePlusClick = () => {
-    console.log('Click...Plus!')
+  const handlePlusClick = (postId: number) => {
+    console.log(`plus button click... ${postId}`)
   }
 
   const isPhoto = photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif');
@@ -33,7 +36,7 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
         <Image
           src={photoUrl}
           alt={createdDate}
-          id={postId.toString()}
+          id={photoId.toString()}
           fill
           style={{objectFit: 'cover', width: '100%', height: '100%'}}
           quality={100}
@@ -53,12 +56,12 @@ export default function  PostBox({postId, photoId, photoUrl, like, saved, create
       }
       </Link>
       <button
-        onClick={handleHeartClick}
+        onClick={()=>handleHeartClick(postId)}
         className="absolute top-2 right-2 z-10">
         <HeartButton width="21px" height="19px" isClicked={ like } />
       </button>
       <button 
-        onClick={handlePlusClick}
+        onClick={()=>handlePlusClick(postId)}
         className="absolute bottom-2 right-2 z-10">
         <PlusButton width="24px" height="24px" isClicked={ saved }/>
       </button>
