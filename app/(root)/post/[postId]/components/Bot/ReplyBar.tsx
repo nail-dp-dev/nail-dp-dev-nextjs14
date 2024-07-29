@@ -1,4 +1,5 @@
 import React from 'react';
+import CloseIcon from '../../../../../../public/assets/svg/close.svg';
 
 type ReplyBarProps = {
   replyTo: string;
@@ -8,12 +9,13 @@ type ReplyBarProps = {
 export default function ReplyBar({ replyTo, onCancelReply }: ReplyBarProps) {
   return (
     <div
-      className="sticky bottom-0 m-1 flex w-auto max-w-xs
-    items-center justify-between  p-2 px-4"
+      className="absolute bottom-[70px] left-16 flex  w-fit  items-center  justify-between rounded-3xl
+    border-none bg-purple bg-opacity-90 px-[15px] py-[10px]  
+    text-sm font-normal text-white"
     >
       <span>{replyTo}</span>
-      <button onClick={onCancelReply} className="text-red-500">
-        x
+      <button onClick={onCancelReply}>
+        <CloseIcon className="ml-1 fill-white" />
       </button>
     </div>
   );

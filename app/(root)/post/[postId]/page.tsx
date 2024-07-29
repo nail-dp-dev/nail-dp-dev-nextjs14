@@ -37,7 +37,7 @@ export default function PostDetailPage() {
 
   return (
     <div className="hide-scrollbar overflow-auto">
-      <TopContainer user={userDetail.post} />
+      <TopContainer user={userDetail.post} postId={userDetail.post.postId} />
       <MidContainer
         post={userDetail.post}
         comments={comments}

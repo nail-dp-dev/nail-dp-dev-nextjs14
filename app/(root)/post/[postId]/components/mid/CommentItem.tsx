@@ -166,6 +166,7 @@ export default function CommentItem({
                 {item.commentUserNickname}
                 <p className="commentDate text-14px-normal-dP ml-3">
                   {formatTimeAgo(item.commentDate)}
+                  {item.edited && <span className="ml-1">(수정됨)</span>}
                 </p>
               </div>
               {isEditing ? (
@@ -237,7 +238,7 @@ export default function CommentItem({
             </div>
           </div>
           <div className="relative mr-3 hidden h-full group-hover/toggle:block ">
-            <Toggle onClick={() => setShowOptions(!showOptions)} />
+            <Toggle className='fill-white' onClick={() => setShowOptions(!showOptions)} />
             {showOptions && (
               <CommentOptions
                 onEditClick={handleEditClick}

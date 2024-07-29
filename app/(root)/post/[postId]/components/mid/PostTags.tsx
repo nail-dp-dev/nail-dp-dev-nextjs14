@@ -38,14 +38,14 @@ export default function PostTags({ post }: PostTagsProps) {
     if (!isDragging.current || !scrollContainerRef.current) return;
     event.preventDefault();
     const x = event.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2; // Scroll-fast
+    const walk = (x - startX.current) * 2; 
     scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
   return (
     <div
       className="relative 
-      overflow-x-hidden  sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] 
+      overflow-x-hidden   xs:max-w-[300px]  sm:max-w-[400px] md:max-w-[500px] lg:max-w-[400px] 
       xl:max-w-[600px] 2xl:max-w-[800px]"
       onWheel={handleWheel}
       ref={scrollContainerRef}

@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/**/*.tsx",
-    ".next/types/**/*.ts"
-, "middleware/getCookie.js"  ],
+    ".next/types/**/*.ts",
+    "middleware/getCookie.js"
+  ],
   "exclude": ["node_modules"]
 }

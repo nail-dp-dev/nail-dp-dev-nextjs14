@@ -61,12 +61,6 @@ export const signUpConsentItems = [
   { name: '[선택] 개인정보 수집 이용 동의' , need: false , desc: '이 내용은 개인정보 수집 이용 동의 에 관한 내용입니다.' },
 ]
 
-// export const postIcons = [
-//   {icon: "HeartIcon", number: 1},
-//   {icon: "chatIcon", number: 1},
-//   {icon: "ShareIcon", number: 1},
-// ]
-
 export const getPostsNumber: {
   [key: number]: { number: number }
 } = {
@@ -86,3 +80,53 @@ export const getArchivePath: {
   '/new': { result: 'NEW' },
   '/trending': { result: 'TRENDING' },
 }
+
+
+export const archiveActionElements = [
+  {
+    icon: 'MenuSettingIcon',
+    label: '아카이브 설정',
+    onClick: () => console.log('아카이브 설정 클릭됨'),
+  },
+  {
+    icon: 'MenuCopyIcon',
+    label: '아카이브 복제',
+    onClick: () => console.log('아카이브 복제 클릭됨'),
+  },
+  {
+    icon: 'MenuShareIcon',
+    label: '아카이브 공유',
+    onClick: () => console.log('아카이브 공유 클릭됨'),
+  },
+];
+
+export const postActionElements = [
+  {
+    icon: 'MenuSettingIcon',
+    label: '게시물 설정',
+    onClick: () => console.log('게시물 설정 클릭됨'),
+  },
+  {
+    icon: 'MenuPostEditIcon',
+    label: '게시물 수정',
+    onClick: () => console.log('게시물 수정 클릭됨'),
+  },
+  {
+    icon: 'MenuShareIcon',
+    label: '게시물 공유',
+    onClick: () => console.log('게시물 공유 클릭됨'),
+  },
+];
+
+export const settingElements = [
+  { label: '전체공개', onClick: () => console.log('전체공개 클릭됨') },
+  { label: '팔로워공개', onClick: () => console.log('팔로워공개 클릭됨') },
+  { label: '비공개', onClick: () => console.log('비공개 클릭됨') },
+];
+
+export const shareMenuElements = [
+  { icon: 'MenuChatIcon', label: '채팅으로 공유', message: '채팅으로 공유' },
+  { icon: 'MenuKakaoIcon', label: '카카오톡 공유', message: '카카오톡 공유' },
+  { icon: 'MenuUrlIcon', label: 'URL 복사', message: 'URL 복사' }
+];
+

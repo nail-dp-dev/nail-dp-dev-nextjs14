@@ -65,15 +65,16 @@ const commentsSlice = createSlice({
     // 댓글 내용을 수정
     saveEdit(
       state,
-      action: PayloadAction<{ commentId: number; parentId: number | null; newContent: string }>,
+      action: PayloadAction<{ commentId: number; parentId: number | null; newContent: string; edited: boolean }>,
     ) {
-      const { commentId, parentId, newContent } = action.payload;
+      const { commentId, parentId, newContent, edited } = action.payload;
       if (parentId === null) {
         const comment = state.data.find(
           (comment) => comment.commentId === commentId,
         );
         if (comment) {
           comment.commentContent = newContent;
+          comment.edited = edited;
         }
       } else {
         const parentComment = state.data.find(
@@ -85,6 +86,7 @@ const commentsSlice = createSlice({
           );
           if (reply) {
             reply.commentContent = newContent;
+            reply.edited = edited;
           }
         }
       }
