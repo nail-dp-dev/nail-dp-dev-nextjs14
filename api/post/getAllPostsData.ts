@@ -1,6 +1,6 @@
 import { PostsDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataProps)  => {
+export const getAllPostsData = async ({ category, size, oldestPostId }: PostsDataProps) => {
 
   try {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
@@ -9,6 +9,7 @@ export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataP
     }
     if (oldestPostId !== 0) {
       url += `&oldestPostId=${oldestPostId}`
+      console.log(oldestPostId,'api')
     }
     const response = await fetch(url, {
       method: "GET",

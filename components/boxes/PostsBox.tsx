@@ -1,30 +1,54 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PostBox from './PostBox';
 import Loading from '../../app/loading';
 import { usePathname } from 'next/navigation';
 import { getArchivePath, getPostsNumber } from '../../constants';
 import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import { useSelector } from 'react-redux';
-import useAllPosts from '../../hooks/post/useAllPosts';
+import { PostArray } from '../../types/dataType';
+import { getAllPostsData } from '../../api/post/getAllPostsData';
 
 export default function PostsBox() {
   const path = usePathname() as '/' | '/new' | '/trending';
   const category = getArchivePath[path].result;
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
-  
-  const { postsData, fetchMorePosts, isLast } = useAllPosts(category, size);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true)
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [oldestPostId, setOldestPostId] = useState<number>(0);
+  const [message, setMessage] = useState<string>('');
+  const [postsData, setPostsData] = useState<PostArray[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  console.log('rendering...')
-  
+  console.log('Component rendering...!!');
+
+  const fetchMorePosts = async () => {
+    console.log('fetchMorePosts called...');
+    let data = await getAllPostsData({ category, size, oldestPostId });
+
+    if (data) {
+      setIsLoading(true);
+      setOldestPostId(data.data.oldestPostId);
+      setPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
+      console.log(data.data.postSummaryList.last);
+      setIsLast(data.data.postSummaryList.last);
+      setMessage(data.data.message);
+      setIsLoading(false);
+      setIsFirstRendering(false);
+    }
+  };
+
   useEffect(() => {
-    console.log('Rerendering...')
+    if (isFirstRendering) {
+      fetchMorePosts()
+    }
     const currentRef = bottomRef.current;
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !isLast) {
+      if (entries[0].isIntersecting && !isLast && !isLoading) {
+        console.log('Fetching more posts due to intersection observer...');
         fetchMorePosts();
       }
     }, {
@@ -34,21 +58,28 @@ export default function PostsBox() {
     if (currentRef) {
       observer.observe(currentRef);
     }
-
+    
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, [isLoading, oldestPostId, isLast, fetchMorePosts]);
 
-  const itemsToRender = postsData 
-    ? postsData.slice(0, postsData.length - (postsData.length % layoutNum)) 
+  useEffect(() => {
+    setPostsData([]);
+    setOldestPostId(0);
+    setIsFirstRendering(true);
+    fetchMorePosts();
+  }, [category]);
+
+  const itemsToRender = postsData
+    ? postsData.slice(0, postsData.length - (postsData.length % layoutNum))
     : [];
 
   return (
     <div className='outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
-      {postsData ? (
+      {postsData.length > 0 ? (
         itemsToRender.map((item, index) => (
           <PostBox
             key={index}
