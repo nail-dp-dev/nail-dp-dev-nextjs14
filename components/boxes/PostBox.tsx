@@ -14,6 +14,7 @@ import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
 import { useState } from 'react';
+import { deletePostLike } from '../../api/post/deletePostLike';
 
 export default function PostBox({
   postId,
@@ -25,9 +26,19 @@ export default function PostBox({
 }: PostBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
+  const [isLiked, setIsLiked] = useState(like)
 
-  const handleHeartClick = () => {
-    let data = postPostLike(postId)
+  const handleHeartClick = async () => {
+    console.log(isLiked)
+    if (!isLiked) {
+      let data = await postPostLike(postId)
+      setIsLiked(prev=>!prev)
+      console.log(data)
+    } else {
+      let data = await deletePostLike(postId)
+      setIsLiked(prev=>!prev)
+      console.log(data)
+    }
   };
 
   const handlePlusClick = () => {
@@ -65,7 +76,7 @@ export default function PostBox({
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
       </Link>
       <button onClick={handleHeartClick} className="absolute right-2 top-2 z-10">
-        <HeartButton width="21px" height="19px" isClicked={like} />
+        <HeartButton width="21px" height="19px" isClicked={isLiked} />
       </button>
       <button onClick={handlePlusClick} className="absolute bottom-2 right-2 z-10">
         <PlusButton width="24px" height="24px" isClicked={saved} />
