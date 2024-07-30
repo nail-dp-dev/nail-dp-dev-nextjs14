@@ -12,6 +12,8 @@ import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
 import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
+import { postPostLike } from '../../api/post/postPostLike';
+import { useState } from 'react';
 
 export default function PostBox({
   postId,
@@ -25,7 +27,7 @@ export default function PostBox({
   const layoutNum = useSelector(selectNumberOfBoxes);
 
   const handleHeartClick = () => {
-    console.log('Click...Heart!');
+    let data = postPostLike(postId)
   };
 
   const handlePlusClick = () => {

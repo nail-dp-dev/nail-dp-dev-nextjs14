@@ -64,14 +64,9 @@ export default function PostsBox() {
         observer.unobserve(currentRef);
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, oldestPostId, isLast, fetchMorePosts]);
 
-  useEffect(() => {
-    setPostsData([]);
-    setOldestPostId(0);
-    setIsFirstRendering(true);
-    fetchMorePosts();
-  }, [category]);
 
   const itemsToRender = postsData
     ? postsData.slice(0, postsData.length - (postsData.length % layoutNum))
