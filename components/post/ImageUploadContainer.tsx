@@ -85,7 +85,7 @@ export default function ImageUploadContainer({
     fileInput?.current?.click();
   };
 
-  const imageUploadChange = async(e: ChangeEvent<HTMLInputElement>) => {
+  const imageUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -114,15 +114,15 @@ export default function ImageUploadContainer({
     }
   };
 
-  const imageUploadRemove = async(
+  const imageUploadRemove = async (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
     e.preventDefault();
     const base64OriginImages = await Promise.all(
-      isOriginImages.map((item) => fileToBase64(item))
+      isOriginImages.map((item) => fileToBase64(item)),
     );
-    const originIndex = base64OriginImages.indexOf(isImages[index])
+    const originIndex = base64OriginImages.indexOf(isImages[index]);
 
     const updateImages = isImages.filter((_, i) => i !== index);
     const updateFormImages = isOriginImages.filter((_, i) => i !== originIndex);
@@ -136,11 +136,13 @@ export default function ImageUploadContainer({
     setIsFileMemory(updateFile);
   };
 
+  console.log(isImages);
+
   return (
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[1.5rem] font-bold">
-          새 게시글 작성
+          {editImages ? '게시글 수정' : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
           <CloseIcon />
@@ -181,16 +183,15 @@ export default function ImageUploadContainer({
                 {item.startsWith('data:video') ||
                 item.endsWith('.mov') ||
                 item.endsWith('.mp4') ? (
-                  <video
-                    src={item}
-                    autoPlay
-                    muted
-                    className="h-full w-full object-cover"
-                  />
+                  <video key={item} autoPlay muted className="h-full w-full object-cover">
+                    <source src={item} 
+                    type="video/mp4"
+                    />
+                  </video>
                 ) : (
                   <Image
                     src={item}
-                    alt={`postImage`}
+                    alt="postImage"
                     fill
                     style={{
                       objectFit: 'cover',
@@ -201,6 +202,7 @@ export default function ImageUploadContainer({
                     priority
                   />
                 )}
+
                 <div className="group absolute z-10 flex h-full w-full items-center justify-center bg-addFolderGray bg-opacity-0 transition-opacity hover:bg-opacity-80">
                   <button
                     className="absolute right-[3px] top-[3px] rounded-full bg-white hover:bg-darkPurple"
