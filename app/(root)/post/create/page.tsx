@@ -33,6 +33,9 @@ export default function PostCreate() {
     setIsTemp(temp);
   };
 
+  const tempButton = isUserHashTags.length > 0 || isImages.length > 0;
+  const uploadButton = isUserHashTags.length > 0 && isImages.length > 0
+
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
@@ -62,7 +65,8 @@ export default function PostCreate() {
             onClick={() => handleTempChange(true)}
             type="submit"
             form="postCreateForm"
-            className="mr-[12px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
+            disabled ={!tempButton}
           >
             임시저장
           </button>
@@ -70,7 +74,8 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`'border-2 mr-[12px] h-[40px] w-[124px] rounded-full border-purple bg-purple text-white hover:bg-white hover:text-purple`}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
+            disabled ={!uploadButton}
           >
             업로드
           </button>

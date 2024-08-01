@@ -59,6 +59,8 @@ export default function PostEdit() {
     setIsUserHashTags(hashtags);
   };
 
+  const editButton = isUserHashTags.length > 0 && isImages.length > 0
+
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
@@ -84,7 +86,8 @@ export default function PostEdit() {
           <button
             type="submit"
             form="postEditForm"
-            className="mr-[12px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
+            disabled ={!editButton}
           >
             완료
           </button>

@@ -69,7 +69,18 @@ export default function MyPagePage() {
         >
           <PostCreate />
           {newPosts &&
-            newPosts.map((item, index) => <PostBox key={index} postId={item.data.postId} photoId={item.data.photoId} photoUrl={item.data.photo_url} like={item.data.like} saved={item.data.saved} createdDate={index} />)}        </div>
+            newPosts.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.data.postId}
+                photoId={item.data.photoId}
+                photoUrl={item.data.photo_url}
+                like={item.data.like}
+                saved={item.data.saved}
+                createdDate={index}
+              />
+            ))}
+        </div>
       </div>
     </div>
   );
