@@ -27,12 +27,10 @@ export default function PostEdit() {
   const parm = useParams();
   const postId = Array.isArray(parm.postid) ? parm.postid[0] : parm.postid;
 
-  console.log(isImages);
-
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPostEditData(+postId);
-      if (data) {        
+      if (data) {
         setIsUrlImages(data.data.photos);
         setIsContent(data.data.postContent);
         setIsBoundary(data.data.boundary);
@@ -59,7 +57,7 @@ export default function PostEdit() {
     setIsUserHashTags(hashtags);
   };
 
-  const editButton = isUserHashTags.length > 0 && isImages.length > 0
+  const editButton = isUserHashTags.length > 0 && isImages.length > 0;
 
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
@@ -68,15 +66,20 @@ export default function PostEdit() {
     const postData = {
       postId,
       postContent: isContent,
-      tags:  isUserHashTags.map((tag) => ({ tagName: tag })),
+      tags: isUserHashTags.map((tag) => ({ tagName: tag })),
       tempSave: isTemp,
       boundary: isBoundary,
       deletedFileUrls: isDeleteImages,
       photos: isImages,
     };
+
+    let success = false;
+    success = await postEdit(postData);
+
+    if (success) {
+      router.push('/my-page');
+    }
     
-    postEdit(postData);
-    // router.push('/my-page');
   };
 
   return (
@@ -86,8 +89,8 @@ export default function PostEdit() {
           <button
             type="submit"
             form="postEditForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
-            disabled ={!editButton}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            disabled={!editButton}
           >
             완료
           </button>

@@ -6,7 +6,7 @@ import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal';
+import PostCreateModal from '../modal/common/postCreatemodal/PostCreateModal'; 
 
 type ImageData = {
   fileName: string;
@@ -135,8 +135,6 @@ export default function ImageUploadContainer({
     setIsOriginImages(updateFormImages);
     setIsFileMemory(updateFile);
   };
-
-  console.log(isImages);
 
   return (
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">

@@ -34,7 +34,7 @@ export default function PostCreate() {
   };
 
   const tempButton = isUserHashTags.length > 0 || isImages.length > 0;
-  const uploadButton = isUserHashTags.length > 0 && isImages.length > 0
+  const uploadButton = isUserHashTags.length > 0 && isImages.length > 0;
 
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
@@ -46,14 +46,17 @@ export default function PostCreate() {
       tempSave: isTemp,
       boundary: isBoundary,
       photos: isImages,
-  }
+    };
 
+    let success = false;
     if (temp) {
-      tempPostCreate(postData);
-      // router.push('/my-page');
+      success = await tempPostCreate(postData);
     } else {
-      postCreate(postData);
-      // router.push('/my-page');
+      success = await postCreate(postData);
+    }
+    
+    if (success) {
+      router.push('/my-page');
     }
   };
 
@@ -65,8 +68,8 @@ export default function PostCreate() {
             onClick={() => handleTempChange(true)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
-            disabled ={!tempButton}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            disabled={!tempButton}
           >
             임시저장
           </button>
@@ -74,8 +77,8 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? "bg-buttonLightGray cursor-pointer":"border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"}`}
-            disabled ={!uploadButton}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            disabled={!uploadButton}
           >
             업로드
           </button>
