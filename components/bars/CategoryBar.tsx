@@ -47,7 +47,9 @@ export default function CategoryBar({elements}: CategoryBarProps) {
           </button>
           {
             isLoggedIn === 'loggedIn' &&
-            <HeartButton width='29' height='24' isClicked={true} />
+            <HeartButton
+              width='29' height='24' isClicked={false} isGetAllLiked={true}
+            />
           }
       </div>
       </div>

@@ -13,10 +13,10 @@ import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { deletePostLike } from '../../api/post/deletePostLike';
 
-export default function PostBox({
+function PostBox({
   postId,
   photoId,
   photoUrl,
@@ -29,28 +29,29 @@ export default function PostBox({
   const [isLiked, setIsLiked] = useState(like)
 
   const handleHeartClick = async () => {
-    console.log(isLiked)
     if (!isLiked) {
       let data = await postPostLike(postId)
-      setIsLiked(prev=>!prev)
-      console.log(data)
+      data.code == 2001 && setIsLiked(prev=>!prev)
     } else {
       let data = await deletePostLike(postId)
-      setIsLiked(prev=>!prev)
-      console.log(data)
+      data.code == 2001 && setIsLiked(prev=>!prev)
     }
   };
 
   const handlePlusClick = () => {
     console.log('Click...Plus!');
   };
-
+  
   const isPhoto =
-    photoUrl.endsWith('.jpg') ||
-    photoUrl.endsWith('.jpeg') ||
-    photoUrl.endsWith('.png') ||
-    photoUrl.endsWith('.gif');
+  photoUrl.endsWith('.jpg') ||
+  photoUrl.endsWith('.jpeg') ||
+  photoUrl.endsWith('.png') ||
+  photoUrl.endsWith('.gif');
   const isVideo = photoUrl.endsWith('.mp4');
+  
+  useEffect(() => {
+    console.log('렌더링')
+  },[])
 
   return (
     <div
@@ -63,7 +64,7 @@ export default function PostBox({
           <Image
             src={photoUrl}
             alt={createdDate}
-            id={postId.toString()}
+            id={photoId.toString()}
             fill
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             quality={100}
@@ -96,3 +97,5 @@ export default function PostBox({
     </div>
   );
 }
+
+export default React.memo(PostBox);

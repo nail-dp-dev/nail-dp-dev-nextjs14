@@ -5,6 +5,7 @@ import boxLayoutReducer from './slice/boxLayoutSlice';
 import commonModalReducer from './slice/modalSlice';
 import commentsReducer from './slice/commentsSlice';
 import replyUserReducer from './slice/replyUserSlice';
+import getLikedPosts from './slice/getLikedPostsSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = () => {
@@ -17,6 +18,7 @@ export const store = () => {
       commonModal: commonModalReducer,
       comments: commentsReducer,
       replyUser: replyUserReducer,
+      likedPosts: getLikedPosts,
     },
   });
 };

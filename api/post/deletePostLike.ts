@@ -2,7 +2,6 @@
 export const deletePostLike = async (postId:number)  => {
 
   try {
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/likes`, {
       method: "DELETE",
       headers: {
@@ -13,22 +12,15 @@ export const deletePostLike = async (postId:number)  => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    const data = await response.json();
-    if (data.code === 2001) {
-      return data
-    } else {
-      return null
-    }
+    return await response.json()
+
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
-      return false
     } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
       console.error('Server returned an error response:', error);
-      return false
     } else {
       console.error('Unexpected error:', error);
-      return false
     }
   }
   

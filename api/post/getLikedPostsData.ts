@@ -1,16 +1,9 @@
 import { PostsDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({ category, size, oldestPostId }: PostsDataProps) => {
+export const getLikedPosts = async ({ category, size, oldestPostId }: PostsDataProps) => {
 
   try {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
-    if (size) {
-      url += `&size=${size}`
-    }
-    if (oldestPostId !== 0) {
-      url += `&oldestPostId=${oldestPostId}`
-    }
-    const response = await fetch(url, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/like`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
