@@ -6,6 +6,7 @@ import { profileMiniMenuElements } from '../../../constants'
 import { userProfileImageData } from '../../../constants/example/index';
 import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
 import Image from 'next/image'
+import { getUserProfileData } from '../../../api/user/getUserProfile';
 
 export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }: ProfileMiniModalProps) {
 
@@ -44,6 +45,11 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMiniModalShow, handleClickOutside]);
+
+  useEffect(() => {
+    let data = getUserProfileData()
+    console.log(data)
+  },[])
   
   return (
     <div

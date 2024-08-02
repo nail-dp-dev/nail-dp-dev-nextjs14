@@ -40,8 +40,9 @@ export default function PostsBox() {
   const fetchMorePosts = async () => {
     console.log('fetchMorePosts called...');
     let data = await getAllPostsData({ category, size, oldestPostId });
-
-    if (data.code === 2000 && data) {
+    console.log(data)
+    
+    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLoading(true);
       setOldestPostId(data.data.oldestPostId);
       setPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
@@ -50,7 +51,7 @@ export default function PostsBox() {
       setIsLoading(false);
       setIsFirstRendering(false);
       setIsContentExist(true)
-    } else if (data.code === 4005) {
+    } else if ( data.code === 2000 && data.data.postSummaryList.content.length === 0 ) {
       setIsLoading(true);
       setMessage(data.message)
       setIsLoading(false)
@@ -62,7 +63,7 @@ export default function PostsBox() {
   const fetchMorePostsByLikedButton = async () => {
     let data = await getLikedPosts({ category, size, oldestPostId });
 
-    if (data.code === 2000 && data) {
+    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
       setOldestLikedPostId(data.data.oldestPostId);
       setLikedPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
@@ -71,9 +72,9 @@ export default function PostsBox() {
       setIsLikedPostsLoading(false);
       setIsLikedPostsFirstRendering(false);
       setIsLikedPostsContentExist(true)
-    } else if (data.code === 4005) {
+    } else if (data.code === 2000 && data.data.postSummaryList.content.length === 0) {
       setIsLikedPostsLoading(true);
-      setLikedPostsMessage(data.message)
+      setLikedPostsMessage('좋아요한 게시글이 없습니다.')
       setIsLikedPostsLoading(false)
       setIsLikedPostsContentExist(false)
       return;
@@ -192,7 +193,7 @@ export default function PostsBox() {
       }
       {
         likedButtonState && !isLikedPostsContentExist && !isLikedPostsLoading &&
-        <div>{message}</div>
+        <div>{likedPostsMessage}</div>
       }
       <div ref={bottomRef} className='bottom-0 h-[1px] w-full'></div>
     </div>
