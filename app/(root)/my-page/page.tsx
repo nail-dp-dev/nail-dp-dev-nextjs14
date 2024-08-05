@@ -8,9 +8,15 @@ import { myPageCategoryElements } from '../../../constants';
 import { useEffect, useState } from 'react';
 import UserImage from '../../../components/ui/UserImage';
 import UserInfo from '../../../components/ui/UserInfo';
+import useLoggedInUserData from '../../../hooks/auth/useLoggedInUserData';
+import { useSelector } from 'react-redux';
+import { selectLoginStatus } from '../../../store/slice/loginSlice';
 
 export default function MyPagePage() {
   const [isScroll, setIsScroll] = useState(false);
+  const isLoggedIn = useSelector(selectLoginStatus);
+  const { userData } = useLoggedInUserData();
+  console.log(userData);
 
   useEffect(() => {
     function handleScroll() {
@@ -36,28 +42,31 @@ export default function MyPagePage() {
   return (
     <div
       id="scroll1"
-      className={`relative h-full overflow-y-scroll scrollbar-hide ${isScroll ? 'mt-[66px] snap-y snap-mandatory' : ''}`}
+      className={`relative h-full overflow-y-scroll scrollbar-hide ${isScroll ? 'mt-[66px]' : ''}
+      `}
     >
-      <div className="flex min-h-[160px] items-center">
-        <UserImage
-          src="/assets/img/logoutProfileImage.png"
-          alt="프로필이미지"
-          width={128}
-          height={128}
-        />
-        <div className="ml-[16px] flex-1">
-          <UserInfo
-            nickname={userMyPageData.data.nickname}
-            postsCount={userMyPageData.data.postsCount}
-            saveCount={userMyPageData.data.saveCount}
-            followerCount={userMyPageData.data.followerCount}
-            followCount={userMyPageData.data.followCount}
-            hoverStyle=""
-            nicknameStyle="text-[22px] font-bold"
-            statsStyle="text-sm font-normal"
+      {isLoggedIn === 'loggedIn' && userData && (
+        <div className="flex min-h-[160px] items-center">
+          <UserImage
+            src={userData.data.profileUrl}
+            alt="프로필이미지"
+            width={128}
+            height={128}
           />
+          <div className="ml-[16px] flex-1">
+            <UserInfo
+              nickname={userData.data.nickname}
+              postsCount={userData.data.postsCount}
+              saveCount={userData.data.saveCount}
+              followerCount={userData.data.followerCount}
+              followCount={userData.data.saveCount}
+              hoverStyle=""
+              nicknameStyle="text-[22px] font-bold"
+              statsStyle="text-sm font-normal"
+            />
+          </div>
         </div>
-      </div>
+      )}
       <div
         className={`${isScroll ? 'fixed top-[84px] z-30 w-[calc(100%_-_365px)] bg-white' : ''}`}
       >
@@ -69,7 +78,36 @@ export default function MyPagePage() {
         >
           <PostCreate />
           {newPosts &&
-            newPosts.map((item, index) => <PostBox key={index} postId={item.data.postId} photoId={item.data.photoId} photoUrl={item.data.photo_url} like={item.data.like} saved={item.data.saved} createdDate={index} />)}        </div>
+            newPosts.map((item, index) => {
+              if (index === 0) {
+                return (
+                  // <div key={index}>
+                    <PostBox
+                      key={index}
+                      postId={item.data.postId}
+                      photoId={item.data.photoId}
+                      photoUrl={item.data.photo_url}
+                      like={item.data.like}
+                      saved={item.data.saved}
+                      createdDate={index}
+                    />
+                  // </div>
+                );
+              } else {
+                return (
+                  <PostBox
+                    key={index}
+                    postId={item.data.postId}
+                    photoId={item.data.photoId}
+                    photoUrl={item.data.photo_url}
+                    like={item.data.like}
+                    saved={item.data.saved}
+                    createdDate={index}
+                  />
+                );
+              }
+            })}
+        </div>
       </div>
     </div>
   );

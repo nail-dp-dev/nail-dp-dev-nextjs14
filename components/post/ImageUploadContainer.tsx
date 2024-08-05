@@ -6,7 +6,7 @@ import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal';
+import PostCreateModal from '../modal/common/postCreatemodal/PostCreateModal'; 
 
 type ImageData = {
   fileName: string;
