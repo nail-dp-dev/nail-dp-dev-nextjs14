@@ -8,7 +8,7 @@ import PrivacySettingContainer from '../../../../../components/post/PrivacySetti
 import { useParams, useRouter } from 'next/navigation';
 import { getPostEditData } from '../../../../../api/post/getPostEditData';
 import { postEdit } from '../../../../../api/post/postEdit';
-import MyPageModal from '../../../../../components/modal/common/myPageModal/MyPageModal';
+import MyPageModal from '../../../../../components/modal/common/postAlarmModal/postAlarmModal';
 
 type ImageData = {
   fileName: string;
