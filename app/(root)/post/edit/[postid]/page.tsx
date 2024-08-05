@@ -8,6 +8,7 @@ import PrivacySettingContainer from '../../../../../components/post/PrivacySetti
 import { useParams, useRouter } from 'next/navigation';
 import { getPostEditData } from '../../../../../api/post/getPostEditData';
 import { postEdit } from '../../../../../api/post/postEdit';
+import MyPageModal from '../../../../../components/modal/common/myPageModal/MyPageModal';
 
 type ImageData = {
   fileName: string;
@@ -23,6 +24,7 @@ export default function PostEdit() {
   const [isBoundary, setIsBoundary] = useState('ALL');
   const [isUserHashTags, setIsUserHashTags] = useState<string[]>([]);
   const [isTemp, setIsTemp] = useState<boolean>(false);
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
   const parm = useParams();
   const postId = Array.isArray(parm.postid) ? parm.postid[0] : parm.postid;
@@ -57,7 +59,26 @@ export default function PostEdit() {
     setIsUserHashTags(hashtags);
   };
 
-  const editButton = isUserHashTags.length > 0 && isImages.length > 0;
+  useEffect(() => {
+    if (isModal) {
+      const handleOutsideClick = () => {
+        setIsModal(false);
+      };
+
+      const timer = setTimeout(() => {
+        setIsModal(false);
+      }, 2000);
+
+      document.addEventListener('click', handleOutsideClick);
+
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('click', handleOutsideClick);
+      };
+    }
+  }, [isModal]);
+
+  const editButton = isUserHashTags.length > 0 && isUrlImages.length > 0;
 
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
@@ -73,13 +94,12 @@ export default function PostEdit() {
       photos: isImages,
     };
 
-    let success = false;
-    success = await postEdit(postData);
-
+    const success = await postEdit(postData);
     if (success) {
-      router.push('/my-page');
+      router.push('/my-page?modal=수정');
+    }else{
+      setIsModal(true)
     }
-    
   };
 
   return (
@@ -95,6 +115,7 @@ export default function PostEdit() {
             완료
           </button>
         </div>
+        {isModal && <MyPageModal isText={'수정'}/>}
         <form
           className="w-[55%] min-w-[512px]"
           id="postEditForm"

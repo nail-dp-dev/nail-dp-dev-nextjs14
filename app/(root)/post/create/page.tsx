@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, SetStateAction, useState } from 'react';
+import { FormEvent, SetStateAction, useEffect, useState } from 'react';
 import ImageUploadContainer from '../../../../components/post/ImageUploadContainer';
 import ContentContainer from '../../../../components/post/ContentContainer';
 import HashTagContainer from '../../../../components/post/HashTagContainer';
@@ -8,6 +8,7 @@ import PrivacySettingContainer from '../../../../components/post/PrivacySettingC
 import { postCreate } from '../../../../api/post/postCreate';
 import { tempPostCreate } from '../../../../api/post/tempPostCreate';
 import { useRouter } from 'next/navigation';
+import MyPageModal from '../../../../components/modal/common/myPageModal/MyPageModal';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
@@ -15,6 +16,7 @@ export default function PostCreate() {
   const [isBoundary, setIsBoundary] = useState('ALL');
   const [isUserHashTags, setIsUserHashTags] = useState<string[]>([]);
   const [isTemp, setIsTemp] = useState<boolean>(true);
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
 
   const handleImageChange = (images: SetStateAction<File[]>) => {
@@ -36,6 +38,25 @@ export default function PostCreate() {
   const tempButton = isUserHashTags.length > 0 || isImages.length > 0;
   const uploadButton = isUserHashTags.length > 0 && isImages.length > 0;
 
+  useEffect(() => {
+    if (isModal) {
+      const handleOutsideClick = () => {
+        setIsModal(false);
+      };
+
+      const timer = setTimeout(() => {
+        setIsModal(false);
+      }, 2000);
+
+      document.addEventListener('click', handleOutsideClick);
+
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('click', handleOutsideClick);
+      };
+    }
+  }, [isModal]);
+
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
@@ -48,15 +69,20 @@ export default function PostCreate() {
       photos: isImages,
     };
 
-    let success = false;
     if (temp) {
-      success = await tempPostCreate(postData);
+      const success = await tempPostCreate(postData);
+      if (success) {
+        router.push('/my-page');
+      } else {
+        setIsModal(true);
+      }
     } else {
-      success = await postCreate(postData);
-    }
-    
-    if (success) {
-      router.push('/my-page');
+      const success = await postCreate(postData);
+      if (success) {
+        router.push('/my-page?modal=작성');
+      } else {
+        setIsModal(true);
+      }
     }
   };
 
@@ -83,6 +109,9 @@ export default function PostCreate() {
             업로드
           </button>
         </div>
+        {isModal && (
+          <MyPageModal isText={'업로드'} />
+        )}
         <form
           className="w-[55%] min-w-[512px]"
           id="postCreateForm"
