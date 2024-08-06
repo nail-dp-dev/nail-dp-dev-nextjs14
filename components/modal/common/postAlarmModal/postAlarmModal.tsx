@@ -2,10 +2,7 @@
 
 import { MyPageModalProps } from '../../../../constants/interface';
 
-export default function MyPageModal({ isText, setIsModal }: MyPageModalProps) {
-  const closeModal = () => {
-    setIsModal(false);
-  };
+export default function MyPageModal({ isText }: MyPageModalProps) {
 
   return (
     <div className="absolute z-30 flex h-[56px] w-[187px] items-center justify-center rounded-full bg-purple font-[20px] font-bold text-white">

@@ -115,9 +115,7 @@ export default function PostEdit() {
             완료
           </button>
         </div>
-        {isModal && <MyPageModal isText={'수정'} setIsModal={function (value: SetStateAction<boolean>): void {
-          throw new Error('Function not implemented.');
-        } }/>}
+        {isModal && <MyPageModal isText={'수정'}/>}
         <form
           className="w-[55%] min-w-[512px]"
           id="postEditForm"

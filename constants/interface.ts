@@ -98,7 +98,7 @@ export interface PostCreateModalProps {
 
 export interface MyPageModalProps {
   isText: string,
-  setIsModal: React.Dispatch<React.SetStateAction<boolean>>
+  // setIsModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface PostsDataProps {

@@ -77,8 +77,8 @@ export default function PostCreate() {
         setIsModal(true);
       }
     } else {
-      // const success = await postCreate(postData);
-      if (false) {
+      const success = await postCreate(postData);
+      if (success) {
         router.push('/my-page?modal=작성');
       } else {
         setIsModal(true);
@@ -109,7 +109,7 @@ export default function PostCreate() {
             업로드
           </button>
         </div>
-        <MyPageModal isText={'업로드'} setIsModal={setIsModal} />
+        {isModal && <MyPageModal isText={'업로드'} />}
         <form
           className="w-[55%] min-w-[512px]"
           id="postCreateForm"
