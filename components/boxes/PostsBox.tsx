@@ -35,25 +35,21 @@ export default function PostsBox() {
   const likedPostsBottomRef = useRef<HTMLDivElement>(null);
   const likedButtonState = useSelector(selectButtonState);
 
-  console.log('Component rendering...!!');
-
   const fetchMorePosts = async () => {
-    console.log('fetchMorePosts called...');
     let data = await getAllPostsData({ category, size, oldestPostId });
-    console.log(data)
     
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLoading(true);
       setOldestPostId(data.data.oldestPostId);
       setPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
       setIsLast(data.data.postSummaryList.last);
-      setMessage(data.data.message);
+      setMessage(data.message);
       setIsLoading(false);
       setIsFirstRendering(false);
       setIsContentExist(true)
     } else if ( data.code === 2000 && data.data.postSummaryList.content.length === 0 ) {
       setIsLoading(true);
-      setMessage(data.message)
+      setMessage('조회된 게시글이 없습니다.')
       setIsLoading(false)
       setIsContentExist(false)
       return;
@@ -68,7 +64,7 @@ export default function PostsBox() {
       setOldestLikedPostId(data.data.oldestPostId);
       setLikedPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
       setIsLikedPostsLast(data.data.postSummaryList.last);
-      setLikedPostsMessage(data.data.message);
+      setLikedPostsMessage(data.message);
       setIsLikedPostsLoading(false);
       setIsLikedPostsFirstRendering(false);
       setIsLikedPostsContentExist(true)
@@ -82,7 +78,6 @@ export default function PostsBox() {
   }
 
   useEffect(() => {
-    console.log('useEffect 위')
     if (isFirstRendering) {
       fetchMorePosts()
     }
@@ -90,7 +85,6 @@ export default function PostsBox() {
     const currentRef = bottomRef.current;
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !isLast && !isLoading && isContentExist) {
-        console.log('Fetching more posts due to intersection observer...');
         fetchMorePosts();
       }
     }, {
@@ -107,7 +101,7 @@ export default function PostsBox() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, oldestPostId, isLast, fetchMorePosts, isContentExist, likedButtonState]);
+  }, [isLoading, oldestPostId, isLast, fetchMorePosts, isContentExist]);
 
   useEffect(() => {
     console.log('useEffect')
@@ -141,16 +135,10 @@ export default function PostsBox() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLikedPostsLoading, oldestLikedPostId, isLikedPostsLast, fetchMorePostsByLikedButton, isLikedPostsContentExist, likedButtonState]);
 
-
-
   const itemsToRender = postsData 
     ? (postsData.length <= layoutNum ? postsData : postsData.slice(0, postsData.length - (postsData.length % layoutNum))) 
     : [];
 
-  const likedPostsitemsToRender = likedPostsData 
-    ? (likedPostsData.length <= layoutNum ? likedPostsData : likedPostsData.slice(0, likedPostsData.length - (likedPostsData.length % layoutNum))) 
-    : [];
-  
   return (
     <div className='outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
       {!likedButtonState && isContentExist && !isLoading && (
@@ -175,7 +163,7 @@ export default function PostsBox() {
         <div>{message}</div>
       }
       {likedButtonState && isLikedPostsContentExist && !isLikedPostsLoading && (
-        likedPostsitemsToRender.map((item, index) => (
+        likedPostsData.map((item, index) => (
           <PostBox
             key={index}
             postId={item.postId}

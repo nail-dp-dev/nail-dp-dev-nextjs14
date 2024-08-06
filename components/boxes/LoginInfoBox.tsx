@@ -10,7 +10,8 @@ import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
 import { getLogOut } from '../../api/auth/secure/getLogOut';
-import useLoggedInUserData from '../../hooks/auth/useLoggedInUserData';
+import useLoggedInUserData from '../../hooks/user/useLoggedInUserData';
+
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -94,7 +95,7 @@ export default function LoginInfoBox() {
             <div className="flex-1 w-full flex justify-start gap-[10px] text-sm font-normal">
               <span>로그인하기를 눌러 회원가입 및 로그인</span>
             </div>
-          </button> 
+            </button>
         }
         
       </div>

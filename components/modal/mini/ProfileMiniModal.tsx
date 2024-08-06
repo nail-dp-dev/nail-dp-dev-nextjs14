@@ -46,10 +46,10 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
     };
   }, [isMiniModalShow, handleClickOutside]);
 
-  useEffect(() => {
-    let data = getUserProfileData()
-    console.log(data)
-  },[])
+  // useEffect(() => {
+  //   let data = getUserProfileData()
+  //   console.log(data)
+  // },[])
   
   return (
     <div
