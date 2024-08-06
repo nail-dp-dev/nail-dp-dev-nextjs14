@@ -1,7 +1,6 @@
 'use client';
 
 import PostBox from '../../../components/boxes/PostBox';
-import { newPosts, userMyPageData } from '../../../constants/example';
 import PostCreate from '../../../components/animations/PostCreateIcon';
 import CategoryBar from '../../../components/bars/CategoryBar';
 import { myPageCategoryElements } from '../../../constants';
@@ -11,12 +10,51 @@ import UserInfo from '../../../components/ui/UserInfo';
 import useLoggedInUserData from '../../../hooks/auth/useLoggedInUserData';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slice/loginSlice';
+import { getPostsData } from '../../../api/post/getPostsData';
+import { getPostsTempData } from '../../../api/post/getPostsTempData';
+
+interface postData {
+  postId: number;
+  photoId: number;
+  photoUrl: string;
+  isPhoto: boolean;
+  isVideo: boolean;
+  like: boolean;
+  saved: boolean;
+  createdDate: string;
+}
+
+interface tempData {
+  isPhoto: boolean;
+  isVideo: boolean;
+  photoId: number;
+  photoUrl: string;
+  postId: number;
+}
 
 export default function MyPagePage() {
   const [isScroll, setIsScroll] = useState(false);
   const isLoggedIn = useSelector(selectLoginStatus);
   const { userData } = useLoggedInUserData();
-  console.log(userData);
+  const [isTempData, setIsTempData] = useState<tempData[]>([]);
+  const [isMyPageData, setIsMyPageData] = useState<postData[]>([]);
+
+  useEffect(() => {
+    const fetchPostData = async () => {
+      if (userData) {
+        const postData = await getPostsData(userData.data.nickname);
+        console.log(postData);
+        setIsMyPageData(postData.data.postSummaryList.content);
+      }
+    };
+    const fetchPostTempData = async () => {
+      const tempData = await getPostsTempData();
+      setIsTempData([tempData.data]);
+    };
+
+    fetchPostData();
+    fetchPostTempData();
+  }, [userData]);
 
   useEffect(() => {
     function handleScroll() {
@@ -59,7 +97,7 @@ export default function MyPagePage() {
               postsCount={userData.data.postsCount}
               saveCount={userData.data.saveCount}
               followerCount={userData.data.followerCount}
-              followCount={userData.data.saveCount}
+              followCount={userData.data.folloingCount}
               hoverStyle=""
               nicknameStyle="text-[22px] font-bold"
               statsStyle="text-sm font-normal"
@@ -77,35 +115,32 @@ export default function MyPagePage() {
           className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
         >
           <PostCreate />
-          {newPosts &&
-            newPosts.map((item, index) => {
-              if (index === 0) {
-                return (
-                  // <div key={index}>
-                    <PostBox
-                      key={index}
-                      postId={item.data.postId}
-                      photoId={item.data.photoId}
-                      photoUrl={item.data.photo_url}
-                      like={item.data.like}
-                      saved={item.data.saved}
-                      createdDate={index}
-                    />
-                  // </div>
-                );
-              } else {
-                return (
-                  <PostBox
-                    key={index}
-                    postId={item.data.postId}
-                    photoId={item.data.photoId}
-                    photoUrl={item.data.photo_url}
-                    like={item.data.like}
-                    saved={item.data.saved}
-                    createdDate={index}
-                  />
-                );
-              }
+          {isTempData &&
+            isTempData.map((item, index) => {
+              return (
+                <PostBox
+                  key={index}
+                  postId={item.postId}
+                  photoId={item.photoId}
+                  photoUrl={item.photoUrl}
+                  saved={false}
+                  createdDate={null}
+                />
+              );
+            })}
+          {isMyPageData &&
+            isMyPageData.map((item, index) => {
+              return (
+                <PostBox
+                  key={index}
+                  postId={item.postId}
+                  photoId={item.photoId}
+                  photoUrl={item.photoUrl}
+                  like={item.like}
+                  saved={item.saved}
+                  createdDate={item.createdDate}
+                />
+              );
             })}
         </div>
       </div>

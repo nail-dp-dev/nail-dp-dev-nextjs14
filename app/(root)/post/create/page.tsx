@@ -50,7 +50,7 @@ export default function PostCreate() {
       router.push('/my-page');
     } else {
       postCreate(postData);
-      router.push('/my-page');
+      // router.push('/my-page');
     }
   };
 

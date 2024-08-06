@@ -8,6 +8,7 @@ export type UserData = {
     followerCount: number;
     point: number;
     profileUrl: string,
+    folloingCount: number
   };
 };
 

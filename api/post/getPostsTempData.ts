@@ -1,7 +1,7 @@
-export const getPostsData = async (nickname: string, cursorId?: number) => {
+export const getPostsTempData = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${nickname}/posts${cursorId == null ? "":`cursorId=${cursorId}`}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/posts/temp`,
       {
         method: 'GET',
         headers: {
@@ -12,6 +12,7 @@ export const getPostsData = async (nickname: string, cursorId?: number) => {
     );
     const data = await response.json();
     return data
+    console.log(data);
     
   } catch (error) {
     if (error instanceof TypeError) {
