@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CommentData } from '../../../../../../types/dataType';
-import { useAppDispatch } from '../../../../../../store/store';
-import { setReplyUser } from '../../../../../../store/slice/replyUserSlice';
 import UserImage from '../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
@@ -9,7 +7,6 @@ import Toggle from '../../../../../../components/buttons/Toggle';
 import CommentOptions from '../CommentOptions';
 import DeleteModal from '../DeleteModal';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
-import { setCommonModal } from '../../../../../../store/slice/modalSlice';
 
 interface ReplyItemProps {
   item: CommentData['data'][number];
@@ -36,9 +33,7 @@ export default function ReplyItem({
   const [editedContent, setEditedContent] = useState(item.commentContent);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const dispatch = useAppDispatch();
   const textarea = useRef<HTMLTextAreaElement>(null);
-  const optionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     handleResizeHeight();
@@ -54,7 +49,6 @@ export default function ReplyItem({
 
   // 대댓글로 스크롤 이동
   const handleReplyClick = () => {
-    dispatch(setReplyUser({ id: parentId, name: item.commentUserNickname }));
     onReply(parentId, item.commentUserNickname);
   };
 
