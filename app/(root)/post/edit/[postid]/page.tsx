@@ -8,7 +8,7 @@ import PrivacySettingContainer from '../../../../../components/post/PrivacySetti
 import { useParams, useRouter } from 'next/navigation';
 import { getPostEditData } from '../../../../../api/post/getPostEditData';
 import { postEdit } from '../../../../../api/post/postEdit';
-import MyPageModal from '../../../../../components/modal/common/postAlarmModal/postAlarmModal';
+import MyPageModal from '../../../../../components/modal/common/postAlarmModal/PostAlarmModal';
 
 type ImageData = {
   fileName: string;
@@ -109,13 +109,15 @@ export default function PostEdit() {
           <button
             type="submit"
             form="postEditForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
             disabled={!editButton}
           >
             완료
           </button>
         </div>
-        {isModal && <MyPageModal isText={'수정'}/>}
+        {isModal && <MyPageModal isText={'수정'} setIsModal={function (value: SetStateAction<boolean>): void {
+          throw new Error('Function not implemented.');
+        } }/>}
         <form
           className="w-[55%] min-w-[512px]"
           id="postEditForm"

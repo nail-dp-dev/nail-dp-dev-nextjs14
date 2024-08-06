@@ -8,7 +8,7 @@ import PrivacySettingContainer from '../../../../components/post/PrivacySettingC
 import { postCreate } from '../../../../api/post/postCreate';
 import { tempPostCreate } from '../../../../api/post/tempPostCreate';
 import { useRouter } from 'next/navigation';
-import MyPageModal from '../../../../components/modal/common/postAlarmModal/postAlarmModal';
+import MyPageModal from '../../../../components/modal/common/postAlarmModal/PostAlarmModal';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
@@ -77,8 +77,8 @@ export default function PostCreate() {
         setIsModal(true);
       }
     } else {
-      const success = await postCreate(postData);
-      if (success) {
+      // const success = await postCreate(postData);
+      if (false) {
         router.push('/my-page?modal=작성');
       } else {
         setIsModal(true);
@@ -94,7 +94,7 @@ export default function PostCreate() {
             onClick={() => handleTempChange(true)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
             disabled={!tempButton}
           >
             임시저장
@@ -103,15 +103,13 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
             disabled={!uploadButton}
           >
             업로드
           </button>
         </div>
-        {isModal && (
-          <MyPageModal isText={'업로드'} />
-        )}
+        <MyPageModal isText={'업로드'} setIsModal={setIsModal} />
         <form
           className="w-[55%] min-w-[512px]"
           id="postCreateForm"

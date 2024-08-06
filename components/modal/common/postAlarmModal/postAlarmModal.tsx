@@ -2,12 +2,13 @@
 
 import { MyPageModalProps } from '../../../../constants/interface';
 
-export default function MyPageModal({
-  isText,
-}: MyPageModalProps) {
+export default function MyPageModal({ isText, setIsModal }: MyPageModalProps) {
+  const closeModal = () => {
+    setIsModal(false);
+  };
 
   return (
-   <div className="absolute flex h-[56px] w-[187px] font-[20px] font-bold text-white bg-purple items-center justify-center rounded-full z-30">
+    <div className="absolute z-30 flex h-[56px] w-[187px] items-center justify-center rounded-full bg-purple font-[20px] font-bold text-white">
       <p>게시글 {isText} 실패!</p>
     </div>
   );
