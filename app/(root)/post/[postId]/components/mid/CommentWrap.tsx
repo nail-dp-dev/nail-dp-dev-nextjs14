@@ -22,7 +22,7 @@ const CommentWrap = ({
   onSaveEdit,
   onDelete,
 }: UserProps) => {
-  const [sortType, setSortType] = useState<'latest' | 'popular'>('latest');
+  const [sortType, setSortType] = useState<'latest' | 'popular'>('popular');
   const [sortedComments, setSortedComments] = useState<CommentData['data']>([]);
   const commentsEndRef = useRef<HTMLDivElement>(null);
 
@@ -86,8 +86,10 @@ const CommentWrap = ({
         </div>
       </div>
 
-      <div className="w-full overflow-y-hidden rounded-2.5xl
-        bg-purple bg-opacity-20 transition-all duration-300">
+      <div
+        className="w-full overflow-y-hidden rounded-2.5xl
+        bg-purple bg-opacity-20 transition-all duration-300"
+      >
         {sortedComments.map((item) => (
           <CommentItem
             key={item.commentId}
