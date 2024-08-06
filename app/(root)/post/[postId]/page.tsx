@@ -6,7 +6,6 @@ import MidContainer from './components/MidContainer';
 import usePostDetail from '../../../../hooks/usePostDetail';
 import BotContainer from './components/BotContainer';
 import useComments from '../../../../hooks/useComments';
-import { AddCommentType } from '../../../../hooks/useComments';
 
 export default function PostDetailPage() {
   const userDetail = usePostDetail();
