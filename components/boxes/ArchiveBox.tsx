@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ArchiveBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import Video from '../ui/Video';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import BoxCommonButton from '../ui/BoxCommonButton';

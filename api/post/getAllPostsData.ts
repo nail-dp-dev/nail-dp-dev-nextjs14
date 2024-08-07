@@ -31,5 +31,5 @@ export const getAllPostsData = async ({ category, size, oldestPostId }: PostsDat
       console.error('Unexpected error:', error);
     }
   }
-  
+
 };

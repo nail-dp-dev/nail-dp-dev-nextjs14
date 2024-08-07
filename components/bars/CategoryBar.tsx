@@ -8,8 +8,8 @@ import PlusSVG from '../../public/assets/svg/plus.svg'
 import HeartButton from '../animations/HeartButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { decreaseBoxes, selectNumberOfBoxes, increaseBoxes } from '../../store/slice/boxLayoutSlice';
-import { selectLoginStatus } from '../../store/slice/loginSlice';
+import { decreaseBoxes, selectNumberOfBoxes, increaseBoxes } from '../../store/slices/boxLayoutSlice';
+import { selectLoginStatus } from '../../store/slices/loginSlice';
 
 export default function CategoryBar({elements}: CategoryBarProps) {
 

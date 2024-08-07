@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
-import StoreProvider from '../store/StoreProvider';
-import ThemeProvider from '../store/ThemeProvider';
-import LoggedInProvider from '../store/LoggedInProvider';
+import StoreProvider from '../store/providers/StoreProvider';
+import LoggedInProvider from '../store/providers/LoggedInProvider';
+import ThemeProvider from '../store/providers/ThemeProvider';
+
 
 const inter = Noto_Sans_KR({ subsets: ['latin'] });
 
@@ -26,7 +27,6 @@ export default function RootLayout({
         <StoreProvider>          
           <LoggedInProvider>
             <ThemeProvider>
-              {modal}
               {children}
             </ThemeProvider>
           </LoggedInProvider>

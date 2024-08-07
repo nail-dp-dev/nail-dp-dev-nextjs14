@@ -2,15 +2,15 @@
 
 import Bits from '../../public/assets/svg/bits.svg';
 import { useSelector } from 'react-redux';
-import { selectLoginStatus } from '../../store/slice/loginSlice';
-import { useAppDispatch } from '../../store/store';
+import { selectLoginStatus } from '../../store/slices/loginSlice';
 import ProfileMiniModal from '../modal/mini/ProfileMiniModal';
 import { useState } from 'react';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
-import { commonModalClose, setCommonModal } from '../../store/slice/modalSlice';
+import { commonModalClose, setCommonModal } from '../../store/slices/modalSlice';
 import { getLogOut } from '../../api/auth/secure/getLogOut';
 import useLoggedInUserData from '../../hooks/user/useLoggedInUserData';
+import { useAppDispatch } from '../../store/store';
 
 
 export default function LoginInfoBox() {

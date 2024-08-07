@@ -8,7 +8,7 @@ import Video from '../ui/Video';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../hooks/useGeneralAction';

@@ -5,11 +5,11 @@ import PostBox from './PostBox';
 import Loading from '../../app/loading';
 import { usePathname } from 'next/navigation';
 import { getArchivePath, getPostsNumber } from '../../constants';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { useSelector } from 'react-redux';
 import { PostArray } from '../../types/dataType';
 import { getAllPostsData } from '../../api/post/getAllPostsData';
-import { selectButtonState } from '../../store/slice/getLikedPostsSlice';
+import { selectButtonState } from '../../store/slices/getLikedPostsSlice';
 import { getLikedPosts } from '../../api/post/getLikedPostsData';
 
 export default function PostsBox() {

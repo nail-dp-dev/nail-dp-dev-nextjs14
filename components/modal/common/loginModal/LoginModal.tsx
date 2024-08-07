@@ -1,7 +1,7 @@
 'use client'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { commonModalClose, selectCommonModalStatus } from '../../../../store/slice/modalSlice';
+import { commonModalClose, selectCommonModalStatus } from '../../../../store/slices/modalSlice';
 import SmallLogo from '../../../../public/assets/svg/small-logo.svg'
 import CloseIcon from '../../../../public/assets/svg/close.svg';
 import UsedLoginPlatform from '../../../../public/assets/svg/used_login_platform.svg'

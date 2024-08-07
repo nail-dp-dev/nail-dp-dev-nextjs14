@@ -97,6 +97,11 @@ export interface PostCreateModalProps {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export interface MyPageModalProps {
+  isText: string,
+  // setIsModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 export interface PostsDataProps {
   category: string,
   size: number,

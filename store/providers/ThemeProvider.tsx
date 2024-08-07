@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectDarkMode, setDarkMode } from './slice/themeSlice';
-import useIsMounted from '../hooks/useIsMounted';
+import { selectDarkMode, setDarkMode } from '../slices/themeSlice';
+import useIsMounted from '../../hooks/useIsMounted';
 
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();

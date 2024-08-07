@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import UserImage from '../../../../../components/ui/UserImage';
 import UserInfo from '../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../types/dataType';
-import useLoggedInUserData from '../../../../../hooks/auth/useLoggedInUserData';
 import Link from 'next/link';
+import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
 
 interface userProps {
   user: PostsDetailData['data'];

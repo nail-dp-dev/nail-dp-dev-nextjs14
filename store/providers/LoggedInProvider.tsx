@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Loading from '../app/loading';
-import { getCookieValid } from '../api/auth/validation/getCookieValid';
-import { getCookie } from '../lib/getCookie';
-import { logOut } from './slice/loginSlice';
+import { getCookieValid } from '../../api/auth/validation/getCookieValid';
+import { getCookie } from '../../lib/getCookie';
+import { logOut } from '../slices/loginSlice';
+import Loading from '../../app/loading';
 
 
 const LoggedInProvider = ({ children }: { children: React.ReactNode}) => {

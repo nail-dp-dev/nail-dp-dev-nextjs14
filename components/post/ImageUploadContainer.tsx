@@ -6,7 +6,7 @@ import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal';
+import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal'; 
 
 type ImageData = {
   fileName: string;
@@ -41,8 +41,7 @@ export default function ImageUploadContainer({
       setIsImages(editImages.map((item: { fileUrl: string }) => item.fileUrl));
       setIsFileMemory(
         editImages.map(
-          (item: { fileSize: number }) =>
-            item.fileSize / (1024 * 1024),
+          (item: { fileSize: number }) => item.fileSize / (1024 * 1024),
         ),
       );
     }
@@ -56,7 +55,7 @@ export default function ImageUploadContainer({
 
   useEffect(() => {
     onImageChange(isOriginImages);
-  }, [isOriginImages, onImageChange]);
+  }, [isOriginImages]);
 
   useEffect(() => {
     if (onDeleteImageChange) {
@@ -64,19 +63,37 @@ export default function ImageUploadContainer({
     }
   }, [isDeleteImages, onDeleteImageChange]);
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('FileReader result is not a string'));
+        }
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const imageUploadClick = (e: MouseEvent) => {
     e.preventDefault();
     fileInput?.current?.click();
   };
 
-  const imageUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const imageUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const fileSizeMB = file.size / (1024 * 1024);
+      const base64String = await fileToBase64(file);
 
       const imageTypes = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'];
-      const videoTypes = ['video/mp4'];
+      const videoTypes = ['video/mp4', 'video/mov'];
       const imageMaxSize = 5;
       const videoMaxSize = 10;
 
@@ -92,26 +109,28 @@ export default function ImageUploadContainer({
         return;
       }
       setIsFileMemory([...isFileMemory, fileSizeMB]);
-      const reader = new FileReader();
       setIsOriginImages([...isOriginImages, e.target.files[0]]);
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        const files = [...isImages, result];
-        setIsImages(files);
-      };
-      reader.readAsDataURL(file);
+      setIsImages([...isImages, base64String]);
     }
   };
 
-  const imageUploadRemove = (
+  const imageUploadRemove = async (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
   ) => {
     e.preventDefault();
+    const base64OriginImages = await Promise.all(
+      isOriginImages.map((item) => fileToBase64(item)),
+    );
+    const originIndex = base64OriginImages.indexOf(isImages[index]);
+
     const updateImages = isImages.filter((_, i) => i !== index);
-    const updateFormImages = isOriginImages.filter((_, i) => i !== index);
+    const updateFormImages = isOriginImages.filter((_, i) => i !== originIndex);
     const updateFile = isFileMemory.filter((_, i) => i !== index);
-    setIsDeleteImages([...isDeleteImages, isImages[index]]);
+
+    if (isImages[index].startsWith('http')) {
+      setIsDeleteImages([...isDeleteImages, isImages[index]]);
+    }
     setIsImages(updateImages);
     setIsOriginImages(updateFormImages);
     setIsFileMemory(updateFile);
@@ -121,7 +140,7 @@ export default function ImageUploadContainer({
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[1.5rem] font-bold">
-          새 게시글 작성
+          {editImages ? '게시글 수정' : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
           <CloseIcon />
@@ -133,7 +152,7 @@ export default function ImageUploadContainer({
           ref={fileInput}
           onChange={imageUploadChange}
           style={{ display: 'none' }}
-          accept=".gif, .jpg, .jpeg, .png, .mp4"
+          accept=".gif, .jpg, .jpeg, .png, .mp4, .mov"
         />
         {isImages.length < 1 && (
           <div className="flex h-full w-full flex-col items-center justify-center">
@@ -159,16 +178,18 @@ export default function ImageUploadContainer({
                 className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-auto overflow-hidden rounded-[5px]"
                 key={index}
               >
-                {item.startsWith('data:video/mp4;base64,') ? (
-                  <video
-                    src={item}
-                    autoPlay
-                    className="h-full w-full object-cover"
-                  />
+                {item.startsWith('data:video') ||
+                item.endsWith('.mov') ||
+                item.endsWith('.mp4') ? (
+                  <video key={item} autoPlay muted className="h-full w-full object-cover">
+                    <source src={item} 
+                    type="video/mp4"
+                    />
+                  </video>
                 ) : (
                   <Image
                     src={item}
-                    alt={`postImage`}
+                    alt="postImage"
                     fill
                     style={{
                       objectFit: 'cover',
@@ -179,6 +200,7 @@ export default function ImageUploadContainer({
                     priority
                   />
                 )}
+
                 <div className="group absolute z-10 flex h-full w-full items-center justify-center bg-addFolderGray bg-opacity-0 transition-opacity hover:bg-opacity-80">
                   <button
                     className="absolute right-[3px] top-[3px] rounded-full bg-white hover:bg-darkPurple"

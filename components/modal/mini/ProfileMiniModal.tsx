@@ -6,11 +6,13 @@ import { profileMiniMenuElements } from '../../../constants'
 import { userProfileImageData } from '../../../constants/example/index';
 import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
 import Image from 'next/image'
-import { getUserProfileData } from '../../../api/user/getUserProfile';
+import { useAppDispatch } from '../../../store/store';
+import { setCommonModal } from '../../../store/slices/modalSlice';
 
 export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }: ProfileMiniModalProps) {
-
+  
   const modalRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
   
   const [whichContent, setWhichContent] = useState('basic')
   
@@ -21,7 +23,8 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
 
   const handleAddNewProfileImage = (e: any) => {
     e.stopPropagation();
-    console.log('새로운 이미지 더하기...')
+    setIsMiniModalShow(false)
+    dispatch(setCommonModal('profile-create'));
   }
 
   const handleChangeProfileImage = (e: any, url:string) => {

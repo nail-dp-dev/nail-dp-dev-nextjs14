@@ -4,17 +4,23 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import HeartIcon from "../../public/assets/svg/heart.svg";
 import { IconButtonProps } from "../../constants/interface";
-import { useDispatch, useSelector } from 'react-redux';
-import { selectButtonState, toggleButtonState } from '../../store/slice/getLikedPostsSlice';
-import { RootState } from '../../store/store';
+import { useDispatch } from 'react-redux';
+import { toggleButtonState } from '../../store/slices/getLikedPostsSlice';
 
-export default function HeartButton({width,height,isClicked,isGetAllLiked}:IconButtonProps) {
+export default function HeartButton(
+  {
+    width,
+    height,
+    isClicked,
+    isGetAllLiked
+  }
+  :IconButtonProps
+) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);
   const [isfillRule, setIsfillRule] = useState<"evenodd" | "nonzero">(isClicked ? "nonzero" : "evenodd")
   const dispatch = useDispatch();
-  const pressBtn = useSelector((state: RootState) => selectButtonState(state));
-  const state = useSelector(selectButtonState);
+
 
   const handleClick = () => {
     setIsClick(!isClick);

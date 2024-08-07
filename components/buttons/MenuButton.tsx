@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MenuElementsProps } from '../../constants/interface'
 import { useSelector } from 'react-redux'
-import { selectLoginStatus } from '../../store/slice/loginSlice'
+import { selectLoginStatus } from '../../store/slices/loginSlice'
 
 
 export default function MenuButton({ icon , url, name, desc, isLast, where }: MenuElementsProps) {

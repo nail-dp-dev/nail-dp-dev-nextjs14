@@ -1,4 +1,4 @@
-import { logIn, logOut } from '../../../store/slice/loginSlice';
+import { logIn, logOut } from '../../../store/slices/loginSlice';
 import { AppDispatch } from '../../../store/store';
 
 export const getCookieValid = async (dispatch: AppDispatch) => {

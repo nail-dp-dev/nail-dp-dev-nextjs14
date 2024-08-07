@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, SetStateAction, useState } from 'react';
+import { FormEvent, SetStateAction, useEffect, useState } from 'react';
 import ImageUploadContainer from '../../../../components/post/ImageUploadContainer';
 import ContentContainer from '../../../../components/post/ContentContainer';
 import HashTagContainer from '../../../../components/post/HashTagContainer';
@@ -8,6 +8,7 @@ import PrivacySettingContainer from '../../../../components/post/PrivacySettingC
 import { postCreate } from '../../../../api/post/postCreate';
 import { tempPostCreate } from '../../../../api/post/tempPostCreate';
 import { useRouter } from 'next/navigation';
+import MyPageModal from '../../../../components/modal/common/postAlarmModal/PostAlarmModal';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
@@ -15,6 +16,7 @@ export default function PostCreate() {
   const [isBoundary, setIsBoundary] = useState('ALL');
   const [isUserHashTags, setIsUserHashTags] = useState<string[]>([]);
   const [isTemp, setIsTemp] = useState<boolean>(true);
+  const [isModal, setIsModal] = useState(false);
   const router = useRouter();
 
   const handleImageChange = (images: SetStateAction<File[]>) => {
@@ -33,6 +35,28 @@ export default function PostCreate() {
     setIsTemp(temp);
   };
 
+  const tempButton = isUserHashTags.length > 0 || isImages.length > 0;
+  const uploadButton = isUserHashTags.length > 0 && isImages.length > 0;
+
+  useEffect(() => {
+    if (isModal) {
+      const handleOutsideClick = () => {
+        setIsModal(false);
+      };
+
+      const timer = setTimeout(() => {
+        setIsModal(false);
+      }, 2000);
+
+      document.addEventListener('click', handleOutsideClick);
+
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('click', handleOutsideClick);
+      };
+    }
+  }, [isModal]);
+
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
@@ -43,14 +67,22 @@ export default function PostCreate() {
       tempSave: isTemp,
       boundary: isBoundary,
       photos: isImages,
-  }
+    };
 
     if (temp) {
-      tempPostCreate(postData);
-      router.push('/my-page');
+      const success = await tempPostCreate(postData);
+      if (success) {
+        router.push('/my-page');
+      } else {
+        setIsModal(true);
+      }
     } else {
-      postCreate(postData);
-      router.push('/my-page');
+      const success = await postCreate(postData);
+      if (success) {
+        router.push('/my-page?modal=작성');
+      } else {
+        setIsModal(true);
+      }
     }
   };
 
@@ -62,7 +94,8 @@ export default function PostCreate() {
             onClick={() => handleTempChange(true)}
             type="submit"
             form="postCreateForm"
-            className="mr-[12px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+            disabled={!tempButton}
           >
             임시저장
           </button>
@@ -70,11 +103,13 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`'border-2 mr-[12px] h-[40px] w-[124px] rounded-full border-purple bg-purple text-white hover:bg-white hover:text-purple`}
+            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+            disabled={!uploadButton}
           >
             업로드
           </button>
         </div>
+        {isModal && <MyPageModal isText={'업로드'} />}
         <form
           className="w-[55%] min-w-[512px]"
           id="postCreateForm"
