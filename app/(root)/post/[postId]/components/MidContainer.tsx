@@ -16,7 +16,7 @@ interface MidContainerProps {
   comments: CommentData['data'];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
-  onLike: (commentId: number, increment: number) => void;
+  onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
