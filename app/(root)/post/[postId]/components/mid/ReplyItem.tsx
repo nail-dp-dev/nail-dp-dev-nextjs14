@@ -33,6 +33,7 @@ export default function ReplyItem({
   const [editedContent, setEditedContent] = useState(item.commentContent);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -46,15 +47,24 @@ export default function ReplyItem({
       textarea.current.style.height = `${textarea.current.scrollHeight}px`;
     }
   };
-
   // 대댓글로 스크롤 이동
   const handleReplyClick = () => {
     onReply(parentId, item.commentUserNickname);
+    scrollToComment();
+  };
+  // 댓글 스크롤 이동
+  const scrollToComment = () => {
+    if (commentRef.current) {
+      commentRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
   };
 
   // 좋아요 증가/감소
   const handleLike = (commentId: number, increment: number) => {
-    onLike(commentId, increment);
+    onLike(item.commentId, increment);
   };
 
   // 댓글 수정
@@ -113,6 +123,7 @@ export default function ReplyItem({
 
   return (
     <div
+      ref={commentRef}
       className="reply-item button-tr mx-2 mb-4 mt-[10px] 
         rounded-xl transition-all duration-300"
     >

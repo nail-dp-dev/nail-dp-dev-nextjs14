@@ -55,12 +55,6 @@ export default function CommentItem({
     setIsRotated(true);
     scrollToComment();
   };
-
-  // 좋아요 증가/감소
-  const handleLike = (commentId: number, increment: number) => {
-    onLike(commentId, increment);
-  };
-
   // 댓글 스크롤 이동
   const scrollToComment = () => {
     if (commentRef.current) {
@@ -69,6 +63,11 @@ export default function CommentItem({
         block: 'center',
       });
     }
+  };
+
+  // 좋아요 증가/감소
+  const handleLike = (commentId: number, increment: number) => {
+    onLike(commentId, increment);
   };
 
   // 댓글 수정
@@ -232,7 +231,10 @@ export default function CommentItem({
             </div>
           </div>
           <div className="relative mr-3 hidden h-full group-hover/toggle:block ">
-            <Toggle className='fill-white' onClick={() => setShowOptions(!showOptions)} />
+            <Toggle
+              className="fill-white"
+              onClick={() => setShowOptions(!showOptions)}
+            />
             {showOptions && (
               <CommentOptions
                 onEditClick={handleEditClick}
@@ -246,8 +248,11 @@ export default function CommentItem({
           </div>
         </div>
         {isRotated &&
-          replyData.map((replyItem,index) => (
-            <div key={`${replyItem.commentId}-${index}`} className="reply-box ml-9">
+          replyData.map((replyItem, index) => (
+            <div
+              key={`${replyItem.commentId}-${index}`}
+              className="reply-box ml-9"
+            >
               <ReplyItem
                 item={replyItem}
                 parentId={item.commentId}
