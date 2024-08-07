@@ -130,16 +130,6 @@ export type Comment = {
   edited?: boolean;
 };
 
-export type Reply = {
-  commentId: number;
-  profileUrl: string;
-  commentUserNickname: string;
-  commentDate: string;
-  commentContent: string;
-  likeCount: number;
-  edited?: boolean;
-};
-
 export type ReplyData = {
   success: boolean;
   code: number;
@@ -147,6 +137,15 @@ export type ReplyData = {
   data: Reply[];
 };
 
+export type Reply = {
+  replyId: number;
+  profileUrl: string;
+  commentUserNickname: string;
+  commentDate: string;
+  commentContent: string;
+  likeCount: number;
+  edited?: boolean;
+};
 
 export type PostCreateData = {
     postContent: string,

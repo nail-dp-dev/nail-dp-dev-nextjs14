@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CommentData } from '../../../../../../types/dataType';
+import { Reply } from '../../../../../../types/dataType';
 import UserImage from '../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
@@ -9,16 +9,16 @@ import DeleteModal from '../DeleteModal';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 
 interface ReplyItemProps {
-  item: CommentData['data'][number];
+  item: Reply;
   parentId: number;
-  onLike: (commentId: number, increment: number) => void;
+  onLike: (replyId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
-    commentId: number,
+    replyId: number,
     parentId: number | null,
     newContent: string,
   ) => void;
-  onDelete: (commentId: number, parentId: number | null) => void;
+  onDelete: (replyId: number, parentId: number | null) => void;
 }
 
 export default function ReplyItem({
@@ -63,8 +63,8 @@ export default function ReplyItem({
   };
 
   // 좋아요 증가/감소
-  const handleLike = (commentId: number, increment: number) => {
-    onLike(item.commentId, increment);
+  const handleLike = (replyId: number, increment: number) => {
+    onLike(item.replyId, increment, true);
   };
 
   // 댓글 수정
@@ -88,9 +88,9 @@ export default function ReplyItem({
   // 수정 댓글 저장
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') {
-      setShowDeleteModal(true); // 빈 값이면 삭제 모달 표시
+      setShowDeleteModal(true);
     } else {
-      onSaveEdit(item.commentId, parentId, editedContent);
+      onSaveEdit(item.replyId, parentId, editedContent);
       setIsEditing(false);
     }
   };
@@ -107,7 +107,7 @@ export default function ReplyItem({
 
   // 댓글 삭제 처리
   const handleDeleteConfirm = () => {
-    onDelete(item.commentId, parentId);
+    onDelete(item.replyId, parentId);
     setShowDeleteModal(false);
   };
 
@@ -218,7 +218,7 @@ export default function ReplyItem({
         <DeleteModal
           onConfirm={handleDeleteConfirm}
           onCancel={() => setShowDeleteModal(false)}
-          commentId={item.commentId}
+          commentId={item.replyId}
         />
       )}
     </div>

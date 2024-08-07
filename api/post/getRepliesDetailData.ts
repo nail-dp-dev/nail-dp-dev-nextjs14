@@ -7,7 +7,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 1,
     data: [
       {
-        commentId: 1,
+        replyId: 1,
         profileUrl:
           'https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg',
         commentUserNickname: 'somi',
@@ -16,7 +16,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 2,
       },
       {
-        commentId: 2,
+        replyId: 2,
         profileUrl:
           'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
         commentUserNickname: 'jake',
@@ -25,25 +25,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 1,
       },
       {
-        commentId: 3,
-        profileUrl:
-          'https://i.pinimg.com/736x/cc/58/c8/cc58c82cb5b49433fa23701b5fe2ed10.jpg',
-        commentUserNickname: 'lisa',
-        commentDate: '20240701',
-        commentContent: '이 네일 디자인 정말 독특하네요!',
-        likeCount: 4,
-      },
-      {
-        commentId: 2,
-        profileUrl:
-          'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
-        commentUserNickname: 'jake',
-        commentDate: '20240701',
-        commentContent: '저도 이 디자인 좋아해요. 특별한 날에 딱이에요.',
-        likeCount: 1,
-      },
-      {
-        commentId: 3,
+        replyId: 3,
         profileUrl:
           'https://i.pinimg.com/736x/cc/58/c8/cc58c82cb5b49433fa23701b5fe2ed10.jpg',
         commentUserNickname: 'lisa',
@@ -59,7 +41,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 2,
     data: [
       {
-        commentId: 4,
+        replyId: 4,
         profileUrl:
           'https://i.pinimg.com/236x/29/4d/ff/294dff945ada2d9b991a30088b8be7f9.jpg',
         commentUserNickname: 'mark',
@@ -68,7 +50,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 3,
       },
       {
-        commentId: 5,
+        replyId: 5,
         profileUrl:
           'https://i.pinimg.com/236x/f6/cd/3f/f6cd3fca69bbcd61976c1a9ae89b4ebb.jpg',
         commentUserNickname: 'nina',
@@ -77,7 +59,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 5,
       },
       {
-        commentId: 6,
+        replyId: 6,
         profileUrl:
           'https://i.pinimg.com/236x/36/ac/8a/36ac8afd4d85c8d83c3f4c0608a3aaeb.jpg',
         commentUserNickname: 'alex',
@@ -86,7 +68,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 2,
       },
       {
-        commentId: 7,
+        replyId: 7,
         profileUrl:
           'https://i.pinimg.com/236x/21/34/9b/21349b5b26da4645cee2d96a9196acda.jpg',
         commentUserNickname: 'amy',
@@ -102,7 +84,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 3,
     data: [
       {
-        commentId: 8,
+        replyId: 8,
         profileUrl:
           'https://i.pinimg.com/236x/11/8a/3f/118a3f800a0e81b5a905be226120102c.jpg',
         commentUserNickname: 'aaron',
@@ -111,7 +93,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 4,
       },
       {
-        commentId: 9,
+        replyId: 9,
         profileUrl:
           'https://i.pinimg.com/236x/90/38/9a/90389ac84d4f156d53515ef04c7c5dab.jpg',
         commentUserNickname: 'sara',
@@ -120,7 +102,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 3,
       },
       {
-        commentId: 10,
+        replyId: 10,
         profileUrl:
           'https://i.pinimg.com/236x/ab/93/71/ab9371801fc86397b388f8924609cadf.jpg',
         commentUserNickname: 'steve',
@@ -136,7 +118,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 4,
     data: [
       {
-        commentId: 11,
+        replyId: 11,
         profileUrl:
           'https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg',
         commentUserNickname: 'somi',
@@ -145,7 +127,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 5,
       },
       {
-        commentId: 12,
+        replyId: 12,
         profileUrl:
           'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
         commentUserNickname: 'jake',
@@ -154,7 +136,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 4,
       },
       {
-        commentId: 13,
+        replyId: 13,
         profileUrl:
           'https://i.pinimg.com/736x/cc/58/c8/cc58c82cb5b49433fa23701b5fe2ed10.jpg',
         commentUserNickname: 'lisa',
@@ -163,7 +145,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 3,
       },
       {
-        commentId: 14,
+        replyId: 14,
         profileUrl:
           'https://i.pinimg.com/236x/29/4d/ff/294dff945ada2d9b991a30088b8be7f9.jpg',
         commentUserNickname: 'mark',
@@ -179,7 +161,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 5,
     data: [
       {
-        commentId: 15,
+        replyId: 15,
         profileUrl:
           'https://i.pinimg.com/236x/29/4d/ff/294dff945ada2d9b991a30088b8be7f9.jpg',
         commentUserNickname: 'mark',
@@ -188,7 +170,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 2,
       },
       {
-        commentId: 16,
+        replyId: 16,
         profileUrl:
           'https://i.pinimg.com/236x/f6/cd/3f/f6cd3fca69bbcd61976c1a9ae89b4ebb.jpg',
         commentUserNickname: 'nina',
@@ -197,7 +179,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 4,
       },
       {
-        commentId: 17,
+        replyId: 17,
         profileUrl:
           'https://i.pinimg.com/236x/36/ac/8a/36ac8afd4d85c8d83c3f4c0608a3aaeb.jpg',
         commentUserNickname: 'alex',
@@ -213,7 +195,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 6,
     data: [
       {
-        commentId: 18,
+        replyId: 18,
         profileUrl:
           'https://i.pinimg.com/236x/21/34/9b/21349b5b26da4645cee2d96a9196acda.jpg',
         commentUserNickname: 'amy',
@@ -222,7 +204,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 5,
       },
       {
-        commentId: 19,
+        replyId: 19,
         profileUrl:
           'https://i.pinimg.com/236x/11/8a/3f/118a3f800a0e81b5a905be226120102c.jpg',
         commentUserNickname: 'aaron',
@@ -238,7 +220,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 7,
     data: [
       {
-        commentId: 20,
+        replyId: 20,
         profileUrl:
           'https://i.pinimg.com/236x/90/38/9a/90389ac84d4f156d53515ef04c7c5dab.jpg',
         commentUserNickname: 'sara',
@@ -247,7 +229,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 5,
       },
       {
-        commentId: 21,
+        replyId: 21,
         profileUrl:
           'https://i.pinimg.com/236x/ab/93/71/ab9371801fc86397b388f8924609cadf.jpg',
         commentUserNickname: 'steve',
@@ -263,7 +245,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 8,
     data: [
       {
-        commentId: 22,
+        replyId: 22,
         profileUrl:
           'https://i.pinimg.com/236x/27/eb/39/27eb393c94e6f1016f1a14263d5e2f79.jpg',
         commentUserNickname: 'somi',
@@ -272,7 +254,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 2,
       },
       {
-        commentId: 23,
+        replyId: 23,
         profileUrl:
           'https://i.pinimg.com/236x/6a/11/be/6a11be206763cdf800b241ca39edf3c9.jpg',
         commentUserNickname: 'jake',
@@ -288,7 +270,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 9,
     data: [
       {
-        commentId: 24,
+        replyId: 24,
         profileUrl:
           'https://i.pinimg.com/736x/cc/58/c8/cc58c82cb5b49433fa23701b5fe2ed10.jpg',
         commentUserNickname: 'lisa',
@@ -297,7 +279,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 3,
       },
       {
-        commentId: 25,
+        replyId: 25,
         profileUrl:
           'https://i.pinimg.com/236x/29/4d/ff/294dff945ada2d9b991a30088b8be7f9.jpg',
         commentUserNickname: 'mark',
@@ -313,7 +295,7 @@ export const repliesDetail: ReplyData[] = [
     commentId: 10,
     data: [
       {
-        commentId: 26,
+        replyId: 26,
         profileUrl:
           'https://i.pinimg.com/236x/90/38/9a/90389ac84d4f156d53515ef04c7c5dab.jpg',
         commentUserNickname: 'sara',
@@ -322,7 +304,7 @@ export const repliesDetail: ReplyData[] = [
         likeCount: 2,
       },
       {
-        commentId: 27,
+        replyId: 27,
         profileUrl:
           'https://i.pinimg.com/236x/f6/cd/3f/f6cd3fca69bbcd61976c1a9ae89b4ebb.jpg',
         commentUserNickname: 'nina',

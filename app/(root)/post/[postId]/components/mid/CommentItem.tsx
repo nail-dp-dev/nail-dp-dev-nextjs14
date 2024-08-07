@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CommentData } from '../../../../../../types/dataType';
+import { Comment, Reply } from '../../../../../../types/dataType';
 import UserImage from '../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
@@ -11,8 +11,8 @@ import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 import ReplyItem from './ReplyItem';
 
 interface CommentItemProps {
-  item: CommentData['data'][number];
-  onLike: (commentId: number, increment: number) => void;
+  item: Comment;
+  onLike: (id: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
@@ -66,8 +66,8 @@ export default function CommentItem({
   };
 
   // 좋아요 증가/감소
-  const handleLike = (commentId: number, increment: number) => {
-    onLike(commentId, increment);
+  const handleLike = (id: number, increment: number, isReply: boolean) => {
+    onLike(id, increment, isReply);
   };
 
   // 댓글 수정
@@ -91,7 +91,7 @@ export default function CommentItem({
   // 수정 댓글 저장
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') {
-      setShowDeleteModal(true); // 빈 값이면 삭제 모달 표시
+      setShowDeleteModal(true);
     } else {
       onSaveEdit(item.commentId, null, editedContent);
       setIsEditing(false);
@@ -202,7 +202,13 @@ export default function CommentItem({
                 </p>
               )}
               <div className="mt-[8.5px] flex items-center">
-                <ThumbsUpCount item={item} onLike={handleLike} />
+                <ThumbsUpCount
+                  item={{
+                    commentId: item.commentId,
+                    likeCount: item.likeCount,
+                  }}
+                  onLike={handleLike}
+                />
                 <ReplyIcon
                   className="ml-[10px] mr-[2px] fill-darkPurple hover:fill-purple"
                   onClick={handleReplyClick}
@@ -250,13 +256,13 @@ export default function CommentItem({
         {isRotated &&
           replyData.map((replyItem, index) => (
             <div
-              key={`${replyItem.commentId}-${index}`}
+              key={`${replyItem.replyId}-${index}`}
               className="reply-box ml-9"
             >
               <ReplyItem
                 item={replyItem}
                 parentId={item.commentId}
-                onLike={handleLike}
+                onLike={onLike}
                 onReply={onReply}
                 onSaveEdit={onSaveEdit}
                 onDelete={onDelete}

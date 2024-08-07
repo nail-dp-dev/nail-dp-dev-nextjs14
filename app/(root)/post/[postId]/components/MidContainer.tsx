@@ -20,7 +20,7 @@ interface MidContainerProps {
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
-    parentId: number | null,
+    parentId: number | null, //parentId: 대댓글이 속한 부모 댓글(지울 예정)
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
@@ -29,8 +29,6 @@ interface MidContainerProps {
 export default function MidContainer({
   post,
   comments,
-  onAddComment,
-  onAddReply,
   onLike,
   onReply,
   onSaveEdit,
