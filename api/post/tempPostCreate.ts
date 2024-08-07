@@ -34,6 +34,12 @@ export const tempPostCreate = async (postData: {
         body: multipartFormData,
       },
     );
+    const data = await response.json();
+    if(data.code == 2001){
+      return true
+    }
+    return false
+
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);

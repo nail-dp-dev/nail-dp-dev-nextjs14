@@ -62,24 +62,24 @@ const editData = [
 ];
 
 export const getPostEditData = async (postId:number) => {
-  // await
-  //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/getPostsLikedData`, {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials: 'include',
-  //   })
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(data => {
-  //     console.log('Success:', data);
-  //     localStorage.setItem('signupData', JSON.stringify(data));
-  //   })
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/edit/${postId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include',
+    });
 
-  return editData[postId];
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return null;
+  }
 };

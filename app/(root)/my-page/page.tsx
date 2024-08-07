@@ -125,6 +125,7 @@ export default function MyPagePage() {
                   photoUrl={item.photoUrl}
                   saved={false}
                   createdDate={null}
+                  tempPost={true}
                 />
               );
             })}

@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CommentData } from '../../../../../../types/dataType';
-import { useAppDispatch } from '../../../../../../store/store';
-import { setReplyUser } from '../../../../../../store/slice/replyUserSlice';
 import UserImage from '../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
@@ -11,6 +9,7 @@ import DeleteModal from '../DeleteModal';
 import PostToggleIcon from '../icons/PostToggleIcon';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 import ReplyItem from './ReplyItem';
+
 interface CommentItemProps {
   item: CommentData['data'][number];
   onLike: (commentId: number, increment: number) => void;
@@ -35,10 +34,8 @@ export default function CommentItem({
   const [editedContent, setEditedContent] = useState(item.commentContent);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const dispatch = useAppDispatch();
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
-  const optionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     handleResizeHeight();
@@ -54,9 +51,6 @@ export default function CommentItem({
 
   // 대댓글로 스크롤 이동
   const handleReplyClick = () => {
-    dispatch(
-      setReplyUser({ id: item.commentId, name: item.commentUserNickname }),
-    );
     onReply(item.commentId, item.commentUserNickname);
     setIsRotated(true);
     scrollToComment();
@@ -218,7 +212,7 @@ export default function CommentItem({
                   <div
                     className="button-tr group/item peer flex items-center rounded-2.5xl
                     px-2 py-[2px] hover:bg-darkPurple hover:bg-opacity-20 hover:text-purple"
-                    key={item.commentId}
+                    key={`${item.commentId}-replies`}
                     onClick={handleRotatedToggle}
                     onTouchStart={handleRotatedToggle}
                   >
@@ -252,8 +246,8 @@ export default function CommentItem({
           </div>
         </div>
         {isRotated &&
-          replyData.map((replyItem) => (
-            <div key={replyItem.commentId} className="reply-box ml-9">
+          replyData.map((replyItem,index) => (
+            <div key={`${replyItem.commentId}-${index}`} className="reply-box ml-9">
               <ReplyItem
                 item={replyItem}
                 parentId={item.commentId}

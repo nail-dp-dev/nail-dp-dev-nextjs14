@@ -33,12 +33,9 @@ export const postCreate = async (postData: {
     });
     const data = await response.json();
     if (data.code === 2001) {
-      alert(data.message);
-    } else if (data.code === 4001) {
-      alert(data.message);
-    } else {
-      alert(data.message);
+      return true;
     }
+    return false;
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);

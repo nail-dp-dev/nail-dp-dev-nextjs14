@@ -20,6 +20,7 @@ export default function PostBox({
   like,
   saved,
   createdDate,
+  tempPost
 }: PostBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
@@ -45,7 +46,7 @@ export default function PostBox({
       className="box relative mb-[16px] flex snap-end items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
-      <div className='absolute bg-darkPurple opacity-60 z-10 w-full h-full'></div>
+      {tempPost == true && <div className='absolute bg-darkPurple opacity-60 z-10 w-full h-full'></div>}
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
         {isPhoto && (
           <Image

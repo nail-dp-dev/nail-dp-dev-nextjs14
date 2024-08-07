@@ -20,6 +20,7 @@ export interface PostBoxNewProps {
   like?:boolean,
   saved: boolean 
   createdDate: any,
+  tempPost?:boolean
 }
 export interface ArchiveBoxNewProps {
   archiveId: number,
@@ -94,6 +95,11 @@ export interface PostCreateModalProps {
   isOverFileType: string,
   isOverFileMemory: number,
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface MyPageModalProps {
+  isText: string,
+  // setIsModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface PostsDataProps {

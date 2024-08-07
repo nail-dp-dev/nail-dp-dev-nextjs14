@@ -136,8 +136,8 @@ export default function MidContainer({
             className={`ImageBox relative aspect-square rounded-2xl bg-textLightYellow transition-all 
             duration-300 ${
               imageBoxWidth >= 500
-                ? 'xs:min-w-[340px] sm:min-w-[380px] md:max-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
-                : 'xs:min-w-[280px] sm:min-w-[230px] md:max-w-[340px] lg:min-w-[300px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
+                ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
+                : 'xs:min-w-[280px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[300px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
             }`}
           >
             <ImageSlider files={post.files} />
@@ -169,8 +169,8 @@ export default function MidContainer({
             text-black transition-all duration-300 xs:mt-4 sm:mt-4 lg:ml-[15px] lg:mt-0
             ${
               imageBoxWidth >= 500
-                ? 'xs:min-h-[160px] xs:max-w-[340px] sm:min-h-[160px] sm:min-w-[380px]  md:min-h-[160px] md:max-w-[400px] lg:min-w-[300px] xl:min-w-[360px] 2xl:min-w-[360px] 3xl:min-w-[460px]'
-                : 'xs:min-h-[140px] xs:max-w-[280px] sm:min-h-[140px] sm:min-w-[230px]  md:min-h-[140px] md:max-w-[340px] lg:min-w-[565px] xl:min-w-[565px] 2xl:min-w-[565px] 3xl:min-w-[800px]'
+                ? 'xs:min-h-[160px] xs:min-w-[340px] sm:min-h-[160px] sm:min-w-[370px] sm:max-w-[370px] md:min-h-[160px] md:min-w-[400px] lg:min-w-[300px] xl:min-w-[360px] 2xl:min-w-[360px] 3xl:min-w-[460px]'
+                : 'xs:min-h-[140px] xs:min-w-[280px] sm:min-h-[140px] sm:min-w-[230px] sm:max-w-[230px] md:min-h-[140px] md:min-w-[320px] lg:min-w-[565px] xl:min-w-[565px] 2xl:min-w-[565px] 3xl:min-w-[800px]'
             }
             ${post.postContent ? 'block' : 'hidden'}`}
           >

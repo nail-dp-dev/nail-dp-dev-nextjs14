@@ -8,7 +8,7 @@ export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataP
       url += `&size=${size}`
     }
     if (oldestPostId) {
-      url += `&oldestPostId=${oldestPostId}`
+      url +=` &oldestPostId=${oldestPostId}`
     }
     const response = await fetch(url, {
       method: "GET",
@@ -38,5 +38,5 @@ export const getAllPostsData = async ({category, size, oldestPostId}: PostsDataP
       return false
     }
   }
-  
+
 };
