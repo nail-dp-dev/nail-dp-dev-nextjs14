@@ -1,11 +1,9 @@
-import { logIn, logOut } from '../../../store/slices/loginSlice';
-import { AppDispatch } from '../../../store/store';
 
-export const getCookieValid = async (dispatch: AppDispatch) => {
-  
+export const deletePostLike = async (postId:number)  => {
+
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/cookie`, {
-      method: "GET",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/likes`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
@@ -14,22 +12,16 @@ export const getCookieValid = async (dispatch: AppDispatch) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    const data = await response.json();
-    if (data.code === 2000) {
-      dispatch(logIn())
-    } else {
-      dispatch(logOut())
-    }
+    return await response.json()
+
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
-      return false
     } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
       console.error('Server returned an error response:', error);
-      return false
     } else {
       console.error('Unexpected error:', error);
-      return false
     }
   }
+  
 };

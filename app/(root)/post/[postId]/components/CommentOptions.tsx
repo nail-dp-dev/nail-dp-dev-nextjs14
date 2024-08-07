@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import useLoggedInUserData from '../../../../../hooks/auth/useLoggedInUserData';
+import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
 
 interface CommentOptionsProps {
   onEditClick: () => void;

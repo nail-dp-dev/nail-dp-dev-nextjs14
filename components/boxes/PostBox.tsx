@@ -4,16 +4,19 @@ import Link from 'next/link';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
+import Video from '../ui/Video';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
-import Video from '../ui/Video';
+import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
+import { postPostLike } from '../../api/post/postPostLike';
+import React, { useEffect, useState } from 'react';
+import { deletePostLike } from '../../api/post/deletePostLike';
 
-export default function PostBox({
+function PostBox({
   postId,
   photoId,
   photoUrl,
@@ -23,21 +26,32 @@ export default function PostBox({
 }: PostBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
+  const [isLiked, setIsLiked] = useState(like)
 
-  const handleHeartClick = () => {
-    console.log('Click...Heart!');
+  const handleHeartClick = async () => {
+    if (!isLiked) {
+      let data = await postPostLike(postId)
+      data.code == 2001 && setIsLiked(prev=>!prev)
+    } else {
+      let data = await deletePostLike(postId)
+      data.code == 2001 && setIsLiked(prev=>!prev)
+    }
   };
 
   const handlePlusClick = () => {
     console.log('Click...Plus!');
   };
-
+  
   const isPhoto =
-    photoUrl.endsWith('.jpg') ||
-    photoUrl.endsWith('.jpeg') ||
-    photoUrl.endsWith('.png') ||
-    photoUrl.endsWith('.gif');
+  photoUrl.endsWith('.jpg') ||
+  photoUrl.endsWith('.jpeg') ||
+  photoUrl.endsWith('.png') ||
+  photoUrl.endsWith('.gif');
   const isVideo = photoUrl.endsWith('.mp4');
+  
+  useEffect(() => {
+    console.log('렌더링')
+  },[])
 
   return (
     <div
@@ -50,7 +64,7 @@ export default function PostBox({
           <Image
             src={photoUrl}
             alt={createdDate}
-            id={postId.toString()}
+            id={photoId.toString()}
             fill
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             quality={100}
@@ -63,7 +77,7 @@ export default function PostBox({
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
       </Link>
       <button onClick={handleHeartClick} className="absolute right-2 top-2 z-10">
-        <HeartButton width="21px" height="19px" isClicked={like} />
+        <HeartButton width="21px" height="19px" isClicked={isLiked} />
       </button>
       <button onClick={handlePlusClick} className="absolute bottom-2 right-2 z-10">
         <PlusButton width="24px" height="24px" isClicked={saved} />
@@ -83,3 +97,6 @@ export default function PostBox({
     </div>
   );
 }
+
+export default React.memo(PostBox);
+  

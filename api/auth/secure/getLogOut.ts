@@ -1,4 +1,4 @@
-import { logOut } from '../../../store/slice/loginSlice';
+import { logOut } from '../../../store/slices/loginSlice';
 import { AppDispatch } from '../../../store/store';
 
 

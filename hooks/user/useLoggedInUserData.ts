@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { UserData } from '../../types/dataType';
 import { getUserData } from '../../api/user/getUserData';
 import { useSelector } from 'react-redux';
-import { selectLoginStatus } from '../../store/slice/loginSlice';
+import { selectLoginStatus } from '../../store/slices/loginSlice';
 
 const useLoggedInUserData = () => {
   

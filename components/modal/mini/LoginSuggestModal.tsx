@@ -1,8 +1,8 @@
 'use client'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLoginStatus } from '../../../store/slice/loginSlice';
-import { commonModalClose, setCommonModal } from '../../../store/slice/modalSlice';
+import { selectLoginStatus } from '../../../store/slices/loginSlice';
+import { commonModalClose, setCommonModal } from '../../../store/slices/modalSlice';
 
 export default function LoginSuggestModal() {
 
