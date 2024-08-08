@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProfileMiniModalProps } from '../../../constants/interface'
 import { profileMiniMenuElements } from '../../../constants'
 import { userProfileImageData } from '../../../constants/example/index';
-import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
-import Image from 'next/image'
 import { useAppDispatch } from '../../../store/store';
 import { setCommonModal } from '../../../store/slices/modalSlice';
+import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
+import Image from 'next/image'
 
 export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }: ProfileMiniModalProps) {
   

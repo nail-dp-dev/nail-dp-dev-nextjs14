@@ -43,6 +43,7 @@ export default function LoginInfoBox() {
             <button
               onClick={handleMiniModalToggle}
               className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
+              disabled={isMiniModalShow}
             >
               <UserImage src={userData.data.profileUrl} alt={'profileIamge'} width={40} height={40}/>
             </button>
