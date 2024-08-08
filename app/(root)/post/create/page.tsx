@@ -6,7 +6,7 @@ import ContentContainer from '../../../../components/post/ContentContainer';
 import HashTagContainer from '../../../../components/post/HashTagContainer';
 import PrivacySettingContainer from '../../../../components/post/PrivacySettingContainer';
 import { postCreate } from '../../../../api/post/postCreate';
-import { tempPostCreate } from '../../../../api/post/tempPostCreate';
+import { tempPostCreate } from '../../../../api/post/postTempCreate';
 import { useRouter } from 'next/navigation';
 import MyPageModal from '../../../../components/modal/common/postAlarmModal/PostAlarmModal';
 
