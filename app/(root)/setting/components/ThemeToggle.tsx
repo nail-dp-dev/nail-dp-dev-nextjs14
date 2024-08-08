@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   selectDarkMode,
   toggleDarkMode,
-} from '../../../../store/slice/themeSlice';
+} from '../../../../store/slices/themeSlice';
 import useIsMounted from '../../../../hooks/useIsMounted';
 
 const ThemeToggle = () => {

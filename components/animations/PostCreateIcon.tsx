@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { postBoxWidths } from '../../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { selectNumberOfBoxes } from '../../store/slice/boxLayoutSlice';
+import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 

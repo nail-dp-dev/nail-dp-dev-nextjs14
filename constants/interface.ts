@@ -11,6 +11,7 @@ export interface IconButtonProps {
   width: string;
   height: string;
   isClicked?: boolean;
+  isGetAllLiked?: boolean;
 }
 
 export interface PostBoxNewProps {

@@ -1,4 +1,4 @@
-import { logIn } from '../../../store/slice/loginSlice';
+import { logIn } from '../../../store/slices/loginSlice';
 import { AppDispatch } from '../../../store/store';
 
 export const getGoogleAuthCode = async (code: string, router: any, dispatch: AppDispatch) => {

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import ChattingBox from '../../boxes/ChattingBox';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { selectLoginStatus } from '../../../store/slice/loginSlice';
+import { selectLoginStatus } from '../../../store/slices/loginSlice';
 
 export default function MessageModal() {
 

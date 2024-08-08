@@ -2,8 +2,9 @@
 
 import { useSelector } from 'react-redux';
 import LoginModal from './loginModal/LoginModal';
-import { selectCommonModalStatus } from '../../../store/slice/modalSlice';
-
+import { selectCommonModalStatus } from '../../../store/slices/modalSlice';
+import ProfileImageCreateModal from './profileImageCreateModal/ProfileImageCreateModal';
+import AlarmModal from './AlarmModal';
 
 export default function CommonModalLayout() {
 
@@ -16,6 +17,14 @@ export default function CommonModalLayout() {
       {
         whichCommonModal === 'login' &&
         <LoginModal />
+      }
+      {
+        whichCommonModal === 'profile-create' &&
+        <ProfileImageCreateModal />
+      }
+      {
+        whichCommonModal === 'alarm' && 
+        <AlarmModal/>
       }
     </div>
   )
