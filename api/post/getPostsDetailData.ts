@@ -1,3 +1,4 @@
+import { getCookie } from '../../lib/getCookie';
 import { PostsDetailData } from '../../types/dataType';
 
 export const postsDetail: PostsDetailData[] = [
@@ -441,31 +442,48 @@ export const postsDetail: PostsDetailData[] = [
   },
 ];
 
-export const getPostsDetailData = async () => {
-  // try {
-  //   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/{postId}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     credentials: 'include',
-  //   });
+export const getPostsDetailData = async (postId: number): Promise<PostsDetailData | null> => {
+  try {
+    const cookie = getCookie('Authorization');
+    if (!cookie) throw new Error('인증 쿠키를 찾을 수 없습니다.');
 
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! Status: ${response.status}`);
-  //   }
+    console.log('인증 쿠키:', cookie);
 
-  //   const data = await response.json();
-  //   return data;
-  // } catch (error) {
-  //   if (error instanceof TypeError) {
-  //     console.error('Network error or invalid JSON:', error);
-  //   } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
-  //     console.error('Server returned an error response:', error);
-  //   } else {
-  //     console.error('Unexpected error:', error);
-  //   }
-  //   return postsDetail;
-  // }
-  return postsDetail;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cookie}`, 
+    };
+
+    console.log('요청 URL:', url);
+    console.log('요청 헤더:', headers); 
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+
+    console.log('API Response Status:', response.status); 
+    console.log('API Response:', response); 
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error response text:', errorText);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data: PostsDetailData = await response.json();
+    console.log('Response Data:', data);
+    return data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      console.error('Network error or invalid JSON:', error);
+    } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
+      console.error('Server returned an error response:', error.message);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    return null;
+  }
 };
