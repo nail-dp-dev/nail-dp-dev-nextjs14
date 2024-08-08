@@ -4,7 +4,7 @@ import Bits from '../../public/assets/svg/bits.svg';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import ProfileMiniModal from '../modal/mini/ProfileMiniModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { commonModalClose, setCommonModal } from '../../store/slices/modalSlice';
@@ -32,6 +32,30 @@ export default function LoginInfoBox() {
     e.stopPropagation();
     setIsMiniModalShow((prev) => !prev);
   };
+
+  const handleModalClose = () => {
+    setIsMiniModalShow(false);
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleModalClose();
+      }
+    };
+
+    if (isMiniModalShow) {
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMiniModalShow]);
 
 
   return (

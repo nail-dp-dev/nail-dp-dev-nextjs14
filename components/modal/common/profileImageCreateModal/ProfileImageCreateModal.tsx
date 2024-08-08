@@ -6,38 +6,40 @@ import CloseIcon from '../../../../public/assets/svg/close.svg';
 import ProfileFolderIcon from '../../../../public/assets/svg/profile-folder.svg';
 import { useRef, useState, ChangeEvent, useEffect } from 'react';
 import Image from 'next/image';
+import { postUserProfile } from '../../../../api/user/postUserProfile';
 
 export default function ProfileImageCreateModal() {
 
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
   const dispatch = useDispatch();
 
-  const [isActive, setActive] = useState(false);
-  const [preview, setPreview] = useState('')
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-
+  const [isActive, setActive] = useState(false);
+  const [preview, setPreview] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  
   const handleDragStart = () => setActive(true);
   const handleDragEnd = () => setActive(false);
-
+  
   const handleModalClose = (e?: React.MouseEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (e) {
       e.stopPropagation();
     }
     dispatch(commonModalClose());
   };
-
+  
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
-
+  
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     readImage(file);
     setActive(false);
   };
-
+  
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const file = e.target.files?.[0];
@@ -45,7 +47,7 @@ export default function ProfileImageCreateModal() {
       readImage(file);
     }
   };
-
+  
   const handleButtonClick = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
@@ -57,11 +59,25 @@ export default function ProfileImageCreateModal() {
   const readImage = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      console.log('Image data:', e.target?.result);
       setPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
+    setFile(file)
   };
+
+  const saveImage = async (e: any, file:any) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if ( file === null ) return;
+
+    const result = await postUserProfile(file)
+
+    if (result.code === 2001) {
+      handleModalClose()
+      window.location.reload();
+    }
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -115,7 +131,7 @@ export default function ProfileImageCreateModal() {
           {
             preview === '' 
               &&
-            <>
+            <div>
               <ProfileFolderIcon className='mb-[34px]' />
               <div className='flex flex-col items-center justify-center'>
                 <p className='font-[300] text-textDarkPurple text-[0.875rem] mb-[10px]'>또는 파일 드래그해서 업로드하기</p>
@@ -123,12 +139,29 @@ export default function ProfileImageCreateModal() {
                   폴더에서 찾아보기
                 </button>
               </div>
-            </>
+            </div>
           }  
           {
             preview !== ''
-            &&
-            <Image src={preview} alt="Preview" className='w-full h-full object-contain' />
+              &&
+              <div className='flex flex-col items-center'>
+                <div className='w-[150px] h-[150px] relative rounded-[12px] overflow-hidden'>
+                  <Image src={preview} alt="Preview" width={150} height={150} className='object-contain relative bg-red' />
+                  <button className='absolute flex items-center justify-center rounded-full w-[18px] h-[18px] bg-red'>
+                    <CloseIcon fill='black'/>
+                  </button>
+                </div>
+                <div className=''>
+                  <p>파일명 : </p>
+                  <p>파일크기 : </p>
+                </div>
+                <button 
+                  className='button-color button-layout w-[150px] h-[40px]'
+                  onClick={(e)=>{saveImage(e, file)}}
+                >
+                  <span>프로필 지정하기</span>
+                </button>
+              </div>
           }
         </div>
       </div>
