@@ -22,7 +22,7 @@ export default function usePostDetail() {
 
     const fetchData = async () => {
       const postData = await getPostsDetailData(numericPostId);
-      console.log('Fetched post data:', postData); 
+
       const commentsData = commentsDetail.find(
         (comment) => comment.postId === numericPostId,
       );

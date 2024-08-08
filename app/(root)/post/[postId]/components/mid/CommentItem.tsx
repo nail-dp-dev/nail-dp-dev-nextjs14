@@ -138,9 +138,9 @@ export default function CommentItem({
     <div ref={commentRef}>
       <div
         className={`comment-wrap button-tr mx-2 mb-4 mt-[10px] 
-        rounded-xl transition-all duration-300
-        ${isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
-      >
+          rounded-xl transition-all duration-300
+          ${replyData.length > 0 && isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
+        >
         <div
           className={`comment-box button-tr group/toggle flex justify-between rounded-xl pb-[10px] pl-[10px] 
           pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}

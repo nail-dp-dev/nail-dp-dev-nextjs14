@@ -101,15 +101,14 @@ export type PostsDetailData = {
     followerCount: number;
     files: {
       fileUrl: string;
-      fileExtension: 'photo' | 'video';
+      photo: boolean;  
+      video: boolean; 
     }[];
     postContent: string;
     likeCount: number;
     commentCount: number;
     sharedCount: number;
-    tags: {
-      tagName: string;
-    }[];
+    tags: string[];
   };
 };
 export type CommentData = {

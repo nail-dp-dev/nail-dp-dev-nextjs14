@@ -138,7 +138,13 @@ export default function MidContainer({
                 : 'xs:min-w-[280px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[300px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
             }`}
           >
-            <ImageSlider files={post.files} />
+            <ImageSlider
+              files={post.files.map((file) => ({
+                fileUrl: file.fileUrl,
+                isPhoto: file.photo,
+                isVideo: file.video,
+              }))}
+            />
             <BoxCommonButton
               onClick={handleToggleClick}
               type="toggle"
