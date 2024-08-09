@@ -2,12 +2,14 @@ export type UserData = {
   success: boolean;
   code: number;
   data: {
+    followingCount: number | undefined;
     nickname: string;
     postsCount: number;
     saveCount: number;
     followerCount: number;
     point: number;
     profileUrl: string,
+    folloingCount: number
   };
 };
 
