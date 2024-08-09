@@ -6,7 +6,8 @@ import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
-import PostCreateModal from '../modal/common/postCreateModal/PostCreateModal'; 
+import { useDispatch } from 'react-redux';
+import { alarmModalData, setCommonModal } from '../../store/slices/modalSlice';
 
 type ImageData = {
   fileName: string;
@@ -35,6 +36,7 @@ export default function ImageUploadContainer({
   const [isOverFileType, setIsOverFileType] = useState<string>('');
   const [isModal, setIsModal] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (editImages !== undefined) {
@@ -62,6 +64,19 @@ export default function ImageUploadContainer({
       onDeleteImageChange(isDeleteImages);
     }
   }, [isDeleteImages, onDeleteImageChange]);
+
+  const modalData = (byte: number, imageType: string) => {
+    dispatch(
+      alarmModalData({
+        byte,
+        imageType,
+        type: 'one',
+        button: '',
+        user: '',
+      }),
+    );
+    dispatch(setCommonModal('alarm'));
+  };
 
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -98,14 +113,10 @@ export default function ImageUploadContainer({
       const videoMaxSize = 10;
 
       if (imageTypes.includes(file.type) && fileSizeMB > imageMaxSize) {
-        setIsOverFileType('image');
-        setIsOverFileMemory(fileSizeMB);
-        setIsModal(true);
+        modalData(fileSizeMB, 'image');
         return;
       } else if (videoTypes.includes(file.type) && fileSizeMB > videoMaxSize) {
-        setIsOverFileType('video');
-        setIsOverFileMemory(fileSizeMB);
-        setIsModal(true);
+        modalData(fileSizeMB, 'video');
         return;
       }
       setIsFileMemory([...isFileMemory, fileSizeMB]);
@@ -181,10 +192,13 @@ export default function ImageUploadContainer({
                 {item.startsWith('data:video') ||
                 item.endsWith('.mov') ||
                 item.endsWith('.mp4') ? (
-                  <video key={item} autoPlay muted className="h-full w-full object-cover">
-                    <source src={item} 
-                    type="video/mp4"
-                    />
+                  <video
+                    key={item}
+                    autoPlay
+                    muted
+                    className="h-full w-full object-cover"
+                  >
+                    <source src={item} type="video/mp4" />
                   </video>
                 ) : (
                   <Image
@@ -248,13 +262,7 @@ export default function ImageUploadContainer({
       {isModal && (
         <div
           className={`pointer-events-auto absolute bottom-0 right-0 z-50 flex h-full w-full items-center justify-center bg-modalBackgroundColor`}
-        >
-          <PostCreateModal
-            isOverFileType={isOverFileType}
-            isOverFileMemory={isOverFileMemory}
-            setIsModal={setIsModal}
-          />
-        </div>
+        ></div>
       )}
     </div>
   );
