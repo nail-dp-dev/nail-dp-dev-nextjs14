@@ -4,7 +4,7 @@ import Bits from '../../public/assets/svg/bits.svg';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import ProfileMiniModal from '../modal/mini/ProfileMiniModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserInfo from '../ui/UserInfo';
 import UserImage from '../ui/UserImage';
 import { commonModalClose, setCommonModal } from '../../store/slices/modalSlice';
@@ -17,7 +17,7 @@ export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
-  const { userData, userPointData } = useLoggedInUserData();
+  const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
   const handleLogin = () => {
     dispatch(commonModalClose())
@@ -33,6 +33,30 @@ export default function LoginInfoBox() {
     setIsMiniModalShow((prev) => !prev);
   };
 
+  const handleModalClose = () => {
+    setIsMiniModalShow(false);
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleModalClose();
+      }
+    };
+
+    if (isMiniModalShow) {
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMiniModalShow]);
+
 
   return (
     <div className={`loginInfoContainer flex flex-col w-full ${isLoggedIn === 'loggedIn' ? 'h-[85px]' : 'h-[60px]'} transition-all`}>
@@ -43,12 +67,14 @@ export default function LoginInfoBox() {
             <button
               onClick={handleMiniModalToggle}
               className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
+              disabled={isMiniModalShow}
             >
-              <UserImage src={userData.data.profileUrl} alt={'profileIamge'} width={40} height={40}/>
+              <UserImage src={userProfileUrl} alt={'profileIamge'} width={40} height={40}/>
             </button>
             <ProfileMiniModal
               isMiniModalShow={isMiniModalShow}
               setIsMiniModalShow={setIsMiniModalShow}
+              setUserProfileUrl={setUserProfileUrl}
             />
           </>
         )

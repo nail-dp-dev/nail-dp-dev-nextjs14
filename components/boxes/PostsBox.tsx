@@ -104,7 +104,6 @@ export default function PostsBox() {
   }, [isLoading, oldestPostId, isLast, fetchMorePosts, isContentExist]);
 
   useEffect(() => {
-    console.log('useEffect')
     if (!likedButtonState) {
       return;
     }
