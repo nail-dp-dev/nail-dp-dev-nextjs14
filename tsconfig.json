@@ -30,7 +30,8 @@
     "**/*.tsx",
     "**/**/*.tsx",
     ".next/types/**/*.ts",
-    "middleware/getCookie.js"
-, "constants/icons.js"  ],
+    "middleware/getCookie.js",
+    "constants/icons.ts"
+  ],
   "exclude": ["node_modules"]
 }
