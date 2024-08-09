@@ -50,7 +50,7 @@ function PostBox({
   const isVideo = photoUrl.endsWith('.mp4');
   
   useEffect(() => {
-    console.log('렌더링')
+    console.log('postBox 렌더링...')
   },[])
 
   return (

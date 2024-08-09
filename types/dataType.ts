@@ -1,3 +1,5 @@
+import { AppDispatch } from '../store/store';
+
 export type UserData = {
   success: boolean;
   code: number;
@@ -88,6 +90,7 @@ export type PostSignUpData = {
   finalPhoneNumber: string;
   finalAgreement: boolean;
   router: any;
+  dispatch: AppDispatch;
 };
 
 export type PostsDetailData = {
