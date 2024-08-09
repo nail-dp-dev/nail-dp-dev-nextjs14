@@ -1,16 +1,14 @@
-export const getUserProfileData = async (category: string) => {
-
+export const postUserProfile = async (file: File) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile?choice=${category}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const multipartFormData = new FormData();
+    const blob = new Blob([file], { type: file.type });
+    multipartFormData.append('photos', blob, file.name);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+      method: 'POST',
       credentials: 'include',
-    })
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+      body: multipartFormData,
+    });
     return await response.json();
   } catch (error) {
     if (error instanceof TypeError) {
@@ -21,5 +19,4 @@ export const getUserProfileData = async (category: string) => {
       console.error('Unexpected error:', error);
     }
   }
-  
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import NailLogoIcon from '../public/assets/svg/nail-logo.svg';
 
 export default function Loading() {

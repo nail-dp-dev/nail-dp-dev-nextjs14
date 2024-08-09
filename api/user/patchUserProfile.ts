@@ -1,16 +1,15 @@
-export const getUserProfileData = async (category: string) => {
-
+export const patchUserProfile = async (url: string) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile?choice=${category}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile`, {
+      method: 'PATCH',
       credentials: 'include',
-    })
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        profileUrl: url
+      }),
+    });
     return await response.json();
   } catch (error) {
     if (error instanceof TypeError) {
@@ -21,5 +20,4 @@ export const getUserProfileData = async (category: string) => {
       console.error('Unexpected error:', error);
     }
   }
-  
 };
