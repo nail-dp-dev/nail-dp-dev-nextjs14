@@ -21,4 +21,4 @@ export const Icons = {
   MenuPostEditIcon,
 };
 
-export type IconKey = keyof typeof Icons;
+export default Icons;

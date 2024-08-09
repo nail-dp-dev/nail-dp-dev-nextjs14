@@ -2,19 +2,23 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ProfileMiniModalProps } from '../../../constants/interface'
-import { profileMiniMenuElements } from '../../../constants'
-import { userProfileImageData } from '../../../constants/example/index';
-import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
-import Image from 'next/image'
+import { basicProfileImageElements, iconProfileImageElements, profileMiniMenuElements } from '../../../constants'
 import { useAppDispatch } from '../../../store/store';
 import { setCommonModal } from '../../../store/slices/modalSlice';
+import PlusSvg from '../../../public/assets/svg/thin-plus.svg'
+import Image from 'next/image'
+import { getUserProfileData } from '../../../api/user/getUserProfile';
+import { patchUserProfile } from '../../../api/user/patchUserProfile';
 
-export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }: ProfileMiniModalProps) {
+export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow, setUserProfileUrl }: ProfileMiniModalProps) {
   
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   
-  const [whichContent, setWhichContent] = useState('basic')
+  const [whichContent, setWhichContent] = useState('BASIC')
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   
   const handleContentChange = (e:any, content:string) => {
     e.stopPropagation();
@@ -27,9 +31,12 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
     dispatch(setCommonModal('profile-create'));
   }
 
-  const handleChangeProfileImage = (e: any, url:string) => {
+  const handleChangeProfileImage = async (e: any, url:string) => {
     e.stopPropagation();
-    console.log('이 이미지로 바꿔주세요...', url)
+    const response = await patchUserProfile(url)
+    if (response.code === 2001) {
+      setUserProfileUrl(url)
+    }
   }
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
@@ -49,10 +56,22 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
     };
   }, [isMiniModalShow, handleClickOutside]);
 
-  // useEffect(() => {
-  //   let data = getUserProfileData()
-  //   console.log(data)
-  // },[])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true); 
+        const response = await getUserProfileData(whichContent);
+        setData(response);
+      } catch (error) {
+        setError('Failed to fetch data');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [whichContent]);
   
   return (
     <div
@@ -70,44 +89,60 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
           ))
         }
       </div>
-      {
-        whichContent === 'basic' ?
+      {   
+          loading ?
+          <div className=' flex-1 h-full flex items-center justify-center'>loading....</div>
+          :
+          error ?
+          <div className=' flex-1 h-full flex items-center justify-center'>error...occured</div>
+          :
+          whichContent === 'BASIC' && !loading && !error ?
           <div className='basicContentDiv flex-1 h-full py-[12px] px-[8px] flex-wrap flex items-start content-start justify-start gap-[10px] '>
-            {/* 가 데이터 만들어지면 map fucntion */}
-            <button
-              className='w-[30px] h-[30px]'
-              // 가 데이터 만들어지면 handleChangeProfileImage 함수 호출로 변경할 겁니다.
-              onClick={(e) => { handleAddNewProfileImage(e) }}
-            >
-              <Image src={'/assets/img/etcProfileImage.png'} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
-            </button>
+            {
+              basicProfileImageElements.map((item:any, index:any) => (
+                <button
+                  key={index}
+                  className='w-[30px] h-[30px]'
+                  onClick={(e)=>handleChangeProfileImage(e,item)}
+                >
+                  <Image src={item} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
+                </button>
+              )
+            )}
           </div>
         :
-          whichContent === 'icon' ?
-            // 위의 basic component 처럼 가 데이터 생성시 map function 및 함수 호출 예정입니다.
-            <div className='iconContentDiv flex-1 h-full py-[12px] px-[8px] flex-wrap flex items-start content-start justify-start gap-[10px] '>
-              <Image src={'/assets/img/etcProfileImage.png'} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
-              <Image src={'/assets/img/etcProfileImage.png'} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
-              <Image src={'/assets/img/etcProfileImage.png'} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
-            </div>
+          whichContent === 'ICON' && !loading && !error ?
+          <div className='iconContentDiv flex-1 h-full py-[12px] px-[8px] flex-wrap flex items-start content-start justify-start gap-[10px] '>
+            {
+              iconProfileImageElements.map((item:any, index:any) => (
+                <button
+                  key={index}
+                  className='w-[30px] h-[30px]'
+                  onClick={(e)=>handleChangeProfileImage(e,item)}
+                >
+                  <Image src={item} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
+                </button>
+              )
+            )}
+          </div>
         :
-          whichContent === 'custom' &&
-            <div className='customContentDiv flex-1 h-full py-[12px] px-[8px] flex-wrap flex items-start content-start justify-start gap-[10px] '>
-              <button className='w-[30px] h-[30px] rounded-full flex items-center justify-center bg-lightGray hover:bg-purple group' onClick={(e) => handleAddNewProfileImage(e)}>
-                <PlusSvg className='fill-current stroke-current stroke-purple fill-purple group-hover:stroke-white group-hover:fill-white'/>
-              </button>
-              {
-                userProfileImageData.photos.map((item, index) => (
-                  <button
-                    key={index}
-                    className='w-[30px] h-[30px]'
-                    onClick={(e)=>handleChangeProfileImage(e,item.photo_url)}
-                  >
-                    <Image src={item.photo_url} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
-                  </button>
-                )
-              )}
-            </div>
+          whichContent === 'CUSTOMIZATION' && !loading && !error &&
+          <div className='customContentDiv flex-1 h-full py-[12px] px-[8px] flex-wrap flex items-start content-start justify-start gap-[10px] '>
+            <button className='w-[30px] h-[30px] rounded-full flex items-center justify-center bg-lightGray hover:bg-purple group' onClick={(e) => handleAddNewProfileImage(e)}>
+              <PlusSvg className='fill-current stroke-current stroke-purple fill-purple group-hover:stroke-white group-hover:fill-white'/>
+            </button>
+            {
+              data.data.profileUrls.map((item:any, index:any) => (
+                <button
+                  key={index}
+                  className='w-[30px] h-[30px]'
+                  onClick={(e)=>handleChangeProfileImage(e,item)}
+                >
+                  <Image src={item} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' priority className='rounded-full '></Image>  
+                </button>
+              )
+            )}
+          </div>
       }
     </div>
   )

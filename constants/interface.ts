@@ -35,6 +35,7 @@ export interface ArchiveBoxNewProps {
 export interface ProfileMiniModalProps {
   isMiniModalShow: boolean;
   setIsMiniModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserProfileUrl: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface MenuElementsProps{
