@@ -31,6 +31,6 @@
     "**/**/*.tsx",
     ".next/types/**/*.ts",
     "middleware/getCookie.js"
-, "constants/icons.js"  ],
+, "constants/icons.js", "constants/urls.js"  ],
   "exclude": ["node_modules"]
 }

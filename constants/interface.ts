@@ -21,6 +21,7 @@ export interface PostBoxNewProps {
   like?:boolean,
   saved: boolean 
   createdDate: any,
+  tempPost?:boolean
 }
 export interface ArchiveBoxNewProps {
   archiveId: number,

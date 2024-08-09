@@ -23,35 +23,36 @@ function PostBox({
   like,
   saved,
   createdDate,
+  tempPost,
 }: PostBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
-  const [isLiked, setIsLiked] = useState(like)
+  const [isLiked, setIsLiked] = useState(like);
 
   const handleHeartClick = async () => {
     if (!isLiked) {
-      let data = await postPostLike(postId)
-      data.code == 2001 && setIsLiked(prev=>!prev)
+      let data = await postPostLike(postId);
+      data.code == 2001 && setIsLiked((prev) => !prev);
     } else {
-      let data = await deletePostLike(postId)
-      data.code == 2001 && setIsLiked(prev=>!prev)
+      let data = await deletePostLike(postId);
+      data.code == 2001 && setIsLiked((prev) => !prev);
     }
   };
 
   const handlePlusClick = () => {
     console.log('Click...Plus!');
   };
-  
+
   const isPhoto =
-  photoUrl.endsWith('.jpg') ||
-  photoUrl.endsWith('.jpeg') ||
-  photoUrl.endsWith('.png') ||
-  photoUrl.endsWith('.gif');
+    photoUrl.endsWith('.jpg') ||
+    photoUrl.endsWith('.jpeg') ||
+    photoUrl.endsWith('.png') ||
+    photoUrl.endsWith('.gif');
   const isVideo = photoUrl.endsWith('.mp4');
-  
+
   useEffect(() => {
-    console.log('렌더링')
-  },[])
+    console.log('렌더링');
+  }, []);
 
   return (
     <div
@@ -59,6 +60,12 @@ function PostBox({
       className="box relative mb-[16px] flex snap-end items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
+      {tempPost == true && (
+        <>
+          <div className="absolute z-10 h-full w-full bg-darkPurple opacity-60"></div>
+          <p className="z-10 text-center text-white">임시저장된 게시물</p>
+        </>
+      )}
       <Link href={`post/${postId}`} className="absolute inset-0 z-0">
         {isPhoto && (
           <Image
@@ -76,13 +83,22 @@ function PostBox({
         )}
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
       </Link>
-      <button onClick={handleHeartClick} className="absolute right-2 top-2 z-10">
+      <button
+        onClick={handleHeartClick}
+        className="absolute right-2 top-2 z-10"
+      >
         <HeartButton width="21px" height="19px" isClicked={isLiked} />
       </button>
-      <button onClick={handlePlusClick} className="absolute bottom-2 right-2 z-10">
+      <button
+        onClick={handlePlusClick}
+        className="absolute bottom-2 right-2 z-10"
+      >
         <PlusButton width="24px" height="24px" isClicked={saved} />
       </button>
-      <button onClick={handleToggleClick} className="absolute left-2 top-2 z-10 p-2">
+      <button
+        onClick={handleToggleClick}
+        className="absolute left-2 top-2 z-10 p-2"
+      >
         <Toggle
           width="4px"
           height="20px"
@@ -99,4 +115,3 @@ function PostBox({
 }
 
 export default React.memo(PostBox);
-  
