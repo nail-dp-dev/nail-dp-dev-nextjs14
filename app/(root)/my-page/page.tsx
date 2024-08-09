@@ -7,11 +7,12 @@ import { myPageCategoryElements } from '../../../constants';
 import { useEffect, useState } from 'react';
 import UserImage from '../../../components/ui/UserImage';
 import UserInfo from '../../../components/ui/UserInfo';
-import useLoggedInUserData from '../../../hooks/auth/useLoggedInUserData';
 import { useSelector } from 'react-redux';
-import { selectLoginStatus } from '../../../store/slice/loginSlice';
 import { getPostsData } from '../../../api/post/getPostsData';
 import { getPostsTempData } from '../../../api/post/getPostsTempData';
+import { selectLoginStatus } from '../../../store/slices/loginSlice';
+import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
+import { selectNumberOfBoxes } from '../../../store/slices/boxLayoutSlice';
 
 interface postData {
   postId: number;
@@ -33,25 +34,46 @@ interface tempData {
 }
 
 export default function MyPagePage() {
-  const [isScroll, setIsScroll] = useState(false);
   const isLoggedIn = useSelector(selectLoginStatus);
   const { userData } = useLoggedInUserData();
   const [isTempData, setIsTempData] = useState<tempData[]>([]);
   const [isMyPageData, setIsMyPageData] = useState<postData[]>([]);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [isCursorId, setIsCursorId] = useState(0);
+  const [isLading, setLading] = useState(true);
+  const [isNickname, setIsNickname] = useState('');
+  const layoutNum = useSelector(selectNumberOfBoxes);
+
+  const fetchPostData = async () => {
+    if (userData) {
+      const postData = await getPostsData(userData.data.nickname);
+      setIsNickname(userData.data.nickname);
+      setIsLastPage(postData.data.postSummaryList.last);
+      setIsCursorId(postData.data.cursorId);
+      setIsMyPageData(postData.data.postSummaryList.content);
+    }
+  };
+
+  const fetchPostTempData = async () => {
+    const tempData = await getPostsTempData();
+    setIsTempData([tempData.data]);
+  };
+
+  const fetchPostScrollData = async () => {
+    setLading(false);
+    if (!isLastPage) {
+      const postData = await getPostsData(isNickname,isCursorId,layoutNum );
+      setIsCursorId(postData.data.cursorId);
+      setIsLastPage(postData.data.postSummaryList.last);
+      setIsMyPageData((prevData) => [
+        ...prevData,
+        ...postData.data.postSummaryList.content,
+      ]);
+      setLading(true);
+    }
+  };
 
   useEffect(() => {
-    const fetchPostData = async () => {
-      if (userData) {
-        const postData = await getPostsData(userData.data.nickname);
-        console.log(postData);
-        setIsMyPageData(postData.data.postSummaryList.content);
-      }
-    };
-    const fetchPostTempData = async () => {
-      const tempData = await getPostsTempData();
-      setIsTempData([tempData.data]);
-    };
-
     fetchPostData();
     fetchPostTempData();
   }, [userData]);
@@ -61,11 +83,11 @@ export default function MyPagePage() {
       const element1 = document.getElementById('scroll1');
       if (element1) {
         const scrollTop = element1.scrollTop;
+        const scrollHeight = element1.scrollHeight;
+        const clientHeight = element1.clientHeight;
 
-        if (scrollTop >= 160) {
-          setIsScroll(true);
-        } else {
-          setIsScroll(false);
+        if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isLastPage) {
+          fetchPostScrollData();
         }
       }
     }
@@ -75,13 +97,13 @@ export default function MyPagePage() {
       scrollElement.addEventListener('scroll', handleScroll);
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
-  }, []);
+  }, [isNickname, isLading, isCursorId,layoutNum]);
 
   return (
     <div
       id="scroll1"
-      className={`relative h-full overflow-y-scroll scrollbar-hide ${isScroll ? 'mt-[66px]' : ''}
-      `}
+      className={`relative h-full overflow-y-scroll scrollbar-hide 
+        `}
     >
       {isLoggedIn === 'loggedIn' && userData && (
         <div className="flex min-h-[160px] items-center">
@@ -97,7 +119,7 @@ export default function MyPagePage() {
               postsCount={userData.data.postsCount}
               saveCount={userData.data.saveCount}
               followerCount={userData.data.followerCount}
-              followCount={userData.data.folloingCount}
+              followCount={userData.data.followingCount}
               hoverStyle=""
               nicknameStyle="text-[22px] font-bold"
               statsStyle="text-sm font-normal"
@@ -105,9 +127,7 @@ export default function MyPagePage() {
           </div>
         </div>
       )}
-      <div
-        className={`${isScroll ? 'fixed top-[84px] z-30 w-[calc(100%_-_365px)] bg-white' : ''}`}
-      >
+      <div className={`sticky top-0 z-30 w-full bg-white`}>
         <CategoryBar elements={myPageCategoryElements} />
       </div>
       <div className="MyPageContainer max-h-full ">

@@ -186,7 +186,7 @@ export default function ImageUploadContainer({
           <div className="flex h-full w-full flex-wrap gap-[0.7%] p-[10px] transition-all">
             {isImages.map((item, index) => (
               <div
-                className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-auto overflow-hidden rounded-[5px]"
+                className="relative flex h-[49%] w-[19.4%] items-center justify-center overflow-hidden rounded-[5px]"
                 key={index}
               >
                 {item.startsWith('data:video') ||
