@@ -11,12 +11,15 @@ import { postUserProfile } from '../../../../api/user/postUserProfile';
 export default function ProfileImageCreateModal() {
 
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
+
   const dispatch = useDispatch();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [isActive, setActive] = useState(false);
-  const [preview, setPreview] = useState('');
+  const [isActive, setActive] = useState<boolean>(false);
+  const [preview, setPreview] = useState<string>('');
+  const [fileName, setFileName] = useState<string>('');
+  const [fileSize, setFileSize] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   
   const handleDragStart = () => setActive(true);
@@ -28,6 +31,20 @@ export default function ProfileImageCreateModal() {
     }
     dispatch(commonModalClose());
   };
+
+const handleInitInfo = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    
+    if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
+
+    setActive(false);
+    setPreview('');
+    setFileName('');
+    setFileSize('');
+    setFile(null);
+};
   
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -62,6 +79,19 @@ export default function ProfileImageCreateModal() {
       setPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
+    const fileNameParts = file.name.split('.');
+    const fileExtension = fileNameParts.pop();
+    const fileNameWithoutExt = fileNameParts.join('.');
+
+    const truncatedFileName =
+    fileNameWithoutExt.length > 6
+      ? `${fileNameWithoutExt.slice(0, 3)}...${fileNameWithoutExt.slice(-3)}.${fileExtension}`
+      : file.name;
+    setFileName(truncatedFileName);
+
+    const sizeInMB = (file.size * 0.000001).toFixed(6);
+    const truncatedSize = sizeInMB.length > 10 ? `${sizeInMB.slice(0, 10)}...` : sizeInMB;
+    setFileSize(`${truncatedSize} MB`);
     setFile(file)
   };
 
@@ -135,7 +165,7 @@ export default function ProfileImageCreateModal() {
           {
             preview === '' 
               &&
-            <div>
+            <div className='flex flex-col items-center'>
               <ProfileFolderIcon className='mb-[34px]' />
               <div className='flex flex-col items-center justify-center'>
                 <p className='font-[300] text-textDarkPurple text-[0.875rem] mb-[10px]'>또는 파일 드래그해서 업로드하기</p>
@@ -148,16 +178,42 @@ export default function ProfileImageCreateModal() {
           {
             preview !== ''
               &&
-              <div className='flex flex-col items-center'>
-                <div className='w-[150px] h-[150px] relative rounded-[12px] overflow-hidden'>
-                  <Image src={preview} alt="Preview" width={150} height={150} className='object-contain relative bg-red' />
-                  <button className='absolute flex items-center justify-center rounded-full w-[18px] h-[18px] bg-red'>
+              <div className='flex flex-col items-center justify-center gap-[12px]'>
+                <div className='w-[150px] h-[150px] relative rounded-[12px]'>
+                  <Image
+                    src={preview}
+                    alt="Preview"
+                    fill
+                    sizes="300px"
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    className='rounded-[12px]'
+                  />
+                  <Image
+                    src={'/assets/img/profile/transparent.png'}
+                    alt="Preview"
+                    fill
+                    sizes="300px"
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    className='rounded-[12px]'
+                  />  
+                  <button
+                    className='absolute flex items-center justify-center rounded-full w-[18px] h-[18px] bg-white top-[5px] right-[5px]'
+                    onClick={(e)=>{handleInitInfo(e)}}
+                  >
                     <CloseIcon fill='black'/>
                   </button>
                 </div>
-                <div className=''>
-                  <p>파일명 : </p>
-                  <p>파일크기 : </p>
+                <div className='flex flex-col gap-[7px]'>
+                  <p className='text-[0.875rem] font-[700] text-textDarkPurple'>파일명 : {fileName}</p>
+                  <p className='text-[0.875rem] font-[300] text-textDarkPurple'>파일크기 : {fileSize}</p>
                 </div>
                 <button 
                   className='button-color button-layout w-[150px] h-[40px]'

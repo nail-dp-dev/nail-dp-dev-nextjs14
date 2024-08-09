@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { getUserProfileData } from '../../../api/user/getUserProfile';
 import { patchUserProfile } from '../../../api/user/patchUserProfile';
 
-export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }: ProfileMiniModalProps) {
+export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow, setUserProfileUrl }: ProfileMiniModalProps) {
   
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -34,7 +34,9 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
   const handleChangeProfileImage = async (e: any, url:string) => {
     e.stopPropagation();
     const response = await patchUserProfile(url)
-    console.log(response)
+    if (response.code === 2001) {
+      setUserProfileUrl(url)
+    }
   }
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
@@ -59,7 +61,6 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow }
       try {
         setLoading(true); 
         const response = await getUserProfileData(whichContent);
-        console.log(response.data.profileUrls)
         setData(response);
       } catch (error) {
         setError('Failed to fetch data');

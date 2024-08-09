@@ -17,7 +17,7 @@ export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
-  const { userData, userPointData } = useLoggedInUserData();
+  const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
   const handleLogin = () => {
     dispatch(commonModalClose())
@@ -69,11 +69,12 @@ export default function LoginInfoBox() {
               className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
               disabled={isMiniModalShow}
             >
-              <UserImage src={userData.data.profileUrl} alt={'profileIamge'} width={40} height={40}/>
+              <UserImage src={userProfileUrl} alt={'profileIamge'} width={40} height={40}/>
             </button>
             <ProfileMiniModal
               isMiniModalShow={isMiniModalShow}
               setIsMiniModalShow={setIsMiniModalShow}
+              setUserProfileUrl={setUserProfileUrl}
             />
           </>
         )
