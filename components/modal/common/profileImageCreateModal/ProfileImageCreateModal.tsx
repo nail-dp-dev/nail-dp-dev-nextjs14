@@ -101,13 +101,13 @@ const handleInitInfo = (e: React.MouseEvent<HTMLButtonElement>) => {
 
     if ( file === null ) return;
 
-    const result = await postUserProfile(file)
+    const response = await postUserProfile(file)
 
-    if (result.code === 2001) {
+    if (response.code === 2001) {
       handleModalClose()
       window.location.reload();
-    } else if (result.code === 4002) {
-      alert(result.message)
+    } else if (response.code === 4002) {
+      alert(response.message)
     } else {
       return;
     }

@@ -1,6 +1,7 @@
 export const getUserProfileData = async (category: string) => {
 
   try {
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/profile?choice=${category}`, {
       method: "GET",
       headers: {
@@ -8,11 +9,15 @@ export const getUserProfileData = async (category: string) => {
       },
       credentials: 'include',
     })
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     return await response.json();
+
   } catch (error) {
+
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
     } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
@@ -20,6 +25,7 @@ export const getUserProfileData = async (category: string) => {
     } else {
       console.error('Unexpected error:', error);
     }
+
   }
   
 };

@@ -12,7 +12,11 @@ export default function KakaoAuth() {
   const code = searchParams.get('code');
 
   useEffect(() => {
-    if (code) {
+    const temp =  localStorage.getItem('loggedInPlatform')
+    if (code && temp === null) {
+      localStorage.setItem('tempLoggedInPlatform', 'kakao')
+      getKakaoAuthCode(code, router, dispatch)
+    } else if(code && temp !== null) {
       getKakaoAuthCode(code, router, dispatch)
     }
   }, [dispatch, code, router]);

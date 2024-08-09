@@ -23,7 +23,6 @@ export default function LoginModal() {
 
   let getLoginedBefore = localStorage.getItem('loggedInPlatform')
   
-
   return (
     whichCommonModal === 'login' &&
     <div className={`commonModal ${!isCommonModalShow && 'hidden'} absolute w-screen h-screen
@@ -72,7 +71,7 @@ export default function LoginModal() {
             </div>
             <div className='w-full h-[40px] flex items-start justify-center animate-easeInOnly '>
               <UsedLoginPlatform
-                className={`${getLoginedBefore === 'naver' && 'translate-x-[165px]' ||  getLoginedBefore === 'kakao' && 'translate-x-[-165px]'}`}
+                className={`${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'translate-x-[165px]' ||  getLoginedBefore === 'kakao' && 'translate-x-[-165px]'}`}
               />
             </div>
           </div>

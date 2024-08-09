@@ -48,11 +48,9 @@ function PostBox({
     photoUrl.endsWith('.jpeg') ||
     photoUrl.endsWith('.png') ||
     photoUrl.endsWith('.gif');
-  const isVideo = photoUrl.endsWith('.mp4');
-
-  useEffect(() => {
-    console.log('렌더링');
-  }, []);
+  const isVideo =
+    photoUrl.endsWith('.mp4') ||
+    photoUrl.endsWith('.mov');
 
   return (
     <div

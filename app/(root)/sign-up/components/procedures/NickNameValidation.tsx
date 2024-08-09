@@ -5,11 +5,13 @@ import { SignUpNickNameProps } from '../../../../../constants/interface';
 import { useRouter } from 'next/navigation';
 import { postSignUpMember } from '../../../../../api/auth/secure/postSignUpMember';
 import { getIsNickNameExist } from '../../../../../api/auth/helper/getIsNIckNameExist';
+import { useDispatch } from 'react-redux';
 
 
 
 export default function NickNameValidation({ finalAgreement, finalPhoneNumber }: SignUpNickNameProps) {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [nickname, setNickname] = useState('')
   const [nicknameError, setNicknameError] = useState('')
   const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
@@ -53,7 +55,7 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
       alert('닉네임을 다시 확인해주세요.')
       return
     }
-    postSignUpMember({nickname, finalPhoneNumber, finalAgreement, router})
+    postSignUpMember({nickname, finalPhoneNumber, finalAgreement, router, dispatch})
   }
 
   return (

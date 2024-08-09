@@ -20,14 +20,14 @@ export default function PostsBox() {
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true)
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [oldestPostId, setOldestPostId] = useState<number>(0);
+  const [cursorId, setCursorId] = useState<number>(0);
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [postsData, setPostsData] = useState<PostArray[]>([]);
   const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] = useState<boolean>(true)
   const [isLikedPostsLast, setIsLikedPostsLast] = useState<boolean>(false);
   const [isLikedPostsLoading, setIsLikedPostsLoading] = useState<boolean>(true);
-  const [oldestLikedPostId, setOldestLikedPostId] = useState<number>(0);
+  const [cursorLikedId, setCursorLikedId] = useState<number>(0);
   const [isLikedPostsContentExist, setIsLikedPostsContentExist] = useState<boolean>(false);
   const [likedPostsMessage, setLikedPostsMessage] = useState<string>('');
   const [likedPostsData, setLikedPostsData] = useState<PostArray[]>([]);
@@ -36,11 +36,11 @@ export default function PostsBox() {
   const likedButtonState = useSelector(selectButtonState);
 
   const fetchMorePosts = async () => {
-    let data = await getAllPostsData({ category, size, oldestPostId });
+    let data = await getAllPostsData({ category, size, cursorId });
     
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLoading(true);
-      setOldestPostId(data.data.oldestPostId);
+      setCursorId(data.data.cursorId);
       setPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
       setIsLast(data.data.postSummaryList.last);
       setMessage(data.message);
@@ -57,11 +57,11 @@ export default function PostsBox() {
   };
 
   const fetchMorePostsByLikedButton = async () => {
-    let data = await getLikedPosts({ category, size, oldestPostId });
+    let data = await getLikedPosts({ category, size, cursorLikedId });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
-      setOldestLikedPostId(data.data.oldestPostId);
+      setCursorLikedId(data.data.oldestPostId);
       setLikedPostsData((prev: PostArray[]) => [...prev, ...data.data.postSummaryList.content]);
       setIsLikedPostsLast(data.data.postSummaryList.last);
       setLikedPostsMessage(data.message);
@@ -78,8 +78,14 @@ export default function PostsBox() {
   }
 
   useEffect(() => {
+
+    if (likedButtonState) {
+      return;
+    }
+
     if (isFirstRendering) {
       fetchMorePosts()
+      console.log('fetch,,,')
     }
 
     const currentRef = bottomRef.current;
@@ -101,7 +107,7 @@ export default function PostsBox() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, oldestPostId, isLast, fetchMorePosts, isContentExist]);
+  }, [isLoading, cursorId, isLast, fetchMorePosts, isContentExist]);
 
   useEffect(() => {
     if (!likedButtonState) {
@@ -132,7 +138,30 @@ export default function PostsBox() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLikedPostsLoading, oldestLikedPostId, isLikedPostsLast, fetchMorePostsByLikedButton, isLikedPostsContentExist, likedButtonState]);
+  }, [isLikedPostsLoading, cursorLikedId, isLikedPostsLast, fetchMorePostsByLikedButton, isLikedPostsContentExist]);
+
+  useEffect(() => {
+    if (!likedButtonState && !isFirstRendering) {
+      setCursorId(0)
+      setMessage('')
+      setIsContentExist(false)
+      setPostsData([])
+      setIsFirstRendering(true)
+      setIsLoading(true)
+      setIsLast(false)
+    }
+
+    if (likedButtonState && !isLikedPostsFirstRendering) {
+      setCursorLikedId(0)
+      setLikedPostsMessage('')
+      setIsLikedPostsContentExist(false)
+      setLikedPostsData([])
+      setIsLikedPostsFirstRendering(true)
+      setIsLikedPostsLoading(true);
+      setIsLikedPostsLast(false)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[likedButtonState])
 
   const itemsToRender = postsData 
     ? (postsData.length <= layoutNum ? postsData : postsData.slice(0, postsData.length - (postsData.length % layoutNum))) 

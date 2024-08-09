@@ -1,6 +1,7 @@
 export const getIsNickNameExist = async (nickname: string): Promise<boolean> => {
 
   try {
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/nickname`, {
       method: 'POST',
       headers: {
@@ -12,7 +13,9 @@ export const getIsNickNameExist = async (nickname: string): Promise<boolean> => 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     const data = await response.json();
+
     if (data.code === 2000) {
       return true
     } else if (data.code === 4001) {
@@ -22,6 +25,7 @@ export const getIsNickNameExist = async (nickname: string): Promise<boolean> => 
       return false
     }
   } catch (error) {
+
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
       return false
@@ -32,5 +36,6 @@ export const getIsNickNameExist = async (nickname: string): Promise<boolean> => 
       console.error('Unexpected error:', error);
       return false
     }
+    
   }
 };

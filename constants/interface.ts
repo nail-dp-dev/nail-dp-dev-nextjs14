@@ -107,7 +107,12 @@ export interface MyPageModalProps {
 export interface PostsDataProps {
   category: string,
   size: number,
-  oldestPostId ?: number
+  cursorId ?: number
+}
+export interface PostsLikedDataProps {
+  category: string,
+  size: number,
+  cursorLikedId ?: number
 }
 
 export interface VideoProps {
