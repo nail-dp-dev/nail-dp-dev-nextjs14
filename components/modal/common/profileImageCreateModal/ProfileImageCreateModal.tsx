@@ -76,6 +76,10 @@ export default function ProfileImageCreateModal() {
     if (result.code === 2001) {
       handleModalClose()
       window.location.reload();
+    } else if (result.code === 4002) {
+      alert(result.message)
+    } else {
+      return;
     }
   }
 

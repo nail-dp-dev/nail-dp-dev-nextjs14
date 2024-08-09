@@ -37,9 +37,35 @@ export const postBoxWidths: { [key: number]: string } = {
 };
 
 export const profileMiniMenuElements = [
-  { name: '기본', data: 'basic' },
-  { name: '아이콘', data: 'icon' },
-  { name: '사용자 지정', data: 'custom' },
+  { name: '기본', data: 'BASIC' },
+  { name: '아이콘', data: 'ICON' },
+  { name: '사용자 지정', data: 'CUSTOMIZATION' },
+]
+
+export const basicProfileImageElements = [
+  '/assets/img/profile/basic/basic_1.png',
+  '/assets/img/profile/basic/basic_2.png',
+  '/assets/img/profile/basic/basic_3.png',
+  '/assets/img/profile/basic/basic_4.png',
+  '/assets/img/profile/basic/basic_5.png',
+  '/assets/img/profile/basic/basic_6.png',
+  '/assets/img/profile/basic/basic_7.png',
+  '/assets/img/profile/basic/basic_8.png',
+  '/assets/img/profile/basic/basic_9.png',
+  '/assets/img/profile/basic/basic_10.png',
+  '/assets/img/profile/basic/basic_11.png',
+  '/assets/img/profile/basic/basic_12.png',
+  '/assets/img/profile/basic/basic_13.png',
+  '/assets/img/profile/basic/basic_14.png',
+  '/assets/img/profile/basic/basic_15.png',
+  '/assets/img/profile/basic/basic_16.png',
+  '/assets/img/profile/basic/basic_17.png',
+  '/assets/img/profile/basic/basic_18.png',
+  '/assets/img/profile/basic/basic_19.png',
+]
+
+export const iconProfileImageElements = [
+  '/assets/img/profile/icon/icon_1.png',
 ]
 
 export const easyLoginElements = [
