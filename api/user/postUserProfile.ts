@@ -1,5 +1,7 @@
 export const postUserProfile = async (file: File) => {
+
   try {
+
     const multipartFormData = new FormData();
     const blob = new Blob([file], { type: file.type });
     multipartFormData.append('photos', blob, file.name);
@@ -9,8 +11,11 @@ export const postUserProfile = async (file: File) => {
       credentials: 'include',
       body: multipartFormData,
     });
+
     return await response.json();
+
   } catch (error) {
+
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
     } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
@@ -18,5 +23,6 @@ export const postUserProfile = async (file: File) => {
     } else {
       console.error('Unexpected error:', error);
     }
+    
   }
 };

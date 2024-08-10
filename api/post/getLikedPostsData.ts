@@ -1,8 +1,9 @@
-import { PostsDataProps } from '../../constants/interface';
+import { PostsLikedDataProps } from '../../constants/interface';
 
-export const getLikedPosts = async ({ category, size, oldestPostId }: PostsDataProps) => {
+export const getLikedPosts = async ({ category, size, cursorLikedId }: PostsLikedDataProps) => {
 
   try {
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/like`, {
       method: "GET",
       headers: {
@@ -10,9 +11,11 @@ export const getLikedPosts = async ({ category, size, oldestPostId }: PostsDataP
       },
       credentials: 'include',
     })
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    
     return await response.json();
 
   } catch (error) {
