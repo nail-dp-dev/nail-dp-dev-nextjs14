@@ -4,16 +4,19 @@ import { AppDispatch } from '../../../store/store';
 export const getGoogleAuthCode = async (code: string, router: any, dispatch: AppDispatch) => {
   
   try {
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google?code=${code}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: 'include',
     })
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
-    }    
+    }  
+    
     const data = await response.json();
 
     if (data.code === 2000) {
@@ -33,5 +36,6 @@ export const getGoogleAuthCode = async (code: string, router: any, dispatch: App
     } else {
       console.error('Unexpected error:', error);
     }
+
   }
 };
