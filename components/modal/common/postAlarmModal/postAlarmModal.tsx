@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { MyPageModalProps } from '../../../../constants/interface';
 
 export default function MyPageModal({ isText }: MyPageModalProps) {

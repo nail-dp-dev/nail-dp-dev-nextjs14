@@ -9,6 +9,9 @@ import DeleteModal from '../DeleteModal';
 import PostToggleIcon from '../icons/PostToggleIcon';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
 import ReplyItem from './ReplyItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../store/slices/modalSlice';
+import AlarmModal from '../../../../../../components/modal/common/AlarmModal';
 
 interface CommentItemProps {
   item: Comment;
@@ -36,6 +39,10 @@ export default function CommentItem({
   const [showOptions, setShowOptions] = useState(false);
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const dispatch = useDispatch();
+  const { isCommonModalShow, whichCommonModal } = useSelector(
+    selectCommonModalStatus,
+  );
 
   useEffect(() => {
     handleResizeHeight();
@@ -78,8 +85,16 @@ export default function CommentItem({
 
   // 삭제 모달 표시
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-    setShowOptions(false);
+    dispatch(setCommonModal('alarm'));
+    dispatch(
+      alarmModalData({
+        type: 'two',
+        button: '삭제',
+        user: item.commentUserNickname,
+        byte: 0,
+        imageType: '',
+      }),
+    );
   };
 
   // 수정 취소
@@ -91,7 +106,7 @@ export default function CommentItem({
   // 수정 댓글 저장
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') {
-      setShowDeleteModal(true);
+      handleDeleteClick();
     } else {
       onSaveEdit(item.commentId, null, editedContent);
       setIsEditing(false);
@@ -109,9 +124,9 @@ export default function CommentItem({
   };
 
   // 댓글 삭제 처리
-  const handleDeleteConfirm = (commentId: number) => {
-    onDelete(commentId, null);
-    setShowDeleteModal(false);
+  const handleDeleteConfirm = () => {
+    onDelete(item.commentId, null);
+    dispatch(commonModalClose());
   };
 
   // 신고 버튼 (일단 옵션 닫기로 설정)
@@ -140,7 +155,7 @@ export default function CommentItem({
         className={`comment-wrap button-tr mx-2 mb-4 mt-[10px] 
           rounded-xl transition-all duration-300
           ${replyData.length > 0 && isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
-        >
+      >
         <div
           className={`comment-box button-tr group/toggle flex justify-between rounded-xl pb-[10px] pl-[10px] 
           pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}
@@ -270,12 +285,8 @@ export default function CommentItem({
             </div>
           ))}
       </div>
-      {showDeleteModal && (
-        <DeleteModal
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setShowDeleteModal(false)}
-          commentId={item.commentId}
-        />
+      {whichCommonModal === 'alarm' && isCommonModalShow && (
+        <AlarmModal onConfirm={handleDeleteConfirm} />
       )}
     </div>
   );

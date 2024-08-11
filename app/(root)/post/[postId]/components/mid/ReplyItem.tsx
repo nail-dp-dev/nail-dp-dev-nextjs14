@@ -7,6 +7,9 @@ import Toggle from '../../../../../../components/buttons/Toggle';
 import CommentOptions from '../CommentOptions';
 import DeleteModal from '../DeleteModal';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
+import { useDispatch, useSelector } from 'react-redux';
+import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../store/slices/modalSlice';
+import AlarmModal from '../../../../../../components/modal/common/AlarmModal';
 
 interface ReplyItemProps {
   item: Reply;
@@ -35,6 +38,10 @@ export default function ReplyItem({
   const [showOptions, setShowOptions] = useState(false);
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const dispatch = useDispatch();
+  const { isCommonModalShow, whichCommonModal } = useSelector(
+    selectCommonModalStatus,
+  );
 
   useEffect(() => {
     handleResizeHeight();
@@ -75,10 +82,17 @@ export default function ReplyItem({
 
   // 삭제 모달 표시
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-    setShowOptions(false);
+    dispatch(setCommonModal(`alarm-${item.replyId}`));
+    dispatch(
+      alarmModalData({
+        type: 'two',
+        button: '삭제',
+        user: item.commentUserNickname,
+        byte: 0,
+        imageType: '',
+      }),
+    );
   };
-
   // 수정 취소
   const handleCancelEdit = () => {
     setIsEditing(false);
@@ -88,7 +102,7 @@ export default function ReplyItem({
   // 수정 댓글 저장
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') {
-      setShowDeleteModal(true);
+      handleDeleteClick();
     } else {
       onSaveEdit(item.replyId, parentId, editedContent);
       setIsEditing(false);
@@ -108,7 +122,7 @@ export default function ReplyItem({
   // 댓글 삭제 처리
   const handleDeleteConfirm = () => {
     onDelete(item.replyId, parentId);
-    setShowDeleteModal(false);
+    dispatch(commonModalClose());
   };
 
   // 신고 버튼 (일단 옵션 닫기로 설정)
@@ -214,12 +228,8 @@ export default function ReplyItem({
           )}
         </div>
       </div>
-      {showDeleteModal && (
-        <DeleteModal
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setShowDeleteModal(false)}
-          commentId={item.replyId}
-        />
+      {whichCommonModal === `alarm-${item.replyId}` && isCommonModalShow && (
+        <AlarmModal onConfirm={handleDeleteConfirm} />
       )}
     </div>
   );

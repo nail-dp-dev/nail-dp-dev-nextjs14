@@ -7,15 +7,18 @@ import {
   selectCommonModalStatus,
 } from '../../../store/slices/modalSlice';
 
-export default function AlarmModal() {
+interface AlarmModalProps {
+  onConfirm: () => void;
+}
+
+export default function AlarmModal({ onConfirm }: AlarmModalProps) {
   const dispatch = useDispatch();
   const { isCommonModalShow, whichCommonModal } = useSelector(
     selectCommonModalStatus,
   );
 
-  const { alarmImageType, alarmByte, alarmButton, alarmType, alarmUser } = useSelector(
-    selectAlarmModalStatus,
-  );
+  const { alarmImageType, alarmByte, alarmButton, alarmType, alarmUser } =
+    useSelector(selectAlarmModalStatus);
   console.log('alarmImageType:', alarmImageType);
   console.log('alarmByte:', alarmByte);
 
@@ -37,19 +40,21 @@ export default function AlarmModal() {
           >
             {alarmUser} 님의 댓글 및 답글을 차단하시겠습니까?
           </p>
-          <p
-            className={`${!(alarmImageType == 'image' || 'video') && 'hidden'} text-[18px] font-bold`}
-          >
-            {alarmImageType == 'image' ? '이미지' : '동영상'} 파일의 크기는{' '}
-            {alarmImageType == 'image' ? '5' : '10'}MB를 초과할 수 없습니다.
-          </p>
-          <p
-            className={`${!(alarmImageType == 'image' || 'video') && 'hidden'} pt-[7px] text-[16px] text-red`}
-          >
-            현재 파일 용량 : {Math.ceil(alarmByte! * 10) / 10}MB
-          </p>
+          {/* alarmImageType이 설정된 경우에만 표시 */}
+          {alarmImageType && (
+            <>
+              <p className="text-[18px] font-bold">
+                {alarmImageType === 'image' ? '이미지' : '동영상'} 파일의 크기는{' '}
+                {alarmImageType === 'image' ? '5' : '10'}MB를 초과할 수
+                없습니다.
+              </p>
+              <p className="pt-[7px] text-[16px] text-red">
+                현재 파일 용량 : {Math.ceil(alarmByte! * 10) / 10}MB
+              </p>
+            </>
+          )}
         </div>
-        {alarmType == 'two' ? (
+        {alarmType === 'two' ? (
           <div className="flex">
             <div className="w-1/2 text-center hover:bg-purple hover:bg-opacity-10">
               <button
@@ -61,7 +66,7 @@ export default function AlarmModal() {
             </div>
             <div className="w-1/2 text-center hover:bg-red hover:bg-opacity-10">
               <button
-                onClick={closeModal}
+                onClick={onConfirm}
                 className="px-[60px] py-[14px] font-bold text-red"
               >
                 {alarmButton}
