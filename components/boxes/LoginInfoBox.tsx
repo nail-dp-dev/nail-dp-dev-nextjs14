@@ -19,8 +19,6 @@ export default function LoginInfoBox() {
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
-  console.log(userData)
-
   const handleLogin = () => {
     dispatch(commonModalClose())
     dispatch(setCommonModal('login'));

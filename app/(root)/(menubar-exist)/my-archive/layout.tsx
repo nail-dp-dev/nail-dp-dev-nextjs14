@@ -1,4 +1,4 @@
-import MyArchiveCategoryBar from './components/CategoryBar'
+import MyArchiveTopBar from './components/TopBar'
 
 export default function MyArchiveLayout({
   children,
@@ -9,7 +9,7 @@ export default function MyArchiveLayout({
     <section className="myArchiveContentSection flex-1 h-screen flex-col p-[20px] ">
       <div className="myArchiveContentContainer flex w-full h-full flex-1 relative">
         <div className="myArchiveContentsDiv relative w-full h-full flex flex-col ">
-          <MyArchiveCategoryBar />
+          <MyArchiveTopBar />
           {children}
         </div>
       </div>
