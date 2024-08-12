@@ -5,7 +5,7 @@ import StoreProvider from '../store/providers/StoreProvider';
 import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
 
-const inter = Noto_Sans_KR({ subsets: ['latin'] , preload:false});
+const inter = Noto_Sans_KR({ subsets: ['latin'], preload:false});
 
 export const metadata: Metadata = {
   title: '네디플',

@@ -43,7 +43,7 @@ export default function MyArchivePage() {
                       key={index}
                       
                       onClick={(e) => { clickNav(e, item.name) }}
-                      className={`h-[54px] border-b-[3px] border-navMenuBotSolidGray ${category === item.name && 'border-mainPurple'} hover:border-mainPurple`}
+                      className={`${category === item.name ? 'border-mainPurple' : 'border-navMenuBotSolidGray'} h-[54px] border-b-[3px]   hover:border-mainPurple`}
                     >
                       <span className='text-[0.785rem] text-textBlack font-[700]'>{item.desc}</span>
                     </button>
