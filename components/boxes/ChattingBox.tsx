@@ -39,7 +39,7 @@ export default function ChattingBox({ isChatModalShow, handleCloseChatModal }: C
             [2, 2, 2, 2, 2, 2,2,2,2,2].map((chat, index) => (
               <li key={index} className='w-[325px] h-[62px] flex items-center justify-between rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton p-[10px]'>
                 <div className='chatRoomImage w-[40px] h-[40px] mr-[10px]'>
-                  <Image src={`https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg`} width={40} height={40} alt={'chatRoomImage'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' priority className='rounded-full ' />  
+                  <Image src={`https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg`} width={40} height={40} alt={'chatRoomImage'} style={{objectFit: 'cover', width: '100%', height: '100%'}} quality={100} sizes='100vw' className='rounded-full ' />  
                 </div>
                 <div className='flex-1 h-[50px] flex justify-between'>
                   <div></div>

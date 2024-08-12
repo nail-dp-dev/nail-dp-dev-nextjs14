@@ -14,6 +14,7 @@ const useLoggedInUserData = () => {
   const isLoggedIn = useSelector(selectLoginStatus);
   
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         let data;
