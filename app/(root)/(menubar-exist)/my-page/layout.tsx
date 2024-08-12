@@ -1,5 +1,5 @@
-import MenuBar from '../../../components/bars/MenuBar';
-import SearchBar from '../../../components/bars/search/SearchBar';
+import MenuBar from '../../../../components/bars/MenuBar';
+import SearchBar from '../../../../components/bars/search/SearchBar';
 
 export default function ArchiveLayout({
   children,

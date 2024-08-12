@@ -1,18 +1,18 @@
 'use client';
 
-import PostBox from '../../../components/boxes/PostBox';
-import PostCreate from '../../../components/animations/PostCreateIcon';
-import CategoryBar from '../../../components/bars/CategoryBar';
-import { myPageCategoryElements } from '../../../constants';
+import PostBox from '../../../../components/boxes/PostBox';
+import PostCreate from '../../../../components/animations/PostCreateIcon';
+import CategoryBar from '../../../../components/bars/CategoryBar';
+import { myPageCategoryElements } from '../../../../constants';
 import { useEffect, useState } from 'react';
-import UserImage from '../../../components/ui/UserImage';
-import UserInfo from '../../../components/ui/UserInfo';
+import UserImage from '../../../../components/ui/UserImage';
+import UserInfo from '../../../../components/ui/UserInfo';
 import { useSelector } from 'react-redux';
-import { getPostsData } from '../../../api/post/getPostsData';
-import { getPostsTempData } from '../../../api/post/getPostsTempData';
-import { selectLoginStatus } from '../../../store/slices/loginSlice';
-import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
-import { selectNumberOfBoxes } from '../../../store/slices/boxLayoutSlice';
+import { getPostsData } from '../../../../api/post/getPostsData';
+import { getPostsTempData } from '../../../../api/post/getPostsTempData';
+import { selectLoginStatus } from '../../../../store/slices/loginSlice';
+import useLoggedInUserData from '../../../../hooks/user/useLoggedInUserData';
+import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
 
 interface postData {
   postId: number;

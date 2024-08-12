@@ -5,8 +5,7 @@ import StoreProvider from '../store/providers/StoreProvider';
 import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
 
-
-const inter = Noto_Sans_KR({ subsets: ['latin'] });
+const inter = Noto_Sans_KR({ subsets: ['latin'], preload:false});
 
 export const metadata: Metadata = {
   title: '네디플',
@@ -14,10 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  modal,
   children,
 }: Readonly<{
-  modal: React.ReactNode;
   children: React.ReactNode;
 }>) {
   return (

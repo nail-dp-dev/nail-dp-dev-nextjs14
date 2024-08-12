@@ -55,7 +55,7 @@ export default function LoginInfoBox() {
     };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMiniModalShow]);
+  }, []);
 
 
   return (

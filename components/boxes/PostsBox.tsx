@@ -85,7 +85,6 @@ export default function PostsBox() {
 
     if (isFirstRendering) {
       fetchMorePosts()
-      console.log('fetch,,,')
     }
 
     const currentRef = bottomRef.current;

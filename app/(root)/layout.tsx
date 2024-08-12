@@ -1,4 +1,5 @@
-import CommonModalLayout from '../../components/modal/common/CommonModalLayout';
+import MenuBar from '../../components/bars/MenuBar';
+import CommonModalLayout from '../../components/modal/common/commonModalLayout';
 import MessageModal from '../../components/modal/message/MessageModal';
 
 export default function HomeLayout({
@@ -12,7 +13,7 @@ export default function HomeLayout({
       bg-white dark:bg-themeDark text-textBlack dark:text-white relative overflow-hidden"
     >
       <CommonModalLayout/>
-      <MessageModal/>
+      <MessageModal />
       {children}
     </main>
   );
