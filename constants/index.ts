@@ -156,3 +156,8 @@ export const shareMenuElements = [
   { icon: 'MenuUrlIcon', label: 'URL 복사', message: 'URL 복사' }
 ];
 
+export const myArchiveElements = [
+  { name:'archive', desc: '아카이브별'},
+  { name:'made', desc: '제작됨'},
+  { name:'following', desc: '팔로잉'},
+]

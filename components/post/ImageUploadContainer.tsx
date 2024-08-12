@@ -211,7 +211,6 @@ export default function ImageUploadContainer({
                       height: '100%',
                     }}
                     quality={100}
-                    priority
                   />
                 )}
 

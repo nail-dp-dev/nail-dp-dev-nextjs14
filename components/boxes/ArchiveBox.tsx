@@ -44,7 +44,6 @@ export default function ArchiveBox({
             fill
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             quality={100}
-            priority
             sizes="100vw, 50vw, 33vw"
             blurDataURL="https://image-component.nextjs.gallery/placeholder"
             placeholder="blur"

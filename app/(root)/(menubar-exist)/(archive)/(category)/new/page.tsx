@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import Loading from '../../../../loading';
-import PostsBox from '../../../../../components/boxes/PostsBox';
+import Loading from '../../../../../loading';
+import PostsBox from '../../../../../../components/boxes/PostsBox';
 
 export default async function NewPage() {
 

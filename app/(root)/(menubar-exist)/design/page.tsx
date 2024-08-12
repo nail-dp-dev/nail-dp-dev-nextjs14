@@ -1,8 +1,10 @@
+import Notice from '../../../../components/notice/Notice';
+
 export default function DesignPage() {
 
   return (
     <div className="DesignContainer w-full h-full">
-      DesignContainer 입니다.
+      <Notice pageName='디자인 제작'/>
     </div>
   );
 }
