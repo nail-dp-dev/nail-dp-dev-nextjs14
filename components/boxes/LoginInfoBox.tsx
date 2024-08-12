@@ -11,12 +11,15 @@ import { commonModalClose, setCommonModal } from '../../store/slices/modalSlice'
 import { getLogOut } from '../../api/auth/secure/getLogOut';
 import useLoggedInUserData from '../../hooks/user/useLoggedInUserData';
 import { useAppDispatch } from '../../store/store';
+import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg'
+import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg'
 
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
+  const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
   const handleLogin = () => {
@@ -35,6 +38,11 @@ export default function LoginInfoBox() {
 
   const handleModalClose = () => {
     setIsMiniModalShow(false);
+  }
+
+  const handleBitsChargeButton = (e: any) => {
+    e.stopPropagation();
+    console.log('bits charge...')
   }
 
   useEffect(() => {
@@ -127,11 +135,26 @@ export default function LoginInfoBox() {
       </div>
       {
         isLoggedIn === 'loggedIn' &&
-        <div className="flex items-center w-full h-[38px] px-[8px]">
-          <Bits className="mr-[12px]" />
-          <span className="text-[14px] text-textDarkPurple font-[700]">
-            {userPointData} 비츠
-          </span>
+        <div className="flex items-center justify-between w-full h-[38px] px-[8px]">
+          <div className='flex items-center '>
+            <Bits className="mr-[12px]" />
+            <span className="text-[14px] text-textDarkPurple font-[700]">
+              {userPointData} 비츠
+            </span>
+          </div>
+          <button
+            onMouseEnter={() => setIsButtonHovered(true)}
+            onMouseLeave={() => setIsButtonHovered(false)}
+            onClick={(e)=>{handleBitsChargeButton(e)}}
+          >
+              {
+                isButtonHovered
+                  ?
+                  <BitsChargeHoverIcon />
+                  :
+                  <BitsChargeIcon />
+              }
+          </button>
         </div>
       }
     </div>
