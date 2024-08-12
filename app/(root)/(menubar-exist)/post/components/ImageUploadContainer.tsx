@@ -1,13 +1,13 @@
 'use client';
 
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import CloseIcon from '../../public/assets/svg/bigclose.svg';
-import PlusIcon from '../../public/assets/svg/image-upload-plus.svg';
-import CloseImageIcon from '../../public/assets/svg/close-post-image.svg';
+import CloseIcon from '../../../../../public/assets/svg/bigclose.svg';
+import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
+import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { alarmModalData, setCommonModal } from '../../store/slices/modalSlice';
+import { alarmModalData, setCommonModal } from '../../../../../store/slices/modalSlice';
 
 type ImageData = {
   fileName: string;

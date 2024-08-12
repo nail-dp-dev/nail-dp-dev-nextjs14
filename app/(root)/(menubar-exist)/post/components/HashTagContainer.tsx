@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import HashtagArrowIcon from '../../public/assets/svg/hashtag-arrow.svg';
+import HashtagArrowIcon from '../../../../../public/assets/svg/hashtag-arrow.svg';
 
 export interface editData {
   editUserHashTags?: string[];

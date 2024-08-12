@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CommentData } from '../../../../../../types/dataType';
+import { CommentData } from '../../../../../../../types/dataType';
 import CommentItem from './CommentItem';
-import { repliesDetail } from '../../../../../../api/post/getRepliesDetailData';
+import { repliesDetail } from '../../../../../../../api/post/getRepliesDetailData';
 
 interface UserProps {
   user: CommentData['data'];

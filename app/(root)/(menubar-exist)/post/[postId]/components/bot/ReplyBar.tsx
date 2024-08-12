@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseIcon from '../../../../../../public/assets/svg/close.svg';
+import CloseIcon from '../../../../../../../public/assets/svg/close.svg';
 
 type ReplyBarProps = {
   replyTo: string;

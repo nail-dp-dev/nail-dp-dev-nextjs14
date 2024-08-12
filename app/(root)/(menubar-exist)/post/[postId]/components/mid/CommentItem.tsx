@@ -1,17 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Comment, Reply } from '../../../../../../types/dataType';
-import UserImage from '../../../../../../components/ui/UserImage';
+import { Comment, Reply } from '../../../../../../../types/dataType';
+import UserImage from '../../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
-import Toggle from '../../../../../../components/buttons/Toggle';
+import Toggle from '../../../../../../../components/buttons/Toggle';
 import CommentOptions from '../CommentOptions';
 import DeleteModal from '../DeleteModal';
 import PostToggleIcon from '../icons/PostToggleIcon';
-import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
+import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
 import ReplyItem from './ReplyItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../store/slices/modalSlice';
-import AlarmModal from '../../../../../../components/modal/common/AlarmModal';
+import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
+import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
 
 interface CommentItemProps {
   item: Comment;

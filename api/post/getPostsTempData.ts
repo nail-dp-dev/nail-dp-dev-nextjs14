@@ -12,8 +12,6 @@ export const getPostsTempData = async () => {
     );
     const data = await response.json();
     return data
-    console.log(data);
-    
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);

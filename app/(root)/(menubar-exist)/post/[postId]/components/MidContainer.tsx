@@ -5,11 +5,11 @@ import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import ImageSlider from './ImageSlider';
-import { CommentData, PostsDetailData } from '../../../../../types/dataType';
-import { AddCommentType } from '../../../../../hooks/useComments';
-import BoxCommonButton from '../../../../../components/ui/BoxCommonButton';
-import GeneralAction from '../../../../../components/buttons/option-menu/GeneralAction';
-import { useGeneralAction } from '../../../../../hooks/useGeneralAction';
+import { CommentData, PostsDetailData } from '../../../../../../types/dataType';
+import { AddCommentType } from '../../../../../../hooks/useComments';
+import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
+import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
+import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];

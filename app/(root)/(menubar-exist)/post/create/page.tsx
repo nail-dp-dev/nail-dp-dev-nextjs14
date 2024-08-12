@@ -1,14 +1,14 @@
 'use client';
 
 import { FormEvent, SetStateAction, useEffect, useState } from 'react';
-import ImageUploadContainer from '../../../../components/post/ImageUploadContainer';
-import ContentContainer from '../../../../components/post/ContentContainer';
-import HashTagContainer from '../../../../components/post/HashTagContainer';
-import PrivacySettingContainer from '../../../../components/post/PrivacySettingContainer';
-import { postCreate } from '../../../../api/post/postCreate';
-import { tempPostCreate } from '../../../../api/post/postTempCreate';
+import ImageUploadContainer from '../components/ImageUploadContainer';
+import ContentContainer from '../components/ContentContainer';
+import HashTagContainer from '../components/HashTagContainer';
+import PrivacySettingContainer from '../components/PrivacySettingContainer';
+import { postCreate } from '../../../../../api/post/postCreate';
+import { tempPostCreate } from '../../../../../api/post/postTempCreate';
 import { useRouter } from 'next/navigation';
-import MyPageModal from '../../../../components/modal/common/postAlarmModal/PostAlarmModal';
+import MyPageModal from '../../../../../components/modal/common/postAlarmModal/PostAlarmModal';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
