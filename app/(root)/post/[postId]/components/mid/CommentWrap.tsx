@@ -5,7 +5,7 @@ import { repliesDetail } from '../../../../../../api/post/getRepliesDetailData';
 
 interface UserProps {
   user: CommentData['data'];
-  onLike: (commentId: number, increment: number) => void;
+  onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,

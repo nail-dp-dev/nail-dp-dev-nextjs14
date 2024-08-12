@@ -31,7 +31,7 @@ export default function PostDetailPage() {
   }, []);
 
   if (!userDetail) {
-    return <div>사용자를 찾을 수 없습니다.</div>;
+    return <div>게시물을 찾을 수 없습니다.</div>;
   }
 
   return (

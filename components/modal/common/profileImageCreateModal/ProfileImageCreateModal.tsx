@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalClose, selectCommonModalStatus } from '../../../../store/slices/modalSlice';
 import CloseIcon from '../../../../public/assets/svg/close.svg';

@@ -38,7 +38,7 @@ export default function PostTags({ post }: PostTagsProps) {
     if (!isDragging.current || !scrollContainerRef.current) return;
     event.preventDefault();
     const x = event.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX.current) * 2; 
+    const walk = (x - startX.current) * 2;
     scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
@@ -61,7 +61,7 @@ export default function PostTags({ post }: PostTagsProps) {
               className="hashtag-layout  hashtag-hover-active button-tr button-tr-tf
               bg-hashTagGray hover:text-white active:text-white"
             >
-              {tag.tagName}
+              {tag}
             </button>
           </div>
         ))}

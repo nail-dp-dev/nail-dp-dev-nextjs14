@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalClose, selectCommonModalStatus } from '../../../../store/slices/modalSlice';
 import SmallLogo from '../../../../public/assets/svg/small-logo.svg'

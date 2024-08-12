@@ -19,22 +19,7 @@ export default function PostCount({ post, toggleScroll }: PostCountProps) {
   const [sharedCount, setSharedCount] = useState(post.sharedCount);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const postsData = await getPostsData();
-        const postData = postsData.data.find((p) => p.postId === post.postId);
-        if (postData) {
-          setIsHeartStatus(postData.like);
-        }
-      } catch (error) {
-        console.error('Error fetching post data:', error);
-      }
-    };
-
-    fetchData();
-  }, [post.postId]);
-
+  
   const handleFollowToggle = () => {
     if (isHeartStatus) {
       setHeartCount(heartCount - 1);

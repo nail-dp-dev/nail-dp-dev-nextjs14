@@ -7,7 +7,8 @@ import ArrowRight from '../../../../../public/assets/svg/arrow-right.svg';
 
 interface File {
   fileUrl: string;
-  fileExtension: 'photo' | 'video';
+  isPhoto: boolean;
+  isVideo: boolean; 
 }
 
 interface ImageSliderProps {
@@ -32,7 +33,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ files }) => {
   return (
     <div className="relative h-full w-full">
       <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
-        {files[currentIndex].fileExtension === 'photo' ? (
+        {files[currentIndex].isPhoto ? (
           <img
             src={files[currentIndex].fileUrl}
             alt={`slide-${currentIndex}`}
@@ -57,17 +58,19 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ files }) => {
           </div>
         </>
       )}
-      <div className="absolute bottom-0 left-0 flex w-full items-center justify-center p-2">
-        {files.map((_, index) => (
-          <div
-            key={index}
-            className={`mx-2 h-2 w-2 cursor-pointer rounded-full ${
-              index === currentIndex ? 'bg-darkPurple' : 'bg-addFolderGray'
-            }`}
-            onClick={() => setCurrentIndex(index)}
-          ></div>
-        ))}
-      </div>
+      {files.length > 1 && (
+        <div className="absolute bottom-0 left-0 flex w-full items-center justify-center p-2">
+          {files.map((_, index) => (
+            <div
+              key={index}
+              className={`mx-2 h-2 w-2 cursor-pointer rounded-full ${
+                index === currentIndex ? 'bg-darkPurple' : 'bg-addFolderGray'
+              }`}
+              onClick={() => setCurrentIndex(index)}
+            ></div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
