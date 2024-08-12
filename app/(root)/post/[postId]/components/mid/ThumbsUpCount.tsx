@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import ThumbsUpIcon from '../icons/ThumbsUpIcon';
 
 type Item = {
-  commentId: number;
+  commentId?: number;
+  replyId?: number;
   likeCount: number;
 };
 
 type ThumbsUpCountProps = {
   item: Item;
-  onLike: (commentId: number, increment: number) => void;
+  // isReply: 댓글/대댓글 구분
+  onLike: (id: number, increment: number, isReply: boolean) => void;
 };
 
 export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
@@ -19,6 +21,7 @@ export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
     setIsThumbsUpCount(item.likeCount);
   }, [item.likeCount]);
 
+  // 좋아요 버튼 클릭 핸들러
   const handleThumbsUp = (
     e: React.MouseEvent<Element, MouseEvent> | React.TouchEvent<Element>,
   ) => {
@@ -26,7 +29,14 @@ export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
     const increment = isThumbsUpStatus ? -1 : 1;
     setIsThumbsUpCount(isThumbsUpCount + increment);
     setIsThumbsUpStatus(!isThumbsUpStatus);
-    onLike(item.commentId, increment);
+
+    // 대댓글인 경우
+    if (item.replyId !== undefined) {
+      onLike(item.replyId, increment, true);
+      // 댓글인 경우
+    } else if (item.commentId !== undefined) {
+      onLike(item.commentId, increment, false);
+    }
   };
 
   return (

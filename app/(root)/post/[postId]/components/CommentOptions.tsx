@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
 
 interface CommentOptionsProps {
@@ -8,7 +8,7 @@ interface CommentOptionsProps {
   onBlockUserClick: () => void;
   onClose: () => void;
   commentUserNickname: string;
-};
+}
 
 export default function CommentOptions({
   onEditClick,
@@ -21,12 +21,17 @@ export default function CommentOptions({
   const { userData } = useLoggedInUserData();
   const optionsRef = useRef<HTMLDivElement>(null);
 
+  const [isOwnComment, setIsOwnComment] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (userData) {
+      setIsOwnComment(userData?.data.nickname === commentUserNickname);
+    }
+  }, [userData, commentUserNickname]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        optionsRef.current &&
-        !optionsRef.current.contains(event.target as Node)
-      ) {
+      if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
         onClose();
       }
     };
@@ -37,16 +42,17 @@ export default function CommentOptions({
     };
   }, [onClose]);
 
-  const isOwnComment = userData?.data.nickname === commentUserNickname;
+  if (isOwnComment === null) {
+    return null;
+  }
 
   return (
     <div
       ref={optionsRef}
-      className="Options-box absolute right-0 top-0 mt-2 rounded-xl 
-      bg-white p-2 shadow-lg opacity-75 w-auto"
+      className="Options-box absolute right-0 top-0 mt-2 w-auto rounded-xl bg-white p-2 opacity-75 shadow-lg"
     >
       {isOwnComment ? (
-        <>
+        <div className="box-one">
           <button
             onClick={onEditClick}
             className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
@@ -61,9 +67,9 @@ export default function CommentOptions({
           >
             댓글 삭제하기
           </button>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="box-two">
           <button
             onClick={onReportClick}
               className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
@@ -78,7 +84,7 @@ export default function CommentOptions({
           >
             사용자 차단하기
           </button>
-        </>
+        </div>
       )}
     </div>
   );

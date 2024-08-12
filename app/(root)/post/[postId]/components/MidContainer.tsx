@@ -16,11 +16,11 @@ interface MidContainerProps {
   comments: CommentData['data'];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
-  onLike: (commentId: number, increment: number) => void;
+  onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
-    parentId: number | null,
+    parentId: number | null, //parentId: 대댓글이 속한 부모 댓글(지울 예정)
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
@@ -29,8 +29,6 @@ interface MidContainerProps {
 export default function MidContainer({
   post,
   comments,
-  onAddComment,
-  onAddReply,
   onLike,
   onReply,
   onSaveEdit,
@@ -140,7 +138,13 @@ export default function MidContainer({
                 : 'xs:min-w-[280px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[300px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
             }`}
           >
-            <ImageSlider files={post.files} />
+            <ImageSlider
+              files={post.files.map((file) => ({
+                fileUrl: file.fileUrl,
+                isPhoto: file.photo,
+                isVideo: file.video,
+              }))}
+            />
             <BoxCommonButton
               onClick={handleToggleClick}
               type="toggle"

@@ -72,7 +72,7 @@ export default function useComments(postId: number | null) {
                   ...(comment.replies || []),
                   {
                     ...reply,
-                    commentId: (comment.replies?.length || 0) + 1,
+                    replyId: (comment.replies?.length || 0) + 1, 
                   },
                 ],
               }
@@ -85,13 +85,17 @@ export default function useComments(postId: number | null) {
 
   // 댓글에 좋아요 추가 or 제거
   const handleLike = useCallback(
-    (commentId: number, increment: number) => {
+    (id: number, increment: number, isReply: boolean) => {
       setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.commentId === commentId
-            ? { ...comment, likeCount: comment.likeCount + increment }
-            : comment,
-        ),
+        prevComments.map((comment) => ({
+          ...comment,
+          likeCount: !isReply && comment.commentId === id ? comment.likeCount + increment : comment.likeCount,
+          replies: (comment.replies || []).map((reply) =>
+            isReply && reply.replyId === id
+              ? { ...reply, likeCount: reply.likeCount + increment }
+              : reply,
+          ),
+        })),
       );
     },
     [],
@@ -99,20 +103,18 @@ export default function useComments(postId: number | null) {
 
   // 댓글 내용 수정
   const handleSaveEdit = useCallback(
-    (commentId: number, parentId: number | null, newContent: string) => {
+    (id: number, parentId: number | null, newContent: string) => {
       setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.commentId === commentId
-            ? { ...comment, commentContent: newContent, edited: true }
-            : {
-                ...comment,
-                replies: (comment.replies || []).map((reply) =>
-                  reply.commentId === commentId
-                    ? { ...reply, commentContent: newContent, edited: true }
-                    : reply,
-                ),
-              },
-        ),
+        prevComments.map((comment) => ({
+          ...comment,
+          commentContent: parentId === null && comment.commentId === id ? newContent : comment.commentContent,
+          edited: parentId === null && comment.commentId === id ? true : comment.edited,
+          replies: (comment.replies || []).map((reply) =>
+            reply.replyId === id
+              ? { ...reply, commentContent: newContent, edited: true }
+              : reply,
+          ),
+        })),
       );
     },
     [],
@@ -120,10 +122,10 @@ export default function useComments(postId: number | null) {
 
   // 댓글 또는 대댓글 삭제
   const handleDelete = useCallback(
-    (commentId: number, parentId: number | null) => {
+    (id: number, parentId: number | null) => {
       if (parentId === null) {
         setComments((prevComments) =>
-          prevComments.filter((comment) => comment.commentId !== commentId),
+          prevComments.filter((comment) => comment.commentId !== id),
         );
       } else {
         setComments((prevComments) =>
@@ -132,7 +134,7 @@ export default function useComments(postId: number | null) {
               ? {
                   ...comment,
                   replies: (comment.replies || []).filter(
-                    (reply) => reply.commentId !== commentId,
+                    (reply) => reply.replyId !== id,
                   ),
                 }
               : comment,

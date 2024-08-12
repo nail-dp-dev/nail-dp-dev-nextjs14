@@ -1,14 +1,18 @@
 'use client'
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LoginModal from './loginModal/LoginModal';
-import { selectCommonModalStatus } from '../../../store/slices/modalSlice';
+import { selectCommonModalStatus, commonModalClose } from '../../../store/slices/modalSlice';
 import ProfileImageCreateModal from './profileImageCreateModal/ProfileImageCreateModal';
 import AlarmModal from './AlarmModal';
 
 export default function CommonModalLayout() {
-
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
+  const dispatch = useDispatch();
+
+  const handleDeleteConfirm = () => {
+    dispatch(commonModalClose());
+  };
 
   return (
     <div className={`commonModal ${!isCommonModalShow && 'hidden'} absolute w-full h-full
@@ -24,8 +28,8 @@ export default function CommonModalLayout() {
       }
       {
         whichCommonModal === 'alarm' && 
-        <AlarmModal/>
+        <AlarmModal onConfirm={handleDeleteConfirm} /> 
       }
     </div>
-  )
+  );
 }

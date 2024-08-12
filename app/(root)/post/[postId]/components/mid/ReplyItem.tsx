@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { CommentData } from '../../../../../../types/dataType';
+import { Reply } from '../../../../../../types/dataType';
 import UserImage from '../../../../../../components/ui/UserImage';
 import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
@@ -7,18 +7,21 @@ import Toggle from '../../../../../../components/buttons/Toggle';
 import CommentOptions from '../CommentOptions';
 import DeleteModal from '../DeleteModal';
 import { formatTimeAgo } from '../../../../../../lib/formatTimeAgo';
+import { useDispatch, useSelector } from 'react-redux';
+import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../store/slices/modalSlice';
+import AlarmModal from '../../../../../../components/modal/common/AlarmModal';
 
 interface ReplyItemProps {
-  item: CommentData['data'][number];
+  item: Reply;
   parentId: number;
-  onLike: (commentId: number, increment: number) => void;
+  onLike: (replyId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
-    commentId: number,
+    replyId: number,
     parentId: number | null,
     newContent: string,
   ) => void;
-  onDelete: (commentId: number, parentId: number | null) => void;
+  onDelete: (replyId: number, parentId: number | null) => void;
 }
 
 export default function ReplyItem({
@@ -33,7 +36,12 @@ export default function ReplyItem({
   const [editedContent, setEditedContent] = useState(item.commentContent);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const dispatch = useDispatch();
+  const { isCommonModalShow, whichCommonModal } = useSelector(
+    selectCommonModalStatus,
+  );
 
   useEffect(() => {
     handleResizeHeight();
@@ -46,15 +54,24 @@ export default function ReplyItem({
       textarea.current.style.height = `${textarea.current.scrollHeight}px`;
     }
   };
-
   // 대댓글로 스크롤 이동
   const handleReplyClick = () => {
     onReply(parentId, item.commentUserNickname);
+    scrollToComment();
+  };
+  // 댓글 스크롤 이동
+  const scrollToComment = () => {
+    if (commentRef.current) {
+      commentRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
   };
 
   // 좋아요 증가/감소
-  const handleLike = (commentId: number, increment: number) => {
-    onLike(commentId, increment);
+  const handleLike = (replyId: number, increment: number) => {
+    onLike(item.replyId, increment, true);
   };
 
   // 댓글 수정
@@ -65,10 +82,17 @@ export default function ReplyItem({
 
   // 삭제 모달 표시
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-    setShowOptions(false);
+    dispatch(setCommonModal(`alarm-${item.replyId}`));
+    dispatch(
+      alarmModalData({
+        type: 'two',
+        button: '삭제',
+        user: item.commentUserNickname,
+        byte: 0,
+        imageType: '',
+      }),
+    );
   };
-
   // 수정 취소
   const handleCancelEdit = () => {
     setIsEditing(false);
@@ -78,9 +102,9 @@ export default function ReplyItem({
   // 수정 댓글 저장
   const handleSaveEdit = () => {
     if (editedContent.trim() === '') {
-      setShowDeleteModal(true); // 빈 값이면 삭제 모달 표시
+      handleDeleteClick();
     } else {
-      onSaveEdit(item.commentId, parentId, editedContent);
+      onSaveEdit(item.replyId, parentId, editedContent);
       setIsEditing(false);
     }
   };
@@ -97,8 +121,8 @@ export default function ReplyItem({
 
   // 댓글 삭제 처리
   const handleDeleteConfirm = () => {
-    onDelete(item.commentId, parentId);
-    setShowDeleteModal(false);
+    onDelete(item.replyId, parentId);
+    dispatch(commonModalClose());
   };
 
   // 신고 버튼 (일단 옵션 닫기로 설정)
@@ -113,6 +137,7 @@ export default function ReplyItem({
 
   return (
     <div
+      ref={commentRef}
       className="reply-item button-tr mx-2 mb-4 mt-[10px] 
         rounded-xl transition-all duration-300"
     >
@@ -203,12 +228,8 @@ export default function ReplyItem({
           )}
         </div>
       </div>
-      {showDeleteModal && (
-        <DeleteModal
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setShowDeleteModal(false)}
-          commentId={item.commentId}
-        />
+      {whichCommonModal === `alarm-${item.replyId}` && isCommonModalShow && (
+        <AlarmModal onConfirm={handleDeleteConfirm} />
       )}
     </div>
   );
