@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Video from '../../../../../components/ui/Video';
-import ArrowLeft from '../../../../../public/assets/svg/arrow-left.svg';
-import ArrowRight from '../../../../../public/assets/svg/arrow-right.svg';
+import Video from '../../../../../../components/ui/Video';
+import ArrowLeft from '../../../../../../public/assets/svg/arrow-left.svg';
+import ArrowRight from '../../../../../../public/assets/svg/arrow-right.svg';
 
 interface File {
   fileUrl: string;

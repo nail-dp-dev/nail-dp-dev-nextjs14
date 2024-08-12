@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import PostHeartIcon from '../icons/PostHeartIcon';
 import PostChatIcon from '../icons/PostChatIcon';
 import PostShareIcon from '../icons/PostShareIcon';
-import { PostsDetailData } from '../../../../../../types/dataType';
+import { PostsDetailData } from '../../../../../../../types/dataType';
 import PostHeartFillIcon from '../icons/PostHeartFillIcon';
-import { getPostsData } from '../../../../../../api/post/getPostsData';
-import PostShareButton from '../../../../../../components/buttons/PostShareButton';
+import { getPostsData } from '../../../../../../../api/post/getPostsData';
+import PostShareButton from '../../../../../../../components/buttons/PostShareButton';
 
 interface PostCountProps {
   post: PostsDetailData['data'];

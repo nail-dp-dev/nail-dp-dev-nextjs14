@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import UserImage from '../../../../../../components/ui/UserImage';
+import UserImage from '../../../../../../../components/ui/UserImage';
 import EmoticonIcon from '../../../../../../public/assets/svg/emoticon.svg';
-import { AddCommentType } from '../../../../../../hooks/useComments';
-import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
+import { AddCommentType } from '../../../../../../../hooks/useComments';
+import { selectLoginStatus } from '../../../../../../../store/slices/loginSlice';
 import { useSelector } from 'react-redux';
-import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
+import useLoggedInUserData from '../../../../../../../hooks/user/useLoggedInUserData';
 import ReplyBar from './ReplyBar';
 
 type ChattingBarProps = {

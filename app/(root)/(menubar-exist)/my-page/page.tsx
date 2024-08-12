@@ -44,6 +44,9 @@ export default function MyPagePage() {
   const [isNickname, setIsNickname] = useState('');
   const layoutNum = useSelector(selectNumberOfBoxes);
 
+  console.log(isTempData);
+  
+
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
@@ -139,7 +142,7 @@ export default function MyPagePage() {
           className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
         >
           <PostCreate />
-          {isTempData &&
+          {isTempData.length > 1 &&
             isTempData.map((item, index) => {
               return (
                 <PostBox
