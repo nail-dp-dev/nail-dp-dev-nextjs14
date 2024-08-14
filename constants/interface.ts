@@ -1,10 +1,12 @@
 export interface CategoryElement {
   name: string;
-  url: string;
+  desc: string;
 }
 
 export interface CategoryBarProps {
   elements: CategoryElement[];
+  category:string,
+  setCategory: React.Dispatch<React.SetStateAction<string>>
 }
 
 export interface IconButtonProps {
@@ -12,6 +14,7 @@ export interface IconButtonProps {
   height: string;
   isClicked?: boolean;
   isGetAllLiked?: boolean;
+  active?: boolean;
 }
 
 export interface PostBoxNewProps {
@@ -21,7 +24,8 @@ export interface PostBoxNewProps {
   like?:boolean,
   saved: boolean 
   createdDate: any,
-  tempPost?:boolean
+  tempPost?: boolean
+  setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export interface ArchiveBoxNewProps {
   archiveId: number,
@@ -36,6 +40,9 @@ export interface ProfileMiniModalProps {
   isMiniModalShow: boolean;
   setIsMiniModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setUserProfileUrl: React.Dispatch<React.SetStateAction<string>>;
+}
+export interface PostsBoxProps {
+  setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MenuElementsProps{

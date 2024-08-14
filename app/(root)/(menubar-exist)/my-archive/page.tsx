@@ -1,21 +1,20 @@
 'use client'
 
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 import { myArchiveElements } from '../../../../constants/index';
 import ListIcon from '../../../../public/assets/svg/my-archive-list.svg'
 import AlbumIcon from '../../../../public/assets/svg/my-archive-album.svg'
+import LoginSuggestModal from '../../../../components/modal/mini/LoginSuggestModal';
 
 export default function MyArchivePage() {
 
   const isLoggedIn = useSelector(selectLoginStatus);
-  const router = useRouter()
   const [category, setCategory] = useState('archive')
   const [showType, setShowType] = useState('album')
 
-  const clickNav = (e:any, name:string) => {
+  const clickCategory = (e:any, name:string) => {
     e.stopPropagation()
     setCategory(name)
   }
@@ -24,12 +23,6 @@ export default function MyArchivePage() {
     e.stopPropagation()
     setShowType(type)
   }
-
-  useEffect(() => {
-    if (isLoggedIn === 'loggedOut') {
-      router.back()
-    }
-  },[])
 
   return (
     isLoggedIn === 'loggedIn' ?
@@ -42,10 +35,10 @@ export default function MyArchivePage() {
                     <button
                       key={index}
                       
-                      onClick={(e) => { clickNav(e, item.name) }}
+                      onClick={(e) => { clickCategory(e, item.name) }}
                       className={`${category === item.name ? 'border-mainPurple' : 'border-navMenuBotSolidGray'} h-[54px] border-b-[3px]   hover:border-mainPurple`}
                     >
-                      <span className='text-[0.785rem] text-textBlack font-[700]'>{item.desc}</span>
+                      <span className='text-[0.875rem] text-textBlack font-[700]'>{item.desc}</span>
                     </button>
                   ))
               }
@@ -75,6 +68,7 @@ export default function MyArchivePage() {
     isLoggedIn == 'loggedOut' &&
     <div>
       로그인이 필요한 페이지입니다.
+      <LoginSuggestModal/>
     </div>
   );
 }

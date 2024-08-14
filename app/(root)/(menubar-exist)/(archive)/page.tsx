@@ -1,38 +1,43 @@
-'use client';
+'use client'
 
-import React, { useEffect, useRef, useState } from 'react';
-import PostBox from './PostBox';
-import Loading from '../../app/loading';
-import { usePathname } from 'next/navigation';
-import { getArchivePath, getPostsNumber } from '../../constants';
-import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import CategoryBar from '../../../../components/bars/CategoryBar';
+import { archiveCategoryElements, getPostsNumber } from '../../../../constants';
+import Loading from '../../../loading';
+import LoginSuggestModal from '../../../../components/modal/mini/LoginSuggestModal';
 import { useSelector } from 'react-redux';
-import { PostArray } from '../../types/dataType';
-import { getAllPostsData } from '../../api/post/getAllPostsData';
-import { selectButtonState } from '../../store/slices/getLikedPostsSlice';
-import { getLikedPosts } from '../../api/post/getLikedPostsData';
+import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
+import { selectButtonState } from '../../../../store/slices/getLikedPostsSlice';
+import { getAllPostsData } from '../../../../api/post/getAllPostsData';
+import { PostArray } from '../../../../types/dataType';
+import { getLikedPosts } from '../../../../api/post/getLikedPostsData';
+import PostBox from '../../../../components/boxes/PostBox';
+import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 
-export default function PostsBox() {
-  const path = usePathname() as '/' | '/new' | '/trending';
-  const category = getArchivePath[path].result;
+export default function ArchivePage() {
+
+  const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
+
+  const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] = useState<boolean>(false);
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
+  const [category, setCategory] = useState<string>('for-you')
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cursorId, setCursorId] = useState<number>(0);
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [postsData, setPostsData] = useState<PostArray[]>([]);
-  const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] =
-    useState<boolean>(true);
+  const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] = useState<boolean>(true);
   const [isLikedPostsLast, setIsLikedPostsLast] = useState<boolean>(false);
   const [isLikedPostsLoading, setIsLikedPostsLoading] = useState<boolean>(true);
   const [cursorLikedId, setCursorLikedId] = useState<number>(0);
-  const [isLikedPostsContentExist, setIsLikedPostsContentExist] =
-    useState<boolean>(false);
+  const [isLikedPostsContentExist, setIsLikedPostsContentExist] = useState<boolean>(false);
   const [likedPostsMessage, setLikedPostsMessage] = useState<string>('');
   const [likedPostsData, setLikedPostsData] = useState<PostArray[]>([]);
+
+  const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const likedPostsBottomRef = useRef<HTMLDivElement>(null);
   const likedButtonState = useSelector(selectButtonState);
@@ -96,6 +101,8 @@ export default function PostsBox() {
       return;
     }
 
+    console.log('fetch...')
+    
     if (isFirstRendering) {
       fetchMorePosts();
       console.log('fetch,,,');
@@ -128,12 +135,14 @@ export default function PostsBox() {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, cursorId, isLast, fetchMorePosts, isContentExist]);
+  }, [isLoading, isLast ,category]);
 
   useEffect(() => {
     if (!likedButtonState) {
       return;
     }
+
+    console.log('likedButtonState')
 
     if (isLikedPostsFirstRendering && likedButtonState) {
       fetchMorePostsByLikedButton();
@@ -198,6 +207,19 @@ export default function PostsBox() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
+  useEffect(() => {
+    setCursorId(0);
+    setMessage('');
+    setIsContentExist(false);
+    setPostsData([]);
+    setIsFirstRendering(true);
+    setIsLoading(true);
+    setIsLast(false);
+    if (isLoggedIn === 'loggedOut') {
+      setCategory('trending')
+    }
+  },[category, isLoggedIn])
+
   const itemsToRender = postsData
     ? postsData.length <= layoutNum
       ? postsData
@@ -205,46 +227,61 @@ export default function PostsBox() {
     : [];
 
   return (
-    <div className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all">
-      {!likedButtonState &&
-        isContentExist &&
-        !isLoading &&
-        itemsToRender.map((item, index) => (
-          <PostBox
-            key={index}
-            postId={item.postId}
-            photoId={item.photoId}
-            photoUrl={item.photoUrl}
-            like={item.like}
-            saved={item.saved}
-            createdDate={item.createdDate}
-          />
-        ))}
-      {!likedButtonState && !isContentExist && isLoading && <Loading />}
-      {!likedButtonState && !isContentExist && !isLoading && (
-        <div>{message}</div>
-      )}
-      {likedButtonState &&
-        isLikedPostsContentExist &&
-        !isLikedPostsLoading &&
-        likedPostsData.map((item, index) => (
-          <PostBox
-            key={index}
-            postId={item.postId}
-            photoId={item.photoId}
-            photoUrl={item.photoUrl}
-            like={item.like}
-            saved={item.saved}
-            createdDate={item.createdDate}
-          />
-        ))}
-      {likedButtonState && !isLikedPostsContentExist && isLikedPostsLoading && (
-        <Loading />
-      )}
-      {likedButtonState &&
-        !isLikedPostsContentExist &&
-        !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
-      <div ref={bottomRef} className="bottom-0 h-[1px] w-full"></div>
-    </div>
+    <>
+      <CategoryBar elements={archiveCategoryElements} category={category} setCategory={setCategory}/>
+      <div className='ForYouContainer max-h-full overflow-hidden'>
+        <Suspense fallback={<Loading/>}>
+          <div
+            ref={boxRef}
+            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all">
+            {!likedButtonState &&
+              isContentExist &&
+              !isLoading &&
+              itemsToRender.map((item, index) => (
+                <PostBox
+                  key={index}
+                  postId={item.postId}
+                  photoId={item.photoId}
+                  photoUrl={item.photoUrl}
+                  like={item.like}
+                  saved={item.saved}
+                  createdDate={item.createdDate}
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  />
+                ))}
+            {!likedButtonState && !isContentExist && isLoading && <Loading />}
+            {!likedButtonState && !isContentExist && !isLoading && (
+              <div>{message}</div>
+            )}
+            {likedButtonState &&
+              isLikedPostsContentExist &&
+              !isLikedPostsLoading &&
+              likedPostsData.map((item, index) => (
+                <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                />
+              ))}
+            {likedButtonState && !isLikedPostsContentExist && isLikedPostsLoading && (
+              <Loading />
+            )}
+            {likedButtonState &&
+              !isLikedPostsContentExist &&
+              !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
+            <div ref={bottomRef} className="bottom-0 h-[1px] w-full"></div>
+          </div>
+        </Suspense>
+      </div>
+      {
+        isSuggestLoginModalShow &&
+        <LoginSuggestModal />
+      }
+    </>
   );
 }

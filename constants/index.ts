@@ -12,9 +12,9 @@ export const bottomMenuElements = [
 ]
 
 export const archiveCategoryElements = [
-  { name: 'For You', url: '/' },
-  { name: 'Trending', url: '/trending' },
-  { name: 'New', url: '/new' },
+  { name: 'For You', desc: 'for-you' },
+  { name: 'Trending', desc: 'trending' },
+  { name: 'New', desc: 'new' },
 ]
 
 export const myPageCategoryElements = [
@@ -158,6 +158,6 @@ export const shareMenuElements = [
 
 export const myArchiveElements = [
   { name:'archive', desc: '아카이브별'},
-  { name:'made', desc: '제작됨'},
+  { name:'made', desc: '제작된 디자인'},
   { name:'following', desc: '팔로잉'},
 ]
