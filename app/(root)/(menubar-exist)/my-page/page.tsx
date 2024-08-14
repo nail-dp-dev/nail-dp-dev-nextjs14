@@ -44,9 +44,6 @@ export default function MyPagePage() {
   const [isNickname, setIsNickname] = useState('');
   const layoutNum = useSelector(selectNumberOfBoxes);
 
-  console.log(isTempData);
-  
-
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);

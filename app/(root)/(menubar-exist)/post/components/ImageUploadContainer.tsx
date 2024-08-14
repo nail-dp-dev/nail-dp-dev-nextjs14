@@ -1,7 +1,7 @@
 'use client';
 
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
-import CloseIcon from '../../../../../public/assets/svg/bigclose.svg';
+import CloseIcon from '../../../../../public/assets/svg/big-close.svg';
 import PlusIcon from '../../../../../public/assets/svg/image-upload-plus.svg';
 import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.svg';
 import Link from 'next/link';

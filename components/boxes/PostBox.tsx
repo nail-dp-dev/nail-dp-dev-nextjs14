@@ -10,11 +10,12 @@ import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
+import { setCommonModal } from '../../store/slices/modalSlice';
 
 function PostBox({
   postId,
@@ -28,6 +29,7 @@ function PostBox({
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
   const [isLiked, setIsLiked] = useState(like);
+  const dispatch = useDispatch();
 
   const handleHeartClick = async () => {
     if (!isLiked) {
@@ -41,6 +43,8 @@ function PostBox({
 
   const handlePlusClick = () => {
     console.log('Click...Plus!');
+    //모달 확인을 위해 작성 
+    dispatch(setCommonModal("archive"))
   };
 
   const isPhoto =
