@@ -5,6 +5,8 @@ import LoginModal from './loginModal/LoginModal';
 import { selectCommonModalStatus, commonModalClose } from '../../../store/slices/modalSlice';
 import ProfileImageCreateModal from './profileImageCreateModal/ProfileImageCreateModal';
 import AlarmModal from './AlarmModal';
+import MyArchiveModal from './myArchiveModal/MyArchiveModal';
+
 
 export default function CommonModalLayout() {
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
@@ -31,6 +33,10 @@ export default function CommonModalLayout() {
       {
         whichCommonModal === 'alarm' && 
         <AlarmModal onConfirm={handleDeleteConfirm} onCancel={handleCancel} /> 
+      }
+      {
+        whichCommonModal === 'archive' && 
+        <MyArchiveModal/>
       }
     </div>
   );
