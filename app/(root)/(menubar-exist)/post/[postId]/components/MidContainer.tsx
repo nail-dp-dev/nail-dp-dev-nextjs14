@@ -12,6 +12,7 @@ import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
+  postId: number;
   comments: Comment[];
   // comments: CommentData['data']; 
   onAddComment: (newComment: AddCommentType) => void;
@@ -28,6 +29,7 @@ interface MidContainerProps {
 
 export default function MidContainer({
   post,
+  postId,
   comments,
   onLike,
   onReply,
@@ -186,7 +188,7 @@ export default function MidContainer({
         </div>
         <div>
           <div className="postInfo flex flex-wrap items-center justify-between">
-            <PostCount post={post} toggleScroll={toggleScroll} />
+            <PostCount post={post} postId={postId} toggleScroll={toggleScroll} />
             <PostTags post={post} />
           </div>
           <div>

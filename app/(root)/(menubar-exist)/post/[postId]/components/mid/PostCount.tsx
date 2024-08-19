@@ -5,26 +5,55 @@ import PostShareIcon from '../icons/PostShareIcon';
 import { PostsDetailData } from '../../../../../../../types/dataType';
 import PostHeartFillIcon from '../icons/PostHeartFillIcon';
 import PostShareButton from '../../../../../../../components/buttons/PostShareButton';
+import { deleteUnlikePost } from '../../../../../../../api/post/deleteUnlikePost';
+import { postLikePost } from '../../../../../../../api/post/postLikePost';
+import { getPostLikeCount } from '../../../../../../../api/post/getPostLikeCount';
 
 interface PostCountProps {
   post: PostsDetailData['data'];
+  postId: number; 
   toggleScroll: () => void;
 }
 
-export default function PostCount({ post, toggleScroll }: PostCountProps) {
+export default function PostCount({ post, toggleScroll ,postId}: PostCountProps) {
   const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sharedCount, setSharedCount] = useState(post.sharedCount);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleFollowToggle = () => {
-    if (isHeartStatus) {
-      setHeartCount(heartCount - 1);
+  useEffect(() => {
+    if (postId) {
+      const fetchLikeCount = async () => {
+        try {
+          const data = await getPostLikeCount(postId);
+          setHeartCount(data.likeCount);
+        } catch (error) {
+          console.error('Failed to fetch like count', error);
+        }
+      };
+
+      fetchLikeCount();
     } else {
-      setHeartCount(heartCount + 1);
+      console.error('postId is undefined');
     }
-    setIsHeartStatus(!isHeartStatus);
+  }, [postId]);
+
+  const handleFollowToggle = async () => {
+    try {
+      if (isHeartStatus) {
+        await deleteUnlikePost(postId);
+      } else {
+        await postLikePost(postId);
+      }
+
+      const data = await getPostLikeCount(postId);
+      setHeartCount(data.likeCount);
+      setIsHeartStatus(!isHeartStatus);
+    } catch (error) {
+      console.error('Failed to toggle like status', error);
+      alert('좋아요 처리 중 오류가 발생했습니다.');
+    }
   };
 
   const handleShareClick = () => {

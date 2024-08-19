@@ -44,6 +44,7 @@ export default function PostDetailPage() {
       <TopContainer user={userDetail.post} postId={numericPostId} />
       <MidContainer
         post={userDetail.post}
+        postId={numericPostId}
         comments={commentsData.comments}
         onAddComment={commentsData.handleAddComment}
         onAddReply={commentsData.handleAddReply}

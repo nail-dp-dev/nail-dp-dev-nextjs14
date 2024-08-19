@@ -18,8 +18,6 @@ export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
   const [isThumbsUpCount, setIsThumbsUpCount] = useState(item.likeCount);
 
   useEffect(() => {
-    console.log('Initial item:', item);
-    console.log('Initial liked:', item.liked);
     setIsThumbsUpCount(item.likeCount);
     setIsThumbsUpStatus(item.liked || false);
   }, [item.likeCount, item.liked]);
