@@ -5,17 +5,21 @@ import PostShareIcon from '../icons/PostShareIcon';
 import { PostsDetailData } from '../../../../../../../types/dataType';
 import PostHeartFillIcon from '../icons/PostHeartFillIcon';
 import PostShareButton from '../../../../../../../components/buttons/PostShareButton';
+import { getPostLikeCount } from '../../../../../../../api/post/getPostLikeCount';
 import { deleteUnlikePost } from '../../../../../../../api/post/deleteUnlikePost';
 import { postLikePost } from '../../../../../../../api/post/postLikePost';
-import { getPostLikeCount } from '../../../../../../../api/post/getPostLikeCount';
 
 interface PostCountProps {
   post: PostsDetailData['data'];
-  postId: number; 
+  postId: number;
   toggleScroll: () => void;
 }
 
-export default function PostCount({ post, toggleScroll ,postId}: PostCountProps) {
+export default function PostCount({
+  post,
+  toggleScroll,
+  postId,
+}: PostCountProps) {
   const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,32 +27,29 @@ export default function PostCount({ post, toggleScroll ,postId}: PostCountProps)
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (postId) {
-      const fetchLikeCount = async () => {
-        try {
-          const data = await getPostLikeCount(postId);
-          setHeartCount(data.likeCount);
-        } catch (error) {
-          console.error('Failed to fetch like count', error);
-        }
-      };
+    const fetchLikeCount = async () => {
+      try {
+        const data = await getPostLikeCount(postId);
+        setHeartCount(data.likeCount ?? post.likeCount);
+      } catch (error) {
+        console.error('Failed to fetch like count', error);
+        setHeartCount(post.likeCount);
+      }
+    };
 
-      fetchLikeCount();
-    } else {
-      console.error('postId is undefined');
-    }
-  }, [postId]);
+    fetchLikeCount();
+  }, [postId, post.likeCount]);
 
-  const handleFollowToggle = async () => {
+  const handleHeartClick = async () => {
     try {
       if (isHeartStatus) {
         await deleteUnlikePost(postId);
+        setHeartCount(heartCount - 1);
       } else {
         await postLikePost(postId);
+        setHeartCount(heartCount + 1);
       }
 
-      const data = await getPostLikeCount(postId);
-      setHeartCount(data.likeCount);
       setIsHeartStatus(!isHeartStatus);
     } catch (error) {
       console.error('Failed to toggle like status', error);
@@ -87,7 +88,7 @@ export default function PostCount({ post, toggleScroll ,postId}: PostCountProps)
     <div className="flex justify-between py-4">
       <div className="flex gap-[44px] pr-[54px] text-[0.8125rem] font-bold text-darkPurple">
         <div className="flex items-center">
-          <button onClick={handleFollowToggle}>
+          <button onClick={handleHeartClick}>
             {isHeartStatus ? (
               <PostHeartFillIcon className="mr-2 fill-red" />
             ) : (
