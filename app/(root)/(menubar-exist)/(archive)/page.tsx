@@ -207,6 +207,8 @@ export default function ArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
+  console.log('rendering...!')
+
   useEffect(() => {
     setCursorId(0);
     setMessage('');

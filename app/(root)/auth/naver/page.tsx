@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { getNaverAuthCode } from '../../../../api/auth/getNaverAuthCode';
+import { getNaverAuthCode } from '../../../../api/auth/code/getNaverAuthCode';
 
 export default function NaverAuth() {
   const searchParams = useSearchParams();

@@ -32,8 +32,8 @@ export interface ArchiveBoxNewProps {
   photoId: number,
   photoUrl : string,
   like?:boolean,
-  saved: boolean 
-  createdDate: any,
+  saved?: boolean 
+  createdDate?: any,
 }
 
 export interface ProfileMiniModalProps {
