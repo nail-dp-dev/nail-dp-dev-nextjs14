@@ -5,10 +5,9 @@ import ThumbsUpCount from './ThumbsUpCount';
 import ReplyIcon from '../icons/ReplyIcon';
 import Toggle from '../../../../../../../components/buttons/Toggle';
 import CommentOptions from '../CommentOptions';
-import DeleteModal from '../DeleteModal';
 import PostToggleIcon from '../icons/PostToggleIcon';
 import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
-import ReplyItem from './ReplyItem';
+// import ReplyItem from './ReplyItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
 import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
@@ -85,7 +84,7 @@ export default function CommentItem({
 
   // 삭제 모달 표시
   const handleDeleteClick = () => {
-    dispatch(setCommonModal('alarm'));
+    setShowDeleteModal(true); 
     dispatch(
       alarmModalData({
         type: 'two',
@@ -95,6 +94,12 @@ export default function CommentItem({
         imageType: '',
       }),
     );
+  };
+  // 댓글 삭제 처리
+  const handleDeleteConfirm = () => {
+    onDelete(item.commentId, null);  
+    setShowDeleteModal(false);  
+    dispatch(commonModalClose()); 
   };
 
   // 수정 취소
@@ -123,11 +128,6 @@ export default function CommentItem({
     }
   };
 
-  // 댓글 삭제 처리
-  const handleDeleteConfirm = () => {
-    onDelete(item.commentId, null);
-    dispatch(commonModalClose());
-  };
 
   // 신고 버튼 (일단 옵션 닫기로 설정)
   const handleReportClick = () => {
@@ -259,7 +259,7 @@ export default function CommentItem({
             {showOptions && (
               <CommentOptions
                 onEditClick={handleEditClick}
-                onDeleteClick={handleDeleteClick}
+                onDeleteClick={handleDeleteClick} 
                 onReportClick={handleReportClick}
                 onBlockUserClick={handleBlockUserClick}
                 onClose={() => setShowOptions(false)}
@@ -268,7 +268,7 @@ export default function CommentItem({
             )}
           </div>
         </div>
-        {isRotated &&
+        {/* {isRotated &&
           replyData.map((replyItem, index) => (
             <div
               key={`${replyItem.replyId}-${index}`}
@@ -283,9 +283,9 @@ export default function CommentItem({
                 onDelete={onDelete}
               />
             </div>
-          ))}
+          ))} */}
       </div>
-      {whichCommonModal === 'alarm' && isCommonModalShow && (
+      {showDeleteModal && (  // 모달이 표시될 때만 AlarmModal 렌더링
         <AlarmModal onConfirm={handleDeleteConfirm} />
       )}
     </div>

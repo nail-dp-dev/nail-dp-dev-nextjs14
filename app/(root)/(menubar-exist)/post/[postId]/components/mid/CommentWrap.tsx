@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CommentData } from '../../../../../../../types/dataType';
+import React, { useState, useEffect, useRef } from 'react';
 import CommentItem from './CommentItem';
-import { repliesDetail } from '../../../../../../../api/post/getRepliesDetailData';
+import { Comment, CommentData } from '../../../../../../../types/dataType';
 
 interface UserProps {
-  user: CommentData['data'];
+  // user: CommentData['data'];
+  user: Comment[];
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
@@ -22,47 +22,27 @@ const CommentWrap = ({
   onSaveEdit,
   onDelete,
 }: UserProps) => {
-  const [sortType, setSortType] = useState<'latest' | 'popular'>('popular');
-  const [sortedComments, setSortedComments] = useState<CommentData['data']>([]);
-  const commentsEndRef = useRef<HTMLDivElement>(null);
-
-  const sortComments = useCallback(
-    (comments: CommentData['data'], type: 'latest' | 'popular') => {
-      return [...comments].sort((a, b) => {
-        if (type === 'latest') {
-          return (
-            new Date(b.commentDate).getTime() -
-            new Date(a.commentDate).getTime()
-          );
-        }
-        if (type === 'popular') {
-          const likeDiff = b.likeCount - a.likeCount;
-          if (likeDiff !== 0) return likeDiff;
-
-          const replyCountA =
-            repliesDetail.find((reply) => reply.commentId === a.commentId)?.data
-              .length || 0;
-          const replyCountB =
-            repliesDetail.find((reply) => reply.commentId === b.commentId)?.data
-              .length || 0;
-
-          const replyDiff = replyCountB - replyCountA;
-          if (replyDiff !== 0) return replyDiff;
-
-          return (
-            new Date(b.commentDate).getTime() -
-            new Date(a.commentDate).getTime()
-          );
-        }
-        return 0;
-      });
-    },
-    [],
-  );
-
   useEffect(() => {
-    setSortedComments(sortComments(user, sortType));
-  }, [sortType, user, sortComments]);
+    console.log('Comments in CommentWrap:', user);
+  }, [user]);
+
+  const [sortType, setSortType] = useState<'latest' | 'popular'>('popular');
+  const [sortedComments, setSortedComments] = useState<Comment[]>([]);
+  useEffect(() => {
+    if (user && user.length > 0) {
+      const sorted =
+        sortType === 'latest'
+          ? [...user].sort(
+              (a, b) =>
+                new Date(b.commentDate).getTime() -
+                new Date(a.commentDate).getTime(),
+            )
+          : [...user].sort((a, b) => b.likeCount - a.likeCount);
+  
+      setSortedComments(sorted);
+    }
+  }, [user, sortType]);
+  
 
   return (
     <>
@@ -90,17 +70,20 @@ const CommentWrap = ({
         className="w-full overflow-y-hidden rounded-2.5xl
         bg-purple bg-opacity-20 transition-all duration-300"
       >
-        {sortedComments.map((item) => (
-          <CommentItem
-            key={item.commentId}
-            item={item}
-            onLike={onLike}
-            onReply={onReply}
-            onSaveEdit={onSaveEdit}
-            onDelete={onDelete}
-          />
-        ))}
-        <div ref={commentsEndRef} />
+        {sortedComments.length > 0 ? (
+          sortedComments.map((item) => (
+            <CommentItem
+              key={item.commentId}
+              item={item}
+              onLike={onLike}
+              onReply={onReply}
+              onSaveEdit={onSaveEdit}
+              onDelete={onDelete}
+            />
+          ))
+        ) : (
+          <p className="py-4 text-center">댓글이 없습니다.</p>
+        )}
       </div>
     </>
   );

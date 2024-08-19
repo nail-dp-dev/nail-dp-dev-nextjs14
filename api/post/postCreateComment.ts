@@ -1,19 +1,20 @@
-export const getCommentData = async (
+export const postCreateComment = async (
   postId: number,
-  cursorId: number | null = null,
+  commentContent: string,
 ) => {
-  const url = new URL(
-    `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/comment`,
-  );
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/comment`;
 
+  console.log('API URL:', url);
+  console.log('Request body:', JSON.stringify({ commentContent }));
 
   try {
-    const response = await fetch(url.toString(), {
-      method: 'GET',
+    const response = await fetch(url, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
+      body: JSON.stringify({ commentContent }),
     });
 
     console.log('API Response Status:', response.status);
@@ -24,9 +25,9 @@ export const getCommentData = async (
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    return data;
+    return data.data;
   } catch (error) {
-    console.error('Error fetching comments:', error);
+    console.error('Error creating comment:', error);
     return null;
   }
 };

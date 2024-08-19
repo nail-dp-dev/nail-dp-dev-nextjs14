@@ -1,11 +1,10 @@
-'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import ImageSlider from './ImageSlider';
-import { CommentData, PostsDetailData } from '../../../../../../types/dataType';
+import { Comment, CommentData, PostsDetailData } from '../../../../../../types/dataType';
 import { AddCommentType } from '../../../../../../hooks/useComments';
 import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
@@ -13,14 +12,15 @@ import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
-  comments: CommentData['data'];
+  comments: Comment[];
+  // comments: CommentData['data']; 
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
-    parentId: number | null, //parentId: 대댓글이 속한 부모 댓글(지울 예정)
+    parentId: number | null,
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
@@ -34,6 +34,9 @@ export default function MidContainer({
   onSaveEdit,
   onDelete,
 }: MidContainerProps) {
+  useEffect(() => {
+    console.log('Received comments in MidContainer:', comments); 
+  }, [comments]);
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
   const INITIAL_WIDTH = MAX_WIDTH;
@@ -131,7 +134,7 @@ export default function MidContainer({
             "
         >
           <div
-            className={`ImageBox relative aspect-square rounded-2xl bg-textLightYellow transition-all 
+            className={`ImageBox relative aspect-square rounded-2xl transition-all 
             duration-300 ${
               imageBoxWidth >= 500
                 ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'

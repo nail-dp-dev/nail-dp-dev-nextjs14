@@ -4,7 +4,6 @@ import PostChatIcon from '../icons/PostChatIcon';
 import PostShareIcon from '../icons/PostShareIcon';
 import { PostsDetailData } from '../../../../../../../types/dataType';
 import PostHeartFillIcon from '../icons/PostHeartFillIcon';
-import { getPostsData } from '../../../../../../../api/post/getPostsData';
 import PostShareButton from '../../../../../../../components/buttons/PostShareButton';
 
 interface PostCountProps {
@@ -13,13 +12,12 @@ interface PostCountProps {
 }
 
 export default function PostCount({ post, toggleScroll }: PostCountProps) {
-  const [isHeartStatus, setIsHeartStatus] = useState(false);
+  const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sharedCount, setSharedCount] = useState(post.sharedCount);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  
   const handleFollowToggle = () => {
     if (isHeartStatus) {
       setHeartCount(heartCount - 1);

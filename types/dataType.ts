@@ -10,8 +10,8 @@ export type UserData = {
     saveCount: number;
     followerCount: number;
     point: number;
-    profileUrl: string,
-    folloingCount: number
+    profileUrl: string;
+    folloingCount: number;
   };
 };
 
@@ -26,45 +26,45 @@ export type SignUpData = {
 };
 
 export type AllPostsData = {
-    code : number,
-    message: string,
-    data: {
-        totalPage:number,
-        totalElements:number,
-        first:boolean,
-        last:boolean,
-        size:number,
-        content: [ 
-            {
-                postId:number,
-                photoId:number,
-                photoUrl:string,
-                like:boolean,
-                saved:boolean
-            },
-        ],
-        number:number,
-        sort: {
-            empty:boolean,
-            sorted:boolean,
-            unsorted:boolean
-        },
-        numberOfElements:number,
-        pageable:{
-            pageNumber:number,
-            pageSize:number,
-            sort:{
-                empty:boolean,
-                sorted:boolean,
-                unsorted:boolean
-            },
-            offset:number,
-            paged:boolean,
-            unpaged:boolean
-        },
-        empty:boolean
-    }
-}
+  code: number;
+  message: string;
+  data: {
+    totalPage: number;
+    totalElements: number;
+    first: boolean;
+    last: boolean;
+    size: number;
+    content: [
+      {
+        postId: number;
+        photoId: number;
+        photoUrl: string;
+        like: boolean;
+        saved: boolean;
+      },
+    ];
+    number: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    numberOfElements: number;
+    pageable: {
+      pageNumber: number;
+      pageSize: number;
+      sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+      };
+      offset: number;
+      paged: boolean;
+      unpaged: boolean;
+    };
+    empty: boolean;
+  };
+};
 
 export type PostArray = {
   postId: number;
@@ -73,7 +73,7 @@ export type PostArray = {
   like: boolean;
   saved: boolean;
   createdDate: any;
-}
+};
 
 export type PostsData = {
   success: boolean;
@@ -106,11 +106,12 @@ export type PostsDetailData = {
     followerCount: number;
     files: {
       fileUrl: string;
-      photo: boolean;  
-      video: boolean; 
+      photo: boolean;
+      video: boolean;
     }[];
     postContent: string;
     likeCount: number;
+    liked: boolean;
     commentCount: number;
     sharedCount: number;
     tags: string[];
@@ -120,7 +121,21 @@ export type CommentData = {
   success: boolean;
   code: number;
   postId: number;
-  data: Comment[];
+  data: {
+    length: number;
+    contents: {
+      content: Comment[];
+      empty: boolean;
+      first: boolean;
+      last: boolean;
+      number: number;
+      numberOfElements: number;
+      size: number;
+      sort: { empty: boolean; unsorted: boolean; sorted: boolean };
+      pageable: Pageable;
+    };
+    cursorId: number;
+  };
 };
 
 export type Comment = {
@@ -130,8 +145,19 @@ export type Comment = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
+  isLiked?: boolean;
   replies?: Reply[];
   edited?: boolean;
+  replyCount: number;
+};
+
+export type Pageable = {
+  pageNumber: number;
+  pageSize: number;
+  sort: { empty: boolean; unsorted: boolean; sorted: boolean };
+  offset: number;
+  paged: boolean;
+  unpaged: boolean;
 };
 
 export type ReplyData = {
@@ -148,21 +174,21 @@ export type Reply = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
+  isLiked?: boolean;
   edited?: boolean;
 };
-
 export type PostCreateData = {
-    postContent: string,
-    tags: { tagName: string}[],
-    tempSave: boolean,
-    boundary:string,
-    photos : {media_file:string}[]
+  postContent: string;
+  tags: { tagName: string }[];
+  tempSave: boolean;
+  boundary: string;
+  photos: { media_file: string }[];
 };
 
 export type TempPostCreateData = {
-  postContent?: string,
-  tags?: { tagName: string}[],
-  tempSave: boolean,
-  boundary:string,
-  photos?: {media_file:string}[]
+  postContent?: string;
+  tags?: { tagName: string }[];
+  tempSave: boolean;
+  boundary: string;
+  photos?: { media_file: string }[];
 };
