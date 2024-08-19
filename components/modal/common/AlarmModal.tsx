@@ -9,9 +9,10 @@ import {
 
 interface AlarmModalProps {
   onConfirm: () => void;
+  onCancel: () => void;
 }
 
-export default function AlarmModal({ onConfirm }: AlarmModalProps) {
+export default function AlarmModal({ onConfirm, onCancel }: AlarmModalProps) {
   const dispatch = useDispatch();
   const { isCommonModalShow, whichCommonModal } = useSelector(
     selectCommonModalStatus,
@@ -58,7 +59,7 @@ export default function AlarmModal({ onConfirm }: AlarmModalProps) {
           <div className="flex">
             <div className="w-1/2 text-center hover:bg-purple hover:bg-opacity-10">
               <button
-                onClick={closeModal}
+                onClick={onCancel}
                 className="px-[60px] py-[14px] font-bold"
               >
                 취소

@@ -101,6 +101,12 @@ export default function CommentItem({
     setShowDeleteModal(false);  
     dispatch(commonModalClose()); 
   };
+  
+  // 댓글 삭제 취소
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);  
+    dispatch(commonModalClose()); 
+  };
 
   // 수정 취소
   const handleCancelEdit = () => {
@@ -285,8 +291,8 @@ export default function CommentItem({
             </div>
           ))} */}
       </div>
-      {showDeleteModal && (  // 모달이 표시될 때만 AlarmModal 렌더링
-        <AlarmModal onConfirm={handleDeleteConfirm} />
+      {showDeleteModal && ( 
+        <AlarmModal onConfirm={handleDeleteConfirm} onCancel={handleCancelDelete}/>
       )}
     </div>
   );
