@@ -227,6 +227,7 @@ export default function CommentItem({
                   item={{
                     commentId: item.commentId,
                     likeCount: item.likeCount,
+                    liked: item.liked,
                   }}
                   onLike={handleLike}
                 />

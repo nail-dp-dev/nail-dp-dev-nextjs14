@@ -145,7 +145,7 @@ export type Comment = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
-  isLiked?: boolean;
+  liked?: boolean;
   replies?: Reply[];
   edited?: boolean;
   replyCount: number;
@@ -174,7 +174,7 @@ export type Reply = {
   commentDate: string;
   commentContent: string;
   likeCount: number;
-  isLiked?: boolean;
+  liked?: boolean;
   edited?: boolean;
 };
 export type PostCreateData = {

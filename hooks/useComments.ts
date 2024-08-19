@@ -3,6 +3,9 @@ import { Comment } from '../types/dataType';
 import { postCreateComment } from '../api/post/postCreateComment';
 import { deleteComment } from '../api/post/deleteComment';
 import { patchEditComment } from '../api/post/patchEditComment';
+import { deleteUnlikeComment } from '../api/post/deleteUnlikeComment';
+import { postLikeComment } from '../api/post/postLikeComment';
+import { getLikeComment } from '../api/post/getLikeComment';
 
 export type AddCommentType = {
   commentId?: number;
@@ -84,26 +87,66 @@ export default function useComments(
     [],
   );
 
-  // 댓글에 좋아요 추가 or 제거
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      if (postId !== null) {
+        try {
+          const updatedComments = await Promise.all(
+            comments.map(async (comment) => {
+              const { likeCount, liked } = await getLikeComment(postId, comment.commentId);
+              return { ...comment, likeCount, liked };
+            })
+          );
+          setComments(updatedComments);
+        } catch (error) {
+          console.error('Failed to fetch like status:', error);
+        }
+      }
+    };
+    fetchLikeStatus();
+  }, [postId]);
+
+  // 댓글에 좋아요 추가 or 취소
   const handleLike = useCallback(
-    (id: number, increment: number, isReply: boolean) => {
-      setComments((prevComments) =>
-        prevComments.map((comment) => ({
-          ...comment,
-          likeCount:
-            !isReply && comment.commentId === id
-              ? comment.likeCount + increment
-              : comment.likeCount,
-          replies: (comment.replies || []).map((reply) =>
-            isReply && reply.replyId === id
-              ? { ...reply, likeCount: reply.likeCount + increment }
-              : reply,
-          ),
-        })),
-      );
+    async (id: number, increment: number, isReply: boolean) => {
+      if (postId === null) {
+        console.error('Post ID is null. Cannot like comment.');
+        return;
+      }
+
+      try {
+        if (increment > 0) {
+          await postLikeComment(postId, id);
+        } else {
+          await deleteUnlikeComment(postId, id);
+        }
+
+        setComments((prevComments) =>
+          prevComments.map((comment) => ({
+            ...comment,
+            likeCount:
+              !isReply && comment.commentId === id
+                ? comment.likeCount + increment
+                : comment.likeCount,
+                liked:
+              !isReply && comment.commentId === id
+                ? increment > 0
+                : comment.liked,
+            replies: (comment.replies || []).map((reply) =>
+              isReply && reply.replyId === id
+                ? { ...reply, likeCount: reply.likeCount + increment }
+                : reply,
+            ),
+          })),
+        );
+      } catch (error) {
+        console.error('Error updating like status:', error);
+      }
     },
-    [],
+    [postId],
   );
+
+
 
   // 댓글 내용 수정
   const handleSaveEdit = useCallback(
