@@ -11,7 +11,7 @@ import ArchiveBox from '../../../../components/boxes/ArchiveBox';
 
 export default function MyArchivePage() {
 
-  console.log('MyArchivePage rendered');  // 컴포넌트가 렌더링될 때마다 로그 출력
+  console.log('MyArchivePage rendered');
 
   const isLoggedIn = useSelector(selectLoginStatus);
   const [category, setCategory] = useState('archive')
@@ -24,7 +24,7 @@ export default function MyArchivePage() {
 
   const clickCategory = (e: any, name: string) => {
     e.stopPropagation()
-    console.log(`Category clicked: ${name}`);  // 카테고리 버튼 클릭 시 로그 출력
+    console.log(`Category clicked: ${name}`);  
     setCategory(name)
   }
 
@@ -75,7 +75,6 @@ export default function MyArchivePage() {
                 myArchiveElements.map((item, index) => (
                   <button
                     key={index}
-                    
                     onClick={(e) => { clickCategory(e, item.name) }}
                     className={`${category === item.name ? 'border-mainPurple' : 'border-navMenuBotSolidGray'} h-[54px] border-b-[3px]   hover:border-mainPurple`}
                   >
