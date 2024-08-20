@@ -28,12 +28,15 @@ export interface PostBoxNewProps {
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export interface ArchiveBoxNewProps {
+  showType: string,
   archiveId: number,
   photoId: number,
   photoUrl : string,
   like?:boolean,
   saved?: boolean 
   createdDate?: any,
+  archiveName: string,
+  postCount: number
 }
 
 export interface ProfileMiniModalProps {

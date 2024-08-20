@@ -16,7 +16,7 @@ export default function MyArchiveTopBar() {
 
   return (
     isLoggedIn === 'loggedIn' &&
-    <div className='makeNewArchiveBar w-full h-[62px] px-[5px] flex items-center justify-between'>
+    <div className='makeNewArchiveBar w-full h-[62px] px-[5px] flex items-center justify-between bg-kakaoYellow'>
       <span className='text-[1.75rem] font-[700] text-textBlack'>저장한 네일아트 디자인</span>
         <button
           onClick={(e)=>{makeNewArchive(e)}}

@@ -22,6 +22,8 @@ export default function LoginInfoBox() {
   const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
+  console.log(isLoggedIn)
+
   const handleLogin = () => {
     dispatch(commonModalClose())
     dispatch(setCommonModal('login'));
@@ -62,14 +64,17 @@ export default function LoginInfoBox() {
       window.removeEventListener('keydown', handleKeyDown);
     };
 
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log('loginInfoBox rendering...')
 
 
   return (
     <div className={`loginInfoContainer flex flex-col w-full ${isLoggedIn === 'loggedIn' ? 'h-[85px]' : 'h-[60px]'} transition-all`}>
       <div className="loginedDiv relative w-full flex items-center h-[45px] mb-[2px]">
-        {isLoggedIn === 'loggedIn' && userData && 
+        {isLoggedIn === 'loggedIn' && userData &&
           (
           <>
             <button
@@ -88,11 +93,11 @@ export default function LoginInfoBox() {
         )
         }
         {
-          isLoggedIn === 'pending' && !userData && 
+          isLoggedIn === 'pending' && !userData &&
           <></>
         }
         {
-          isLoggedIn === 'loggedOut' && 
+          isLoggedIn === 'loggedOut' &&
           (
             <UserImage src={'/assets/img/logoutProfileImage.png'} alt={'profileIamge'} width={40} height={40}/>
           )
@@ -158,5 +163,6 @@ export default function LoginInfoBox() {
         </div>
       }
     </div>
+
   );
 }

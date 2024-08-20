@@ -1,6 +1,7 @@
+import React from 'react';
 import SearchBar from '../../../../components/bars/search/SearchBar';
 
-export default function ArchiveLayout({
+function ArchiveLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -16,3 +17,5 @@ export default function ArchiveLayout({
     </section>
   );
 }
+
+export default React.memo(ArchiveLayout)

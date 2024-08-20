@@ -4,22 +4,24 @@ import GeneralSetting from './GeneralSetting';
 import GeneralShareMenu from './GeneralShareMenu';
 import { archiveActionElements, postActionElements } from '../../../constants';
 import { Icons } from '../../../constants/icons';
+import { postCloneArchiveCreate } from '../../../api/archive/postCloneArchiveCreate';
+import { deleteArchiveCreate } from '../../../api/archive/deleteArchive';
 
 interface GeneralActionProps {
+  archiveId?: number;
   type: 'archive' | 'post';
   onSettingClick?: () => void;
-  onCopyClick?: () => void;
-  onEditClick?: () => void;
+  onCopyClick?: (archiveId: number) => void;
+  onEditClick?: (archiveId: number) => void;
   onShareClick?: () => void;
-  onDeleteClick?: () => void;
 }
 
 // 메뉴 게시물/아카이브
 export default function GeneralAction({
+  archiveId,
   type,
-  onCopyClick = () => console.log('복제 클릭됨'),
-  onEditClick = () => console.log('수정 클릭됨'),
-  onDeleteClick = () => console.log('삭제 클릭됨'),
+  onCopyClick = (archiveId) => {postCloneArchiveCreate(archiveId)},
+  onEditClick = (archiveId) => {postCloneArchiveCreate(archiveId)},
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -37,6 +39,15 @@ export default function GeneralAction({
   const handleBackClick = () => {
     setShowSetting(false);
     setShowShareMenu(false);
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>, archiveId?: number) => {
+    e.stopPropagation();
+    if (archiveId !== undefined) {
+      deleteArchiveCreate(archiveId);
+    } else {
+      console.error('Archive ID is undefined');
+    }
   };
 
   if (showSetting) {
@@ -73,10 +84,10 @@ export default function GeneralAction({
                 ? handleSettingClick
                 : item.label.includes('공유')
                   ? handleShareClick
-                  : item.label.includes('복제')
-                    ? onCopyClick
-                    : item.label.includes('수정')
-                      ? onEditClick
+                  : item.label.includes('복제') && archiveId !== undefined
+                    ? () => onCopyClick(archiveId)
+                    : item.label.includes('수정') && archiveId !== undefined
+                      ? () => onEditClick(archiveId)
                       : item.onClick
             }
             className="flex cursor-pointer items-center justify-center 
@@ -88,14 +99,13 @@ export default function GeneralAction({
         );
       })}
       <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
-      <div
-        className="group/item flex items-center justify-center 
-        px-2 pt-[5px] hover:font-bold hover:text-red"
-        onClick={onDeleteClick}
+      <button
+        className="group/item flex items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
+        onClick={(e) => handleDeleteClick(e, archiveId)}
       >
         <MenuDeleteIcon className="mr-2 fill-darkPurple group-hover/item:fill-red" />
         {type === 'archive' ? '아카이브 삭제' : '게시물 삭제'}
-      </div>
+      </button>
     </div>
   );
 }
