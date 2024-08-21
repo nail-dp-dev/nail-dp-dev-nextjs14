@@ -109,7 +109,7 @@ function PostBox({
       </button>
       {showGeneralAction && (
         <div className="absolute left-5 top-0 z-20">
-          <GeneralAction type="post" />
+          <GeneralAction type="post" postId={postId}/>
         </div>
       )}
     </div>

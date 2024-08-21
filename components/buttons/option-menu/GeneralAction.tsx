@@ -4,9 +4,11 @@ import GeneralSetting from './GeneralSetting';
 import GeneralShareMenu from './GeneralShareMenu';
 import { archiveActionElements, postActionElements } from '../../../constants';
 import { Icons } from '../../../constants/icons';
+import Link from 'next/link';
 
 interface GeneralActionProps {
   type: 'archive' | 'post';
+  postId: number;
   onSettingClick?: () => void;
   onCopyClick?: () => void;
   onEditClick?: () => void;
@@ -17,6 +19,7 @@ interface GeneralActionProps {
 // 메뉴 게시물/아카이브
 export default function GeneralAction({
   type,
+  postId,
   onCopyClick = () => console.log('복제 클릭됨'),
   onEditClick = () => console.log('수정 클릭됨'),
   onDeleteClick = () => console.log('삭제 클릭됨'),
@@ -82,8 +85,17 @@ export default function GeneralAction({
             className="flex cursor-pointer items-center justify-center 
             rounded-xl px-2 pb-[10px] hover:font-bold"
           >
-            <IconComponent className="mr-2 fill-textDarkPurple" />
-            {item.label}
+            {item.label.includes('수정') ? (
+              <Link href={`/post/edit/${postId}`} className="flex items-center">
+                <IconComponent className="mr-2 fill-textDarkPurple" />
+                {item.label}
+              </Link>
+            ) : (
+              <>
+                <IconComponent className="mr-2 fill-textDarkPurple" />
+                {item.label}
+              </>
+            )}
           </div>
         );
       })}
