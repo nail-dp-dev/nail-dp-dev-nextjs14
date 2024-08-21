@@ -6,6 +6,7 @@ import { patchEditComment } from '../api/post/patchEditComment';
 import { deleteUnlikeComment } from '../api/post/deleteUnlikeComment';
 import { postLikeComment } from '../api/post/postLikeComment';
 import { getLikeComment } from '../api/post/getLikeComment';
+import { getCommentData } from '../api/post/getCommentsDetailData';
 
 export type AddCommentType = {
   commentId?: number;
@@ -22,12 +23,41 @@ export default function useComments(
   initialComments: Comment[],
 ) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (postId !== null && initialComments.length > 0) {
       setComments(initialComments);
+      setCursorId(initialComments[initialComments.length - 1]?.commentId || null); // 초기 cursorId 설정
+      setIsLastPage(false);
     }
   }, [postId, initialComments]);
+
+  const fetchMoreComments = useCallback(async () => {
+    if (postId === null || isLastPage || isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const data = await getCommentData(postId, cursorId);
+      if (data?.data?.contents?.content.length > 0) {
+        setComments((prevComments) => [
+          ...prevComments,
+          ...data.data.contents.content,
+        ]);
+        setCursorId(data.data.contents.content[data.data.contents.content.length - 1]?.commentId || null); // 새 cursorId로 갱신
+        setIsLastPage(data.data.contents.last);
+      } else {
+        setIsLastPage(true);
+      }
+    } catch (error) {
+      console.error('Error fetching more comments:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [postId, cursorId, isLastPage, isLoading]);
+
   // 새로운 댓글 추가
   const handleAddComment = useCallback(
     async (newComment: AddCommentType) => {
@@ -93,9 +123,12 @@ export default function useComments(
         try {
           const updatedComments = await Promise.all(
             comments.map(async (comment) => {
-              const { likeCount, liked } = await getLikeComment(postId, comment.commentId);
+              const { likeCount, liked } = await getLikeComment(
+                postId,
+                comment.commentId,
+              );
               return { ...comment, likeCount, liked };
-            })
+            }),
           );
           setComments(updatedComments);
         } catch (error) {
@@ -128,7 +161,7 @@ export default function useComments(
               !isReply && comment.commentId === id
                 ? comment.likeCount + increment
                 : comment.likeCount,
-                liked:
+            liked:
               !isReply && comment.commentId === id
                 ? increment > 0
                 : comment.liked,
@@ -145,8 +178,6 @@ export default function useComments(
     },
     [postId],
   );
-
-
 
   // 댓글 내용 수정
   const handleSaveEdit = useCallback(
@@ -233,5 +264,8 @@ export default function useComments(
     handleLike,
     handleSaveEdit,
     handleDelete,
+    fetchMoreComments,
+    isLoading,
+    isLastPage,
   };
 }

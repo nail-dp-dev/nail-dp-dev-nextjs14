@@ -11,11 +11,10 @@ export default function PostDetailPage() {
   const { userDetail, numericPostId } = usePostDetail();
   const commentsData = useComments(numericPostId, userDetail?.comments || []);
 
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('PostDetailPage - userDetail:', userDetail);
+    console.log('PostDetailPage - userDetai,@!@!@!@!@!@!:', userDetail);
     console.log('PostDetailPage - numericPostId:', numericPostId);
     if (userDetail && numericPostId !== null) {
       setIsLoading(false);
@@ -52,6 +51,9 @@ export default function PostDetailPage() {
         onReply={handleReply}
         onSaveEdit={commentsData.handleSaveEdit}
         onDelete={commentsData.handleDelete}
+        fetchMoreComments={commentsData.fetchMoreComments}
+        isLoading={commentsData.isLoading}
+        isLastPage={commentsData.isLastPage}
       />
       <BotContainer
         onAddComment={commentsData.handleAddComment}

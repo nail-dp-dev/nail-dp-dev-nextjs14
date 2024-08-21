@@ -1,10 +1,13 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import ImageSlider from './ImageSlider';
-import { Comment, CommentData, PostsDetailData } from '../../../../../../types/dataType';
+import {
+  Comment,
+  CommentData,
+  PostsDetailData,
+} from '../../../../../../types/dataType';
 import { AddCommentType } from '../../../../../../hooks/useComments';
 import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
@@ -14,7 +17,7 @@ interface MidContainerProps {
   post: PostsDetailData['data'];
   postId: number;
   comments: Comment[];
-  // comments: CommentData['data']; 
+  // comments: CommentData['data'];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
@@ -25,6 +28,9 @@ interface MidContainerProps {
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
+  fetchMoreComments: () => void;
+  isLoading: boolean;
+  isLastPage: boolean;
 }
 
 export default function MidContainer({
@@ -35,9 +41,12 @@ export default function MidContainer({
   onReply,
   onSaveEdit,
   onDelete,
+  fetchMoreComments,  
+  isLoading,
+  isLastPage,
 }: MidContainerProps) {
   useEffect(() => {
-    console.log('Received comments in MidContainer:', comments); 
+    console.log('Received comments in MidContainer:', comments);
   }, [comments]);
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
@@ -188,7 +197,11 @@ export default function MidContainer({
         </div>
         <div>
           <div className="postInfo flex flex-wrap items-center justify-between">
-            <PostCount post={post} postId={postId} toggleScroll={toggleScroll} />
+            <PostCount
+              post={post}
+              postId={postId}
+              toggleScroll={toggleScroll}
+            />
             <PostTags post={post} />
           </div>
           <div>
@@ -198,6 +211,9 @@ export default function MidContainer({
               onReply={onReply}
               onSaveEdit={onSaveEdit}
               onDelete={onDelete}
+              fetchMoreComments={fetchMoreComments}
+              isLoading={isLoading}
+              isLastPage={isLastPage}
             />
           </div>
         </div>

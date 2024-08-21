@@ -13,9 +13,9 @@ export default function usePostDetail() {
   const { postId } = useParams();
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const [numericPostId, setNumericPostId] = useState<number | null>(null);
+  const [commentsLoaded, setCommentsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('postId from useParams:', postId);
     if (postId) {
       const parsedPostId = Number(postId);
       if (!isNaN(parsedPostId)) {
@@ -23,8 +23,6 @@ export default function usePostDetail() {
       } else {
         console.error('Invalid postId:', postId);
       }
-    } else {
-      console.log('postId is not available:', postId);
     }
   }, [postId]);
 
@@ -35,18 +33,12 @@ export default function usePostDetail() {
           const postData = await getPostsDetailData(numericPostId);
           const commentsData = await getCommentData(numericPostId);
 
-          console.log('Fetched post data:', postData);
-          console.log('Fetched comments data:', commentsData);
-
           if (postData?.data && commentsData?.data?.contents?.content) {
             setUserDetail({
               post: postData.data,
               comments: commentsData.data.contents.content,
             });
-            console.log('PostDetailPage - userDetail after setting:', {
-              post: postData.data,
-              comments: commentsData.data.contents.content,
-            });
+            setCommentsLoaded(true);
           } else {
             console.error('Invalid data structure:', { postData, commentsData });
           }
@@ -55,9 +47,12 @@ export default function usePostDetail() {
         }
       };
 
-      fetchData();
+      // 처음에만 데이터 로드
+      if (!commentsLoaded) {
+        fetchData();
+      }
     }
-  }, [numericPostId]);
+  }, [numericPostId, commentsLoaded]);
 
   return { userDetail, numericPostId };
 }

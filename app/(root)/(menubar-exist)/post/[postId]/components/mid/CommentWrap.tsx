@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CommentItem from './CommentItem';
-import { Comment, CommentData } from '../../../../../../../types/dataType';
+import { Comment } from '../../../../../../../types/dataType';
+import LoadingSpinner from '../../../../../../../components/animations/LoadingSpinner';
 
 interface UserProps {
-  // user: CommentData['data'];
   user: Comment[];
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
@@ -13,6 +13,9 @@ interface UserProps {
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
+  fetchMoreComments: () => void;
+  isLoading: boolean;
+  isLastPage: boolean;
 }
 
 const CommentWrap = ({
@@ -21,13 +24,16 @@ const CommentWrap = ({
   onReply,
   onSaveEdit,
   onDelete,
+  fetchMoreComments,
+  isLoading,
+  isLastPage,
 }: UserProps) => {
-  useEffect(() => {
-    console.log('Comments in CommentWrap:', user);
-  }, [user]);
-
   const [sortType, setSortType] = useState<'latest' | 'popular'>('popular');
   const [sortedComments, setSortedComments] = useState<Comment[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+
   useEffect(() => {
     if (user && user.length > 0) {
       const sorted =
@@ -38,11 +44,52 @@ const CommentWrap = ({
                 new Date(a.commentDate).getTime(),
             )
           : [...user].sort((a, b) => b.likeCount - a.likeCount);
-  
       setSortedComments(sorted);
     }
   }, [user, sortType]);
-  
+
+  useEffect(() => {
+    if (!bottomRef.current || isLoading || isLastPage) return;
+
+    const handleScroll = () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !isLoading && !isLastPage) {
+            setShowLoadingSpinner(true);
+
+            setTimeout(() => {
+              fetchMoreComments();
+              setShowLoadingSpinner(false);
+            }, 1000);
+          }
+        },
+        {
+          threshold: 1.0,
+        },
+      );
+
+      if (bottomRef.current) {
+        observerRef.current.observe(bottomRef.current);
+      }
+    };
+
+    if (window.scrollY === 0) {
+      setTimeout(handleScroll, 100);
+    } else {
+      handleScroll();
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+    };
+  }, [fetchMoreComments, isLoading, isLastPage]);
 
   return (
     <>
@@ -67,13 +114,13 @@ const CommentWrap = ({
       </div>
 
       <div
-        className="w-full overflow-y-hidden rounded-2.5xl
-        bg-purple bg-opacity-20 transition-all duration-300"
+        className="w-full overflow-y-hidden rounded-2.5xl 
+      bg-purple bg-opacity-20 transition-all duration-300"
       >
         {sortedComments.length > 0 ? (
-          sortedComments.map((item) => (
+          sortedComments.map((item, index) => (
             <CommentItem
-              key={item.commentId}
+              key={`${item.commentId}-${index}`}
               item={item}
               onLike={onLike}
               onReply={onReply}
@@ -84,6 +131,8 @@ const CommentWrap = ({
         ) : (
           <p className="py-4 text-center">댓글이 없습니다.</p>
         )}
+        <div ref={bottomRef} className="h-3"></div>
+        {showLoadingSpinner && <LoadingSpinner />}
       </div>
     </>
   );
