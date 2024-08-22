@@ -6,8 +6,8 @@ import { PostsDetailData } from '../../../../../../../types/dataType';
 import PostHeartFillIcon from '../icons/PostHeartFillIcon';
 import PostShareButton from '../../../../../../../components/buttons/PostShareButton';
 import { getPostLikeCount } from '../../../../../../../api/post/getPostLikeCount';
-import { deleteUnlikePost } from '../../../../../../../api/post/deleteUnlikePost';
-import { postLikePost } from '../../../../../../../api/post/postLikePost';
+import { deletePostUnlike } from '../../../../../../../api/post/deletePostUnlike';
+import { postPostLike } from '../../../../../../../api/post/postPostLike';
 
 interface PostCountProps {
   post: PostsDetailData['data'];
@@ -43,10 +43,10 @@ export default function PostCount({
   const handleHeartClick = async () => {
     try {
       if (isHeartStatus) {
-        await deleteUnlikePost(postId);
+        await deletePostUnlike(postId);
         setHeartCount(heartCount - 1);
       } else {
-        await postLikePost(postId);
+        await postPostLike(postId);
         setHeartCount(heartCount + 1);
       }
 

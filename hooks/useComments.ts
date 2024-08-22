@@ -3,9 +3,9 @@ import { Comment } from '../types/dataType';
 import { postCreateComment } from '../api/post/postCreateComment';
 import { deleteComment } from '../api/post/deleteComment';
 import { patchEditComment } from '../api/post/patchEditComment';
-import { deleteUnlikeComment } from '../api/post/deleteUnlikeComment';
+import { deleteCommentUnlike } from '../api/post/deleteCommentUnlike';
 import { postLikeComment } from '../api/post/postLikeComment';
-import { getLikeComment } from '../api/post/getLikeComment';
+import { getCommentLike } from '../api/post/getCommentLike';
 import { getCommentData } from '../api/post/getCommentsDetailData';
 
 export type AddCommentType = {
@@ -30,7 +30,9 @@ export default function useComments(
   useEffect(() => {
     if (postId !== null && initialComments.length > 0) {
       setComments(initialComments);
-      setCursorId(initialComments[initialComments.length - 1]?.commentId || null); // 초기 cursorId 설정
+      setCursorId(
+        initialComments[initialComments.length - 1]?.commentId || null,
+      ); // 초기 cursorId 설정
       setIsLastPage(false);
     }
   }, [postId, initialComments]);
@@ -46,7 +48,10 @@ export default function useComments(
           ...prevComments,
           ...data.data.contents.content,
         ]);
-        setCursorId(data.data.contents.content[data.data.contents.content.length - 1]?.commentId || null); // 새 cursorId로 갱신
+        setCursorId(
+          data.data.contents.content[data.data.contents.content.length - 1]
+            ?.commentId || null,
+        ); // 새 cursorId로 갱신
         setIsLastPage(data.data.contents.last);
       } else {
         setIsLastPage(true);
@@ -123,7 +128,7 @@ export default function useComments(
         try {
           const updatedComments = await Promise.all(
             comments.map(async (comment) => {
-              const { likeCount, liked } = await getLikeComment(
+              const { likeCount, liked } = await getCommentLike(
                 postId,
                 comment.commentId,
               );
@@ -151,7 +156,7 @@ export default function useComments(
         if (increment > 0) {
           await postLikeComment(postId, id);
         } else {
-          await deleteUnlikeComment(postId, id);
+          await deleteCommentUnlike(postId, id);
         }
 
         setComments((prevComments) =>
