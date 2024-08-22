@@ -1,4 +1,4 @@
-export const deleteUnlikeComment = async (
+export const deleteCommentUnlike = async (
   postId: number,
   commentId: number,
 ) => {

@@ -1,4 +1,4 @@
-export const deleteUnlikePost = async (postId: number) => {
+export const deletePostUnlike = async (postId: number) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/likes`,
     {
