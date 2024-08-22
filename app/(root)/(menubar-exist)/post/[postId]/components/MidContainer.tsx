@@ -170,7 +170,7 @@ export default function MidContainer({
             />
             {showGeneralAction && (
               <div ref={boxRef} className=" absolute left-5 top-0 z-20">
-                <GeneralAction type="post"  postId={postId}/>
+                <GeneralAction type="post"  postId={postId} />
               </div>
             )}
             <BoxCommonButton

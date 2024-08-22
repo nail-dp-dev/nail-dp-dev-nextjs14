@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import CommentItem from './CommentItem';
 import { Comment } from '../../../../../../../types/dataType';
 import LoadingSpinner from '../../../../../../../components/animations/LoadingSpinner';
+import BigChatIcon from '../../../../../../../public/assets/svg/big-chat-icon.svg';
 
 interface UserProps {
   user: Comment[];
@@ -35,21 +36,25 @@ const CommentWrap = ({
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
 
   useEffect(() => {
-    if (user && user.length > 0) {
-      const sorted =
-        sortType === 'latest'
-          ? [...user].sort(
-              (a, b) =>
-                new Date(b.commentDate).getTime() -
-                new Date(a.commentDate).getTime(),
-            )
-          : [...user].sort((a, b) => b.likeCount - a.likeCount);
-      setSortedComments(sorted);
-    }
+    const sorted =
+      sortType === 'latest'
+        ? [...user].sort(
+            (a, b) =>
+              new Date(b.commentDate).getTime() -
+              new Date(a.commentDate).getTime(),
+          )
+        : [...user].sort((a, b) => b.likeCount - a.likeCount);
+    setSortedComments(sorted);
   }, [user, sortType]);
 
   useEffect(() => {
-    if (!bottomRef.current || isLoading || isLastPage) return;
+    if (
+      !bottomRef.current ||
+      isLoading ||
+      isLastPage ||
+      sortedComments.length < 20
+    )
+      return;
 
     const handleScroll = () => {
       if (observerRef.current) {
@@ -68,7 +73,7 @@ const CommentWrap = ({
           }
         },
         {
-          threshold: 1.0,
+          threshold: 0.7,
         },
       );
 
@@ -89,7 +94,7 @@ const CommentWrap = ({
         observerRef.current = null;
       }
     };
-  }, [fetchMoreComments, isLoading, isLastPage]);
+  }, [fetchMoreComments, isLoading, isLastPage, sortedComments.length]);
 
   return (
     <>
@@ -129,7 +134,13 @@ const CommentWrap = ({
             />
           ))
         ) : (
-          <p className="py-4 text-center">댓글이 없습니다.</p>
+          <div className="my-7 flex flex-col items-center justify-center">
+            <BigChatIcon />
+            <div className="mt-4 text-center text-base font-medium text-darkPurple">
+              <p>아직 작성된 댓글이 없습니다.</p>
+              <p>제일 먼저 댓글을 작성해보세요!</p>
+            </div>
+          </div>
         )}
         <div ref={bottomRef} className="h-3"></div>
         {showLoadingSpinner && <LoadingSpinner />}
