@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import RecentButton from '../../buttons/RecentButton';
 
 type SearchRecentProps = {
@@ -13,6 +14,9 @@ type SearchRecentProps = {
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
+// 로컬 스토리지 키
+const LOCAL_STORAGE_KEY = 'recentSearchTags';
+
 // 최근 검색, 전체 삭제, 검색 기록 저장 끄기
 export default function SearchRecent({
   clearRecent,
@@ -22,6 +26,28 @@ export default function SearchRecent({
   onTagClick,
   setTags,
 }: SearchRecentProps) {
+  // 로컬 스토리지에서 검색어 불러오기
+  useEffect(() => {
+    const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (storedTags) {
+      setTags(JSON.parse(storedTags));
+    }
+  }, [setTags]);
+
+  // 검색어 변경 시 로컬 스토리지에 저장
+  useEffect(() => {
+    if (isSearchRecentEnabled) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tags));
+    }
+  }, [tags, isSearchRecentEnabled]);
+
+  // 검색어 전체 삭제
+  const handleClearRecent = () => {
+    setTags([]);
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    clearRecent();
+  };
+
   return (
     <div className="relative mt-[3.5rem]">
       <div className="topContainer flex items-center justify-between">
@@ -35,7 +61,7 @@ export default function SearchRecent({
         <div className="text-14px-normal-dP ml-auto flex items-center">
           {isSearchRecentEnabled && (
             <>
-              <button onClick={clearRecent}>전체삭제</button>
+              <button onClick={handleClearRecent}>전체삭제</button>
               <p className="mx-2 select-none">|</p>
             </>
           )}
