@@ -4,6 +4,10 @@ import UserInfo from '../../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../../types/dataType';
 import Link from 'next/link';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
+import {
+  followUser,
+  unFollowUser,
+} from '../../../../../../api/user/followUser';
 
 interface userProps {
   user: PostsDetailData['data'];
@@ -22,13 +26,20 @@ export default function TopContainer({ user, postId }: userProps) {
     }
   }, [userData, user.nickname]);
 
-  const handleFollowToggle = () => {
+  const handleFollowToggle = async () => {
     if (isFollowing) {
-      setFollowerCount(followerCount - 1);
+      const success = await unFollowUser(user.nickname);
+      if (success) {
+        setFollowerCount((prev) => prev - 1);
+        setIsFollowing(false);
+      }
     } else {
-      setFollowerCount(followerCount + 1);
+      const success = await followUser(user.nickname);
+      if (success) {
+        setFollowerCount((prev) => prev + 1);
+        setIsFollowing(true);
+      }
     }
-    setIsFollowing(!isFollowing);
   };
 
   if (!user) {
