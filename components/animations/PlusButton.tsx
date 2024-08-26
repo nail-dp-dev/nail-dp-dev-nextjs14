@@ -4,12 +4,15 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { IconButtonProps } from '../../constants/interface';
 
-export default function PlusButton({width, height, isClicked }: IconButtonProps) {
+export default function PlusButton({width, height, isClicked, active }: IconButtonProps) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isBackGround, setIsBackGround] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);
 
   const handleClick = () => {
+    if (!active) {
+      return;
+    }
     setIsClick(!isClick);
     setIsAnimate(true)
     setTimeout(() => {

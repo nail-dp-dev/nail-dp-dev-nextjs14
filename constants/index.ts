@@ -54,10 +54,10 @@ export const bottomMenuElements = [
 ];
 
 export const archiveCategoryElements = [
-  { name: 'For You', url: '/' },
-  { name: 'Trending', url: '/trending' },
-  { name: 'New', url: '/new' },
-];
+  { name: 'For You', desc: 'for-you' },
+  { name: 'Trending', desc: 'trending' },
+  { name: 'New', desc: 'new' },
+]
 
 export const myPageCategoryElements = [
   { name: '내 게시물', url: '/my-page' },
@@ -245,10 +245,10 @@ export const shareMenuElements = [
 ];
 
 export const myArchiveElements = [
-  { name: 'archive', desc: '아카이브별' },
-  { name: 'made', desc: '제작됨' },
-  { name: 'following', desc: '팔로잉' },
-];
+  { name:'archive', desc: '아카이브별'},
+  { name:'made', desc: '제작된 디자인'},
+  { name:'following', desc: '팔로잉'},
+]
 
 export const archiveModalElements = [
   { name: 'archiveCreate', desc: '새로운 아카이브 생성' },

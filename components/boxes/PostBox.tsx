@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
@@ -15,6 +14,8 @@ import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
+import { selectLoginStatus } from '../../store/slices/loginSlice';
+import { useRouter } from 'next/navigation';
 import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
 
 function PostBox({
@@ -25,28 +26,58 @@ function PostBox({
   saved,
   createdDate,
   tempPost,
+  setIsSuggestLoginModalShow
 }: PostBoxNewProps) {
-  const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const router = useRouter()
+
+  const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
+
+  const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+
   const [isLiked, setIsLiked] = useState(like);
   const dispatch = useDispatch();
 
+
+
   const handleHeartClick = async () => {
-    if (!isLiked) {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+
+    if (!isLiked && isLoggedIn === 'loggedIn') {
       let data = await postPostLike(postId);
       data.code == 2001 && setIsLiked((prev) => !prev);
-    } else {
+    } else if(isLiked && isLoggedIn === 'loggedIn') {
       let data = await deletePostLike(postId);
       data.code == 2001 && setIsLiked((prev) => !prev);
     }
   };
 
   const handlePlusClick = () => {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+
     console.log('Click...Plus!');
     //모달 확인을 위해 작성 
     dispatch(setCommonModal("archive"))
     dispatch(setArchiveModal({postId}))
   };
+
+  const handlePostClick = (e:any, postId:number) => {
+    e.stopPropagation()
+
+    if (isLoggedIn === 'loggedOut') {
+      console.log('찍찍...')
+      setIsSuggestLoginModalShow(true)
+    }
+
+    if (isLoggedIn === 'loggedIn') {
+      router.push(`post/${postId}`)
+    }
+
+  }
 
   const isPhoto =
     photoUrl.endsWith('.jpg') ||
@@ -61,7 +92,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="box relative mb-[16px] flex snap-end items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+      className="box relative mb-[16px] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       {tempPost == true && (
@@ -70,7 +101,7 @@ function PostBox({
           <p className="z-10 text-center text-white">임시저장된 게시물</p>
         </>
       )}
-      <Link href={`post/${postId}`} className="absolute inset-0 z-0">
+      <button type='button' className="absolute inset-0 z-0" onClick={(e)=>{handlePostClick(e,postId)}}>
         {isPhoto && (
           <Image
             src={photoUrl}
@@ -85,18 +116,18 @@ function PostBox({
           />
         )}
         {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
-      </Link>
+      </button>
       <button
         onClick={handleHeartClick}
         className="absolute right-2 top-2 z-10"
       >
-        <HeartButton width="21px" height="19px" isClicked={isLiked} />
+        <HeartButton width="21px" height="19px" isClicked={isLiked} active={ isLoggedIn === 'loggedIn' }/>
       </button>
       <button
         onClick={handlePlusClick}
         className="absolute bottom-2 right-2 z-10"
       >
-        <PlusButton width="24px" height="24px" isClicked={saved} />
+        <PlusButton width="24px" height="24px" isClicked={saved} active={ isLoggedIn === 'loggedIn' }/>
       </button>
       <button
         onClick={handleToggleClick}
