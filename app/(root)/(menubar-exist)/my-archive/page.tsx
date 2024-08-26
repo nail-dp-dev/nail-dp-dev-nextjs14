@@ -30,7 +30,7 @@ export default function MyArchivePage() {
 
   const clickShowType = (e: any, type: string) => {
     e.stopPropagation()
-    console.log(`Show type clicked: ${type}`);  // 보기 방식 버튼 클릭 시 로그 출력
+    console.log(`Show type clicked: ${type}`);
     setShowType(type)
   }
 
@@ -98,12 +98,21 @@ export default function MyArchivePage() {
         </div>
         </div>
         {
-          showType === 'album' &&
-          <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
-            {archiveData.map((item:any, index:any)=>(
-              <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
-            ))}
-          </div>
+          showType === 'album' ?
+            <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
+              {archiveData.map((item:any, index:any)=>(
+                <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
+              ))}
+            </div>
+            :
+          showType === 'list' ? 
+            <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
+              {archiveData.map((item:any, index:any)=>(
+                <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
+              ))}
+            </div>
+              :
+            null
         }
     </div>
     :

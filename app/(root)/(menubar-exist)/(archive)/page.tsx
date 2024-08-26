@@ -101,11 +101,8 @@ export default function ArchivePage() {
       return;
     }
 
-    console.log('fetch...')
-    
     if (isFirstRendering) {
       fetchMorePosts();
-      console.log('fetch,,,');
     }
 
     const currentRef = bottomRef.current;
@@ -141,8 +138,6 @@ export default function ArchivePage() {
     if (!likedButtonState) {
       return;
     }
-
-    console.log('likedButtonState')
 
     if (isLikedPostsFirstRendering && likedButtonState) {
       fetchMorePostsByLikedButton();
@@ -207,8 +202,6 @@ export default function ArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
-  console.log('rendering...!')
-
   useEffect(() => {
     setCursorId(0);
     setMessage('');
@@ -240,17 +233,18 @@ export default function ArchivePage() {
               isContentExist &&
               !isLoading &&
               itemsToRender.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  <PostBox
+                    key={index}
+                    postId={item.postId}
+                    photoId={item.photoId}
+                    photoUrl={item.photoUrl}
+                    like={item.like}
+                    saved={item.saved}
+                    createdDate={item.createdDate}
+                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   />
-                ))}
+                )
+              )}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
             {!likedButtonState && !isContentExist && !isLoading && (
               <div>{message}</div>

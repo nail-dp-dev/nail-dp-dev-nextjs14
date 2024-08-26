@@ -11,8 +11,8 @@ interface GeneralActionProps {
   archiveId?: number;
   type: 'archive' | 'post';
   onSettingClick?: () => void;
-  onCopyClick?: (archiveId: number) => void;
-  onEditClick?: (archiveId: number) => void;
+  onCopyClick?: (e:any, archiveId: number) => void;
+  onEditClick?: (e:any, archiveId: number) => void;
   onShareClick?: () => void;
 }
 
@@ -20,8 +20,16 @@ interface GeneralActionProps {
 export default function GeneralAction({
   archiveId,
   type,
-  onCopyClick = (archiveId) => {postCloneArchiveCreate(archiveId)},
-  onEditClick = (archiveId) => {postCloneArchiveCreate(archiveId)},
+  onCopyClick = (e, archiveId) => {
+    e.preventDefault()
+    e.stopPropagation()
+    postCloneArchiveCreate(archiveId)
+  },
+  onEditClick = (e, archiveId) => {
+    e.preventDefault()
+    e.stopPropagation()
+    postCloneArchiveCreate(archiveId)
+  },
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -85,9 +93,9 @@ export default function GeneralAction({
                 : item.label.includes('공유')
                   ? handleShareClick
                   : item.label.includes('복제') && archiveId !== undefined
-                    ? () => onCopyClick(archiveId)
+                    ? (e) => onCopyClick(e, archiveId)
                     : item.label.includes('수정') && archiveId !== undefined
-                      ? () => onEditClick(archiveId)
+                      ? (e) => onEditClick(e, archiveId)
                       : item.onClick
             }
             className="flex cursor-pointer items-center justify-center 

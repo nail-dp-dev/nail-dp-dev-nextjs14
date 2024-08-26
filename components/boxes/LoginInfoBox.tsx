@@ -22,8 +22,6 @@ export default function LoginInfoBox() {
   const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } = useLoggedInUserData();
 
-  console.log(isLoggedIn)
-
   const handleLogin = () => {
     dispatch(commonModalClose())
     dispatch(setCommonModal('login'));
@@ -44,7 +42,6 @@ export default function LoginInfoBox() {
 
   const handleBitsChargeButton = (e: any) => {
     e.stopPropagation();
-    console.log('bits charge...')
   }
 
   useEffect(() => {
@@ -67,8 +64,6 @@ export default function LoginInfoBox() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log('loginInfoBox rendering...')
 
 
   return (
