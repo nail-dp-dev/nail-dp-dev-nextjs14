@@ -1,7 +1,7 @@
+import React from 'react';
 import MenuBar from '../../../components/bars/MenuBar';
 
-
-export default function MenuBarExistLayout({
+function MenuBarExistLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -15,3 +15,5 @@ export default function MenuBarExistLayout({
     </>
   );
 }
+
+export default React.memo(MenuBarExistLayout);

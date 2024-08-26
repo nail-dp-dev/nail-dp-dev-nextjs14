@@ -1,8 +1,6 @@
 'use client'
 
-import Link from 'next/link';
 import { CategoryBarProps } from '../../constants/interface';
-import { usePathname } from 'next/navigation';
 import MinusSVG from '../../public/assets/svg/minus.svg'
 import PlusSVG from '../../public/assets/svg/plus.svg'
 import HeartButton from '../animations/HeartButton';
@@ -11,12 +9,17 @@ import { RootState } from '../../store/store';
 import { decreaseBoxes, selectNumberOfBoxes, increaseBoxes } from '../../store/slices/boxLayoutSlice';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 
-export default function CategoryBar({elements}: CategoryBarProps) {
+export default function CategoryBar({elements, category, setCategory}: CategoryBarProps) {
 
-  const path = usePathname()
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) => selectNumberOfBoxes(state));
   const isLoggedIn = useSelector(selectLoginStatus);
+
+  const categoryClick = (e:any, category:string) => {
+    e.stopPropagation()
+    setCategory(category)
+    console.log(category)
+  }
 
   return  (
     <div className='categoryBar w-full h-[66px] flex flex-col items-start justify-between px-[5px]'>
@@ -25,15 +28,15 @@ export default function CategoryBar({elements}: CategoryBarProps) {
           {elements.map((item, index) => {
             if (item.name === 'For You') {
               return isLoggedIn === 'loggedIn' && (
-                <Link key={index} href={item.url} className={`inline-flex h-[100%] transition-all items-center justify-center ${path === item.url ? 'border-purple' : 'border-navMenuBotSolidGray'} border-b-[3px]`}>
-                  <p className='text-[14px] font-[700]'>{item.name}</p>
-                </Link>
+                <button key={index} onClick={(e)=>{categoryClick(e,item.desc)}} className={`inline-flex h-[100%] transition-all items-center justify-center ${category === item.desc ? 'border-purple' : 'border-navMenuBotSolidGray'} border-b-[3px]`}>
+                  <p className='text-[0.875rem] font-[700] text-textBlack'>{item.name}</p>
+                </button>
               );
             } else {
               return (
-                <Link key={index} href={item.url} className={`inline-flex h-[100%] transition-all items-center justify-center ${path === item.url ? 'border-purple' : 'border-navMenuBotSolidGray'} border-b-[3px]`}>
+                <button key={index} onClick={(e)=>{categoryClick(e,item.desc)}} className={`inline-flex h-[100%] transition-all items-center justify-center ${category === item.desc ? 'border-purple' : 'border-navMenuBotSolidGray'} border-b-[3px]`}>
                   <p className='text-[14px] font-[700]'>{item.name}</p>
-                </Link>
+                </button>
               );
             }
           })}

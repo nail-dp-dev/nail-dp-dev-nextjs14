@@ -1,4 +1,4 @@
-export const getArchive = async () => {
+export const getArchiveData = async () => {
     
   try {
     const response = await fetch(
@@ -17,6 +17,7 @@ export const getArchive = async () => {
     }
 
     return await response.json();
+    
   } catch (error) {
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
