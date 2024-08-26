@@ -1,14 +1,14 @@
-export const postArchiveCreate = async (name: string, boundary: string) => {
+export const postSetArchive = async (postId: number, archiveId: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/archive`,
+      `${process.env.NEXT_PUBLIC_API_URL}/archive/${archiveId}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ archiveName: name, boundary: boundary }),
+        body: JSON.stringify({ postId:postId }),
       },
     );
 

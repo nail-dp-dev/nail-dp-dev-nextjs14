@@ -130,3 +130,38 @@ export interface VideoProps {
   width: string;
   height: string;
 }
+
+export interface archiveArray {
+  archiveId: number;
+  archiveImgUrl: string;
+  archiveName: string;
+  boundary: string;
+  isPhoto: string;
+  isVideo: string;
+  postCount: number;
+}
+
+
+export interface AlarmModalProps {
+  onConfirm: () => void;
+}
+
+
+export interface postData {
+  postId: number;
+  photoId: number;
+  photoUrl: string;
+  isPhoto: boolean;
+  isVideo: boolean;
+  like: boolean;
+  saved: boolean;
+  createdDate: string;
+}
+
+export interface tempData {
+  isPhoto: boolean;
+  isVideo: boolean;
+  photoId: number;
+  photoUrl: string;
+  postId: number;
+}

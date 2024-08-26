@@ -14,9 +14,13 @@ import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
+<<<<<<< HEAD
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
 import { setCommonModal } from '../../store/slices/modalSlice';
+=======
+import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
+>>>>>>> 03eb60697c975e5328ac123fa85f55df6a40bd13
 
 function PostBox({
   postId,
@@ -62,6 +66,7 @@ function PostBox({
     console.log('Click...Plus!');
     //모달 확인을 위해 작성 
     dispatch(setCommonModal("archive"))
+    dispatch(setArchiveModal({postId}))
   };
 
   const handlePostClick = (e:any, postId:number) => {
