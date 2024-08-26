@@ -16,6 +16,7 @@ interface GeneralActionProps {
   onEditClick?: () => void;
   onShareClick?: () => void;
   onDeleteClick?: () => void;
+  setSharedCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // 메뉴 게시물/아카이브
@@ -24,6 +25,7 @@ export default function GeneralAction({
   postId,
   nickname,
   imageUrl,
+  setSharedCount,
   onCopyClick = () => console.log('복제 클릭됨'),
   onEditClick = () => console.log('수정 클릭됨'),
   onDeleteClick = () => console.log('삭제 클릭됨'),
@@ -33,17 +35,19 @@ export default function GeneralAction({
 
   const handleSettingClick = () => {
     setShowSetting(true);
-    console.log('설정 클릭됨');
   };
 
   const handleShareClick = () => {
     setShowShareMenu(true);
-    console.log('공유 클릭됨');
   };
 
   const handleBackClick = () => {
     setShowSetting(false);
     setShowShareMenu(false);
+  };
+
+  const handleShareCount = () => {
+    setSharedCount((prevCount) => prevCount + 1);
   };
 
   if (showSetting) {
@@ -55,7 +59,7 @@ export default function GeneralAction({
   if (showShareMenu) {
     return (
       <GeneralShareMenu
-        onClick={console.log}
+        onClick={handleShareCount}
         onBack={handleBackClick}
         showBackButton={true}
         type={type}

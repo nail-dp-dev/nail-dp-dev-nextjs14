@@ -134,6 +134,7 @@ export interface archiveArray {
 
 export interface AlarmModalProps {
   onConfirm: () => void;
+  onCancel: () => void;
 }
 
 

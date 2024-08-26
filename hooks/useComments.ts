@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Comment } from '../types/dataType';
-import { postCreateComment } from '../api/post/postCreateComment';
-import { deleteComment } from '../api/post/deleteComment';
-import { patchEditComment } from '../api/post/patchEditComment';
-import { deleteCommentUnlike } from '../api/post/deleteCommentUnlike';
-import { postLikeComment } from '../api/post/postLikeComment';
-import { getCommentLike } from '../api/post/getCommentLike';
-import { getCommentData } from '../api/post/getCommentsDetailData';
+import { postCreateComment } from '../api/comment/postCreateComment';
+import { deleteComment } from '../api/comment/deleteComment';
+import { patchEditComment } from '../api/comment/patchEditComment';
+import { deleteCommentUnlike } from '../api/comment/deleteCommentUnlike';
+import { postLikeComment } from '../api/comment/postLikeComment';
+import { getCommentLike } from '../api/comment/getCommentLike';
+import { getCommentData } from '../api/comment/getCommentsDetailData';
 
 export type AddCommentType = {
   commentId?: number;
@@ -32,7 +32,7 @@ export default function useComments(
       setComments(initialComments);
       setCursorId(
         initialComments[initialComments.length - 1]?.commentId || null,
-      ); // 초기 cursorId 설정
+      );
       setIsLastPage(false);
     }
   }, [postId, initialComments]);
@@ -51,7 +51,7 @@ export default function useComments(
         setCursorId(
           data.data.contents.content[data.data.contents.content.length - 1]
             ?.commentId || null,
-        ); // 새 cursorId로 갱신
+        );
         setIsLastPage(data.data.contents.last);
       } else {
         setIsLastPage(true);
@@ -90,7 +90,10 @@ export default function useComments(
 
           setComments((prevComments) => [createdComment, ...prevComments]);
         } else {
-          console.error('Failed to post comment: Invalid response');
+          // console.error('Failed to post comment: Invalid response');
+          alert(
+            '댓글을 등록할 수 없습니다. 댓글을 등록할 권한이 있는 지 확인하세요',
+          );
         }
       } catch (error) {
         console.error('Error posting comment:', error);

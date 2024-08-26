@@ -49,6 +49,7 @@ export default function MidContainer({
   nickname,
   imageUrl,
 }: MidContainerProps) {
+  const [sharedCount, setSharedCount] = useState(post.sharedCount);
   useEffect(() => {
     console.log('Received comments in MidContainer:', comments);
   }, [comments]);
@@ -181,8 +182,9 @@ export default function MidContainer({
                 <GeneralAction
                   type="post"
                   postId={postId}
-                  nickname={nickname} 
-                  imageUrl={currentImageUrl} 
+                  nickname={nickname}
+                  imageUrl={currentImageUrl}
+                  setSharedCount={setSharedCount} 
                 />
               </div>
             )}
@@ -216,6 +218,8 @@ export default function MidContainer({
               toggleScroll={toggleScroll}
               nickname={nickname}
               imageUrl={currentImageUrl}
+              sharedCount={sharedCount}
+              setSharedCount={setSharedCount}
             />
             <PostTags post={post} />
           </div>

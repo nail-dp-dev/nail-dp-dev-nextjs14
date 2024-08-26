@@ -42,6 +42,7 @@ export default function ShareMenuList({
           },
         },
       });
+      onClick('카카오톡 공유');
     } else {
       console.error('Kakao SDK is not loaded');
     }
@@ -50,6 +51,7 @@ export default function ShareMenuList({
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(currentUrl).then(
       () => {
+        onClick('URL 복사');
         alert('URL이 복사되었습니다.');
       },
       (err) => {
@@ -72,7 +74,6 @@ export default function ShareMenuList({
           <div
             key={index}
             onClick={() => {
-              onClick(item.message);
               if (item.label === '카카오톡 공유') handleKakaoShare();
               if (item.label === 'URL 복사') handleCopyUrl();
             }}

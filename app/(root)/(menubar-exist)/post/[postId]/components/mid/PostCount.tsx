@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PostHeartIcon from '../icons/PostHeartIcon';
 import PostChatIcon from '../icons/PostChatIcon';
 import PostShareIcon from '../icons/PostShareIcon';
@@ -13,21 +13,24 @@ interface PostCountProps {
   post: PostsDetailData['data'];
   postId: number;
   toggleScroll: () => void;
-  nickname: string; 
-  imageUrl: string; 
+  nickname: string;
+  imageUrl: string;
+  sharedCount: number;
+  setSharedCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function PostCount({
   post,
   toggleScroll,
   postId,
-  nickname, 
-  imageUrl, 
+  nickname,
+  imageUrl,
+  sharedCount,
+  setSharedCount,
 }: PostCountProps) {
   const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [sharedCount, setSharedCount] = useState(post.sharedCount);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -65,16 +68,11 @@ export default function PostCount({
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleMenuClick = () => {
-    setSharedCount(sharedCount + 1);
-    setIsMenuOpen(false);
-  };
-
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
       setIsMenuOpen(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -85,7 +83,7 @@ export default function PostCount({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, handleClickOutside]);
 
   return (
     <div className="flex justify-between py-4">
@@ -115,9 +113,9 @@ export default function PostCount({
           {sharedCount}
           {isMenuOpen && (
             <PostShareButton
-              onClick={handleMenuClick}
-              nickname={nickname} 
-              imageUrl={imageUrl} 
+              onClick={() => setSharedCount(sharedCount + 1)}
+              nickname={nickname}
+              imageUrl={imageUrl}
             />
           )}
         </div>

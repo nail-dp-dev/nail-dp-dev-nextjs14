@@ -5,11 +5,6 @@ import {
   commonModalClose,
   selectAlarmModalStatus,
 } from '../../../store/slices/modalSlice';
-
-interface AlarmModalProps {
-  onConfirm: () => void;
-  onCancel: () => void;
-}
 import { AlarmModalProps } from '../../../constants/interface';
 
 export default function AlarmModal({ onConfirm, onCancel }: AlarmModalProps) {

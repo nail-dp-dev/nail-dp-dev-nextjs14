@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PostsDetailData, CommentData } from '../types/dataType';
 import { getPostsDetailData } from '../api/post/getPostsDetailData';
-import { getCommentData } from '../api/post/getCommentsDetailData';
+import { getCommentData } from '../api/comment/getCommentsDetailData';
 
 type UserDetail = {
   post: PostsDetailData['data'];
@@ -40,7 +40,10 @@ export default function usePostDetail() {
             });
             setCommentsLoaded(true);
           } else {
-            console.error('Invalid data structure:', { postData, commentsData });
+            console.error('Invalid data structure:', {
+              postData,
+              commentsData,
+            });
           }
         } catch (error) {
           console.error('Error fetching data:', error);

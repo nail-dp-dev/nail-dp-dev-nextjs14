@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
 import { posts, followData } from '../../../constants/example';
-import RecentButton from '../../buttons/RecentButton';
-import SearchFollow from './SearchFollow';
+import SearchNickname from './SearchNickname';
+import { getSearchResults } from '../../../api/search/getSearch';
 
 export default function SearchBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -18,6 +18,7 @@ export default function SearchBar() {
   );
   const [searchError, setSearchError] = useState('');
   const [isSearchRecentEnabled, setIsSearchRecentEnabled] = useState(true);
+  const [userResults, setUserResults] = useState([]);
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,9 +29,10 @@ export default function SearchBar() {
     e.stopPropagation();
     setSearchTerm('');
     setSearchError('');
+    setUserResults([]);
   };
 
-  const handleSearch = (searchQuery: string) => {
+  const handleSearch = async (searchQuery: string) => {
     if (searchQuery && !searchRecent.includes(searchQuery)) {
       if (isSearchRecentEnabled) {
         setSearchRecent((prevRecent) =>
@@ -45,31 +47,28 @@ export default function SearchBar() {
         .includes(searchQuery.toLowerCase()),
     );
 
-    const filteredFollow =
-      searchQuery.startsWith('@') && searchQuery.length > 1
-        ? followData.filter(
-            (user) =>
-              user.data.nickname
-                .toLowerCase()
-                .includes(searchQuery.slice(1).toLowerCase()) ||
-              searchQuery
-                .slice(1)
-                .toLowerCase()
-                .includes(user.data.nickname.toLowerCase()),
-          )
-        : [];
-
-    // 검색 결과 확인 및 오류 메시지 설정
-    if (filteredWords.length === 0 && filteredFollow.length === 0) {
-      if (searchQuery.startsWith('@') && searchQuery.length > 1) {
-        setSearchError(
-          `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-        );
-      } else if (!searchQuery.startsWith('@')) {
-        setSearchError(`'${searchQuery}' 검색결과를 찾을 수 없습니다.`);
+    if (searchQuery.startsWith('@') && searchQuery.length > 1) {
+      try {
+        const response = await getSearchResults(searchQuery.slice(1));
+        if (response && response.data) {
+          setUserResults(response.data);
+          setSearchError('');
+        } else {
+          setUserResults([]);
+          setSearchError(
+            `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
+          );
+        }
+      } catch (error) {
+        console.error('Error fetching user search results:', error);
+        setSearchError('사용자 검색 중 오류가 발생했습니다.');
       }
-    } else {
-      setSearchError('');
+    } else if (!searchQuery.startsWith('@')) {
+      setSearchError(
+        filteredWords.length === 0
+          ? `'${searchQuery}' 검색결과를 찾을 수 없습니다.`
+          : '',
+      );
     }
 
     setIsDropdownOpen(true);
@@ -151,7 +150,7 @@ export default function SearchBar() {
               type="button"
               onClick={handleCloseClick}
             >
-              <CloseIcon className='fill-darkPurple'/>
+              <CloseIcon className="fill-darkPurple" />
             </button>
           )}
         </div>
@@ -183,9 +182,10 @@ export default function SearchBar() {
               />
             ) : (
               searchTerm.length > 1 && (
-                <SearchFollow
+                <SearchNickname
                   searchTerm={searchTerm}
                   onTagClick={handleTagClick}
+                  followData={userResults}
                 />
               )
             )}

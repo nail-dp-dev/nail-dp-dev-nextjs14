@@ -1,18 +1,22 @@
 import React from 'react';
 import UserInfo from '../../ui/UserInfo';
 import UserImage from '../../ui/UserImage';
-import { followData } from '../../../constants/example';
+import { useRouter } from 'next/navigation';
 
-type SearchFollowProps = {
+type SearchNicknameProps = {
   searchTerm: string;
   onTagClick: (tag: string) => void;
+  followData: any[];
 };
 
 // 사용자 검색 결과 컴포넌트
-export default function SearchFollow({
+export default function SearchNickname({
   searchTerm,
   onTagClick,
-}: SearchFollowProps) {
+  followData,
+}: SearchNicknameProps) {
+  const router = useRouter();
+
   const filteredFollow =
     searchTerm.startsWith('@') && searchTerm.length > 1
       ? followData.filter(
@@ -27,6 +31,10 @@ export default function SearchFollow({
         )
       : [];
 
+  const handleProfileClick = (nickname: string) => {
+    router.push(`/profile/${nickname}`);
+  };
+
   return (
     <div
       className="flex max-h-[210px] snap-y flex-col flex-wrap overflow-auto overflow-x-hidden
@@ -38,7 +46,7 @@ export default function SearchFollow({
         2xl:max-h-[210px]
         3xl:max-h-[210px]"
     >
-      <div className="flex flex-wrap ">
+      <div className="flex flex-wrap">
         {filteredFollow.map((user) => (
           <div
             key={user.data.nickname}
@@ -52,9 +60,9 @@ export default function SearchFollow({
               3xl:w-1/4"
           >
             <button
-              className="button-tr group flex w-[310px] snap-end items-center 
-                rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10 "
-              onClick={() => onTagClick(`@${user.data.nickname}`)}
+              className="nickname-wrap button-tr group flex w-[310px] snap-end items-center 
+                rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10"
+              onClick={() => handleProfileClick(user.data.nickname)}
             >
               <div className="button-tr group-hover:brightness-75">
                 <UserImage
@@ -71,7 +79,7 @@ export default function SearchFollow({
                   saveCount={user.data.saveCount}
                   followerCount={user.data.followerCount}
                   hoverStyle="group-hover:text-orange button-tr"
-                  nicknameStyle="text-base font-medium "
+                  nicknameStyle="text-base font-medium"
                   statsStyle="text-sm font-normal"
                 />
               </div>
