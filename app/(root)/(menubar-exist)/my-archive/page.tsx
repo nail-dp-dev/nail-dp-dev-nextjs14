@@ -50,7 +50,7 @@ export default function MyArchivePage() {
       .then(res => res.json())
       .then(res => {
         if (res.code === 2000) {
-          setArchiveData(res.data.archiveList);
+          setArchiveData(res.data.postSummaryList.content);
           console.log('Data fetched:', res.data.archiveList);
         }
       })
@@ -98,14 +98,14 @@ export default function MyArchivePage() {
         </div>
         </div>
         {
-          showType === 'album' ?
+          showType === 'album' && archiveData ?
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
               {archiveData.map((item:any, index:any)=>(
                 <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
               ))}
             </div>
             :
-          showType === 'list' ? 
+          showType === 'list' && archiveData ? 
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
               {archiveData.map((item:any, index:any)=>(
                 <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />

@@ -10,23 +10,18 @@ import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import MyArchiveFolder from '../../../../public/assets/svg/my-archive-folder.svg';
 import CloseIcon from '../../../../public/assets/svg/big-close.svg';
 import FolderIcon from '../../../../public/assets/svg/folder-icon.svg';
-<<<<<<< HEAD
-import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
-
-=======
 import YellowIcon from '../../../../public/assets/svg/yellow-plus.svg';
 import ArchiveNullIcon from '../../../../public/assets/svg/archive-modal-null.svg';
 import ListMenu from '../../../../public/assets/svg/my-archive-list.svg';
 import AlbumMenu from '../../../../public/assets/svg/my-archive-album.svg';
 import SearchIcon from '../../../../public/assets/svg/search.svg';
 import BellIcon from '../../../../public/assets/svg/bell.svg';
-import { postArchiveCreate } from '../../../../api/post/postArchiveCreate';
-import { getArchive } from '../../../../api/post/getArchive';
+import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
+import { getArchiveData } from '../../../../api/archive/getArchiveData';
 import { archiveModalElements } from '../../../../constants';
 import Image from 'next/image';
 import { postSetArchive } from '../../../../api/post/postSetArchive';
 import { archiveArray } from '../../../../constants/interface';
->>>>>>> 03eb60697c975e5328ac123fa85f55df6a40bd13
 
 export default function MyArchiveModal() {
   const [isName, setIsName] = useState('');
@@ -85,7 +80,7 @@ export default function MyArchiveModal() {
   };
 
   const archiveData = async () => {
-    const data = await getArchive();
+    const data = await getArchiveData();
     setIsArchive(data.data.postSummaryList.content);
     setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
     setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
@@ -194,7 +189,7 @@ export default function MyArchiveModal() {
           <div className="flex w-full flex-1">
             <div className="h-full w-[20%] min-w-[155px] bg-menuLightGray px-[10px] text-[0.9rem] font-bold">
               <div className="mt-[5px]">
-                {archiveModalElements.map((item, index) => {
+                {archiveModalElements.map((item:any, index:number) => {
                   return (
                     <button
                       key={index}
