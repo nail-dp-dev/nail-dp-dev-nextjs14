@@ -31,6 +31,8 @@ interface MidContainerProps {
   fetchMoreComments: () => void;
   isLoading: boolean;
   isLastPage: boolean;
+  nickname: string;
+  imageUrl: string;
 }
 
 export default function MidContainer({
@@ -41,9 +43,11 @@ export default function MidContainer({
   onReply,
   onSaveEdit,
   onDelete,
-  fetchMoreComments,  
+  fetchMoreComments,
   isLoading,
   isLastPage,
+  nickname,
+  imageUrl,
 }: MidContainerProps) {
   useEffect(() => {
     console.log('Received comments in MidContainer:', comments);
@@ -56,6 +60,9 @@ export default function MidContainer({
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const startY = useRef(0);
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const [currentImageUrl, setCurrentImageUrl] = useState(
+    post.files[0]?.fileUrl || '',
+  );
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
@@ -158,6 +165,7 @@ export default function MidContainer({
                 isPhoto: file.photo,
                 isVideo: file.video,
               }))}
+              onImageChange={setCurrentImageUrl}
             />
             <BoxCommonButton
               onClick={handleToggleClick}
@@ -170,7 +178,12 @@ export default function MidContainer({
             />
             {showGeneralAction && (
               <div ref={boxRef} className=" absolute left-5 top-0 z-20">
-                <GeneralAction type="post"  postId={postId} />
+                <GeneralAction
+                  type="post"
+                  postId={postId}
+                  nickname={nickname} 
+                  imageUrl={currentImageUrl} 
+                />
               </div>
             )}
             <BoxCommonButton
@@ -201,6 +214,8 @@ export default function MidContainer({
               post={post}
               postId={postId}
               toggleScroll={toggleScroll}
+              nickname={nickname}
+              imageUrl={currentImageUrl}
             />
             <PostTags post={post} />
           </div>

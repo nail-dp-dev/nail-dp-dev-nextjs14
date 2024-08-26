@@ -4,6 +4,7 @@ import './globals.css';
 import StoreProvider from '../store/providers/StoreProvider';
 import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
+import KakaoScript from '../components/external/KakaoScript';
 
 const inter = Noto_Sans_KR({ subsets: ['latin'], preload:false});
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           </LoggedInProvider>
         </StoreProvider>
       </body>
+      <KakaoScript />
     </html>
   );
 }

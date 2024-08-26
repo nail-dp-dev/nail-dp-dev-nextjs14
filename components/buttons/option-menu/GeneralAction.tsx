@@ -9,6 +9,8 @@ import Link from 'next/link';
 interface GeneralActionProps {
   type: 'archive' | 'post';
   postId: number;
+  nickname: string;
+  imageUrl: string;
   onSettingClick?: () => void;
   onCopyClick?: () => void;
   onEditClick?: () => void;
@@ -20,6 +22,8 @@ interface GeneralActionProps {
 export default function GeneralAction({
   type,
   postId,
+  nickname,
+  imageUrl,
   onCopyClick = () => console.log('복제 클릭됨'),
   onEditClick = () => console.log('수정 클릭됨'),
   onDeleteClick = () => console.log('삭제 클릭됨'),
@@ -43,7 +47,9 @@ export default function GeneralAction({
   };
 
   if (showSetting) {
-    return <GeneralSetting type={type} onBack={handleBackClick} />;
+    return (
+      <GeneralSetting type={type} postId={postId} onBack={handleBackClick} />
+    );
   }
 
   if (showShareMenu) {
@@ -53,6 +59,8 @@ export default function GeneralAction({
         onBack={handleBackClick}
         showBackButton={true}
         type={type}
+        nickname={nickname}
+        imageUrl={imageUrl}
       />
     );
   }

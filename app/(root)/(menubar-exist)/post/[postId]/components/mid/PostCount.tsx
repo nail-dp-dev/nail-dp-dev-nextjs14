@@ -13,12 +13,16 @@ interface PostCountProps {
   post: PostsDetailData['data'];
   postId: number;
   toggleScroll: () => void;
+  nickname: string; 
+  imageUrl: string; 
 }
 
 export default function PostCount({
   post,
   toggleScroll,
   postId,
+  nickname, 
+  imageUrl, 
 }: PostCountProps) {
   const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
@@ -61,8 +65,7 @@ export default function PostCount({
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleMenuClick = (message: string) => {
-    alert(message);
+  const handleMenuClick = () => {
     setSharedCount(sharedCount + 1);
     setIsMenuOpen(false);
   };
@@ -110,7 +113,13 @@ export default function PostCount({
             onClick={handleShareClick}
           />
           {sharedCount}
-          {isMenuOpen && <PostShareButton onClick={handleMenuClick} />}
+          {isMenuOpen && (
+            <PostShareButton
+              onClick={handleMenuClick}
+              nickname={nickname} 
+              imageUrl={imageUrl} 
+            />
+          )}
         </div>
       </div>
     </div>

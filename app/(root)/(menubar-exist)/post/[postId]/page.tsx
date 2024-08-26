@@ -37,6 +37,8 @@ export default function PostDetailPage() {
   if (!userDetail || numericPostId === null) {
     return <div>Loading...</div>;
   }
+  const nickname = userDetail.post?.nickname ?? '';
+  const imageUrl = userDetail.post?.files[0]?.fileUrl ?? '';
 
   return (
     <div className="hide-scrollbar overflow-auto">
@@ -54,6 +56,8 @@ export default function PostDetailPage() {
         fetchMoreComments={commentsData.fetchMoreComments}
         isLoading={commentsData.isLoading}
         isLastPage={commentsData.isLastPage}
+        nickname={nickname}
+        imageUrl={imageUrl}
       />
       <BotContainer
         onAddComment={commentsData.handleAddComment}
