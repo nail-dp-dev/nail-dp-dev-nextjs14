@@ -8,6 +8,8 @@ interface CommonModalState {
   AlarmModalUser?: string; //유저 닉네임
   AlarmModalByte?: number; // 모달 이미지 바이트
   AlarmModalImageType?: string; // 모달 이미지 타입
+  ArchiveModalPostId?: number; //아카이브 모달 postId값
+  ArchiveModalSetSuccess? : boolean; //아카이브에 게시글 저장 성공여부
 }
 
 const initialCommonModalState: CommonModalState = {
@@ -19,6 +21,8 @@ const initialCommonModalState: CommonModalState = {
   AlarmModalUser: '',
   AlarmModalByte: 0,
   AlarmModalImageType: '',
+  ArchiveModalPostId: 0,
+  ArchiveModalSetSuccess: false
 };
 
 const commonModalSlice = createSlice({
@@ -38,6 +42,7 @@ const commonModalSlice = createSlice({
       state.AlarmModalUser = '';
       state.AlarmModalByte = 0;
       state.AlarmModalImageType = '';
+      state.ArchiveModalPostId = 0;
     },
     alarmModalData: (
       state,
@@ -55,10 +60,13 @@ const commonModalSlice = createSlice({
       state.AlarmModalByte = action.payload.byte;
       state.AlarmModalImageType = action.payload.imageType;
     },
+    setArchiveModal: (state, action: PayloadAction<{postId:number}>) => {
+      state.ArchiveModalPostId = action.payload.postId;
+    },
   },
 });
 
-export const { setCommonModal, commonModalClose, alarmModalData } =
+export const { setCommonModal, commonModalClose, alarmModalData, setArchiveModal } =
   commonModalSlice.actions;
 
 const selectCommonModal = (state: { commonModal: CommonModalState }) =>
@@ -81,6 +89,14 @@ export const selectAlarmModalStatus = createSelector(
     alarmUser: commonModal.AlarmModalUser,
     alarmByte: commonModal.AlarmModalByte,
     alarmImageType: commonModal.AlarmModalImageType,
+  }),
+);
+
+export const selectArchiveModalStatus = createSelector(
+  [selectCommonModal],
+  (archiveModal) => ({
+    ArchivePostId: archiveModal.ArchiveModalPostId,
+    ArchiveState: archiveModal.ArchiveModalSetSuccess
   }),
 );
 

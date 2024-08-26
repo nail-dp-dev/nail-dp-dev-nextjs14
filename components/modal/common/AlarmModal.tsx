@@ -4,20 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   commonModalClose,
   selectAlarmModalStatus,
-  selectCommonModalStatus,
 } from '../../../store/slices/modalSlice';
 
 interface AlarmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
 }
+import { AlarmModalProps } from '../../../constants/interface';
 
 export default function AlarmModal({ onConfirm, onCancel }: AlarmModalProps) {
   const dispatch = useDispatch();
-  const { isCommonModalShow, whichCommonModal } = useSelector(
-    selectCommonModalStatus,
-  );
-
   const { alarmImageType, alarmByte, alarmButton, alarmType, alarmUser } =
     useSelector(selectAlarmModalStatus);
   console.log('alarmImageType:', alarmImageType);

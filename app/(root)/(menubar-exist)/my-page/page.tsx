@@ -13,25 +13,7 @@ import { getPostsTempData } from '../../../../api/post/getPostsTempData';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 import useLoggedInUserData from '../../../../hooks/user/useLoggedInUserData';
 import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
-
-interface postData {
-  postId: number;
-  photoId: number;
-  photoUrl: string;
-  isPhoto: boolean;
-  isVideo: boolean;
-  like: boolean;
-  saved: boolean;
-  createdDate: string;
-}
-
-interface tempData {
-  isPhoto: boolean;
-  isVideo: boolean;
-  photoId: number;
-  photoUrl: string;
-  postId: number;
-}
+import { postData, tempData } from '../../../../constants/interface';
 
 export default function MyPagePage() {
   const isLoggedIn = useSelector(selectLoginStatus);

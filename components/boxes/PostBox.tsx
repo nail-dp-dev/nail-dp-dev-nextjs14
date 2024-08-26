@@ -15,7 +15,7 @@ import { selectNumberOfBoxes } from '../../store/slices/boxLayoutSlice';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
-import { setCommonModal } from '../../store/slices/modalSlice';
+import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
 
 function PostBox({
   postId,
@@ -45,6 +45,7 @@ function PostBox({
     console.log('Click...Plus!');
     //모달 확인을 위해 작성 
     dispatch(setCommonModal("archive"))
+    dispatch(setArchiveModal({postId}))
   };
 
   const isPhoto =
