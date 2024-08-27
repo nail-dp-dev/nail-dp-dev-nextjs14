@@ -7,6 +7,7 @@ import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserDat
 import {
   followUser,
   unFollowUser,
+  getFollowerCount, // 수정된 API 함수 임포트
 } from '../../../../../../api/user/followUser';
 
 interface userProps {
@@ -17,7 +18,9 @@ interface userProps {
 export default function TopContainer({ user, postId }: userProps) {
   const { userData } = useLoggedInUserData();
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);
-  const [followerCount, setFollowerCount] = useState(user.followerCount);
+  const [followerCount, setFollowerCount] = useState<number | null>(
+    user.followerCount,
+  );
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
@@ -26,17 +29,31 @@ export default function TopContainer({ user, postId }: userProps) {
     }
   }, [userData, user.nickname]);
 
+  useEffect(() => {
+    const fetchFollowerCount = async () => {
+      try {
+        const count = await getFollowerCount(user.nickname);
+        setFollowerCount(count);
+      } catch (error) {
+        console.error('Error fetching follower count:', error);
+        setFollowerCount(null);
+      }
+    };
+
+    fetchFollowerCount();
+  }, [user.nickname]);
+
   const handleFollowToggle = async () => {
     if (isFollowing) {
       const success = await unFollowUser(user.nickname);
       if (success) {
-        setFollowerCount((prev) => prev - 1);
+        setFollowerCount((prev) => (prev !== null ? prev - 1 : null));
         setIsFollowing(false);
       }
     } else {
       const success = await followUser(user.nickname);
       if (success) {
-        setFollowerCount((prev) => prev + 1);
+        setFollowerCount((prev) => (prev !== null ? prev + 1 : null));
         setIsFollowing(true);
       }
     }
@@ -62,7 +79,13 @@ export default function TopContainer({ user, postId }: userProps) {
             nicknameStyle="text-base font-medium"
             statsStyle="text-14px-normal-dP"
           />
-          <span className="text-14px-normal-dP">{followerCount} 팔로워</span>
+          {followerCount !== null ? (
+            <span className="text-14px-normal-dP">{followerCount} 팔로워</span>
+          ) : (
+            <span className="text-14px-normal-dP">
+              팔로워 수를 불러올 수 없습니다.
+            </span>
+          )}
         </div>
 
         {!isOwner && (

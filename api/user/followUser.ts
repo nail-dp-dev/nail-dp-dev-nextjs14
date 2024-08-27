@@ -39,3 +39,29 @@ export const unFollowUser = async (nickname: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const getFollowerCount = async (
+  nickname: string,
+): Promise<number | null> => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/${nickname}/followers`,
+      {
+        method: 'GET',
+        credentials: 'include',
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch follower count');
+    }
+
+    const data = await response.json();
+    console.log('API Response Data:', data);
+
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching follower count:', error);
+    return null;
+  }
+};
