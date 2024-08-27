@@ -12,6 +12,7 @@ import { AddCommentType } from '../../../../../../hooks/useComments';
 import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
+import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -49,10 +50,7 @@ export default function MidContainer({
   nickname,
   imageUrl,
 }: MidContainerProps) {
-  const [sharedCount, setSharedCount] = useState(post.sharedCount);
-  useEffect(() => {
-    console.log('Received comments in MidContainer:', comments);
-  }, [comments]);
+  const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
   const INITIAL_WIDTH = MAX_WIDTH;
@@ -64,6 +62,24 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
+
+  useEffect(() => {
+    const fetchSharedCount = async () => {
+      try {
+        const count = await getPostSharedCount(postId);
+        setSharedCount(count);
+      } catch (error) {
+        console.error('Failed to fetch shared count:', error);
+        setSharedCount(post.sharedCount);
+      }
+    };
+
+    fetchSharedCount();
+  }, [postId, post.sharedCount]);
+
+  useEffect(() => {
+    console.log('Received comments in MidContainer:', comments);
+  }, [comments]);
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
@@ -184,7 +200,7 @@ export default function MidContainer({
                   postId={postId}
                   nickname={nickname}
                   imageUrl={currentImageUrl}
-                  setSharedCount={setSharedCount} 
+                  setSharedCount={setSharedCount}
                 />
               </div>
             )}
