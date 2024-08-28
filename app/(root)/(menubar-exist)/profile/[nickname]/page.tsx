@@ -8,31 +8,47 @@ import { selectLoginStatus } from '../../../../../store/slices/loginSlice';
 import { getProfileData } from '../../../../../api/profile/getProfileData';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-
-interface profileData {
-  followerCount: number;
-  followingCount: number;
-  followingStatus: boolean;
-  nickname: string;
-  point: null;
-  postsCount: number;
-  profileUrl: string;
-  saveCount: number;
-}
+import { postData, profileData } from '../../../../../constants/interface';
+import CategoryBar from '../../../../../components/bars/CategoryBar';
+import { ProfileElements } from '../../../../../constants';
+import { getProfilePost } from '../../../../../api/profile/getProfilePost';
+import { getProfileArchive } from '../../../../../api/profile/getProfileArchive';
 
 export default function ProfilePage() {
   const isLoggedIn = useSelector(selectLoginStatus);
   const { nickname } = useParams<{ nickname: string }>();
   const [isProfile, setIsProfile] = useState<profileData>();
+  const [isCategory, setIsCategory] = useState('post');
+  const [isPost, setIsPost] = useState<postData[]>();
+  const [isPostLost, setIsPostLost] = useState();
+  const [isPostCursorId, setIsCursorId] = useState();
+  const [isArchive, setIsArchive] = useState();
 
   const profileData = async () => {
-    console.log(nickname);
     const response = await getProfileData(nickname);
     setIsProfile(response.data);
   };
+  const profilePostData = async () => {
+    const postData = await getProfilePost(nickname);
+    console.log(postData);
+    setIsPostLost(postData.data.postSummaryList.last);
+    setIsCursorId(postData.data.cursorId);
+    setIsPost(postData.data.postSummaryList.content);
+  };
+  const profileArchiveData = async () => {
+    const archiveData = await getProfileArchive(nickname);
+    console.log(archiveData);
+    setIsArchive;
+  };
+
+  const message = () => {};
+
+  const follow = () => {};
 
   useEffect(() => {
     profileData();
+    profilePostData();
+    profileArchiveData();
   }, []);
 
   return (
@@ -58,23 +74,36 @@ export default function ProfilePage() {
             />
           </div>
           <div>
-            <button className="mr-[12px] h-[32px] w-[84px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple">
+            <button
+              onClick={(e) => follow()}
+              className="mr-[12px] h-[32px] w-[84px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
+            >
               팔로우
             </button>
-            <button className="mr-[12px] h-[32px] w-[84px] rounded-full border-2 border-black bg-black text-white hover:bg-white hover:text-black">
+            <button
+              onClick={(e) => message()}
+              className="mr-[12px] h-[32px] w-[84px] rounded-full border-2 border-black bg-black text-white hover:bg-white hover:text-black"
+            >
               메세지
             </button>
           </div>
         </div>
       )}
       <div className={`sticky top-0 z-30 w-full bg-white`}>
-        {/* 여기수정 */}
-        {/* <CategoryBar elements={myPageCategoryElements} /> */}
+        <CategoryBar
+          elements={ProfileElements}
+          category={isCategory}
+          setCategory={setIsCategory}
+        />
       </div>
       <div className="MyPageContainer max-h-full ">
         <div
           className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
-        ></div>
+        >
+          {/* {isCategory == 'post' && isPost && isPost.map((item, index) => {
+
+          })} */}
+        </div>
       </div>
     </div>
   );

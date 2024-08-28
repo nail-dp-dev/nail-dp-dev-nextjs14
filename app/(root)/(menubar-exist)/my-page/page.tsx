@@ -121,7 +121,7 @@ export default function MyPagePage() {
       <div className="MyPageContainer max-h-full ">
         <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
           <PostCreate />
-          {isTempData.length === 1 &&
+          {isTempData[0] !== null &&
             isTempData.map((item, index) => {
               if (item && item.postId) {
                 return (
