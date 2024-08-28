@@ -10,7 +10,7 @@ interface ButtonProps {
   type: 'heart' | 'plus' | 'toggle';
   isClicked?: boolean;
   showGeneralAction?: boolean;
-  position: 'top-left' | 'top-right' | 'bottom-right';
+  position: 'top-left' | 'top-right' | 'bottom-right' | 'nothing';
   width?: string;
   height?: string;
   className?: string;
@@ -41,7 +41,7 @@ const BoxCommonButton: React.FC<ButtonProps> = ({
 }) => {
   const ButtonComponent = buttonComponents[type];
   return (
-    <button onClick={onClick} className={`${showType !== 'list' && 'absolute'} z-10 ${positionClasses[position]} ${className}`}>
+    <button onClick={onClick} className={`${showType !== 'list' && 'absolute'} z-10 ${position !== 'nothing' && positionClasses[position]} ${className}`}>
       <ButtonComponent
         width={width}
         height={height}

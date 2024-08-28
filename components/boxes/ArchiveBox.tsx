@@ -127,6 +127,7 @@ export default function ArchiveBox({
               width="4px"
               height="20px"
               showGeneralAction={showGeneralAction}
+              position="nothing"
               className="p-2 z-30 relative"
             />
             {
