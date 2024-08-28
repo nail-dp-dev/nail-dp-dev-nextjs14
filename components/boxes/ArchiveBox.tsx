@@ -14,7 +14,6 @@ import { useGeneralAction } from '../../hooks/useGeneralAction';
 import NoArchiveImage from '../../public/assets/svg/no-archive.svg'
 import NoArchiveFont from '../../public/assets/svg/no-archive-font.svg'
 
-// 내아카이브 박스(임시)
 export default function ArchiveBox({
   showType,
   archiveId,
@@ -47,16 +46,18 @@ export default function ArchiveBox({
   };
 
   return (
-    <>
+    <div
+      className={` relative mb-[30px] flex ${showType === 'list' && 'h-[72px] items-center px-[16px] gap-[16px]'}`}
+      style={boxStyle}
+    >
       <Link
         href={`archive/${archiveId}`} 
-        className={`flex ${showType === 'album' && 'flex-col items-center mb-[30px]'} justify-between ${ showType === 'list' && 'h-[72px] items-center px-[16px] gap-[16px]'} relative ${showType === 'list' && 'rounded-2xl  hover:bg-chatChooseButton cursor-pointer'} z-0`}
-        style={boxStyle}
+        className={`flex w-full h-full ${showType === 'album' && 'flex-col items-center gap-[20px]'} justify-between ${ showType === 'list' && 'items-center px-[16px] rounded-2xl  hover:bg-chatChooseButton cursor-pointer'} z-0`}
       >
         <div
-          className={`box ${ photoUrl === null  && 'bg-noArchiveColor'} ${showType === 'list' && 'w-[56px] h-[56px]'} ${showType === 'album' && 'w-full mb-[12px]  transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px]`}
+          className={`box ${ photoUrl === null  && 'bg-noArchiveColor'} ${showType === 'list' && 'w-[56px] h-[56px]'} ${showType === 'album' && 'w-full aspect-auto	 transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px]`}
         >
-          <div className={`inset-0 z-0`}>
+          <div className={`inset-0 z-0 w-full h-full`}>
             {isPhoto && photoUrl !== null && (
               <Image
                 src={photoUrl}
@@ -85,25 +86,7 @@ export default function ArchiveBox({
             )}
             {isVideo && photoUrl !== null && <Video src={photoUrl} width={'100%'} height={'100%'} />}
           </div>
-          {
-            showType === 'album' &&
-            <BoxCommonButton
-              showType={showType}
-              type="toggle"
-              onClick={handleToggleClick}
-              width="4px"
-              height="20px"
-              showGeneralAction={showGeneralAction}
-              position="top-left"
-              className="p-2 z-40 "
-            />
-          }
-          {
-            showType === 'album' && showGeneralAction && 
-            <div ref={boxRef} className="absolute left-5 top-0 z-40">
-              <GeneralAction type="archive" archiveId={archiveId}/>
-            </div>
-          }
+
         </div>
         <div 
           className='px-[10px] w-full h-full flex flex-col items-start justify-center'
@@ -112,9 +95,9 @@ export default function ArchiveBox({
           <p className='text-text text-[0.875rem] font-[400]'>{postCount} designs </p>
         </div>
       </Link>
-      <div className='absolute'>
+      
         {
-          showType === 'list' &&
+          showType === 'album' &&
           <BoxCommonButton
             showType={showType}
             type="toggle"
@@ -123,17 +106,39 @@ export default function ArchiveBox({
             height="20px"
             showGeneralAction={showGeneralAction}
             position="top-left"
-            className="p-2 z-40"
+            className="p-2 z-30 "
           />
         }
         {
-          showType === 'list' && showGeneralAction && 
-          <div ref={boxRef} className="left-5 top-0 z-40">
+          showType === 'album' && showGeneralAction && 
+          <div ref={boxRef} className="absolute left-5 top-0 z-40">
             <GeneralAction type="archive" archiveId={archiveId}/>
           </div>
         }
+        {
+          showType === 'list' &&
+          <div
+            className='absolute right-0 translate-x-[-20px]'
+          >
+            <BoxCommonButton
+              showType={showType}
+              type="toggle"
+              onClick={handleToggleClick}
+              width="4px"
+              height="20px"
+              showGeneralAction={showGeneralAction}
+              className="p-2 z-30 relative"
+            />
+            {
+              showType === 'list' && showGeneralAction && 
+                <div ref={boxRef} className="absolute right-0 bottom-0 z-40 translate-y-[-30px] translate-x-[-150px]">
+                  <GeneralAction type="archive" archiveId={archiveId}/>
+                </div>
+            }
+          </div>
 
-      </div>
-    </>
+        }
+
+    </div>
   );
 }
