@@ -3,11 +3,7 @@ import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import ImageSlider from './ImageSlider';
-import {
-  Comment,
-  CommentData,
-  PostsDetailData,
-} from '../../../../../../types/dataType';
+import { Comment, PostsDetailData } from '../../../../../../types/dataType';
 import { AddCommentType } from '../../../../../../hooks/useComments';
 import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
@@ -18,7 +14,6 @@ interface MidContainerProps {
   post: PostsDetailData['data'];
   postId: number;
   comments: Comment[];
-  // comments: CommentData['data'];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
@@ -51,6 +46,9 @@ export default function MidContainer({
   imageUrl,
 }: MidContainerProps) {
   const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
+  const [boundary, setBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
+    post.boundary,
+  );
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
   const INITIAL_WIDTH = MAX_WIDTH;
@@ -200,6 +198,8 @@ export default function MidContainer({
                   postId={postId}
                   imageUrl={currentImageUrl}
                   setSharedCount={setSharedCount}
+                  initialBoundary={boundary}
+                  onBoundaryChange={setBoundary}
                 />
               </div>
             )}

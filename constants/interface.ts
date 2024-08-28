@@ -27,6 +27,7 @@ export interface PostBoxNewProps {
   tempPost?: boolean
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setSharedCount: React.Dispatch<React.SetStateAction<number>>; 
+  boundary: 'ALL' | 'FOLLOW' | 'NONE';
 }
 export interface ArchiveBoxNewProps {
   showType: string,
@@ -158,6 +159,7 @@ export interface postData {
   like: boolean;
   saved: boolean;
   createdDate: string;
+  boundary: string;
 }
 
 export interface tempData {
@@ -166,4 +168,5 @@ export interface tempData {
   photoId: number;
   photoUrl: string;
   postId: number;
+  boundary: string;
 }

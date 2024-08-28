@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import CategoryBar from '../../../../components/bars/CategoryBar';
@@ -15,27 +15,30 @@ import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 
 export default function ArchivePage() {
-
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
 
-  const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] = useState<boolean>(false);
+  const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
+    useState<boolean>(false);
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
-  const [category, setCategory] = useState<string>('for-you')
+  const [category, setCategory] = useState<string>('for-you');
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cursorId, setCursorId] = useState<number>(0);
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [postsData, setPostsData] = useState<PostArray[]>([]);
-  const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] = useState<boolean>(true);
+  const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] =
+    useState<boolean>(true);
   const [isLikedPostsLast, setIsLikedPostsLast] = useState<boolean>(false);
   const [isLikedPostsLoading, setIsLikedPostsLoading] = useState<boolean>(true);
   const [cursorLikedId, setCursorLikedId] = useState<number>(0);
-  const [isLikedPostsContentExist, setIsLikedPostsContentExist] = useState<boolean>(false);
+  const [isLikedPostsContentExist, setIsLikedPostsContentExist] =
+    useState<boolean>(false);
   const [likedPostsMessage, setLikedPostsMessage] = useState<string>('');
   const [likedPostsData, setLikedPostsData] = useState<PostArray[]>([]);
+  const [sharedCount, setSharedCount] = useState<number>(0);
 
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -211,9 +214,9 @@ export default function ArchivePage() {
     setIsLoading(true);
     setIsLast(false);
     if (isLoggedIn === 'loggedOut') {
-      setCategory('trending')
+      setCategory('trending');
     }
-  },[category, isLoggedIn])
+  }, [category, isLoggedIn]);
 
   const itemsToRender = postsData
     ? postsData.length <= layoutNum
@@ -223,28 +226,34 @@ export default function ArchivePage() {
 
   return (
     <>
-      <CategoryBar elements={archiveCategoryElements} category={category} setCategory={setCategory}/>
-      <div className='ForYouContainer max-h-full overflow-hidden'>
-        <Suspense fallback={<Loading/>}>
+      <CategoryBar
+        elements={archiveCategoryElements}
+        category={category}
+        setCategory={setCategory}
+      />
+      <div className="ForYouContainer max-h-full overflow-hidden">
+        <Suspense fallback={<Loading />}>
           <div
             ref={boxRef}
-            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all">
+            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
+          >
             {!likedButtonState &&
               isContentExist &&
               !isLoading &&
               itemsToRender.map((item, index) => (
-                  <PostBox
-                    key={index}
-                    postId={item.postId}
-                    photoId={item.photoId}
-                    photoUrl={item.photoUrl}
-                    like={item.like}
-                    saved={item.saved}
-                    createdDate={item.createdDate}
-                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  />
-                )
-              )}
+                <PostBox
+                  key={index}
+                  postId={item.postId}
+                  photoId={item.photoId}
+                  photoUrl={item.photoUrl}
+                  like={item.like}
+                  saved={item.saved}
+                  createdDate={item.createdDate}
+                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  setSharedCount={setSharedCount}
+                />
+              ))}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
             {!likedButtonState && !isContentExist && !isLoading && (
               <div>{message}</div>
@@ -254,19 +263,21 @@ export default function ArchivePage() {
               !isLikedPostsLoading &&
               likedPostsData.map((item, index) => (
                 <PostBox
-                key={index}
-                postId={item.postId}
-                photoId={item.photoId}
-                photoUrl={item.photoUrl}
-                like={item.like}
-                saved={item.saved}
-                createdDate={item.createdDate}
-                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  key={index}
+                  postId={item.postId}
+                  photoId={item.photoId}
+                  photoUrl={item.photoUrl}
+                  like={item.like}
+                  saved={item.saved}
+                  createdDate={item.createdDate}
+                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  setSharedCount={setSharedCount}
                 />
               ))}
-            {likedButtonState && !isLikedPostsContentExist && isLikedPostsLoading && (
-              <Loading />
-            )}
+            {likedButtonState &&
+              !isLikedPostsContentExist &&
+              isLikedPostsLoading && <Loading />}
             {likedButtonState &&
               !isLikedPostsContentExist &&
               !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
@@ -274,10 +285,7 @@ export default function ArchivePage() {
           </div>
         </Suspense>
       </div>
-      {
-        isSuggestLoginModalShow &&
-        <LoginSuggestModal />
-      }
+      {isSuggestLoginModalShow && <LoginSuggestModal />}
     </>
   );
 }

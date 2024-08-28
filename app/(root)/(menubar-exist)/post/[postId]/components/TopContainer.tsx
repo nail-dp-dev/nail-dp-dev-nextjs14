@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import {
   followUser,
   unFollowUser,
-  getFollowerCount, // 수정된 API 함수 임포트
+  getFollowerCount,
 } from '../../../../../../api/user/followUser';
 
 interface userProps {
@@ -23,7 +23,7 @@ export default function TopContainer({ user, postId }: userProps) {
     user.followerCount,
   );
   const [isOwner, setIsOwner] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (userData && userData.data.nickname === user.nickname) {
@@ -65,26 +65,29 @@ export default function TopContainer({ user, postId }: userProps) {
     return <div>사용자를 찾을 수 없습니다.</div>;
   }
   //프로필 이동
-  const test = (nickname:string) => {
+  const test = (nickname: string) => {
     if (nickname !== undefined) {
       router.push(`/profile/${nickname}`);
     }
-    console.log("에러");
-  }
+    console.log('에러');
+  };
 
   return (
     <div className="flex flex-wrap items-center justify-between bg-white p-2">
       <div className="wrap-left flex flex-wrap items-center gap-4">
-        <UserImage
-          src={user.profileUrl}
-          alt={`${user.nickname}'s profile`}
-          width={56}
-          height={56}
-        />
-
         <div
-        onClick={e => test(userData?.data.nickname!)}
-         className="wrap-info pb-2 leading-3">
+          className="cursor-pointer"
+          onClick={(e) => test(userData?.data.nickname!)}
+        >
+          <UserImage
+            src={user.profileUrl}
+            alt={`${user.nickname}'s profile`}
+            width={56}
+            height={56}
+          />
+        </div>
+
+        <div className="wrap-info pb-2 leading-3 ">
           <UserInfo
             nickname={user.nickname}
             nicknameStyle="text-base font-medium"

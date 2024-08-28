@@ -28,6 +28,7 @@ function PostBox({
   tempPost,
   setIsSuggestLoginModalShow,
   setSharedCount,
+  boundary: initialBoundary,
 }: PostBoxNewProps) {
   const router = useRouter();
 
@@ -37,6 +38,7 @@ function PostBox({
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
 
   const [isLiked, setIsLiked] = useState(like);
+  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
   const dispatch = useDispatch();
 
   const handleHeartClick = async () => {
@@ -158,6 +160,8 @@ function PostBox({
             postId={postId}
             imageUrl={photoUrl}
             setSharedCount={setSharedCount}
+            initialBoundary={currentBoundary}
+            onBoundaryChange={setCurrentBoundary}
           />
         </div>
       )}

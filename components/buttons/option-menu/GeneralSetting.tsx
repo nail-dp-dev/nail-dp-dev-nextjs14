@@ -6,41 +6,49 @@ import { patchPostCloser } from '../../../api/post/patchPostCloser';
 
 interface GeneralSettingProps {
   type: 'archive' | 'post';
-  postId: number; 
+  postId: number;
   onBack: () => void;
+  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE'; 
+  onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void; 
 }
 
 // 메뉴-설정 게시물/아카이브
-export default function GeneralSetting({ type, onBack, postId }: GeneralSettingProps) {
-  const [selected, setSelected] = useState('전체공개');
+export default function GeneralSetting({
+  type,
+  onBack,
+  postId,
+  initialBoundary,
+  onBoundaryChange, 
+}: GeneralSettingProps) {
+  const [selected, setSelected] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
 
-  const handleSettingChange = async (newSetting: string) => {
-    setSelected(newSetting);
+const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
+  setSelected(newSetting);
+  onBoundaryChange(newSetting);
 
-    const boundaryMap: { [key: string]: 'ALL' | 'FOLLOW' | 'NONE' } = {
-      '전체공개': 'ALL',
-      '팔로워공개': 'FOLLOW',
-      '비공개': 'NONE',
-    };
-
-    const closerValue = boundaryMap[newSetting] || 'ALL';
-
-    if (type === 'post') {
-      const result = await patchPostCloser(postId, closerValue);
-      if (result && result.success) {
-        console.log(result.message);
-      } else {
-        console.error('Failed to update post visibility');
-      }
+  if (type === 'post') {
+    const result = await patchPostCloser(postId, newSetting);
+    if (result && result.success) {
+      console.log(result.message);
     } else {
-      console.log('아카이브 설정 변경: ', newSetting);
+      console.error('Failed to update post visibility');
     }
+  } else {
+    console.log('아카이브 설정 변경: ', newSetting);
+  }
+};
+
+
+  const boundaryMap: { [key: string]: 'ALL' | 'FOLLOW' | 'NONE' } = {
+    '전체공개': 'ALL',
+    '팔로워공개': 'FOLLOW',
+    '비공개': 'NONE',
   };
 
   const items = settingElements.map((item) => ({
     ...item,
-    isSelected: item.label === selected,
-    onClick: () => handleSettingChange(item.label),
+    isSelected: boundaryMap[item.label] === selected,
+    onClick: () => handleSettingChange(boundaryMap[item.label]),
   }));
 
   return (
@@ -62,7 +70,9 @@ export default function GeneralSetting({ type, onBack, postId }: GeneralSettingP
         <div
           key={index}
           onClick={item.onClick}
-          className={`flex cursor-pointer items-center px-[19px] py-[3px] hover:font-bold ${item.isSelected ? 'font-bold text-purple' : ''}`}
+          className={`flex cursor-pointer items-center px-[19px] py-[3px] hover:font-bold ${
+            item.isSelected ? 'font-bold text-purple' : ''
+          }`}
         >
           {item.label}
           {item.isSelected && <MenuCheck className="ml-[6px]" />}

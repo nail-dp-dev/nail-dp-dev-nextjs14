@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuDeleteIcon from '../../../public/assets/svg/menu-delete.svg';
 import GeneralSetting from './GeneralSetting';
 import GeneralShareMenu from './GeneralShareMenu';
@@ -16,10 +16,12 @@ interface GeneralActionProps {
   imageUrl?: string;
   setSharedCount?: React.Dispatch<React.SetStateAction<number>>;
   onSettingClick?: () => void;
-  onCopyClick?: (e: any, archiveId: number) => void;
-  onEditClick?: (e: any, archiveId: number) => void;
+  onCopyClick?: (e: React.MouseEvent, archiveId: number) => void;
+  onEditClick?: (e: React.MouseEvent, archiveId: number) => void;
   onShareClick?: () => void;
   onDeleteClick?: () => void;
+  initialBoundary?: 'ALL' | 'FOLLOW' | 'NONE';
+  onBoundaryChange?: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
 
 // 메뉴 게시물/아카이브
@@ -29,31 +31,37 @@ export default function GeneralAction({
   postId,
   imageUrl,
   setSharedCount,
+  initialBoundary,
   onDeleteClick = () => console.log('삭제 클릭됨'),
-  onCopyClick = (e, archiveId) => {
+  onCopyClick = (e: React.MouseEvent, archiveId) => {
     e.preventDefault();
     e.stopPropagation();
     postCloneArchiveCreate(archiveId);
   },
-  onEditClick = (e, archiveId) => {
+  onEditClick = (e: React.MouseEvent, archiveId) => {
     e.preventDefault();
     e.stopPropagation();
     postCloneArchiveCreate(archiveId);
   },
+  onBoundaryChange,
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [currentBoundary, setCurrentBoundary] = useState<
+    'ALL' | 'FOLLOW' | 'NONE' | undefined
+  >(initialBoundary);
 
-  const handleShareCount = useHandleShareCount(postId as number, setSharedCount!); 
+  const handleShareCount = useHandleShareCount(
+    postId as number,
+    setSharedCount!,
+  );
 
-  const handleSettingClick = () => {
-    setShowSetting(true);
-  };
+  useEffect(() => {
+    setCurrentBoundary(initialBoundary);
+  }, [initialBoundary]);
 
-  const handleShareClick = () => {
-    setShowShareMenu(true);
-  };
-
+  const handleSettingClick = () => setShowSetting(true);
+  const handleShareClick = () => setShowShareMenu(true);
   const handleBackClick = () => {
     setShowSetting(false);
     setShowShareMenu(false);
@@ -71,18 +79,29 @@ export default function GeneralAction({
     }
   };
 
+  const handleBoundaryChange = (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => {
+    setCurrentBoundary(newBoundary);
+    onBoundaryChange?.(newBoundary);
+  };
+
   if (showSetting) {
-    return postId !== undefined ? (
-      <GeneralSetting type={type} postId={postId} onBack={handleBackClick} />
+    return postId && currentBoundary ? (
+      <GeneralSetting
+        type={type}
+        postId={postId}
+        onBack={handleBackClick}
+        initialBoundary={currentBoundary}
+        onBoundaryChange={handleBoundaryChange}
+      />
     ) : (
-      <div>Error: postId is required for settings</div>
+      <div>로딩 중... 잠시만 기다려 주세요.</div>
     );
   }
 
   if (showShareMenu) {
     return (
       <GeneralShareMenu
-        onClick={handleShareCount} 
+        onClick={handleShareCount}
         onBack={handleBackClick}
         showBackButton={true}
         type={type}
@@ -102,22 +121,21 @@ export default function GeneralAction({
     >
       {actionElements.map((item, index) => {
         const IconComponent = Icons[item.icon as keyof typeof Icons];
+        const handleClick = item.label.includes('설정')
+          ? handleSettingClick
+          : item.label.includes('공유')
+            ? handleShareClick
+            : item.label.includes('복제') && archiveId !== undefined
+              ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
+              : item.label.includes('수정') && archiveId !== undefined
+                ? (e: React.MouseEvent) => onEditClick(e, archiveId)
+                : item.onClick;
+
         return (
           <div
             key={index}
-            onClick={
-              item.label.includes('설정')
-                ? handleSettingClick
-                : item.label.includes('공유')
-                ? handleShareClick
-                : item.label.includes('복제') && archiveId !== undefined
-                ? (e) => onCopyClick(e, archiveId)
-                : item.label.includes('수정') && archiveId !== undefined
-                ? (e) => onEditClick(e, archiveId)
-                : item.onClick
-            }
-            className="flex cursor-pointer items-center justify-center 
-            rounded-xl px-2 pb-[10px] hover:font-bold"
+            onClick={handleClick}
+            className="flex cursor-pointer items-center justify-center rounded-xl px-2 pb-[10px] hover:font-bold"
           >
             {item.label.includes('수정') ? (
               <Link href={`/post/edit/${postId}`} className="flex items-center">

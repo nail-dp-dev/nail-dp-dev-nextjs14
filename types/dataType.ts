@@ -41,6 +41,7 @@ export type AllPostsData = {
         photoUrl: string;
         like: boolean;
         saved: boolean;
+        boundary: 'ALL' | 'FOLLOW' | 'NONE';
       },
     ];
     number: number;
@@ -73,6 +74,7 @@ export type PostArray = {
   like: boolean;
   saved: boolean;
   createdDate: any;
+  boundary: string;
 };
 
 export type PostsData = {
@@ -115,6 +117,7 @@ export type PostsDetailData = {
     commentCount: number;
     sharedCount: number;
     tags: string[];
+    boundary: 'ALL' | 'FOLLOW' | 'NONE';
   };
 };
 export type CommentData = {
