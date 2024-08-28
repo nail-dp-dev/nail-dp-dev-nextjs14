@@ -4,7 +4,7 @@ import PostBox from '../../../../components/boxes/PostBox';
 import PostCreate from '../../../../components/animations/PostCreateIcon';
 import CategoryBar from '../../../../components/bars/CategoryBar';
 import { myPageCategoryElements } from '../../../../constants';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import UserImage from '../../../../components/ui/UserImage';
 import UserInfo from '../../../../components/ui/UserInfo';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
 import { postData, tempData } from '../../../../constants/interface';
 
 export default function MyPagePage() {
+  const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
+    useState<boolean>(false);
   const isLoggedIn = useSelector(selectLoginStatus);
   const { userData } = useLoggedInUserData();
   const [isTempData, setIsTempData] = useState<tempData[]>([]);
@@ -114,14 +116,15 @@ export default function MyPagePage() {
         </div>
       )}
       <div className={`sticky top-0 z-30 w-full bg-white`}>
-        <CategoryBar elements={myPageCategoryElements} />
+        {/* 여기수정 */}
+        {/* <CategoryBar elements={myPageCategoryElements} /> */}
       </div>
       <div className="MyPageContainer max-h-full ">
         <div
           className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
         >
           <PostCreate />
-          {isTempData.length > 1 &&
+          {isTempData.length == 1 &&
             isTempData.map((item, index) => {
               return (
                 <PostBox
@@ -132,6 +135,7 @@ export default function MyPagePage() {
                   saved={false}
                   createdDate={null}
                   tempPost={true}
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                 />
               );
             })}
@@ -146,6 +150,8 @@ export default function MyPagePage() {
                   like={item.like}
                   saved={item.saved}
                   createdDate={item.createdDate}
+                  tempPost={false}
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                 />
               );
             })}
