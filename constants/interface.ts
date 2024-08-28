@@ -26,6 +26,7 @@ export interface PostBoxNewProps {
   createdDate: any,
   tempPost?: boolean
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setSharedCount: React.Dispatch<React.SetStateAction<number>>; 
 }
 export interface ArchiveBoxNewProps {
   showType: string,

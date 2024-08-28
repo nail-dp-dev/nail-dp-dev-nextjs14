@@ -7,7 +7,6 @@ interface GeneralShareMenuProps {
   onBack?: () => void;
   showBackButton?: boolean;
   type: 'archive' | 'post';
-  nickname: string;
   imageUrl: string;
 }
 
@@ -17,7 +16,6 @@ export default function GeneralShareMenu({
   onBack,
   showBackButton = false,
   type,
-  nickname,
   imageUrl,
 }: GeneralShareMenuProps) {
   const [selected, setSelected] = useState('');
@@ -49,7 +47,6 @@ export default function GeneralShareMenu({
       <ShareMenuList
         onClick={handleClick}
         selected={selected}
-        nickname={nickname}
         imageUrl={imageUrl}
       />
     </div>

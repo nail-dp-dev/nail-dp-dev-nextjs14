@@ -7,19 +7,19 @@ import { Icons } from '../../../constants/icons';
 import { postCloneArchiveCreate } from '../../../api/archive/postCloneArchiveCreate';
 import { deleteArchiveCreate } from '../../../api/archive/deleteArchive';
 import Link from 'next/link';
+import { useHandleShareCount } from '../../../hooks/useHandleShareCount';
 
 interface GeneralActionProps {
   archiveId?: number;
   type: 'archive' | 'post';
-  postId: number;
-  nickname: string;
-  imageUrl: string;
+  postId?: number;
+  imageUrl?: string;
+  setSharedCount?: React.Dispatch<React.SetStateAction<number>>;
   onSettingClick?: () => void;
-  onCopyClick?: (e:any, archiveId: number) => void;
-  onEditClick?: (e:any, archiveId: number) => void;
+  onCopyClick?: (e: any, archiveId: number) => void;
+  onEditClick?: (e: any, archiveId: number) => void;
   onShareClick?: () => void;
   onDeleteClick?: () => void;
-  setSharedCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // 메뉴 게시물/아카이브
@@ -27,23 +27,24 @@ export default function GeneralAction({
   archiveId,
   type,
   postId,
-  nickname,
   imageUrl,
   setSharedCount,
   onDeleteClick = () => console.log('삭제 클릭됨'),
   onCopyClick = (e, archiveId) => {
-    e.preventDefault()
-    e.stopPropagation()
-    postCloneArchiveCreate(archiveId)
+    e.preventDefault();
+    e.stopPropagation();
+    postCloneArchiveCreate(archiveId);
   },
   onEditClick = (e, archiveId) => {
-    e.preventDefault()
-    e.stopPropagation()
-    postCloneArchiveCreate(archiveId)
+    e.preventDefault();
+    e.stopPropagation();
+    postCloneArchiveCreate(archiveId);
   },
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+
+  const handleShareCount = useHandleShareCount(postId as number, setSharedCount!); 
 
   const handleSettingClick = () => {
     setShowSetting(true);
@@ -58,7 +59,10 @@ export default function GeneralAction({
     setShowShareMenu(false);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent<HTMLButtonElement>, archiveId?: number) => {
+  const handleDeleteClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    archiveId?: number,
+  ) => {
     e.stopPropagation();
     if (archiveId !== undefined) {
       deleteArchiveCreate(archiveId);
@@ -67,25 +71,22 @@ export default function GeneralAction({
     }
   };
 
-  const handleShareCount = () => {
-    setSharedCount((prevCount) => prevCount + 1);
-  };
-
   if (showSetting) {
-    return (
+    return postId !== undefined ? (
       <GeneralSetting type={type} postId={postId} onBack={handleBackClick} />
+    ) : (
+      <div>Error: postId is required for settings</div>
     );
   }
 
   if (showShareMenu) {
     return (
       <GeneralShareMenu
-        onClick={handleShareCount}
+        onClick={handleShareCount} 
         onBack={handleBackClick}
         showBackButton={true}
         type={type}
-        nickname={nickname}
-        imageUrl={imageUrl}
+        imageUrl={imageUrl as string}
       />
     );
   }
@@ -108,12 +109,12 @@ export default function GeneralAction({
               item.label.includes('설정')
                 ? handleSettingClick
                 : item.label.includes('공유')
-                  ? handleShareClick
-                  : item.label.includes('복제') && archiveId !== undefined
-                    ? (e) => onCopyClick(e, archiveId)
-                    : item.label.includes('수정') && archiveId !== undefined
-                      ? (e) => onEditClick(e, archiveId)
-                      : item.onClick
+                ? handleShareClick
+                : item.label.includes('복제') && archiveId !== undefined
+                ? (e) => onCopyClick(e, archiveId)
+                : item.label.includes('수정') && archiveId !== undefined
+                ? (e) => onEditClick(e, archiveId)
+                : item.onClick
             }
             className="flex cursor-pointer items-center justify-center 
             rounded-xl px-2 pb-[10px] hover:font-bold"

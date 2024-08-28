@@ -9,7 +9,6 @@ interface MenuProps {
 // 게시물 공유 버튼
 export default function PostShareButton({
   onClick,
-  nickname,
   imageUrl,
 }: MenuProps) {
   return (
@@ -20,7 +19,6 @@ export default function PostShareButton({
     >
       <ShareMenuList
         onClick={onClick}
-        nickname={nickname}
         imageUrl={imageUrl}
       />{' '}
     </div>

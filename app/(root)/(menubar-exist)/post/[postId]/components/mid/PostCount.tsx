@@ -8,6 +8,7 @@ import PostShareButton from '../../../../../../../components/buttons/PostShareBu
 import { getPostLikeCount } from '../../../../../../../api/post/getPostLikeCount';
 import { deletePostUnlike } from '../../../../../../../api/post/deletePostUnlike';
 import { postPostLike } from '../../../../../../../api/post/postPostLike';
+import { useHandleShareCount } from '../../../../../../../hooks/useHandleShareCount';
 
 interface PostCountProps {
   post: PostsDetailData['data'];
@@ -32,6 +33,8 @@ export default function PostCount({
   const [heartCount, setHeartCount] = useState(post.likeCount);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleShareCount = useHandleShareCount(postId, setSharedCount);
 
   useEffect(() => {
     const fetchLikeCount = async () => {
@@ -113,7 +116,7 @@ export default function PostCount({
           {sharedCount}
           {isMenuOpen && (
             <PostShareButton
-              onClick={() => setSharedCount(sharedCount + 1)}
+              onClick={handleShareCount}
               nickname={nickname}
               imageUrl={imageUrl}
             />

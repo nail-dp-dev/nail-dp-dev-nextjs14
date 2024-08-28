@@ -198,7 +198,6 @@ export default function MidContainer({
                 <GeneralAction
                   type="post"
                   postId={postId}
-                  nickname={nickname}
                   imageUrl={currentImageUrl}
                   setSharedCount={setSharedCount}
                 />

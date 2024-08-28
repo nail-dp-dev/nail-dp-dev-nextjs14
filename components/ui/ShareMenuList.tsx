@@ -5,14 +5,12 @@ import { shareMenuElements } from '../../constants';
 interface ShareMenuListProps {
   onClick: (message: string) => void;
   selected?: string;
-  nickname: string;
   imageUrl: string;
 }
 
 export default function ShareMenuList({
   onClick,
   selected,
-  nickname,
   imageUrl,
 }: ShareMenuListProps) {
   const [isKakaoReady, setIsKakaoReady] = useState(false);
@@ -34,7 +32,7 @@ export default function ShareMenuList({
         objectType: 'feed',
         content: {
           title: '네디플',
-          description: `${nickname}의 게시물`,
+          description: `세상의 모든 네일아트, 여기서 만나보세요! 트렌디한 디자인과 나만의 스타일을 찾을 수 있는 네일아트 플랫폼`,
           imageUrl: imageUrl,
           link: {
             mobileWebUrl: currentUrl,
