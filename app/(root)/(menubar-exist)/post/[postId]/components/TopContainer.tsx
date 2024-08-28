@@ -4,6 +4,7 @@ import UserInfo from '../../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../../types/dataType';
 import Link from 'next/link';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
+import { useRouter } from 'next/navigation';
 
 interface userProps {
   user: PostsDetailData['data'];
@@ -15,6 +16,7 @@ export default function TopContainer({ user, postId }: userProps) {
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);
   const [followerCount, setFollowerCount] = useState(user.followerCount);
   const [isOwner, setIsOwner] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     if (userData && userData.data.nickname === user.nickname) {
@@ -34,6 +36,13 @@ export default function TopContainer({ user, postId }: userProps) {
   if (!user) {
     return <div>사용자를 찾을 수 없습니다.</div>;
   }
+  //프로필 이동
+  const test = (nickname:string) => {
+    if (nickname !== undefined) {
+      router.push(`/profile/${nickname}`);
+    }
+    console.log("에러");
+  }
 
   return (
     <div className="flex flex-wrap items-center justify-between bg-white p-2">
@@ -45,7 +54,9 @@ export default function TopContainer({ user, postId }: userProps) {
           height={56}
         />
 
-        <div className="wrap-info pb-2 leading-3">
+        <div
+        onClick={e => test(userData?.data.nickname!)}
+         className="wrap-info pb-2 leading-3">
           <UserInfo
             nickname={user.nickname}
             nicknameStyle="text-base font-medium"
