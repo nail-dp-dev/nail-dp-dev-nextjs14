@@ -3,13 +3,15 @@ import MenuBack from '../../../public/assets/svg/menu-back.svg';
 import MenuCheck from '../../../public/assets/svg/menu-check.svg';
 import { settingElements } from '../../../constants';
 import { patchPostCloser } from '../../../api/post/patchPostCloser';
+import { patchArchiveBoundary } from '../../../api/archive/patchArchiveBoundary';
 
 interface GeneralSettingProps {
   type: 'archive' | 'post';
-  postId: number;
+  postId?: number;
+  archiveId?: number; 
   onBack: () => void;
-  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE'; 
-  onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void; 
+  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
+  onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
 
 // 메뉴-설정 게시물/아카이브
@@ -17,27 +19,32 @@ export default function GeneralSetting({
   type,
   onBack,
   postId,
+  archiveId,
   initialBoundary,
-  onBoundaryChange, 
+  onBoundaryChange,
 }: GeneralSettingProps) {
   const [selected, setSelected] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
 
-const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
-  setSelected(newSetting);
-  onBoundaryChange(newSetting);
+  const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
+    setSelected(newSetting);
+    onBoundaryChange(newSetting);
 
-  if (type === 'post') {
-    const result = await patchPostCloser(postId, newSetting);
-    if (result && result.success) {
-      console.log(result.message);
-    } else {
-      console.error('Failed to update post visibility');
+    if (type === 'post') {
+      const result = await patchPostCloser(postId!, newSetting);
+      if (result && result.success) {
+        console.log(result.message);
+      } else {
+        console.error('Failed to update post visibility');
+      }
+    } else if (type === 'archive') {
+      const result = await patchArchiveBoundary(archiveId!, newSetting);
+      if (result && result.success) {
+        console.log(result.message);
+      } else {
+        console.error('Failed to update archive visibility');
+      }
     }
-  } else {
-    console.log('아카이브 설정 변경: ', newSetting);
-  }
-};
-
+  };
 
   const boundaryMap: { [key: string]: 'ALL' | 'FOLLOW' | 'NONE' } = {
     '전체공개': 'ALL',
@@ -52,10 +59,8 @@ const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
   }));
 
   return (
-    <div
-      className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
-    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow"
-    >
+    <div className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
+    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow">
       <div className="flex items-center px-3 text-lg font-bold">
         <button onClick={onBack} className="mr-2">
           <MenuBack />

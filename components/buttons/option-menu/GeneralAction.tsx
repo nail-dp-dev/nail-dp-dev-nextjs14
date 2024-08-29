@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useHandleShareCount } from '../../../hooks/useHandleShareCount';
 
 interface GeneralActionProps {
-  archiveId?: number;
+  archiveId?: number; 
   type: 'archive' | 'post';
   postId?: number;
   imageUrl?: string;
@@ -20,11 +20,10 @@ interface GeneralActionProps {
   onEditClick?: (e: React.MouseEvent, archiveId: number) => void;
   onShareClick?: () => void;
   onDeleteClick?: () => void;
-  initialBoundary?: 'ALL' | 'FOLLOW' | 'NONE';
-  onBoundaryChange?: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
+  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE'; 
+  onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void; 
 }
 
-// 메뉴 게시물/아카이브
 export default function GeneralAction({
   archiveId,
   type,
@@ -47,9 +46,7 @@ export default function GeneralAction({
 }: GeneralActionProps) {
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [currentBoundary, setCurrentBoundary] = useState<
-    'ALL' | 'FOLLOW' | 'NONE' | undefined
-  >(initialBoundary);
+  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
 
   const handleShareCount = useHandleShareCount(
     postId as number,
@@ -79,22 +76,21 @@ export default function GeneralAction({
     }
   };
 
-  const handleBoundaryChange = (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => {
+  const handleBoundaryChangeInternal = (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => {
     setCurrentBoundary(newBoundary);
-    onBoundaryChange?.(newBoundary);
+    onBoundaryChange(newBoundary);
   };
 
   if (showSetting) {
-    return postId && currentBoundary ? (
+    return (
       <GeneralSetting
         type={type}
         postId={postId}
+        archiveId={archiveId}
         onBack={handleBackClick}
         initialBoundary={currentBoundary}
-        onBoundaryChange={handleBoundaryChange}
+        onBoundaryChange={handleBoundaryChangeInternal}
       />
-    ) : (
-      <div>로딩 중... 잠시만 기다려 주세요.</div>
     );
   }
 
@@ -110,8 +106,7 @@ export default function GeneralAction({
     );
   }
 
-  const actionElements =
-    type === 'archive' ? archiveActionElements : postActionElements;
+  const actionElements = type === 'archive' ? archiveActionElements : postActionElements;
 
   return (
     <div

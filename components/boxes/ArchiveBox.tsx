@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArchiveBoxNewProps } from '../../constants/interface';
@@ -22,10 +22,13 @@ export default function ArchiveBox({
   archiveName,
   postCount,
   createdDate,
+  initialBoundary, 
 }: ArchiveBoxNewProps) {
 
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const layoutNum = useSelector(selectNumberOfBoxes);
+  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+
   let isPhoto = false;
   let isVideo = false;
 
@@ -43,6 +46,10 @@ export default function ArchiveBox({
     
   const boxStyle = {
     width: showType === 'album' ? postBoxWidths[layoutNum] : '49.65%',
+  };
+
+  const handleBoundaryChange = (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => {
+    setCurrentBoundary(newBoundary);
   };
 
   return (
@@ -112,7 +119,12 @@ export default function ArchiveBox({
         {
           showType === 'album' && showGeneralAction && 
           <div ref={boxRef} className="absolute left-5 top-0 z-40">
-            <GeneralAction type="archive" archiveId={archiveId}/>
+            <GeneralAction
+              type="archive"
+              archiveId={archiveId}
+              initialBoundary={currentBoundary}
+              onBoundaryChange={handleBoundaryChange} 
+            />
           </div>
         }
         {
@@ -133,7 +145,12 @@ export default function ArchiveBox({
             {
               showType === 'list' && showGeneralAction && 
                 <div ref={boxRef} className="absolute right-0 bottom-0 z-40 translate-y-[-30px] translate-x-[-150px]">
-                  <GeneralAction type="archive" archiveId={archiveId}/>
+                  <GeneralAction
+                    type="archive"
+                    archiveId={archiveId}
+                    initialBoundary={currentBoundary}
+                    onBoundaryChange={handleBoundaryChange} 
+                  />
                 </div>
             }
           </div>

@@ -5,8 +5,8 @@ export interface CategoryElement {
 
 export interface CategoryBarProps {
   elements: CategoryElement[];
-  category:string,
-  setCategory: React.Dispatch<React.SetStateAction<string>>
+  category: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface IconButtonProps {
@@ -18,27 +18,28 @@ export interface IconButtonProps {
 }
 
 export interface PostBoxNewProps {
-  postId: number,
-  photoId: number,
-  photoUrl : string,
-  like?:boolean,
-  saved: boolean 
-  createdDate: any,
-  tempPost?: boolean
+  postId: number;
+  photoId: number;
+  photoUrl: string;
+  like?: boolean;
+  saved: boolean;
+  createdDate: any;
+  tempPost?: boolean;
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setSharedCount: React.Dispatch<React.SetStateAction<number>>; 
+  setSharedCount: React.Dispatch<React.SetStateAction<number>>;
   boundary: 'ALL' | 'FOLLOW' | 'NONE';
 }
 export interface ArchiveBoxNewProps {
-  showType: string,
-  archiveId: number,
-  photoId: number,
-  photoUrl : string,
-  like?:boolean,
-  saved?: boolean 
-  createdDate?: any,
-  archiveName: string,
-  postCount: number
+  showType: string;
+  archiveId: number;
+  photoId: number;
+  photoUrl: string;
+  like?: boolean;
+  saved?: boolean;
+  createdDate?: any;
+  archiveName: string;
+  postCount: number;
+  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
 }
 
 export interface ProfileMiniModalProps {
@@ -50,11 +51,11 @@ export interface PostsBoxProps {
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface MenuElementsProps{
+export interface MenuElementsProps {
   icon: string;
-  url: string[],
-  name: string,
-  desc: string,
+  url: string[];
+  name: string;
+  desc: string;
   isLast: boolean;
   where: string;
 }
@@ -63,68 +64,67 @@ export interface ChattingBoxProps {
   isChatModalShow: boolean;
   handleCloseChatModal: (e: any) => void;
 }
-export interface ProfileProps{
-  "success": boolean,
-  "code": number,  
-    "data" :{
-        "nickname": string,
-        "postsCount": number,
-        "saveCount" : number,  
-        "followerCount" : number,
-        "point" : number
-    }
+export interface ProfileProps {
+  success: boolean;
+  code: number;
+  data: {
+    nickname: string;
+    postsCount: number;
+    saveCount: number;
+    followerCount: number;
+    point: number;
+  };
 }
 
-export interface ProfileButtonProps{
-  nickname:string
+export interface ProfileButtonProps {
+  nickname: string;
 }
 
-
-export interface SignUpAgreementProps{
+export interface SignUpAgreementProps {
   setProcedure: React.Dispatch<React.SetStateAction<string>>;
   setFinalAgreement: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export interface SignUpPhoneNumberProps{
+export interface SignUpPhoneNumberProps {
   setProcedure: React.Dispatch<React.SetStateAction<string>>;
   setFinalPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface SignUpNickNameProps{
+export interface SignUpNickNameProps {
   finalAgreement: boolean;
   finalPhoneNumber: string;
 }
 
-export interface SignUpInfoBoxProps{
+export interface SignUpInfoBoxProps {
   procedure: string;
 }
 
 export interface ProcedureUIProps {
-  now_procedure: string,
-  this_procedure: string,
-  number: number,
-  name: string
+  now_procedure: string;
+  this_procedure: string;
+  number: number;
+  name: string;
 }
 
 export interface PostCreateModalProps {
-  isOverFileType: string,
-  isOverFileMemory: number,
+  isOverFileType: string;
+  isOverFileMemory: number;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface MyPageModalProps {
-  isText: string,
+  isText: string;
   // setIsModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export interface PostsDataProps {
-  category: string,
-  size: number,
-  cursorId ?: number
+  category: string;
+  size: number;
+  cursorId?: number;
 }
 export interface PostsLikedDataProps {
-  category: string,
-  size: number,
-  cursorLikedId ?: number
+  category: string;
+  size: number;
+  cursorLikedId?: number;
 }
 
 export interface VideoProps {
@@ -143,12 +143,10 @@ export interface archiveArray {
   postCount: number;
 }
 
-
 export interface AlarmModalProps {
   onConfirm: () => void;
   onCancel: () => void;
 }
-
 
 export interface postData {
   postId: number;
