@@ -16,6 +16,7 @@ import ListMenu from '../../../../public/assets/svg/my-archive-list.svg';
 import AlbumMenu from '../../../../public/assets/svg/my-archive-album.svg';
 import SearchIcon from '../../../../public/assets/svg/search.svg';
 import BellIcon from '../../../../public/assets/svg/bell.svg';
+import DottedAlbum from '../../../../public/assets/svg/dotted_album.svg';
 import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
 import { getArchiveData } from '../../../../api/archive/getArchiveData';
 import { archiveModalElements } from '../../../../constants';
@@ -59,7 +60,13 @@ export default function MyArchiveModal() {
   };
 
   const createArchive = async (isName: string, isBoundary: string) => {
-    const success = await postArchiveCreate(isName, isBoundary);
+    if (isName.length > 0) {      
+      const success = await postArchiveCreate(isName, isBoundary);
+      archiveData()
+      setIsName("")
+    }else{
+      console.log("모달로 변경: 아카이브이름을 입력해주세요!");
+    }
   };
 
   const setArchive = async (archiveId: number, postId: number) => {
@@ -81,9 +88,11 @@ export default function MyArchiveModal() {
 
   const archiveData = async () => {
     const data = await getArchiveData();
-    setIsArchive(data.data.postSummaryList.content);
-    setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
-    setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+    if (data.data.postSummaryList.content[0]) {
+      setIsArchive(data.data.postSummaryList.content);
+      setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
+      setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+    }
   };
 
   const clickType = (e: any, type: string) => {
@@ -110,7 +119,6 @@ export default function MyArchiveModal() {
 
   useEffect(() => {
     archiveData();
-    console.log('a');
   }, []);
 
   return (
@@ -189,7 +197,7 @@ export default function MyArchiveModal() {
           <div className="flex w-full flex-1">
             <div className="h-full w-[20%] min-w-[155px] bg-menuLightGray px-[10px] text-[0.9rem] font-bold">
               <div className="mt-[5px]">
-                {archiveModalElements.map((item:any, index:number) => {
+                {archiveModalElements.map((item: any, index: number) => {
                   return (
                     <button
                       key={index}
@@ -233,6 +241,7 @@ export default function MyArchiveModal() {
                       className="my-[16px] h-[40px] w-[320px] rounded-full border-none bg-darkGray pl-[12px] text-[0.9rem] outline-none"
                       type="text"
                       placeholder="폴더 이름을 입력해주세요.(최대 8글자)"
+                      value={isName}
                       onChange={(e) => archiveName(e)}
                     />
                     <div className="pl-[14px] pt-[20px]">
@@ -303,7 +312,7 @@ export default function MyArchiveModal() {
                 </div>
               </div>
             )}
-            {isArchiveMenu == 'myArchive' && (
+            {isArchiveMenu == 'myArchive' && isArchive[0] ? (
               <div className="flex flex-1 flex-col justify-between">
                 <div className="max-h-[235px] overflow-y-auto px-[44px]">
                   {/* <div className="hidden">
@@ -375,7 +384,7 @@ export default function MyArchiveModal() {
                     </div>
                   </div>
                 </div>
-                <div className="flex h-[80px] w-full justify-center bg-white">
+                <div className={`flex h-[80px] w-full justify-center bg-white`}>
                   <button
                     className="my-[20px] h-[40px] w-[250px] rounded-full bg-purple"
                     onClick={(e) => setArchive(isSelectArchive, ArchivePostId!)}
@@ -383,6 +392,18 @@ export default function MyArchiveModal() {
                     ‘{isArchiveName}’ 아카이브에 저장
                   </button>
                 </div>
+              </div>
+            ) : (
+              <div className={`${isArchiveMenu == 'myArchive' ? "" : "hidden"} relative flex flex-1 flex-col items-center justify-center`}>
+                <DottedAlbum />
+                <div className="absolute w-[90px] h-[30px] rounded-full text-center bg-lightGray">
+                  <p className="text-[18px]">
+                    비어있음
+                  </p>
+                </div>
+                <p className="text-[18px] mt-[20px] text-darkGray">
+                  새로운 아카이브를 생성하세요.
+                </p>
               </div>
             )}
           </div>
