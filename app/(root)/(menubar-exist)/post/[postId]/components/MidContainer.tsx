@@ -1,39 +1,54 @@
-'use client';
-
 import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
 import PostTags from './mid/PostTags';
 import ImageSlider from './ImageSlider';
-import { CommentData, PostsDetailData } from '../../../../../../types/dataType';
+import { Comment, PostsDetailData } from '../../../../../../types/dataType';
 import { AddCommentType } from '../../../../../../hooks/useComments';
 import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
+import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
-  comments: CommentData['data'];
+  postId: number;
+  comments: Comment[];
   onAddComment: (newComment: AddCommentType) => void;
   onAddReply: (parentId: number, newComment: AddCommentType) => void;
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
     commentId: number,
-    parentId: number | null, //parentId: 대댓글이 속한 부모 댓글(지울 예정)
+    parentId: number | null,
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
+  fetchMoreComments: () => void;
+  isLoading: boolean;
+  isLastPage: boolean;
+  nickname: string;
+  imageUrl: string;
 }
 
 export default function MidContainer({
   post,
+  postId,
   comments,
   onLike,
   onReply,
   onSaveEdit,
   onDelete,
+  fetchMoreComments,
+  isLoading,
+  isLastPage,
+  nickname,
+  imageUrl,
 }: MidContainerProps) {
+  const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
+  const [boundary, setBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
+    post.boundary,
+  );
   const MAX_WIDTH = 550;
   const MIN_WIDTH = 300;
   const INITIAL_WIDTH = MAX_WIDTH;
@@ -42,6 +57,27 @@ export default function MidContainer({
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const startY = useRef(0);
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const [currentImageUrl, setCurrentImageUrl] = useState(
+    post.files[0]?.fileUrl || '',
+  );
+
+  useEffect(() => {
+    const fetchSharedCount = async () => {
+      try {
+        const count = await getPostSharedCount(postId);
+        setSharedCount(count);
+      } catch (error) {
+        console.error('Failed to fetch shared count:', error);
+        setSharedCount(post.sharedCount);
+      }
+    };
+
+    fetchSharedCount();
+  }, [postId, post.sharedCount]);
+
+  useEffect(() => {
+    console.log('Received comments in MidContainer:', comments);
+  }, [comments]);
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
@@ -131,7 +167,7 @@ export default function MidContainer({
             "
         >
           <div
-            className={`ImageBox relative aspect-square rounded-2xl bg-textLightYellow transition-all 
+            className={`ImageBox relative aspect-square rounded-2xl transition-all 
             duration-300 ${
               imageBoxWidth >= 500
                 ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
@@ -144,6 +180,7 @@ export default function MidContainer({
                 isPhoto: file.photo,
                 isVideo: file.video,
               }))}
+              onImageChange={setCurrentImageUrl}
             />
             <BoxCommonButton
               onClick={handleToggleClick}
@@ -156,7 +193,14 @@ export default function MidContainer({
             />
             {showGeneralAction && (
               <div ref={boxRef} className=" absolute left-5 top-0 z-20">
-                <GeneralAction type="post" />
+                <GeneralAction
+                  type="post"
+                  postId={postId}
+                  imageUrl={currentImageUrl}
+                  setSharedCount={setSharedCount}
+                  initialBoundary={boundary}
+                  onBoundaryChange={setBoundary}
+                />
               </div>
             )}
             <BoxCommonButton
@@ -183,7 +227,15 @@ export default function MidContainer({
         </div>
         <div>
           <div className="postInfo flex flex-wrap items-center justify-between">
-            <PostCount post={post} toggleScroll={toggleScroll} />
+            <PostCount
+              post={post}
+              postId={postId}
+              toggleScroll={toggleScroll}
+              nickname={nickname}
+              imageUrl={currentImageUrl}
+              sharedCount={sharedCount}
+              setSharedCount={setSharedCount}
+            />
             <PostTags post={post} />
           </div>
           <div>
@@ -193,6 +245,9 @@ export default function MidContainer({
               onReply={onReply}
               onSaveEdit={onSaveEdit}
               onDelete={onDelete}
+              fetchMoreComments={fetchMoreComments}
+              isLoading={isLoading}
+              isLastPage={isLastPage}
             />
           </div>
         </div>

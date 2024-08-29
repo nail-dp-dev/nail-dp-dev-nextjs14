@@ -26,6 +26,7 @@ export default function MyPagePage() {
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setLading] = useState(true);
   const [isNickname, setIsNickname] = useState('');
+  const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
 
   const fetchPostData = async () => {
@@ -120,40 +121,48 @@ export default function MyPagePage() {
         {/* <CategoryBar elements={myPageCategoryElements} /> */}
       </div>
       <div className="MyPageContainer max-h-full ">
-        <div
-          className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
-        >
+        <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
           <PostCreate />
-          {isTempData.length == 1 &&
+          {isTempData.length === 1 &&
             isTempData.map((item, index) => {
-              return (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  saved={false}
-                  createdDate={null}
-                  tempPost={true}
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                />
-              );
+              if (item && item.postId) {
+                return (
+                  <PostBox
+                    key={index}
+                    postId={item.postId}
+                    photoId={item.photoId}
+                    photoUrl={item.photoUrl}
+                    saved={false}
+                    createdDate={null}
+                    tempPost={true}
+                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                    setSharedCount={setSharedCount}
+                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                  />
+                );
+              }
+              return null;
             })}
           {isMyPageData &&
             isMyPageData.map((item, index) => {
-              return (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  tempPost={false}
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                />
-              );
+              if (item && item.postId) {
+                return (
+                  <PostBox
+                    key={index}
+                    postId={item.postId}
+                    photoId={item.photoId}
+                    photoUrl={item.photoUrl}
+                    like={item.like}
+                    saved={item.saved}
+                    createdDate={item.createdDate}
+                    tempPost={false}
+                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                    setSharedCount={setSharedCount}
+                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                  />
+                );
+              }
+              return null;
             })}
         </div>
       </div>

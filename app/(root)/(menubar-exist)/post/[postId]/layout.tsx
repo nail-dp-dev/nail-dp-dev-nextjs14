@@ -1,4 +1,5 @@
 import SearchBar from '../../../../../components/bars/search/SearchBar';
+import NotLoginNotice from '../../../../../components/notice/NotLoginNotice';
 
 export default function ArchiveLayout({
   children,
@@ -10,7 +11,7 @@ export default function ArchiveLayout({
       <div className="contentContainer relative flex h-full w-full flex-1">
         <div className="contentsDiv relative flex h-full w-full flex-col">
           <SearchBar />
-          {children}
+          <NotLoginNotice>{children}</NotLoginNotice>
         </div>
       </div>
     </section>

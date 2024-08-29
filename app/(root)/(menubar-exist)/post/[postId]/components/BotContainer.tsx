@@ -1,6 +1,6 @@
 import React from 'react';
 import ChattingBar from './bot/ChattingBar';
-import { AddCommentType } from '../../../../../hooks/useComments';
+import { AddCommentType } from '../../../../../../hooks/useComments';
 
 interface BotContainerProps {
   onAddComment: (newComment: AddCommentType) => void;

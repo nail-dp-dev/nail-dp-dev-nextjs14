@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import TopContainer from './components/TopContainer';
 import MidContainer from './components/MidContainer';
 import usePostDetail from '../../../../../hooks/usePostDetail';
@@ -8,15 +8,19 @@ import BotContainer from './components/BotContainer';
 import useComments from '../../../../../hooks/useComments';
 
 export default function PostDetailPage() {
-  const userDetail = usePostDetail();
-  const {
-    comments,
-    handleAddComment,
-    handleAddReply,
-    handleLike,
-    handleSaveEdit,
-    handleDelete,
-  } = useComments(userDetail?.post.postId || null);
+  const { userDetail, numericPostId } = usePostDetail();
+  const commentsData = useComments(numericPostId, userDetail?.comments || []);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    console.log('PostDetailPage - userDetai,@!@!@!@!@!@!:', userDetail);
+    console.log('PostDetailPage - numericPostId:', numericPostId);
+    if (userDetail && numericPostId !== null) {
+      setIsLoading(false);
+    }
+  }, [userDetail, numericPostId]);
+
   const [replyUser, setReplyUser] = useState<{
     id: number | null;
     name: string | null;
@@ -30,27 +34,35 @@ export default function PostDetailPage() {
     setReplyUser({ id: null, name: null });
   }, []);
 
-  if (!userDetail) {
-    return <div>게시물을 찾을 수 없습니다.</div>;
+  if (!userDetail || numericPostId === null) {
+    return <div>Loading...</div>;
   }
+  const nickname = userDetail.post?.nickname ?? '';
+  const imageUrl = userDetail.post?.files[0]?.fileUrl ?? '';
 
   return (
     <div className="hide-scrollbar overflow-auto">
-      <TopContainer user={userDetail.post} postId={userDetail.post.postId} />
+      <TopContainer user={userDetail.post} postId={numericPostId} />
       <MidContainer
         post={userDetail.post}
-        comments={comments}
-        onAddComment={handleAddComment}
-        onAddReply={handleAddReply}
-        onLike={handleLike}
+        postId={numericPostId}
+        comments={commentsData.comments}
+        onAddComment={commentsData.handleAddComment}
+        onAddReply={commentsData.handleAddReply}
+        onLike={commentsData.handleLike}
         onReply={handleReply}
-        onSaveEdit={handleSaveEdit}
-        onDelete={handleDelete}
+        onSaveEdit={commentsData.handleSaveEdit}
+        onDelete={commentsData.handleDelete}
+        fetchMoreComments={commentsData.fetchMoreComments}
+        isLoading={commentsData.isLoading}
+        isLastPage={commentsData.isLastPage}
+        nickname={nickname}
+        imageUrl={imageUrl}
       />
       <BotContainer
-        onAddComment={handleAddComment}
+        onAddComment={commentsData.handleAddComment}
         replyUser={replyUser}
-        onAddReply={handleAddReply}
+        onAddReply={commentsData.handleAddReply}
         onCancelReply={handleCancelReply}
       />
     </div>

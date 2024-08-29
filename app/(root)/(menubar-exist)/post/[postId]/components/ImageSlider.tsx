@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Video from '../../../../../../components/ui/Video';
 import ArrowLeft from '../../../../../../public/assets/svg/arrow-left.svg';
 import ArrowRight from '../../../../../../public/assets/svg/arrow-right.svg';
@@ -13,10 +13,17 @@ interface File {
 
 interface ImageSliderProps {
   files: File[];
+  onImageChange?: (url: string) => void; 
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ files }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ files, onImageChange }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (onImageChange) {
+      onImageChange(files[currentIndex].fileUrl);  
+    }
+  }, [currentIndex, files, onImageChange]);
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;
@@ -45,14 +52,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ files }) => {
       </div>
       {files.length > 1 && (
         <>
-          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-between ">
-            <button
-              onClick={goToPrevious}
-              className="2 p-2 py-8 pr-8 text-white"
-            >
+          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-between">
+            <button onClick={goToPrevious} className="p-2 py-8 pr-8 text-white">
               <ArrowLeft />
             </button>
-            <button onClick={goToNext} className="p-2  py-8 pl-8 text-white">
+            <button onClick={goToNext} className="p-2 py-8 pl-8 text-white">
               <ArrowRight />
             </button>
           </div>

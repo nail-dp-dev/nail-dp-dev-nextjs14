@@ -97,7 +97,7 @@ export default function ChattingBar({
             {/* <EmoticonIcon /> */}
             <button
               type="button"
-              className="button-layout button-color ml-[22px] mr-2 px-[26px] py-[5.5px] text-sm font-medium"
+              className="button-layout button-color border-none ml-[22px] mr-2 px-[26px] py-[5.5px] text-sm font-medium"
               onClick={handlePostComment}
             >
               Post

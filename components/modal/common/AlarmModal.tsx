@@ -7,30 +7,40 @@ import {
 } from '../../../store/slices/modalSlice';
 import { AlarmModalProps } from '../../../constants/interface';
 
-export default function AlarmModal({ onConfirm }: AlarmModalProps) {
+export default function AlarmModal({ onConfirm, onCancel }: AlarmModalProps) {
   const dispatch = useDispatch();
-  const { alarmImageType, alarmByte, alarmButton, alarmType, alarmUser } =
-    useSelector(selectAlarmModalStatus);
-  console.log('alarmImageType:', alarmImageType);
-  console.log('alarmByte:', alarmByte);
+  const {
+    alarmImageType,
+    alarmByte,
+    alarmButton,
+    alarmType,
+    alarmUser,
+    alarmActionType,
+  } = useSelector(selectAlarmModalStatus);
 
   const closeModal = () => {
     dispatch(commonModalClose());
   };
 
+  const deleteMessages: { [key: string]: string } = {
+    comment: '해당 댓글을 삭제하시겠습니까?',
+    archive: `[ ${alarmUser} ]\n아카이브를 삭제하시겠습니까?`,
+    post: '이 게시물을 삭제하시겠습니까?',
+    block: `${alarmUser} 님의 댓글 및 답글을 차단하시겠습니까?`,
+  };
+
+  // alarmActionType이 undefined가 아닌지 확인
+  const getDeleteMessage = alarmActionType
+    ? deleteMessages[alarmActionType]
+    : '';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-modalBackgroundColor">
       <div className="rounded-lg bg-white opacity-85">
         <div className="px-[33px] py-11 text-center">
-          <p
-            className={`${alarmButton !== '삭제' && 'hidden'} text-[18px] font-bold`}
-          >
-            해당 댓글을 삭제하시겠습니까?
-          </p>
-          <p
-            className={`${alarmButton !== '차단' && 'hidden'} text-[18px] font-bold`}
-          >
-            {alarmUser} 님의 댓글 및 답글을 차단하시겠습니까?
+          {/* 삭제 관련 메시지 */}
+          <p className="whitespace-pre-line text-lg font-bold leading-relaxed text-black">
+            {getDeleteMessage}
           </p>
           {/* alarmImageType이 설정된 경우에만 표시 */}
           {alarmImageType && (
@@ -46,12 +56,14 @@ export default function AlarmModal({ onConfirm }: AlarmModalProps) {
             </>
           )}
         </div>
+
+        {/* 모달 하단 버튼 (취소/확인) */}
         {alarmType === 'two' ? (
           <div className="flex">
             <div className="w-1/2 text-center hover:bg-purple hover:bg-opacity-10">
               <button
-                onClick={closeModal}
-                className="px-[60px] py-[14px] font-bold"
+                onClick={onCancel}
+                className="px-[60px] py-[14px] text-base font-bold text-black"
               >
                 취소
               </button>
@@ -59,7 +71,7 @@ export default function AlarmModal({ onConfirm }: AlarmModalProps) {
             <div className="w-1/2 text-center hover:bg-red hover:bg-opacity-10">
               <button
                 onClick={onConfirm}
-                className="px-[60px] py-[14px] font-bold text-red"
+                className="px-[60px] py-[14px] text-base font-bold text-red"
               >
                 {alarmButton}
               </button>

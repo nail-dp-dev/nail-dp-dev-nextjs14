@@ -101,14 +101,36 @@ export default function MyArchivePage() {
           showType === 'album' && archiveData ?
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
               {archiveData.map((item:any, index:any)=>(
-                <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
+                <ArchiveBox
+                  key={index}
+                  showType={showType}
+                  archiveId={item.archiveId}
+                  photoId={index}
+                  photoUrl={item.archiveImgUrl}
+                  saved={false}
+                  createdDate={undefined}
+                  archiveName={item.archiveName}
+                  postCount={item.postCount}
+                  initialBoundary={item.boundary} 
+                />
               ))}
             </div>
             :
           showType === 'list' && archiveData ? 
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
               {archiveData.map((item:any, index:any)=>(
-                <ArchiveBox key={index} showType={showType} archiveId={item.archiveId} photoId={index} photoUrl={item.archiveImgUrl} saved={false} createdDate={undefined} archiveName={item.archiveName} postCount={item.postCount} />
+                <ArchiveBox
+                  key={index}
+                  showType={showType}
+                  archiveId={item.archiveId}
+                  photoId={index}
+                  photoUrl={item.archiveImgUrl}
+                  saved={false}
+                  createdDate={undefined}
+                  archiveName={item.archiveName}
+                  postCount={item.postCount}
+                  initialBoundary={item.boundary} 
+                />
               ))}
             </div>
               :

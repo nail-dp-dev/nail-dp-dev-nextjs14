@@ -17,6 +17,7 @@ import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
 import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
+import { useVisibility } from '../../hooks/useVisibility';
 
 function PostBox({
   postId,
@@ -26,19 +27,21 @@ function PostBox({
   saved,
   createdDate,
   tempPost,
-  setIsSuggestLoginModalShow
+  setIsSuggestLoginModalShow,
+  setSharedCount,
+  boundary: initialBoundary,
 }: PostBoxNewProps) {
-  const router = useRouter()
-
+  const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
 
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const { isVisible, handleDelete } = useVisibility(); 
 
   const [isLiked, setIsLiked] = useState(like);
+  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+
   const dispatch = useDispatch();
-
-
 
   const handleHeartClick = async () => {
     if (isLoggedIn === 'loggedOut') {
@@ -48,7 +51,7 @@ function PostBox({
     if (!isLiked && isLoggedIn === 'loggedIn') {
       let data = await postPostLike(postId);
       data.code == 2001 && setIsLiked((prev) => !prev);
-    } else if(isLiked && isLoggedIn === 'loggedIn') {
+    } else if (isLiked && isLoggedIn === 'loggedIn') {
       let data = await deletePostLike(postId);
       data.code == 2001 && setIsLiked((prev) => !prev);
     }
@@ -60,34 +63,32 @@ function PostBox({
     }
 
     console.log('Click...Plus!');
-    //모달 확인을 위해 작성 
-    dispatch(setCommonModal("archive"))
-    dispatch(setArchiveModal({postId}))
+    dispatch(setCommonModal('archive'));
+    dispatch(setArchiveModal({ postId }));
   };
 
-  const handlePostClick = (e:any, postId:number) => {
-    e.stopPropagation()
+  const handlePostClick = (e: any, postId: number) => {
+    e.stopPropagation();
 
     if (isLoggedIn === 'loggedOut') {
-      console.log('찍찍...')
-      setIsSuggestLoginModalShow(true)
+      console.log('찍찍...');
+      setIsSuggestLoginModalShow(true);
     }
 
     if (isLoggedIn === 'loggedIn') {
-      router.push(`post/${postId}`)
+      router.push(`post/${postId}`);
     }
-
-  }
+  };
 
   const isPhoto =
     photoUrl.endsWith('.jpg') ||
     photoUrl.endsWith('.jpeg') ||
     photoUrl.endsWith('.png') ||
     photoUrl.endsWith('.gif');
-  
-  const isVideo =
-    photoUrl.endsWith('.mp4') ||
-    photoUrl.endsWith('.mov');
+
+  const isVideo = photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov');
+
+  if (!isVisible) return null; 
 
   return (
     <div
@@ -101,7 +102,13 @@ function PostBox({
           <p className="z-10 text-center text-white">임시저장된 게시물</p>
         </>
       )}
-      <button type='button' className="absolute inset-0 z-0" onClick={(e)=>{handlePostClick(e,postId)}}>
+      <button
+        type="button"
+        className="absolute inset-0 z-0"
+        onClick={(e) => {
+          handlePostClick(e, postId);
+        }}
+      >
         {isPhoto && (
           <Image
             src={photoUrl}
@@ -121,13 +128,23 @@ function PostBox({
         onClick={handleHeartClick}
         className="absolute right-2 top-2 z-10"
       >
-        <HeartButton width="21px" height="19px" isClicked={isLiked} active={ isLoggedIn === 'loggedIn' }/>
+        <HeartButton
+          width="21px"
+          height="19px"
+          isClicked={isLiked}
+          active={isLoggedIn === 'loggedIn'}
+        />
       </button>
       <button
         onClick={handlePlusClick}
         className="absolute bottom-2 right-2 z-10"
       >
-        <PlusButton width="24px" height="24px" isClicked={saved} active={ isLoggedIn === 'loggedIn' }/>
+        <PlusButton
+          width="24px"
+          height="24px"
+          isClicked={saved}
+          active={isLoggedIn === 'loggedIn'}
+        />
       </button>
       <button
         onClick={handleToggleClick}
@@ -141,7 +158,15 @@ function PostBox({
       </button>
       {showGeneralAction && (
         <div className="absolute left-5 top-0 z-20">
-          <GeneralAction type="post" />
+          <GeneralAction
+            type="post"
+            postId={postId}
+            imageUrl={photoUrl}
+            setSharedCount={setSharedCount}
+            initialBoundary={currentBoundary}
+            onBoundaryChange={setCurrentBoundary}
+            onDeleteClick={handleDelete}
+          />
         </div>
       )}
     </div>

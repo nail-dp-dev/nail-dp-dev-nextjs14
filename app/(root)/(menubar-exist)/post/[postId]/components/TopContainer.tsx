@@ -5,6 +5,11 @@ import { PostsDetailData } from '../../../../../../types/dataType';
 import Link from 'next/link';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
 import { useRouter } from 'next/navigation';
+import {
+  followUser,
+  unFollowUser,
+  getFollowerCount,
+} from '../../../../../../api/user/followUser';
 
 interface userProps {
   user: PostsDetailData['data'];
@@ -14,9 +19,11 @@ interface userProps {
 export default function TopContainer({ user, postId }: userProps) {
   const { userData } = useLoggedInUserData();
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);
-  const [followerCount, setFollowerCount] = useState(user.followerCount);
+  const [followerCount, setFollowerCount] = useState<number | null>(
+    user.followerCount,
+  );
   const [isOwner, setIsOwner] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (userData && userData.data.nickname === user.nickname) {
@@ -24,45 +31,75 @@ export default function TopContainer({ user, postId }: userProps) {
     }
   }, [userData, user.nickname]);
 
-  const handleFollowToggle = () => {
+  useEffect(() => {
+    const fetchFollowerCount = async () => {
+      try {
+        const count = await getFollowerCount(user.nickname);
+        setFollowerCount(count);
+      } catch (error) {
+        console.error('Error fetching follower count:', error);
+        setFollowerCount(null);
+      }
+    };
+
+    fetchFollowerCount();
+  }, [user.nickname]);
+
+  const handleFollowToggle = async () => {
     if (isFollowing) {
-      setFollowerCount(followerCount - 1);
+      const success = await unFollowUser(user.nickname);
+      if (success) {
+        setFollowerCount((prev) => (prev !== null ? prev - 1 : null));
+        setIsFollowing(false);
+      }
     } else {
-      setFollowerCount(followerCount + 1);
+      const success = await followUser(user.nickname);
+      if (success) {
+        setFollowerCount((prev) => (prev !== null ? prev + 1 : null));
+        setIsFollowing(true);
+      }
     }
-    setIsFollowing(!isFollowing);
   };
 
   if (!user) {
     return <div>사용자를 찾을 수 없습니다.</div>;
   }
   //프로필 이동
-  const test = (nickname:string) => {
+  const test = (nickname: string) => {
     if (nickname !== undefined) {
       router.push(`/profile/${nickname}`);
     }
-    console.log("에러");
-  }
+    console.log('에러');
+  };
 
   return (
     <div className="flex flex-wrap items-center justify-between bg-white p-2">
       <div className="wrap-left flex flex-wrap items-center gap-4">
-        <UserImage
-          src={user.profileUrl}
-          alt={`${user.nickname}'s profile`}
-          width={56}
-          height={56}
-        />
-
         <div
-        onClick={e => test(userData?.data.nickname!)}
-         className="wrap-info pb-2 leading-3">
+          className="cursor-pointer"
+          onClick={(e) => test(userData?.data.nickname!)}
+        >
+          <UserImage
+            src={user.profileUrl}
+            alt={`${user.nickname}'s profile`}
+            width={56}
+            height={56}
+          />
+        </div>
+
+        <div className="wrap-info pb-2 leading-3 ">
           <UserInfo
             nickname={user.nickname}
             nicknameStyle="text-base font-medium"
             statsStyle="text-14px-normal-dP"
           />
-          <span className="text-14px-normal-dP">{followerCount} 팔로워</span>
+          {followerCount !== null ? (
+            <span className="text-14px-normal-dP">{followerCount} 팔로워</span>
+          ) : (
+            <span className="text-14px-normal-dP">
+              팔로워 수를 불러올 수 없습니다.
+            </span>
+          )}
         </div>
 
         {!isOwner && (

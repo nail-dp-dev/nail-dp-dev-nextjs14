@@ -7,6 +7,7 @@ interface GeneralShareMenuProps {
   onBack?: () => void;
   showBackButton?: boolean;
   type: 'archive' | 'post';
+  imageUrl: string;
 }
 
 // 메뉴-공유 게시물/아카이브
@@ -15,6 +16,7 @@ export default function GeneralShareMenu({
   onBack,
   showBackButton = false,
   type,
+  imageUrl,
 }: GeneralShareMenuProps) {
   const [selected, setSelected] = useState('');
 
@@ -25,7 +27,7 @@ export default function GeneralShareMenu({
 
   return (
     <div
-      className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
+      className="text-14px-normal-dP absolute z-10 ml-2 mt-3 w-[120px] 
     whitespace-nowrap rounded-xl bg-white bg-opacity-90 pt-2 shadow-option-modal-shadow"
     >
       {showBackButton && (
@@ -42,7 +44,11 @@ export default function GeneralShareMenu({
         </div>
       )}
       <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
-      <ShareMenuList onClick={handleClick} selected={selected} />
+      <ShareMenuList
+        onClick={handleClick}
+        selected={selected}
+        imageUrl={imageUrl}
+      />
     </div>
   );
 }

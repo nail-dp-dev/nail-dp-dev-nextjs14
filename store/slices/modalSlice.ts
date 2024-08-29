@@ -8,21 +8,23 @@ interface CommonModalState {
   AlarmModalUser?: string; //유저 닉네임
   AlarmModalByte?: number; // 모달 이미지 바이트
   AlarmModalImageType?: string; // 모달 이미지 타입
-  ArchiveModalPostId?: number; //아카이브 모달 postId값
-  ArchiveModalSetSuccess? : boolean; //아카이브에 게시글 저장 성공여부
+  ArchiveModalPostId?: number; // 아카이브 모달 postId값
+  ArchiveModalSetSuccess?: boolean; // 아카이브에 게시글 저장 성공여부
+  alarmActionType?: 'comment' | 'archive' | 'post' | 'block';
 }
 
 const initialCommonModalState: CommonModalState = {
   isCommonModalShow: false,
   whichCommonModal: '',
-  //초기값
+  // 초기값
   AlarmModalType: '',
   AlarmModalButton: '',
   AlarmModalUser: '',
   AlarmModalByte: 0,
   AlarmModalImageType: '',
   ArchiveModalPostId: 0,
-  ArchiveModalSetSuccess: false
+  ArchiveModalSetSuccess: false,
+  alarmActionType: undefined,
 };
 
 const commonModalSlice = createSlice({
@@ -36,13 +38,14 @@ const commonModalSlice = createSlice({
     commonModalClose: (state) => {
       state.isCommonModalShow = false;
       state.whichCommonModal = '';
-      //초기화
+      // 초기화
       state.AlarmModalType = '';
       state.AlarmModalButton = '';
       state.AlarmModalUser = '';
       state.AlarmModalByte = 0;
       state.AlarmModalImageType = '';
       state.ArchiveModalPostId = 0;
+      state.alarmActionType = undefined;
     },
     alarmModalData: (
       state,
@@ -52,6 +55,7 @@ const commonModalSlice = createSlice({
         user: string;
         byte: number;
         imageType: string;
+        actionType: 'comment' | 'archive' | 'post' | 'block';
       }>,
     ) => {
       state.AlarmModalType = action.payload.type;
@@ -59,15 +63,20 @@ const commonModalSlice = createSlice({
       state.AlarmModalUser = action.payload.user;
       state.AlarmModalByte = action.payload.byte;
       state.AlarmModalImageType = action.payload.imageType;
+      state.alarmActionType = action.payload.actionType;
     },
-    setArchiveModal: (state, action: PayloadAction<{postId:number}>) => {
+    setArchiveModal: (state, action: PayloadAction<{ postId: number }>) => {
       state.ArchiveModalPostId = action.payload.postId;
     },
   },
 });
 
-export const { setCommonModal, commonModalClose, alarmModalData, setArchiveModal } =
-  commonModalSlice.actions;
+export const {
+  setCommonModal,
+  commonModalClose,
+  alarmModalData,
+  setArchiveModal,
+} = commonModalSlice.actions;
 
 const selectCommonModal = (state: { commonModal: CommonModalState }) =>
   state.commonModal;
@@ -80,7 +89,6 @@ export const selectCommonModalStatus = createSelector(
   }),
 );
 
-// const { alarmType,alarmButton, alarmUser, alarmByte, alarmImageType } = useSelector(selectAlarmModalStatus)으로 호출해서 사용
 export const selectAlarmModalStatus = createSelector(
   [selectCommonModal],
   (commonModal) => ({
@@ -89,6 +97,7 @@ export const selectAlarmModalStatus = createSelector(
     alarmUser: commonModal.AlarmModalUser,
     alarmByte: commonModal.AlarmModalByte,
     alarmImageType: commonModal.AlarmModalImageType,
+    alarmActionType: commonModal.alarmActionType,
   }),
 );
 
@@ -96,7 +105,7 @@ export const selectArchiveModalStatus = createSelector(
   [selectCommonModal],
   (archiveModal) => ({
     ArchivePostId: archiveModal.ArchiveModalPostId,
-    ArchiveState: archiveModal.ArchiveModalSetSuccess
+    ArchiveState: archiveModal.ArchiveModalSetSuccess,
   }),
 );
 

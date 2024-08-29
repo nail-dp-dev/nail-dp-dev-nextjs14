@@ -1,4 +1,3 @@
-// BoxCommonButton.tsx
 import React from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';

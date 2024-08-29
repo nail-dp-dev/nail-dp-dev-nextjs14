@@ -2,30 +2,65 @@ import React, { useState } from 'react';
 import MenuBack from '../../../public/assets/svg/menu-back.svg';
 import MenuCheck from '../../../public/assets/svg/menu-check.svg';
 import { settingElements } from '../../../constants';
+import { patchPostCloser } from '../../../api/post/patchPostCloser';
+import { patchArchiveBoundary } from '../../../api/archive/patchArchiveBoundary';
 
 interface GeneralSettingProps {
   type: 'archive' | 'post';
+  postId?: number;
+  archiveId?: number; 
   onBack: () => void;
+  initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
+  onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
 
 // 메뉴-설정 게시물/아카이브
-export default function GeneralSetting({ type, onBack }: GeneralSettingProps) {
-  const [selected, setSelected] = useState('전체공개');
+export default function GeneralSetting({
+  type,
+  onBack,
+  postId,
+  archiveId,
+  initialBoundary,
+  onBoundaryChange,
+}: GeneralSettingProps) {
+  const [selected, setSelected] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+
+  const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
+    setSelected(newSetting);
+    onBoundaryChange(newSetting);
+
+    if (type === 'post') {
+      const result = await patchPostCloser(postId!, newSetting);
+      if (result && result.success) {
+        console.log(result.message);
+      } else {
+        console.error('Failed to update post visibility');
+      }
+    } else if (type === 'archive') {
+      const result = await patchArchiveBoundary(archiveId!, newSetting);
+      if (result && result.success) {
+        console.log(result.message);
+      } else {
+        console.error('Failed to update archive visibility');
+      }
+    }
+  };
+
+  const boundaryMap: { [key: string]: 'ALL' | 'FOLLOW' | 'NONE' } = {
+    '전체공개': 'ALL',
+    '팔로워공개': 'FOLLOW',
+    '비공개': 'NONE',
+  };
 
   const items = settingElements.map((item) => ({
     ...item,
-    isSelected: item.label === selected,
-    onClick: () => {
-      setSelected(item.label);
-      item.onClick();
-    },
+    isSelected: boundaryMap[item.label] === selected,
+    onClick: () => handleSettingChange(boundaryMap[item.label]),
   }));
 
   return (
-    <div
-      className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
-    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow"
-    >
+    <div className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
+    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow">
       <div className="flex items-center px-3 text-lg font-bold">
         <button onClick={onBack} className="mr-2">
           <MenuBack />
@@ -40,7 +75,9 @@ export default function GeneralSetting({ type, onBack }: GeneralSettingProps) {
         <div
           key={index}
           onClick={item.onClick}
-          className={`flex cursor-pointer items-center px-[19px] py-[3px] hover:font-bold ${item.isSelected ? 'font-bold text-purple' : ''}`}
+          className={`flex cursor-pointer items-center px-[19px] py-[3px] hover:font-bold ${
+            item.isSelected ? 'font-bold text-purple' : ''
+          }`}
         >
           {item.label}
           {item.isSelected && <MenuCheck className="ml-[6px]" />}

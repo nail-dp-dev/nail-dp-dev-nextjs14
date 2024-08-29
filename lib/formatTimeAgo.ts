@@ -1,14 +1,18 @@
 export const formatTimeAgo = (dateString: string) => {
-  // 날짜 문자열 형식 확인
-  let formattedDateString;
-  if (dateString.length === 8) {
-    // 'YYYYMMDD' 형식
-    formattedDateString = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`;
-  } else {
-    formattedDateString = dateString; // ISO 형식 등 다른 형식
-  }
+  // // 날짜 문자열 형식 확인
+  // let formattedDateString;
+  // if (dateString.length === 8) {
+  //   // 'YYYYMMDD' 형식
+  //   formattedDateString = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`;
+  // } else {
+  //   formattedDateString = dateString; // ISO 형식 등 다른 형식
+  // }
 
-  const date = new Date(formattedDateString);
+  // const date = new Date(formattedDateString);
+  // const now = new Date();
+  // const diff = now.getTime() - date.getTime();
+
+  const date = new Date(dateString);
   const now = new Date();
   const diff = now.getTime() - date.getTime();
 

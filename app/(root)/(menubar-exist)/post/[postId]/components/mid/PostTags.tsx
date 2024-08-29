@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { PostsDetailData } from '../../../../../../types/dataType';
+import { PostsDetailData } from '../../../../../../../types/dataType';
 
 interface PostTagsProps {
   post: PostsDetailData['data'];

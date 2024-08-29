@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CommentData } from '../../../../../../../types/dataType';
+import React, { useState, useEffect, useRef } from 'react';
 import CommentItem from './CommentItem';
-import { repliesDetail } from '../../../../../../../api/post/getRepliesDetailData';
+import { Comment } from '../../../../../../../types/dataType';
+import LoadingSpinner from '../../../../../../../components/animations/LoadingSpinner';
+import BigChatIcon from '../../../../../../../public/assets/svg/big-chat-icon.svg';
 
 interface UserProps {
-  user: CommentData['data'];
+  user: Comment[];
   onLike: (commentId: number, increment: number, isReply: boolean) => void;
   onReply: (id: number, name: string) => void;
   onSaveEdit: (
@@ -13,6 +14,9 @@ interface UserProps {
     newContent: string,
   ) => void;
   onDelete: (commentId: number, parentId: number | null) => void;
+  fetchMoreComments: () => void;
+  isLoading: boolean;
+  isLastPage: boolean;
 }
 
 const CommentWrap = ({
@@ -21,48 +25,76 @@ const CommentWrap = ({
   onReply,
   onSaveEdit,
   onDelete,
+  fetchMoreComments,
+  isLoading,
+  isLastPage,
 }: UserProps) => {
   const [sortType, setSortType] = useState<'latest' | 'popular'>('popular');
-  const [sortedComments, setSortedComments] = useState<CommentData['data']>([]);
-  const commentsEndRef = useRef<HTMLDivElement>(null);
-
-  const sortComments = useCallback(
-    (comments: CommentData['data'], type: 'latest' | 'popular') => {
-      return [...comments].sort((a, b) => {
-        if (type === 'latest') {
-          return (
-            new Date(b.commentDate).getTime() -
-            new Date(a.commentDate).getTime()
-          );
-        }
-        if (type === 'popular') {
-          const likeDiff = b.likeCount - a.likeCount;
-          if (likeDiff !== 0) return likeDiff;
-
-          const replyCountA =
-            repliesDetail.find((reply) => reply.commentId === a.commentId)?.data
-              .length || 0;
-          const replyCountB =
-            repliesDetail.find((reply) => reply.commentId === b.commentId)?.data
-              .length || 0;
-
-          const replyDiff = replyCountB - replyCountA;
-          if (replyDiff !== 0) return replyDiff;
-
-          return (
-            new Date(b.commentDate).getTime() -
-            new Date(a.commentDate).getTime()
-          );
-        }
-        return 0;
-      });
-    },
-    [],
-  );
+  const [sortedComments, setSortedComments] = useState<Comment[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
 
   useEffect(() => {
-    setSortedComments(sortComments(user, sortType));
-  }, [sortType, user, sortComments]);
+    const sorted =
+      sortType === 'latest'
+        ? [...user].sort(
+            (a, b) =>
+              new Date(b.commentDate).getTime() -
+              new Date(a.commentDate).getTime(),
+          )
+        : [...user].sort((a, b) => b.likeCount - a.likeCount);
+    setSortedComments(sorted);
+  }, [user, sortType]);
+
+  useEffect(() => {
+    if (
+      !bottomRef.current ||
+      isLoading ||
+      isLastPage ||
+      sortedComments.length < 20
+    )
+      return;
+
+    const handleScroll = () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !isLoading && !isLastPage) {
+            setShowLoadingSpinner(true);
+
+            setTimeout(() => {
+              fetchMoreComments();
+              setShowLoadingSpinner(false);
+            }, 1000);
+          }
+        },
+        {
+          threshold: 0.7,
+        },
+      );
+
+      if (bottomRef.current) {
+        observerRef.current.observe(bottomRef.current);
+      }
+    };
+
+    if (window.scrollY === 0) {
+      setTimeout(handleScroll, 100);
+    } else {
+      handleScroll();
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+    };
+  }, [fetchMoreComments, isLoading, isLastPage, sortedComments.length]);
 
   return (
     <>
@@ -87,20 +119,31 @@ const CommentWrap = ({
       </div>
 
       <div
-        className="w-full overflow-y-hidden rounded-2.5xl
-        bg-purple bg-opacity-20 transition-all duration-300"
+        className="w-full overflow-y-hidden rounded-2.5xl 
+      bg-purple bg-opacity-20 transition-all duration-300"
       >
-        {sortedComments.map((item) => (
-          <CommentItem
-            key={item.commentId}
-            item={item}
-            onLike={onLike}
-            onReply={onReply}
-            onSaveEdit={onSaveEdit}
-            onDelete={onDelete}
-          />
-        ))}
-        <div ref={commentsEndRef} />
+        {sortedComments.length > 0 ? (
+          sortedComments.map((item, index) => (
+            <CommentItem
+              key={`${item.commentId}-${index}`}
+              item={item}
+              onLike={onLike}
+              onReply={onReply}
+              onSaveEdit={onSaveEdit}
+              onDelete={onDelete}
+            />
+          ))
+        ) : (
+          <div className="my-7 flex flex-col items-center justify-center">
+            <BigChatIcon />
+            <div className="mt-4 text-center text-base font-medium text-darkPurple">
+              <p>아직 작성된 댓글이 없습니다.</p>
+              <p>제일 먼저 댓글을 작성해보세요!</p>
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} className="h-3"></div>
+        {showLoadingSpinner && <LoadingSpinner />}
       </div>
     </>
   );

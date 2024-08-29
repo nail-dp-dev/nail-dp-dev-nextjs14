@@ -15,7 +15,9 @@ export default function CommonModalLayout() {
   const handleDeleteConfirm = () => {
     dispatch(commonModalClose());
   };
-
+  const handleCancel = () => {
+    dispatch(commonModalClose());
+  };
   return (
     <div className={`commonModal ${!isCommonModalShow && 'hidden'} absolute w-full h-full
       z-50 flex items-center justify-center pointer-events-auto
@@ -30,7 +32,7 @@ export default function CommonModalLayout() {
       }
       {
         whichCommonModal === 'alarm' && 
-        <AlarmModal onConfirm={handleDeleteConfirm} /> 
+        <AlarmModal onConfirm={handleDeleteConfirm} onCancel={handleCancel} /> 
       }
       {
         whichCommonModal === 'archive' && 
