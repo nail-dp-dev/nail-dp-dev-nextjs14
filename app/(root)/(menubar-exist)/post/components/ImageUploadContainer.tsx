@@ -7,7 +7,11 @@ import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.sv
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { alarmModalData, setCommonModal } from '../../../../../store/slices/modalSlice';
+import {
+  alarmModalData,
+  setCommonModal,
+} from '../../../../../store/slices/modalSlice';
+import Video from '../../../../../components/ui/Video';
 
 type ImageData = {
   fileName: string;
@@ -70,7 +74,7 @@ export default function ImageUploadContainer({
         type: 'one',
         button: '',
         user: '',
-        actionType: 'archive'
+        actionType: 'comment',
       }),
     );
     dispatch(setCommonModal('alarm'));
@@ -190,15 +194,18 @@ export default function ImageUploadContainer({
                 {item.startsWith('data:video') ||
                 item.endsWith('.mov') ||
                 item.endsWith('.mp4') ? (
-                  <video
-                    key={item}
-                    autoPlay
-                    muted
-                    className="h-full w-full object-cover"
-                  >
-                    <source src={item} type="video/mp4" />
-                  </video>
+                  // <video
+                  //   key={item}
+                  //   autoPlay
+                  //   muted
+                  //   className="h-full w-full object-cover"
+                  // >
+                  //   <source src={item} type="video/mp4" />
+                  // </video>
+                  // <div className="h-full w-full object-cover">
+                  <Video src={item} width="100%" height="100%" />
                 ) : (
+                  // </div>
                   <Image
                     src={item}
                     alt="postImage"

@@ -34,7 +34,6 @@ export default function MyPagePage() {
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setLading] = useState(true);
   const [isNickname, setIsNickname] = useState('');
-  const [isCategory, setIsCategory] = useState('myPost');
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
