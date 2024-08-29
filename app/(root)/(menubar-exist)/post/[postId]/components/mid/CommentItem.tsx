@@ -9,7 +9,12 @@ import PostToggleIcon from '../icons/PostToggleIcon';
 import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
 // import ReplyItem from './ReplyItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
+import {
+  alarmModalData,
+  commonModalClose,
+  selectCommonModalStatus,
+  setCommonModal,
+} from '../../../../../../../store/slices/modalSlice';
 import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
 
 interface CommentItemProps {
@@ -39,9 +44,6 @@ export default function CommentItem({
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const dispatch = useDispatch();
-  const { isCommonModalShow, whichCommonModal } = useSelector(
-    selectCommonModalStatus,
-  );
 
   useEffect(() => {
     handleResizeHeight();
@@ -84,28 +86,29 @@ export default function CommentItem({
 
   // 삭제 모달 표시
   const handleDeleteClick = () => {
-    setShowDeleteModal(true); 
+    setShowDeleteModal(true);
     dispatch(
       alarmModalData({
         type: 'two',
         button: '삭제',
-        user: item.commentUserNickname,
+        user: '',
         byte: 0,
         imageType: '',
+        actionType: 'comment',
       }),
     );
   };
   // 댓글 삭제 처리
   const handleDeleteConfirm = () => {
-    onDelete(item.commentId, null);  
-    setShowDeleteModal(false);  
-    dispatch(commonModalClose()); 
+    onDelete(item.commentId, null);
+    setShowDeleteModal(false);
+    dispatch(commonModalClose());
   };
-  
+
   // 댓글 삭제 취소
   const handleCancelDelete = () => {
-    setShowDeleteModal(false);  
-    dispatch(commonModalClose()); 
+    setShowDeleteModal(false);
+    dispatch(commonModalClose());
   };
 
   // 수정 취소
@@ -133,7 +136,6 @@ export default function CommentItem({
       handleSaveEdit();
     }
   };
-
 
   // 신고 버튼 (일단 옵션 닫기로 설정)
   const handleReportClick = () => {
@@ -266,7 +268,7 @@ export default function CommentItem({
             {showOptions && (
               <CommentOptions
                 onEditClick={handleEditClick}
-                onDeleteClick={handleDeleteClick} 
+                onDeleteClick={handleDeleteClick}
                 onReportClick={handleReportClick}
                 onBlockUserClick={handleBlockUserClick}
                 onClose={() => setShowOptions(false)}
@@ -292,8 +294,11 @@ export default function CommentItem({
             </div>
           ))} */}
       </div>
-      {showDeleteModal && ( 
-        <AlarmModal onConfirm={handleDeleteConfirm} onCancel={handleCancelDelete}/>
+      {showDeleteModal && (
+        <AlarmModal
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleCancelDelete}
+        />
       )}
     </div>
   );

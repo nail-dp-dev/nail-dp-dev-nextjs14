@@ -17,6 +17,7 @@ import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
 import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
+import { useVisibility } from '../../hooks/useVisibility';
 
 function PostBox({
   postId,
@@ -31,14 +32,15 @@ function PostBox({
   boundary: initialBoundary,
 }: PostBoxNewProps) {
   const router = useRouter();
-
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
 
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const { isVisible, handleDelete } = useVisibility(); 
 
   const [isLiked, setIsLiked] = useState(like);
   const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+
   const dispatch = useDispatch();
 
   const handleHeartClick = async () => {
@@ -61,7 +63,6 @@ function PostBox({
     }
 
     console.log('Click...Plus!');
-    //모달 확인을 위해 작성
     dispatch(setCommonModal('archive'));
     dispatch(setArchiveModal({ postId }));
   };
@@ -86,6 +87,8 @@ function PostBox({
     photoUrl.endsWith('.gif');
 
   const isVideo = photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov');
+
+  if (!isVisible) return null; 
 
   return (
     <div
@@ -162,6 +165,7 @@ function PostBox({
             setSharedCount={setSharedCount}
             initialBoundary={currentBoundary}
             onBoundaryChange={setCurrentBoundary}
+            onDeleteClick={handleDelete}
           />
         </div>
       )}
