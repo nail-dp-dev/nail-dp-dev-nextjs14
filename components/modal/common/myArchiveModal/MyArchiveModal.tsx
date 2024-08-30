@@ -75,7 +75,6 @@ export default function MyArchiveModal() {
   };
 
   const setArchive = async (archiveId: number, postId: number) => {
-    console.log("여기",postId);
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
       dispatch(setArchiveState({state:true}))
