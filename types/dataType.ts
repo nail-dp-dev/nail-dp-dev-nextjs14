@@ -195,3 +195,12 @@ export type TempPostCreateData = {
   boundary: string;
   photos?: { media_file: string }[];
 };
+
+export type UserSearchData = {
+  nickname: string;
+  profileUrl: string;
+  postCount: number;
+  savedPostCount: number;
+  followerCount: number;
+  isFollowing: boolean;
+};

@@ -5,7 +5,7 @@ import CloseIcon from '../../../public/assets/svg/close.svg';
 import { useEffect, useState } from 'react';
 import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
-import { posts, followData } from '../../../constants/example';
+import { posts } from '../../../constants/example';
 import SearchNickname from './SearchNickname';
 import { getSearchResults } from '../../../api/search/getSearch';
 
@@ -14,11 +14,12 @@ export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchRecent, setSearchRecent] = useState<string[]>([]);
   const [recommendedWords, setRecommendedWords] = useState(() =>
-    posts.sort(() => 0.5 - Math.random()).slice(0, 14),
+    posts.sort(() => 0.5 - Math.random()).slice(0, 14)
   );
   const [searchError, setSearchError] = useState('');
   const [isSearchRecentEnabled, setIsSearchRecentEnabled] = useState(true);
-  const [userResults, setUserResults] = useState([]);
+  const [userResults, setUserResults] = useState<any[]>([]);
+  const [cachedResults, setCachedResults] = useState<Map<string, any[]>>(new Map());
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -30,48 +31,65 @@ export default function SearchBar() {
     setSearchTerm('');
     setSearchError('');
     setUserResults([]);
+    setIsDropdownOpen(false);
   };
 
   const handleSearch = async (searchQuery: string) => {
+    if (!searchQuery) return;
+
+    // 이미 검색한 결과가 있다면 캐시에서 사용
+    if (cachedResults.has(searchQuery)) {
+      setUserResults(cachedResults.get(searchQuery) || []);
+      return;
+    }
+
     if (searchQuery && !searchRecent.includes(searchQuery)) {
       if (isSearchRecentEnabled) {
-        setSearchRecent((prevRecent) =>
-          [searchQuery, ...prevRecent].slice(0, 30),
-        );
+        setSearchRecent((prevRecent) => [searchQuery, ...prevRecent].slice(0, 30));
       }
     }
 
-    const filteredWords = posts.filter((post) =>
-      post.data.tags[0].tagName
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()),
-    );
-
+    // '@'로 시작하는 경우 사용자 검색 API 호출
     if (searchQuery.startsWith('@') && searchQuery.length > 1) {
       try {
         const response = await getSearchResults(searchQuery.slice(1));
         if (response && response.data) {
           setUserResults(response.data);
+          setCachedResults((prev) => new Map(prev).set(searchQuery, response.data));
           setSearchError('');
         } else {
           setUserResults([]);
-          setSearchError(
-            `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-          );
+          setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
         }
       } catch (error) {
         console.error('Error fetching user search results:', error);
         setSearchError('사용자 검색 중 오류가 발생했습니다.');
       }
     } else if (!searchQuery.startsWith('@')) {
-      setSearchError(
-        filteredWords.length === 0
-          ? `'${searchQuery}' 검색결과를 찾을 수 없습니다.`
-          : '',
+      const filteredWords = posts.filter((post) =>
+        post.data.tags[0].tagName.toLowerCase().includes(searchQuery.toLowerCase())
       );
+      setUserResults([]);
+      setSearchError(filteredWords.length === 0 ? `'${searchQuery}' 검색결과를 찾을 수 없습니다.` : '');
     }
 
     setIsDropdownOpen(true);
+  };
+
+  // 검색어 입력 필드에 변화가 있을 때 호출됨
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setSearchError('');
+  };
+
+  // Enter 키를 누르면 검색 실행
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (searchTerm !== '@') {
+        handleSearch(searchTerm);  
+      }
+    }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -88,10 +106,7 @@ export default function SearchBar() {
 
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (
-      !target.closest('.dropdown-container') &&
-      !target.closest('.search-input')
-    ) {
+    if (!target.closest('.dropdown-container') && !target.closest('.search-input')) {
       setIsDropdownOpen(false);
     }
   };
@@ -103,11 +118,6 @@ export default function SearchBar() {
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setSearchError('');
-  };
-
   const handleClearRecent = () => {
     setSearchRecent([]);
   };
@@ -118,9 +128,7 @@ export default function SearchBar() {
 
   const filteredWords = searchTerm
     ? posts.filter((post) =>
-        post.data.tags[0].tagName
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()),
+        post.data.tags[0].tagName.toLowerCase().includes(searchTerm.toLowerCase())
       )
     : recommendedWords;
 
@@ -134,12 +142,15 @@ export default function SearchBar() {
         <div className="search-input relative w-full">
           <input
             className={`w-full rounded-full px-4 py-3 pl-12 placeholder:text-sm placeholder:font-normal placeholder:text-darkPurple 
-            focus:outline-none ${isDropdownOpen ? (searchTerm.startsWith('@') ? 'bg-orange bg-opacity-20' : 'bg-purple bg-opacity-20') : 'bg-lightGray'}`}
+            focus:outline-none ${
+              isDropdownOpen ? (searchTerm.startsWith('@') ? 'bg-orange bg-opacity-20' : 'bg-purple bg-opacity-20') : 'bg-lightGray'
+            }`}
             type="text"
             value={searchTerm}
             placeholder="다양한 네일 디자인을 검색해보세요."
             onClick={handleInputClick}
             onChange={handleChange}
+            onKeyDown={handleKeyDown} 
           />
           <div className="absolute inset-y-0 left-0 flex items-center pl-4">
             <SearchIcon />
