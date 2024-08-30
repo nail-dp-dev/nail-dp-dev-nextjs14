@@ -16,7 +16,7 @@ import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
-import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
+import { setCommonModal, setArchivePost } from '../../store/slices/modalSlice';
 import { useVisibility } from '../../hooks/useVisibility';
 
 function PostBox({
@@ -36,10 +36,12 @@ function PostBox({
   const layoutNum = useSelector(selectNumberOfBoxes);
 
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
-  const { isVisible, handleDelete } = useVisibility(); 
+  const { isVisible, handleDelete } = useVisibility();
 
   const [isLiked, setIsLiked] = useState(like);
-  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+  const [currentBoundary, setCurrentBoundary] = useState<
+    'ALL' | 'FOLLOW' | 'NONE'
+  >(initialBoundary);
 
   const dispatch = useDispatch();
 
@@ -64,7 +66,7 @@ function PostBox({
 
     console.log('Click...Plus!');
     dispatch(setCommonModal('archive'));
-    dispatch(setArchiveModal({ postId }));
+    dispatch(setArchivePost({ postId }));
   };
 
   const handlePostClick = (e: any, postId: number) => {
@@ -88,7 +90,7 @@ function PostBox({
 
   const isVideo = photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov');
 
-  if (!isVisible) return null; 
+  if (!isVisible) return null;
 
   return (
     <div
@@ -129,6 +131,7 @@ function PostBox({
         className="absolute right-2 top-2 z-10"
       >
         <HeartButton
+          postId={postId}
           width="21px"
           height="19px"
           isClicked={isLiked}
@@ -140,6 +143,7 @@ function PostBox({
         className="absolute bottom-2 right-2 z-10"
       >
         <PlusButton
+          postId={postId}
           width="24px"
           height="24px"
           isClicked={saved}
