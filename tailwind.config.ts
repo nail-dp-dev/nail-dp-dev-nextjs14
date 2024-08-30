@@ -100,6 +100,9 @@ const config: Config = {
       // Gray 6
       postInputGray: '#E0DBE5',
 
+      // Gray 7 
+      darkModeGray: `#7D7D7D`,
+
       // Purple 1
       purple: '#B98CE0',
       mainPurple: '#B98CE0',
