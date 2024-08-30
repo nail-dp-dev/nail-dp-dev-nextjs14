@@ -6,26 +6,39 @@ interface ShareMenuListProps {
   onClick: (message: string) => void;
   selected?: string;
   imageUrl: string;
+  type: 'post' | 'archive';
+  id: number;
 }
-
+// 공유 리스트( 채팅, 카카오톡, URL복사)
 export default function ShareMenuList({
   onClick,
   selected,
   imageUrl,
+  type,
+  id,
 }: ShareMenuListProps) {
   const [isKakaoReady, setIsKakaoReady] = useState(false);
-  const [currentUrl, setCurrentUrl] = useState('');
 
-  useEffect(() => {
-    setCurrentUrl(window.location.href);
-  }, []);
+  const getValidImageUrl = () => {
+    if (!imageUrl.startsWith('http')) {
+      return `${window.location.origin}${imageUrl}`;
+    }
+    return imageUrl;
+  };
 
   const handleKakaoShare = () => {
-    if (!imageUrl || !imageUrl.startsWith('http')) {
-      console.error('Invalid imageUrl:', imageUrl);
+    const validImageUrl = getValidImageUrl();
+
+    if (!validImageUrl || !validImageUrl.startsWith('http')) {
+      console.error('Invalid imageUrl:', validImageUrl);
       alert('이미지 URL이 올바르지 않습니다. 공유할 수 없습니다.');
       return;
     }
+
+    const shareUrl =
+      type === 'post'
+        ? `${window.location.origin}/post/${id}`
+        : `${window.location.origin}/archive/${id}`;
 
     if (isKakaoReady && window.Kakao) {
       window.Kakao.Share.sendDefault({
@@ -33,10 +46,10 @@ export default function ShareMenuList({
         content: {
           title: '네디플',
           description: `세상의 모든 네일아트, 여기서 만나보세요! 트렌디한 디자인과 나만의 스타일을 찾을 수 있는 네일아트 플랫폼`,
-          imageUrl: imageUrl,
+          imageUrl: validImageUrl,
           link: {
-            mobileWebUrl: currentUrl,
-            webUrl: currentUrl,
+            mobileWebUrl: shareUrl,
+            webUrl: shareUrl,
           },
         },
       });
@@ -47,7 +60,12 @@ export default function ShareMenuList({
   };
 
   const handleCopyUrl = () => {
-    navigator.clipboard.writeText(currentUrl).then(
+    const shareUrl =
+      type === 'post'
+        ? `${window.location.origin}/post/${id}`
+        : `${window.location.origin}/archive/${id}`;
+
+    navigator.clipboard.writeText(shareUrl).then(
       () => {
         onClick('URL 복사');
         alert('URL이 복사되었습니다.');

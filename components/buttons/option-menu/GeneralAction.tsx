@@ -33,6 +33,7 @@ interface GeneralActionProps {
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
 
+// 옵션 메뉴 동작
 export default function GeneralAction({
   archiveId,
   archiveName,
@@ -60,7 +61,7 @@ export default function GeneralAction({
   const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
   const [showDeleteModal, setShowDeleteModal] = useState(false); 
 
-  const handleShareCount = useHandleShareCount(postId as number, setSharedCount!);
+  const handleShareCount = useHandleShareCount(type, postId as number, setSharedCount);
 
   useEffect(() => {
     setCurrentBoundary(initialBoundary);
@@ -73,38 +74,45 @@ export default function GeneralAction({
     setShowShareMenu(false);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number) => {
-    e.stopPropagation();
-    setShowDeleteModal(true);
+const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number) => {
+  e.stopPropagation();
+  setShowDeleteModal(true);
 
-    if (archiveId !== undefined) {
-      console.log('아카이브 삭제 모달이 열렸습니다.');  
-      dispatch(
-        alarmModalData({
-          type: 'two',
-          button: '삭제',
-          user: archiveName || '아카이브 이름',
-          byte: 0,
-          imageType: '',
-          actionType: 'archive',
-        }),
-      );
-    } else if (postId !== undefined) {
-      console.log('포스트 삭제 모달이 열렸습니다.');
-      dispatch(
-        alarmModalData({
-          type: 'two',
-          button: '삭제',
-          user: '',
-          byte: 0,
-          imageType: '',
-          actionType: 'post',
-        }),
-      );
-    } else {
-      console.error('ID is undefined');
-    }
-  };
+  if (archiveId !== undefined) {
+    console.log('아카이브 삭제 모달이 열렸습니다.');
+    dispatch(
+      alarmModalData({
+        type: 'two',
+        button: '삭제',
+        user: archiveName || '아카이브 이름',
+        byte: 0,
+        imageType: '',
+        actionType: 'archive',
+      }),
+    );
+
+    // 여기에 archiveId가 숫자임을 보장하기 때문에 archive 타입으로 전달
+    if (onDeleteClick) onDeleteClick(archiveId, 'archive');
+  } else if (postId !== undefined) {
+    console.log('포스트 삭제 모달이 열렸습니다.');
+    dispatch(
+      alarmModalData({
+        type: 'two',
+        button: '삭제',
+        user: '',
+        byte: 0,
+        imageType: '',
+        actionType: 'post',
+      }),
+    );
+
+    // 여기에 postId가 숫자임을 보장하기 때문에 post 타입으로 전달
+    if (onDeleteClick) onDeleteClick(postId, 'post');
+  } else {
+    console.error('ID is undefined');
+  }
+};
+
 
   const handleDeleteConfirm = async () => {
     try {
@@ -162,6 +170,7 @@ export default function GeneralAction({
         showBackButton={true}
         type={type}
         imageUrl={imageUrl as string}
+        id={type === 'post' ? postId! : archiveId!} 
       />
     );
   }
