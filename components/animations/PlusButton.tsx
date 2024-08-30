@@ -1,24 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { IconButtonProps } from '../../constants/interface';
+import { selectArchiveModalStatus, setArchivePost, setArchiveState } from '../../store/slices/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function PlusButton({width, height, isClicked, active }: IconButtonProps) {
+export default function PlusButton({
+  postId,
+  width,
+  height,
+  isClicked,
+  active,
+}: IconButtonProps) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isBackGround, setIsBackGround] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);
+  const { ArchiveState,ArchivePostId } = useSelector(selectArchiveModalStatus);
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    if (!active) {
+    if (!active || !ArchiveState || ArchivePostId !== postId) {
       return;
     }
+    dispatch(setArchiveState({state:false}))
     setIsClick(!isClick);
-    setIsAnimate(true)
+    setIsAnimate(true);
     setTimeout(() => {
       setIsBackGround(!isBackGround);
     }, 300);
+    dispatch(setArchivePost({postId:0}))
   };
+
+  useEffect(() => {
+    if (ArchiveState && ArchivePostId === postId) {
+      handleClick();
+    }
+  }, [ArchiveState]);
 
   return (
     <div className={`width='${width}' height='${height}'`}>
@@ -28,7 +46,6 @@ export default function PlusButton({width, height, isClicked, active }: IconButt
         viewBox="0 0 25 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        onClick={handleClick}
         animate={
           isAnimate ? { scale: isClick ? [1, 1.2, 1, 1] : [1, 1.2, 1] } : {}
         }

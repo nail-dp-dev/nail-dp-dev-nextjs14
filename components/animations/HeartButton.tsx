@@ -9,6 +9,7 @@ import { selectButtonState, toggleButtonState } from '../../store/slices/getLike
 
 export default function HeartButton(
   {
+    postId,
     width,
     height,
     isClicked,
@@ -23,7 +24,6 @@ export default function HeartButton(
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    console.log('클릭...!')
     setIsClick(!isClick);
     setIsAnimate(true); 
     setTimeout(() =>{
