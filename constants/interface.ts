@@ -10,7 +10,7 @@ export interface CategoryBarProps {
 }
 
 export interface IconButtonProps {
-  postId: number;
+  postId?: number;
   width: string;
   height: string;
   isClicked?: boolean;

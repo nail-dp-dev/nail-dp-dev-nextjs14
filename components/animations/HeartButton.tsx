@@ -9,12 +9,10 @@ import { selectButtonState, toggleButtonState } from '../../store/slices/getLike
 
 export default function HeartButton(
   {
-    postId,
     width,
     height,
     isClicked,
     isGetAllLiked,
-    active,
   }
   : IconButtonProps
 ) {
