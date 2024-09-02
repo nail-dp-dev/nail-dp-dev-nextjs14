@@ -1,26 +1,42 @@
 import { useEffect, useState } from 'react';
 import { posts } from '../../../constants/example';
 
+type TagResult = {
+  tagName: string;
+  tagImageUrl: string;
+  isPhoto: boolean;
+  isVideo: boolean;
+};
+
 type SearchWordProps = {
   searchWords: typeof posts;
   onTagClick: (tag: string) => void;
   searchTerm: string;
+  tagResults: TagResult[];
 };
 
-// 검색어 컴포넌트
 export default function SearchWord({
   searchWords,
   onTagClick,
   searchTerm,
+  tagResults,
 }: SearchWordProps) {
-  // 연관 검색어 랜덤 출력 (임시 함수)
-  const [displayWords, setDisplayWords] = useState(() =>
-    posts.sort(() => 0.5 - Math.random()).slice(0, 14),
-  );
+  const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
-    setDisplayWords(searchWords);
-  }, [searchWords]);
+    if (tagResults.length > 0) {
+      setDisplayWords(tagResults);
+    } else {
+      setDisplayWords(
+        searchWords.map((post) => ({
+          tagName: post.data.tags[0].tagName,
+          tagImageUrl: post.data.postImageUrls[0],
+          isPhoto: true,
+          isVideo: false,
+        })),
+      );
+    }
+  }, [searchWords, tagResults]);
 
   return (
     <div className="">
@@ -48,13 +64,13 @@ export default function SearchWord({
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
             style={{
-              backgroundImage: `url(${item.data.postImageUrls[0]})`,
+              backgroundImage: `url(${item.isPhoto ? item.tagImageUrl : ''})`,
             }}
-            onClick={() => onTagClick(item.data.tags[0].tagName)}
+            onClick={() => onTagClick(item.tagName)}
           >
             <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
             <div className="relative text-[0.94rem] font-extrabold text-white">
-              {item.data.tags[0].tagName}
+              {item.tagName}
             </div>
           </button>
         ))}
