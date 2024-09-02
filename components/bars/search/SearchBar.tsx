@@ -2,12 +2,20 @@
 
 import SearchIcon from '../../../public/assets/svg/search.svg';
 import CloseIcon from '../../../public/assets/svg/close.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
 import { posts } from '../../../constants/example';
 import SearchNickname from './SearchNickname';
 import { getSearchResults } from '../../../api/search/getSearch';
+
+function debounce(fn: Function, delay: number) {
+  let timer: NodeJS.Timeout;
+  return function (...args: any[]) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
 
 export default function SearchBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -34,52 +42,77 @@ export default function SearchBar() {
     setIsDropdownOpen(false);
   };
 
-  const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery) return;
-
-    // 이미 검색한 결과가 있다면 캐시에서 사용
-    if (cachedResults.has(searchQuery)) {
-      setUserResults(cachedResults.get(searchQuery) || []);
+  const performSearch = async (searchQuery: string, showError: boolean = false) => {
+    if (!searchQuery) {
+      setUserResults([]);
+      setSearchError('');
       return;
     }
 
-    if (searchQuery && !searchRecent.includes(searchQuery)) {
-      if (isSearchRecentEnabled) {
-        setSearchRecent((prevRecent) => [searchQuery, ...prevRecent].slice(0, 30));
-      }
+    if (cachedResults.has(searchQuery)) {
+      setUserResults(cachedResults.get(searchQuery) || []);
+      setSearchError('');
+      return;
     }
 
-    // '@'로 시작하는 경우 사용자 검색 API 호출
     if (searchQuery.startsWith('@') && searchQuery.length > 1) {
       try {
         const response = await getSearchResults(searchQuery.slice(1));
-        if (response && response.data) {
-          setUserResults(response.data);
-          setCachedResults((prev) => new Map(prev).set(searchQuery, response.data));
-          setSearchError('');
+        if (response && response.data.length > 0) {
+          const filteredResults = response.data.filter((user: any) => {
+            const nickname = user.nickname.toLowerCase();
+            const searchValue = searchQuery.slice(1).toLowerCase();
+            return nickname.includes(searchValue) || searchValue.includes(nickname);
+          });
+
+          if (filteredResults.length > 0) {
+            setUserResults(filteredResults);
+            setCachedResults((prev) => new Map(prev).set(searchQuery, filteredResults));
+            setSearchError('');
+          } else {
+            setUserResults([]);
+            if (showError) {
+              setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
+            }
+          }
         } else {
           setUserResults([]);
-          setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
+          if (showError) {
+            setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
+          }
         }
       } catch (error) {
         console.error('Error fetching user search results:', error);
-        setSearchError('사용자 검색 중 오류가 발생했습니다.');
+        setUserResults([]);
+        if (showError) {
+          setSearchError('사용자 검색 중 오류가 발생했습니다.');
+        }
       }
     } else if (!searchQuery.startsWith('@')) {
       const filteredWords = posts.filter((post) =>
         post.data.tags[0].tagName.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setUserResults([]);
-      setSearchError(filteredWords.length === 0 ? `'${searchQuery}' 검색결과를 찾을 수 없습니다.` : '');
+      if (showError) {
+        setSearchError(filteredWords.length === 0 ? `'${searchQuery}' 검색결과를 찾을 수 없습니다.` : '');
+      }
     }
 
     setIsDropdownOpen(true);
   };
 
+  // 디바운스된 검색 함수
+  const debouncedSearch = useCallback(debounce((query: string) => performSearch(query), 300), [cachedResults]);
+
   // 검색어 입력 필드에 변화가 있을 때 호출됨
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
     setSearchError('');
+
+    if (newSearchTerm !== '@') {
+      debouncedSearch(newSearchTerm);
+    }
   };
 
   // Enter 키를 누르면 검색 실행
@@ -87,7 +120,12 @@ export default function SearchBar() {
     if (e.key === 'Enter') {
       e.preventDefault();
       if (searchTerm !== '@') {
-        handleSearch(searchTerm);  
+        performSearch(searchTerm, true); 
+
+        // 검색어를 최근 검색에 추가
+        if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
+          setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
+        }
       }
     }
   };
@@ -95,13 +133,32 @@ export default function SearchBar() {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm !== '@') {
-      handleSearch(searchTerm);
+      performSearch(searchTerm, true);
+
+      // 검색어를 최근 검색에 추가
+      if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
+        setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
+      }
     }
   };
 
   const handleTagClick = (tag: string) => {
     setSearchTerm(tag);
-    handleSearch(tag);
+    performSearch(tag);
+
+    // 닉네임 클릭 시 최근 검색어에 추가
+    if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
+      setSearchRecent((prevRecent) => [tag, ...prevRecent].slice(0, 30));
+    }
+  };
+
+  const handleProfileClick = (nickname: string) => {
+    const searchFormat = `@${nickname}`;
+    
+    // 프로필로 이동할 때 닉네임을 최근 검색어에 '@' 포함하여 추가
+    if (isSearchRecentEnabled && !searchRecent.includes(searchFormat)) {
+      setSearchRecent((prevRecent) => [searchFormat, ...prevRecent].slice(0, 30));
+    }
   };
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -197,6 +254,7 @@ export default function SearchBar() {
                   searchTerm={searchTerm}
                   onTagClick={handleTagClick}
                   followData={userResults}
+                  onProfileClick={handleProfileClick}  
                 />
               )
             )}

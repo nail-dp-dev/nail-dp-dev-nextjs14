@@ -8,6 +8,7 @@ type SearchNicknameProps = {
   searchTerm: string;
   onTagClick: (tag: string) => void;
   followData: UserSearchData[];
+  onProfileClick: (nickname: string) => void; 
 };
 
 // 사용자 검색 결과 컴포넌트
@@ -15,6 +16,7 @@ export default function SearchNickname({
   searchTerm,
   onTagClick,
   followData,
+  onProfileClick, 
 }: SearchNicknameProps) {
   const router = useRouter();
 
@@ -29,6 +31,7 @@ export default function SearchNickname({
       : [];
 
   const handleProfileClick = (nickname: string) => {
+    onProfileClick(nickname); 
     router.push(`/profile/${nickname}`);
   };
 
@@ -59,7 +62,7 @@ export default function SearchNickname({
             <button
               className="nickname-wrap button-tr group flex w-[310px] snap-end items-center 
                 rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10"
-              onClick={() => handleProfileClick(user.nickname)}
+              onClick={() => handleProfileClick(user.nickname)}  
             >
               <div className="button-tr group-hover:brightness-75">
                 <UserImage
