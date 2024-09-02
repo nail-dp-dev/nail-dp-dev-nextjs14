@@ -58,6 +58,8 @@ export default function MyPagePage() {
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
+      console.log(postData.data.postSummaryList.content);
+      
       setIsNickname(userData.data.nickname);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsCursorId(postData.data.cursorId);
@@ -85,7 +87,19 @@ export default function MyPagePage() {
     }
   };
 
+  const modalAlarm = () => {
+    const miniModal = localStorage.getItem("mini")
+    if (miniModal == "작성") {
+      console.log("작성");
+    }else if(miniModal == "수정"){
+      console.log("수정");
+    }else if(miniModal == "임시"){
+      console.log("임시");
+    }
+  }
+
   useEffect(() => {
+    modalAlarm();
     fetchPostData();
     fetchPostTempData();
   }, [userData]);
@@ -143,8 +157,6 @@ export default function MyPagePage() {
         </div>
       )}
       <div className={`sticky top-0 z-[17] w-full bg-white`}>
-        {/* 여기수정 */}
-        {/* <CategoryBar elements={myPageCategoryElements} /> */}
         <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
           <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
             <div className="flex h-[53px] gap-[32px]">

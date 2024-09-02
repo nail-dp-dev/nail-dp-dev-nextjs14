@@ -32,9 +32,6 @@ export default function ImageUploadContainer({
   const [isOriginImages, setIsOriginImages] = useState<File[]>([]);
   const [isFileMemory, setIsFileMemory] = useState<number[]>([]);
   const [isMaxFileMemory, setIsMaxFileMemory] = useState<number>(0);
-  const [isOverFileMemory, setIsOverFileMemory] = useState<number>(0);
-  const [isOverFileType, setIsOverFileType] = useState<string>('');
-  const [isModal, setIsModal] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
 
@@ -179,7 +176,7 @@ export default function ImageUploadContainer({
               사진 추가하기
             </button>
             <p className="mb-[13px] mt-[24px] text-[1rem]">
-              (최대 10장 50M까자입니다.)
+              (최대 10장 50MB까자입니다.)
             </p>
           </div>
         )}
@@ -259,11 +256,6 @@ export default function ImageUploadContainer({
           </p>
         </div>
       </div>
-      {isModal && (
-        <div
-          className={`pointer-events-auto absolute bottom-0 right-0 z-50 flex h-full w-full items-center justify-center bg-modalBackgroundColor`}
-        ></div>
-      )}
     </div>
   );
 }

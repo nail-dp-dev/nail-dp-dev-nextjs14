@@ -1,4 +1,3 @@
-import MenuBar from '../../../../components/bars/MenuBar';
 import SearchBar from '../../../../components/bars/search/SearchBar';
 import NotLoginNotice from '../../../../components/notice/NotLoginNotice';
 

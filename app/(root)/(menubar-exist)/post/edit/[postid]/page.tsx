@@ -59,24 +59,25 @@ export default function PostEdit() {
     setIsUserHashTags(hashtags);
   };
 
-  useEffect(() => {
-    if (isModal) {
-      const handleOutsideClick = () => {
-        setIsModal(false);
-      };
+  // 여기 수정
+  // useEffect(() => {
+  //   if (isModal) {
+  //     const handleOutsideClick = () => {
+  //       setIsModal(false);
+  //     };
 
-      const timer = setTimeout(() => {
-        setIsModal(false);
-      }, 2000);
+  //     const timer = setTimeout(() => {
+  //       setIsModal(false);
+  //     }, 2000);
 
-      document.addEventListener('click', handleOutsideClick);
+  //     document.addEventListener('click', handleOutsideClick);
 
-      return () => {
-        clearTimeout(timer);
-        document.removeEventListener('click', handleOutsideClick);
-      };
-    }
-  }, [isModal]);
+  //     return () => {
+  //       clearTimeout(timer);
+  //       document.removeEventListener('click', handleOutsideClick);
+  //     };
+  //   }
+  // }, [isModal]);
 
   const editButton = isUserHashTags.length > 0 && isImages.length > 0 || isUrlImages.length > 0;
   
@@ -97,8 +98,8 @@ export default function PostEdit() {
     const success = await postEdit(postData);
     if (success) {
       router.push('/my-page?modal=수정');
-    }else{
-      setIsModal(true)
+    } else {
+      setIsModal(true);
     }
   };
 
@@ -115,7 +116,6 @@ export default function PostEdit() {
             완료
           </button>
         </div>
-        {isModal && <MyPageModal isText={'수정'}/>}
         <form
           className="w-[55%] min-w-[512px]"
           id="postEditForm"

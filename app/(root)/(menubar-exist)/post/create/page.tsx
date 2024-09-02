@@ -72,6 +72,8 @@ export default function PostCreate() {
     if (temp) {
       const success = await tempPostCreate(postData);
       if (success) {
+        localStorage.setItem("mini","임시")
+        localStorage.setItem("state","true")
         router.push('/my-page');
       } else {
         setIsModal(true);
@@ -79,7 +81,9 @@ export default function PostCreate() {
     } else {
       const success = await postCreate(postData);
       if (success) {
-        router.push('/my-page?modal=작성');
+        localStorage.setItem("mini","작성")
+        localStorage.setItem("state","true")
+        router.push('/my-page');
       } else {
         setIsModal(true);
       }
@@ -109,7 +113,6 @@ export default function PostCreate() {
             업로드
           </button>
         </div>
-        {isModal && <MyPageModal isText={'업로드'} />}
         <form
           className="w-[55%] min-w-[512px]"
           id="postCreateForm"

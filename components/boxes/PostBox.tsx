@@ -1,11 +1,10 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
 import Video from '../ui/Video';
-import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
@@ -93,6 +92,15 @@ function PostBox({
       className="group/button preload box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
+      {tempPost == true && (
+        <>
+          <div
+            onClick={handleTempClick}
+            className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+          ></div>
+          <p className="z-10 text-center text-white">임시저장된 게시물</p>
+        </>
+      )}
       <button
         type="button"
         className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"

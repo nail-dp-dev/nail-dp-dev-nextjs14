@@ -1,4 +1,3 @@
-import MenuBar from '../../components/bars/MenuBar';
 import CommonModalLayout from '../../components/modal/common/commonModalLayout';
 import MessageModal from '../../components/modal/message/MessageModal';
 
