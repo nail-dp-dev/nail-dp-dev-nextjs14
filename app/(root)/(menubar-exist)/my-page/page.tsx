@@ -27,6 +27,8 @@ export default function MyPagePage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
 
+  console.log(userData);
+  
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);

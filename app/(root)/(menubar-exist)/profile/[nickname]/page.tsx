@@ -7,14 +7,16 @@ import UserInfo from '../../../../../components/ui/UserInfo';
 import { selectLoginStatus } from '../../../../../store/slices/loginSlice';
 import { getProfileData } from '../../../../../api/profile/getProfileData';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { postData, profileData } from '../../../../../constants/interface';
 import CategoryBar from '../../../../../components/bars/CategoryBar';
 import { ProfileElements } from '../../../../../constants';
 import { getProfilePost } from '../../../../../api/profile/getProfilePost';
 import { getProfileArchive } from '../../../../../api/profile/getProfileArchive';
+import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
 
 export default function ProfilePage() {
+  const { userData } = useLoggedInUserData();
   const isLoggedIn = useSelector(selectLoginStatus);
   const { nickname } = useParams<{ nickname: string }>();
   const [isProfile, setIsProfile] = useState<profileData>();
@@ -23,6 +25,7 @@ export default function ProfilePage() {
   const [isPostLost, setIsPostLost] = useState();
   const [isPostCursorId, setIsCursorId] = useState();
   const [isArchive, setIsArchive] = useState();
+  const router = useRouter()
 
   const profileData = async () => {
     const response = await getProfileData(nickname);
@@ -46,6 +49,9 @@ export default function ProfilePage() {
   const follow = () => {};
 
   useEffect(() => {
+    if (userData?.data.nickname === nickname) {
+      router.push('/my-page');
+    }
     profileData();
     profilePostData();
     profileArchiveData();
