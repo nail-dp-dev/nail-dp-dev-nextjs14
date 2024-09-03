@@ -54,12 +54,15 @@ export default function SearchRecent({
 
   // 태그 클릭 시 로직 업데이트
   const handleTagClick = (tag: string) => {
-    if (tag.startsWith('@')) {
-      setSearchTerm(tag); 
-      performSearch(tag, true); 
-    } else {
-      onTagClick(tag);
+    setSearchTerm(tag); 
+
+    if (!tags.includes(tag) && isSearchRecentEnabled) {
+      const updatedTags = [tag, ...tags].slice(0, 30);
+      setTags(updatedTags);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTags));
     }
+
+    performSearch(tag, true);
   };
 
   return (

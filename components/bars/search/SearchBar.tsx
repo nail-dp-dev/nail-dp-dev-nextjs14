@@ -18,13 +18,21 @@ function debounce(fn: Function, delay: number) {
   };
 }
 
+const LOCAL_STORAGE_KEY = 'recentSearchTags';
+
 export default function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState(initialKeyword);
-  const [searchRecent, setSearchRecent] = useState<string[]>([]); 
+  const [searchRecent, setSearchRecent] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
+      return storedTags ? JSON.parse(storedTags) : [];
+    }
+    return [];
+  });
   const [recommendedWords, setRecommendedWords] = useState(() =>
     posts.sort(() => 0.5 - Math.random()).slice(0, 14)
   );
@@ -45,7 +53,6 @@ export default function SearchBar() {
     setUserResults([]);
     setTagResults([]);
     setIsDropdownOpen(false);
-    // setSearchRecent([]); 
   };
 
   const performSearch = async (searchQuery: string, showError: boolean = false) => {
@@ -119,7 +126,9 @@ export default function SearchBar() {
       performSearch(searchTerm, true);
 
       if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
-        setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
+        const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
+        setSearchRecent(updatedRecent);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
       }
     }
   };
@@ -135,25 +144,30 @@ export default function SearchBar() {
     performSearch(searchTerm, true);
 
     if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
-      setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
+      const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
+      setSearchRecent(updatedRecent);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
     }
   };
 
   const handleTagClick = (tag: string) => {
     console.log('handleTagClick called with tag:', tag);
+
+    // 검색어를 업데이트하고 검색을 수행
     setSearchTerm(tag);
-    router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
     performSearch(tag, true);
+
+    // 최근 검색어에 추가
+    if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
+      const updatedRecent = [tag, ...searchRecent].slice(0, 30);
+      setSearchRecent(updatedRecent);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
+      console.log('Updated searchRecent:', updatedRecent);
+    }
 
     setIsDropdownOpen(false);
 
-    if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
-      setSearchRecent((prevRecent) => {
-        const updatedRecent = [tag, ...prevRecent].slice(0, 30);
-        console.log('Updated searchRecent:', updatedRecent);
-        return updatedRecent;
-      });
-    }
+    router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
   };
 
   const handleProfileClick = (nickname: string) => {
@@ -162,7 +176,9 @@ export default function SearchBar() {
     setIsDropdownOpen(false);
 
     if (isSearchRecentEnabled && !searchRecent.includes(searchFormat)) {
-      setSearchRecent((prevRecent) => [searchFormat, ...prevRecent].slice(0, 30));
+      const updatedRecent = [searchFormat, ...searchRecent].slice(0, 30);
+      setSearchRecent(updatedRecent);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
     }
   };
 
@@ -193,6 +209,7 @@ export default function SearchBar() {
 
   const handleClearRecent = () => {
     setSearchRecent([]);
+    localStorage.removeItem(LOCAL_STORAGE_KEY); 
   };
 
   const toggleSearchRecent = () => {
