@@ -78,7 +78,7 @@ function PostBox({
     }
 
     if (isLoggedIn === 'loggedIn') {
-      router.push(`post/${postId}`);
+      router.push(`/post/${postId}`);
     }
   };
 

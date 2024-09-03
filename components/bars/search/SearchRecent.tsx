@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import RecentButton from '../../buttons/RecentButton';
-import { useRouter } from 'next/navigation';
 
 type SearchRecentProps = {
   searchRecent: string[];
@@ -12,6 +11,8 @@ type SearchRecentProps = {
   onTagClick: (tag: string) => void;
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>; 
+  performSearch: (searchQuery: string, showError?: boolean) => void; 
 };
 
 // 로컬 스토리지 키
@@ -25,9 +26,10 @@ export default function SearchRecent({
   tags = [],
   onTagClick,
   setTags,
+  setSearchTerm, 
+  performSearch, 
 }: SearchRecentProps) {
-  const router = useRouter();  
-
+  
   // 로컬 스토리지에서 검색어 불러오기
   useEffect(() => {
     const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -53,8 +55,8 @@ export default function SearchRecent({
   // 태그 클릭 시 로직 업데이트
   const handleTagClick = (tag: string) => {
     if (tag.startsWith('@')) {
-      const nickname = tag.slice(1);  
-      router.push(`/profile/${nickname}`); 
+      setSearchTerm(tag); 
+      performSearch(tag, true); 
     } else {
       onTagClick(tag);
     }

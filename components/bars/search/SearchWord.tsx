@@ -66,7 +66,7 @@ export default function SearchWord({
             style={{
               backgroundImage: `url(${item.isPhoto ? item.tagImageUrl : ''})`,
             }}
-            onClick={() => onTagClick(item.tagName)}
+            onClick={() => onTagClick(item.tagName)} 
           >
             <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
             <div className="relative text-[0.94rem] font-extrabold text-white">

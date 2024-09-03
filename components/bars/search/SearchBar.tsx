@@ -3,7 +3,7 @@
 import SearchIcon from '../../../public/assets/svg/search.svg';
 import CloseIcon from '../../../public/assets/svg/close.svg';
 import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
 import { posts } from '../../../constants/example';
@@ -20,9 +20,11 @@ function debounce(fn: Function, delay: number) {
 
 export default function SearchBar() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialKeyword = searchParams.get('keyword') || '';
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchRecent, setSearchRecent] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState(initialKeyword);
+  const [searchRecent, setSearchRecent] = useState<string[]>([]); 
   const [recommendedWords, setRecommendedWords] = useState(() =>
     posts.sort(() => 0.5 - Math.random()).slice(0, 14)
   );
@@ -30,7 +32,6 @@ export default function SearchBar() {
   const [isSearchRecentEnabled, setIsSearchRecentEnabled] = useState(true);
   const [userResults, setUserResults] = useState<any[]>([]);
   const [tagResults, setTagResults] = useState<any[]>([]);
-  const [cachedResults, setCachedResults] = useState<Map<string, any[]>>(new Map());
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,9 +45,9 @@ export default function SearchBar() {
     setUserResults([]);
     setTagResults([]);
     setIsDropdownOpen(false);
+    // setSearchRecent([]); 
   };
 
-  // 검색을 수행하는 함수
   const performSearch = async (searchQuery: string, showError: boolean = false) => {
     if (!searchQuery) {
       setUserResults([]);
@@ -55,59 +56,22 @@ export default function SearchBar() {
       return;
     }
 
-    if (cachedResults.has(searchQuery)) {
-      setUserResults(cachedResults.get(searchQuery) || []);
-      setSearchError('');
-      return;
-    }
-
-    // 닉네임 검색 처리
-    if (searchQuery.startsWith('@') && searchQuery.length > 1) {
-      try {
+    try {
+      if (searchQuery.startsWith('@') && searchQuery.length > 1) {
         const response = await getUserSearchResults(searchQuery.slice(1));
         if (response && response.data.length > 0) {
-          const filteredResults = response.data.filter((user: any) => {
-            const nickname = user.nickname.toLowerCase();
-            const searchValue = searchQuery.slice(1).toLowerCase();
-            return nickname.includes(searchValue) || searchValue.includes(nickname);
-          });
-
-          if (filteredResults.length > 0) {
-            setUserResults(filteredResults);
-            setCachedResults((prev) => new Map(prev).set(searchQuery, filteredResults));
-            setSearchError('');
-          } else {
-            setUserResults([]);
-            if (showError) {
-              setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
-            }
-          }
+          setUserResults(response.data);
+          setSearchError('');
         } else {
           setUserResults([]);
           if (showError) {
             setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
           }
         }
-      } catch (error) {
-        console.error('Error fetching user search results:', error);
-        setUserResults([]);
-        if (showError) {
-          setSearchError('사용자 검색 중 오류가 발생했습니다.');
-        }
-      }
-    } else {
-      // 태그 검색 처리
-      try {
+      } else {
         const response = await getTagSearchResults(searchQuery);
         if (response && response.data.length > 0) {
-          const tags = response.data.map((tag: any) => ({
-            tagName: tag.tagName,
-            tagImageUrl: tag.tagImageUrl,
-            isPhoto: tag.isPhoto,
-            isVideo: tag.isVideo
-          }));
-          setTagResults(tags);
-          setCachedResults((prev) => new Map(prev).set(searchQuery, tags));
+          setTagResults(response.data);
           setSearchError('');
         } else {
           setTagResults([]);
@@ -115,22 +79,24 @@ export default function SearchBar() {
             setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
           }
         }
-      } catch (error) {
-        console.error('Error fetching tag search results:', error);
-        setTagResults([]);
-        if (showError) {
-          setSearchError('태그 검색 중 오류가 발생했습니다.');
-        }
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+      setUserResults([]);
+      setTagResults([]);
+      if (showError) {
+        setSearchError('검색 중 오류가 발생했습니다.');
       }
     }
 
     setIsDropdownOpen(true);
   };
 
-  // 디바운스된 검색 함수
-  const debouncedSearch = useCallback(debounce((query: string) => performSearch(query), 300), [cachedResults]);
+  const debouncedSearch = useCallback(
+    debounce((query: string) => performSearch(query, true), 300),
+    []
+  );
 
-  // 검색어 입력 필드에 변화가 있을 때 호출됨
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
@@ -141,46 +107,59 @@ export default function SearchBar() {
     }
   };
 
-  // Enter 키를 누르면 검색 실행
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      if (searchTerm !== '@') {
-        performSearch(searchTerm, true);
 
-        // 검색어를 최근 검색에 추가
-        if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
-          setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
-        }
+      if (searchTerm.trim() === '' || searchTerm.startsWith('@')) {
+        return;
       }
-    }
-  };
 
-  // 검색 폼 제출 시 검색 실행
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchTerm !== '@') {
+      router.push(`/search/posts?keyword=${encodeURIComponent(searchTerm)}`);
       performSearch(searchTerm, true);
 
-      // 검색어를 최근 검색에 추가
       if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
         setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
       }
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (searchTerm.trim() === '' || searchTerm.startsWith('@')) {
+      return;
+    }
+
+    router.push(`/search/posts?keyword=${encodeURIComponent(searchTerm)}`);
+    performSearch(searchTerm, true);
+
+    if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
+      setSearchRecent((prevRecent) => [searchTerm, ...prevRecent].slice(0, 30));
+    }
+  };
+
   const handleTagClick = (tag: string) => {
+    console.log('handleTagClick called with tag:', tag);
     setSearchTerm(tag);
-    router.push(`/search/posts?keyword=${tag}`);
+    router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
+    performSearch(tag, true);
+
+    setIsDropdownOpen(false);
 
     if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
-      setSearchRecent((prevRecent) => [tag, ...prevRecent].slice(0, 30));
+      setSearchRecent((prevRecent) => {
+        const updatedRecent = [tag, ...prevRecent].slice(0, 30);
+        console.log('Updated searchRecent:', updatedRecent);
+        return updatedRecent;
+      });
     }
   };
 
   const handleProfileClick = (nickname: string) => {
     const searchFormat = `@${nickname}`;
     router.push(`/profile/${nickname}`);
+    setIsDropdownOpen(false);
 
     if (isSearchRecentEnabled && !searchRecent.includes(searchFormat)) {
       setSearchRecent((prevRecent) => [searchFormat, ...prevRecent].slice(0, 30));
@@ -201,7 +180,17 @@ export default function SearchBar() {
     };
   }, []);
 
-  // 최근 검색어 초기화
+  useEffect(() => {
+    if (initialKeyword) {
+      setSearchTerm(initialKeyword);
+      performSearch(initialKeyword);
+    }
+  }, [initialKeyword]);
+
+  useEffect(() => {
+    console.log('searchRecent changed:', searchRecent);
+  }, [searchRecent]);
+
   const handleClearRecent = () => {
     setSearchRecent([]);
   };
@@ -234,7 +223,7 @@ export default function SearchBar() {
             placeholder="다양한 네일 디자인을 검색해보세요."
             onClick={handleInputClick}
             onChange={handleChange}
-            onKeyDown={handleKeyDown} 
+            onKeyDown={handleKeyDown}
           />
           <div className="absolute inset-y-0 left-0 flex items-center pl-4">
             <SearchIcon />
@@ -267,6 +256,8 @@ export default function SearchBar() {
             onTagClick={handleTagClick}
             tags={searchRecent}
             setTags={setSearchRecent}
+            setSearchTerm={setSearchTerm}
+            performSearch={performSearch}
           />
           <>
             {!searchTerm.startsWith('@') ? (

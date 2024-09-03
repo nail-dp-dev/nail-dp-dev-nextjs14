@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import PostBox from '../../../../../components/boxes/PostBox';
 import Loading from '../../../../loading';
 import LoginSuggestModal from '../../../../../components/modal/mini/LoginSuggestModal';
@@ -23,7 +23,6 @@ export default function SearchResultsPage() {
 
   useEffect(() => {
     if (keyword) {
-      console.log('입력된 검색어:', keyword); 
       fetchSearchResults(keyword);
     } else {
       setMessage('검색어가 제공되지 않았습니다.');
@@ -31,12 +30,9 @@ export default function SearchResultsPage() {
     }
   }, [keyword]);
 
-  // 게시물 검색 결과를 가져오는 함수
   const fetchSearchResults = async (keyword: string) => {
     setIsLoading(true);
     try {
-      console.log('서버에 요청을 보낼 키워드:', keyword); 
-
       const response: PostSearchResponse | null = await getPostSearchResults(keyword);
 
       if (
@@ -46,12 +42,14 @@ export default function SearchResultsPage() {
         response.data.postSummaryList.content.length > 0
       ) {
         setPostsData(response.data.postSummaryList.content);
+        setMessage('');
       } else if (
         response &&
         response.data &&
         response.data.postSummaryList &&
         response.data.postSummaryList.content.length === 0
       ) {
+        setPostsData([]);
         setMessage('검색 결과가 없습니다.');
       } else {
         setMessage('검색 결과를 가져오는 중 오류가 발생했습니다.');
@@ -66,13 +64,12 @@ export default function SearchResultsPage() {
 
   return (
     <div className="container mx-auto mt-8">
-      <h1 className="mb-4 text-2xl font-bold">검색 결과</h1>
       {isLoading ? (
         <Loading />
       ) : message ? (
         <p className="text-red-500">{message}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all">
           {postsData.map((item, index) => (
             <PostBox
               key={index}
@@ -95,5 +92,3 @@ export default function SearchResultsPage() {
     </div>
   );
 }
-
-

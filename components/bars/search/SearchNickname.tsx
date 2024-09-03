@@ -25,8 +25,8 @@ export default function SearchNickname({
     searchTerm.startsWith('@') && searchTerm.length > 1
       ? followData.filter(
           (user) =>
-            user.nickname.toLowerCase().includes(searchTerm.slice(1).toLowerCase()) ||
-            searchTerm.slice(1).toLowerCase().includes(user.nickname.toLowerCase()),
+            user.nickname?.toLowerCase().includes(searchTerm.slice(1).toLowerCase()) ||
+            searchTerm.slice(1).toLowerCase().includes(user.nickname?.toLowerCase()),
         )
       : [];
 
