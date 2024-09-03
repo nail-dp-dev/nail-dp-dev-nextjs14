@@ -5,7 +5,7 @@ import {
   commonModalClose,
   selectArchiveModalStatus,
   selectCommonModalStatus,
-  setArchiveState
+  setArchiveState,
 } from '../../../../store/slices/modalSlice';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import MyArchiveFolder from '../../../../public/assets/svg/my-archive-folder.svg';
@@ -22,24 +22,25 @@ import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
 import { getArchiveData } from '../../../../api/archive/getArchiveData';
 import { archiveModalElements } from '../../../../constants';
 import Image from 'next/image';
-import { postSetArchive } from '../../../../api/post/postSetArchive';
+import { postSetArchive } from '../../../../api/archive/postSetArchive';
 import { archiveArray } from '../../../../constants/interface';
 import Video from '../../../ui/Video';
+import { getPostArchive } from '../../../../api/archive/getPostArchive';
 
 export default function MyArchiveModal() {
+  const { ArchivePostId, ArchivePage } = useSelector(selectArchiveModalStatus);
+  const { isCommonModalShow, whichCommonModal } = useSelector(
+    selectCommonModalStatus,
+  );
   const [isName, setIsName] = useState('');
   const [isBoundary, setIsBoundary] = useState('ALL');
-  const [isArchiveMenu, setIsArchiveMenu] = useState('archiveCreate');
+  const [isArchiveMenu, setIsArchiveMenu] = useState(ArchivePage);
   const [isArchive, setIsArchive] = useState<archiveArray[]>([]);
   const [isArchiveName, setIsArchiveName] = useState('');
   const [isSelectArchive, setIsSelectArchive] = useState(0);
   const [isType, setIsType] = useState('album');
   const [isSearch, setIsSearch] = useState('');
   const [isBell, setIsBell] = useState(false);
-  const { ArchivePostId } = useSelector(selectArchiveModalStatus);
-  const { isCommonModalShow, whichCommonModal } = useSelector(
-    selectCommonModalStatus,
-  );
   const dispatch = useDispatch();
 
   const closeModal = () => {
@@ -77,7 +78,7 @@ export default function MyArchiveModal() {
   const setArchive = async (archiveId: number, postId: number) => {
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
-      dispatch(setArchiveState({state:true}))
+      dispatch(setArchiveState({ state: true }));
       closeModal();
     } else {
       setIsBell(true);
@@ -93,11 +94,16 @@ export default function MyArchiveModal() {
   };
 
   const archiveData = async () => {
-    const data = await getArchiveData();
-    if (data.data.postSummaryList.content[0]) {
-      setIsArchive(data.data.postSummaryList.content);
-      setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
-      setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+    if (isArchiveMenu == 'deletePost') {
+      const data = await getPostArchive(ArchivePostId);
+      console.log(data);
+    } else {
+      const data = await getArchiveData();
+      if (data.data.postSummaryList.content[0]) {
+        setIsArchive(data.data.postSummaryList.content);
+        setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
+        setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+      }
     }
   };
 
@@ -125,7 +131,12 @@ export default function MyArchiveModal() {
 
   useEffect(() => {
     archiveData();
+    setIsArchiveMenu(ArchivePage);
   }, []);
+
+  const test = (str: string) => {
+    console.log(str);
+  };
 
   return (
     whichCommonModal === 'archive' && (
@@ -164,6 +175,31 @@ export default function MyArchiveModal() {
                       />
                     </button>
                   </div>
+                  <button className="mr-[14px]">
+                    <CloseIcon
+                      width={18}
+                      height={18}
+                      onClick={() => {
+                        closeModal();
+                      }}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : isArchiveMenu == 'deletePost' ? (
+            <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
+              <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
+                <MyArchiveFolder />
+                <p className="pl-[12px] text-[0.9rem] font-bold text-purple">
+                  내 아카이브
+                </p>
+              </div>
+              <div className="flex flex-1 items-center justify-between">
+                <div className="ml-[31px] text-[16px] font-bold text-darkPurple">
+                  <p>이 게시물이 저장된 아카이브</p>
+                </div>
+                <div className="flex">
                   <button className="mr-[14px]">
                     <CloseIcon
                       width={18}
@@ -310,7 +346,7 @@ export default function MyArchiveModal() {
                 </div>
                 <div className="flex flex-1 justify-center pt-[25px]">
                   <button
-                    className={`${isName.length >= 1 ? "text-white bg-purple": "text-darkModeGray bg-lightGray"} h-[40px] w-[250px] rounded-full font-bold`}
+                    className={`${isName.length >= 1 ? 'bg-purple text-white' : 'text-darkModeGray bg-lightGray'} h-[40px] w-[250px] rounded-full font-bold`}
                     onClick={(e) =>
                       createArchive(isName, isBoundary, ArchivePostId!)
                     }
@@ -350,16 +386,19 @@ export default function MyArchiveModal() {
                     <div className="flex flex-wrap">
                       {filteredArchives.map((item, index) => {
                         return (
-                          <button
+                          <div
                             key={index}
-                            className={`${isType == 'album' ? `relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden rounded-[18px] px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}` : `flex h-[72px] w-[50%] items-center`}`}
-                            onClick={(e) =>
-                              setArchiveName(item.archiveName, item.archiveId)
-                            }
+                            className={`${isType == 'album' ? `relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}` : `flex h-[72px] w-[50%] items-center`}`}
                           >
-                            <div
-                              className={`flex items-center justify-center ${isType == 'album' ? 'h-[130px] w-[130px] rounded-[17px]' : 'h-[66px] w-[66px] rounded-[11px]'} ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''} `}
+                            <button
+                              className={`relative flex items-center justify-center overflow-hidden rounded-[8px] ${isType == 'album' ? 'h-[130px] w-[130px]' : 'h-[66px] w-[66px]'} `}
+                              onClick={(e) =>
+                                setArchiveName(item.archiveName, item.archiveId)
+                              }
                             >
+                              <div
+                                className={`absolute top-0 z-50 h-full w-full rounded-[8px] ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''}`}
+                              ></div>
                               {item.archiveImgUrl !== null ? (
                                 item.archiveImgUrl.endsWith('.mov') ||
                                 item.archiveImgUrl.endsWith('.mp4') ? (
@@ -370,11 +409,15 @@ export default function MyArchiveModal() {
                                   />
                                 ) : (
                                   <Image
-                                    className={`${isType == 'album' ? 'h-[120px] w-[120px] rounded-[12px]' : 'h-[56px] w-[56px] rounded-[6px]'} `}
                                     src={item.archiveImgUrl}
                                     alt={''}
-                                    width={120}
-                                    height={120}
+                                    fill
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                    }}
+                                    sizes="100vw, 50vw, 33vw"
+                                    quality={100}
                                   />
                                 )
                               ) : (
@@ -384,7 +427,7 @@ export default function MyArchiveModal() {
                                   viewBox="0 0 120 120"
                                 />
                               )}
-                            </div>
+                            </button>
                             <div
                               className={`${isType == 'album' ? 'w-full' : 'pl-[16px]'} mt-[7px] text-start`}
                             >
@@ -395,7 +438,7 @@ export default function MyArchiveModal() {
                                 {item.postCount} designs
                               </p>
                             </div>
-                          </button>
+                          </div>
                         );
                       })}
                     </div>
@@ -403,7 +446,7 @@ export default function MyArchiveModal() {
                 </div>
                 <div className={`flex h-[80px] w-full justify-center bg-white`}>
                   <button
-                    className="my-[20px] h-[40px] w-[250px] rounded-full bg-purple"
+                    className="my-[20px] h-[40px] w-[250px] text-white rounded-full bg-purple"
                     onClick={(e) => setArchive(isSelectArchive, ArchivePostId!)}
                   >
                     ‘{isArchiveName}’ 아카이브에 저장
@@ -421,6 +464,84 @@ export default function MyArchiveModal() {
                 <p className="mt-[20px] text-[18px] text-darkGray">
                   새로운 아카이브를 생성하세요.
                 </p>
+              </div>
+            )}
+            {isArchiveMenu == 'deletePost' && (
+              // isArchive[0] &&
+              <div className="flex flex-1 flex-col justify-between">
+                <div className="max-h-[235px] overflow-y-auto px-[44px]">
+                  <div className="pt-[20px]">
+                    <div className="flex flex-wrap">
+                      <div className="flex w-full justify-between pb-[20px] text-darkPurple">
+                        <p>어떤 아카이브에서 저장 해제 할까요?</p>
+                        <button>모두선택</button>
+                      </div>
+                      {filteredArchives.map((item, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className={`relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}`}
+                          >
+                            <button
+                              className={`relative flex h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-[8px]`}
+                              onClick={(e) =>
+                                setArchiveName(item.archiveName, item.archiveId)
+                              }
+                            >
+                              <div
+                                className={`absolute top-0 z-50 h-full w-full rounded-[8px] ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''}`}
+                              ></div>
+                              {item.archiveImgUrl !== null ? (
+                                item.archiveImgUrl.endsWith('.mov') ||
+                                item.archiveImgUrl.endsWith('.mp4') ? (
+                                  <Video
+                                    src={item.archiveImgUrl}
+                                    width={'100%'}
+                                    height={'100%'}
+                                  />
+                                ) : (
+                                  <Image
+                                    src={item.archiveImgUrl}
+                                    alt={''}
+                                    fill
+                                    style={{
+                                      width: '100%',
+                                      height: '100%',
+                                    }}
+                                    sizes="100vw, 50vw, 33vw"
+                                    quality={100}
+                                  />
+                                )
+                              ) : (
+                                <ArchiveNullIcon
+                                  width={120}
+                                  height={120}
+                                  viewBox="0 0 120 120"
+                                />
+                              )}
+                            </button>
+                            <div className={`mt-[7px] w-full text-start`}>
+                              <p className="text-[1rem] font-bold">
+                                {item.archiveName}
+                              </p>
+                              <p className="text-[0.9rem] text-darkPurple">
+                                {item.postCount} designs
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+                <div className={`flex h-[80px] w-full justify-center bg-white`}>
+                  <button
+                    className="my-[20px] h-[40px] w-[250px] text-white rounded-full bg-purple"
+                    onClick={(e) => setArchive(isSelectArchive, ArchivePostId!)}
+                  >
+                    선택한 아카이브에 저장 해제
+                  </button>
+                </div>
               </div>
             )}
           </div>

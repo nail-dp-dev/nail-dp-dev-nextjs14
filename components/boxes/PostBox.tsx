@@ -143,7 +143,6 @@ function PostBox({
         className="absolute right-2 top-2 z-10"
       >
         <HeartButton
-          postId={postId}
           width="21px"
           height="19px"
           isClicked={isLiked}

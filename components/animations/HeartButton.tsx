@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import HeartIcon from "../../public/assets/svg/heart.svg";
-import { IconButtonProps } from "../../constants/interface";
+import { IconHeartButtonProps } from "../../constants/interface";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectButtonState, toggleButtonState } from '../../store/slices/getLikedPostsSlice';
 
@@ -14,7 +14,7 @@ export default function HeartButton(
     isClicked,
     isGetAllLiked,
   }
-  : IconButtonProps
+  : IconHeartButtonProps
 ) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isAnimate, setIsAnimate] = useState(false);

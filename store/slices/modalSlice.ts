@@ -8,8 +8,11 @@ interface CommonModalState {
   AlarmModalUser?: string; //유저 닉네임
   AlarmModalByte?: number; // 모달 이미지 바이트
   AlarmModalImageType?: string; // 모달 이미지 타입
-  ArchiveModalPostId?: number; // 아카이브 모달 postId값
+  ArchiveModalPostId: number; // 아카이브 모달 postId값
   ArchiveSetState?: boolean; // 아카이브에 게시글 저장 성공여부
+  PlusState?: boolean; // 플러스 버튼 
+  StarState?: boolean; // 별 버튼
+  ArchiveModalPage?:string;
   alarmActionType?: 'comment' | 'archive' | 'post' | 'block';
 }
 
@@ -25,6 +28,7 @@ const initialCommonModalState: CommonModalState = {
   ArchiveModalPostId: 0,
   ArchiveSetState: false,
   alarmActionType: undefined,
+  PlusState:false
 };
 
 const commonModalSlice = createSlice({
@@ -70,6 +74,15 @@ const commonModalSlice = createSlice({
     setArchiveState: (state, action: PayloadAction<{  state:boolean}>) => {
       state.ArchiveSetState = action.payload.state;
     },
+    setPlusState: (state, action: PayloadAction<{  state:boolean}>) => {
+      state.PlusState = action.payload.state;
+    },
+    setStarState: (state, action: PayloadAction<{  state:boolean}>) => {
+      state.StarState = action.payload.state;
+    },
+    setArchivePage: (state, action: PayloadAction<{  state:string}>) => {
+      state.ArchiveModalPage = action.payload.state;
+    },
   },
 });
 
@@ -78,7 +91,10 @@ export const {
   commonModalClose,
   alarmModalData,
   setArchivePost,
-  setArchiveState
+  setArchiveState,
+  setPlusState,
+  setStarState,
+  setArchivePage
 } = commonModalSlice.actions;
 
 const selectCommonModal = (state: { commonModal: CommonModalState }) =>
@@ -109,6 +125,9 @@ export const selectArchiveModalStatus = createSelector(
   (archiveModal) => ({
     ArchivePostId: archiveModal.ArchiveModalPostId,
     ArchiveState: archiveModal.ArchiveSetState,
+    ArchivePage: archiveModal.ArchiveModalPage,
+    postState: archiveModal.PlusState,
+    starState: archiveModal.StarState,
   }),
 );
 

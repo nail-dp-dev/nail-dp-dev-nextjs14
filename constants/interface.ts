@@ -13,8 +13,20 @@ export interface ControlBarProps {
   archiveName: string;
 }
 
-export interface IconButtonProps {
-  postId?: number;
+export interface ControlBarProps {
+  archiveName: string;
+}
+
+export interface IconHeartButtonProps {
+  width: string;
+  height: string;
+  isClicked?: boolean;
+  isGetAllLiked?: boolean;
+  active?: boolean;
+}
+
+export interface IconPlusButtonProps {
+  postId: number;
   width: string;
   height: string;
   isClicked?: boolean;
@@ -162,7 +174,7 @@ export interface archiveArray {
   archiveId: number;
   archiveImgUrl: string;
   archiveName: string;
-  boundary: string;
+  boundary: 'ALL' | 'FOLLOW' | 'NONE';
   isPhoto: string;
   isVideo: string;
   postCount: number;
