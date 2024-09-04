@@ -40,6 +40,8 @@ export default function SearchResultsPage() {
   useEffect(() => {
     const newKeyword = searchParams.get('keyword') || '';
     setSearchTerm(newKeyword);
+    resetSearch();
+    fetchSearchResults(newKeyword);
   }, [searchParams]);
 
   useEffect(() => {
