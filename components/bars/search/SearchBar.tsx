@@ -102,12 +102,11 @@ export default function SearchBar() {
           }
         }
       }
-
     } catch (error) {
       console.error('Error fetching search results:', error);
       setUserResults([]);
       setTagResults([]);
-      setIsDropdownOpen(false); 
+      setIsDropdownOpen(false);
       if (showError) {
         setSearchError('검색 중 오류가 발생했습니다.');
       }
@@ -145,7 +144,6 @@ export default function SearchBar() {
         setSearchRecent(updatedRecent);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
       }
-
     }
   };
 
@@ -166,7 +164,7 @@ export default function SearchBar() {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
     }
 
-    setIsDropdownOpen(false); 
+    setIsDropdownOpen(false);
   };
 
   // 태그 클릭
@@ -223,10 +221,6 @@ export default function SearchBar() {
       performSearch(initialKeyword);
     }
   }, [initialKeyword]);
-
-  useEffect(() => {
-    console.log('searchRecent changed:', searchRecent);
-  }, [searchRecent]);
 
   const handleClearRecent = () => {
     setSearchRecent([]);

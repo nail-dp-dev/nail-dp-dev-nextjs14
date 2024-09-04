@@ -60,7 +60,6 @@ export default function SearchWord({
         xl:max-h-[230px]"
       >
         {displayWords.map((item, index) => {
-          console.log(`렌더링할 아이템 ${index}:`, item);
 
           return (
             <button
