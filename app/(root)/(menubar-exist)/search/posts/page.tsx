@@ -17,7 +17,7 @@ export default function SearchResultsPage() {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState<string>(
-    searchParams.get('keyword') || '',
+    searchParams.get('keyword') || ''
   );
   const [postsData, setPostsData] = useState<
     PostSearchResponse['data']['postSummaryList']['content']
@@ -28,7 +28,7 @@ export default function SearchResultsPage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
   const isLikedOnly = useSelector(selectButtonState);
-  const layoutNum = useSelector(selectNumberOfBoxes); 
+  const layoutNum = useSelector(selectNumberOfBoxes);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
@@ -36,13 +36,25 @@ export default function SearchResultsPage() {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const newKeyword = searchParams.get('keyword') || '';
+    setSearchTerm(newKeyword);
+  }, [searchParams]);
+
+  useEffect(() => {
     if (searchTerm) {
+      resetSearch();
       fetchSearchResults(searchTerm);
     } else {
       setMessage('검색어가 제공되지 않았습니다.');
       setIsLoading(false);
     }
   }, [searchTerm]);
+
+  const resetSearch = () => {
+    setPostsData([]);
+    setCursorId(null);
+    setIsLastPage(false);
+  };
 
   const fetchSearchResults = async (keyword: string, cursor?: number) => {
     if (isLastPage) return;
@@ -52,7 +64,7 @@ export default function SearchResultsPage() {
       const response: PostSearchResponse | null = await getPostSearchResults(
         keyword,
         cursor,
-        layoutNum, 
+        layoutNum
       );
 
       console.log('API 응답:', response);
@@ -61,17 +73,18 @@ export default function SearchResultsPage() {
       if (response && response.data && response.data.postSummaryList) {
         const newPosts = response.data.postSummaryList.content;
 
-        // 중복 게시물 방지
         setPostsData((prevData) => {
-          const postIdSet = new Set(prevData.map(post => post.postId));
-          const uniqueNewPosts = newPosts.filter(post => !postIdSet.has(post.postId));
+          const postIdSet = new Set(prevData.map((post) => post.postId));
+          const uniqueNewPosts = newPosts.filter(
+            (post) => !postIdSet.has(post.postId)
+          );
           return [...prevData, ...uniqueNewPosts];
         });
 
         setCursorId(response.data.cursorId);
 
         if (response.data.postSummaryList.last) {
-          setIsLastPage(true); 
+          setIsLastPage(true);
         } else {
           setIsLastPage(false);
         }
@@ -80,7 +93,7 @@ export default function SearchResultsPage() {
         setMessage('');
       } else {
         setMessage('검색 결과가 없습니다.');
-        setIsLastPage(true);  
+        setIsLastPage(true);
       }
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -98,22 +111,15 @@ export default function SearchResultsPage() {
   const handleLikeToggle = (postId: number) => {
     setPostsData((prevPosts) =>
       prevPosts.map((post) =>
-        post.postId === postId ? { ...post, like: !post.like } : post,
-      ),
+        post.postId === postId ? { ...post, like: !post.like } : post
+      )
     );
   };
 
   const handleTagClick = (tag: string) => {
     const newSearchTerm = searchTerm ? `${searchTerm} ${tag}` : tag;
-    setSearchTerm(newSearchTerm);
-
     const encodedSearchTerm = encodeURIComponent(newSearchTerm);
     router.push(`/search/posts?keyword=${encodedSearchTerm}`);
-
-    setCursorId(null);
-    setIsLastPage(false);
-    setPostsData([]);
-    fetchSearchResults(newSearchTerm);
   };
 
   useEffect(() => {
@@ -145,17 +151,15 @@ export default function SearchResultsPage() {
     };
   }, [cursorId, isFetchingMore, searchTerm, isLastPage]);
 
-  useEffect(() => {
-    const newKeyword = searchParams.get('keyword') || '';
-    setSearchTerm(newKeyword);
-  }, [searchParams]);
-
-  // 검색어에서 태그 추출
   const activeTags = searchTerm.split(' ');
 
   return (
     <>
-      <TagBar onTagClick={handleTagClick} isLikedOnly={isLikedOnly} activeTags={activeTags} />
+      <TagBar
+        onTagClick={handleTagClick}
+        isLikedOnly={isLikedOnly}
+        activeTags={activeTags}
+      />
 
       {isLoading && postsData.length === 0 ? (
         <Loading />
