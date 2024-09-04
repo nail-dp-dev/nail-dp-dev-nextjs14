@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { tagElements } from '../../constants';
 import MinusSVG from '../../public/assets/svg/minus.svg';
 import PlusSVG from '../../public/assets/svg/plus.svg';
@@ -31,16 +31,20 @@ export default function TagBar({
   );
   const isLoggedIn = useSelector(selectLoginStatus);
 
-  const filteredTags = tagElements.filter(
-    (tag) => !activeTags.includes(tag.name),
+  const filteredTags = useMemo(
+    () => tagElements.filter((tag) => !activeTags.includes(tag.name)),
+    [activeTags],
   );
 
   const [visibleTags, setVisibleTags] = useState(filteredTags);
 
   useEffect(() => {
     const handleResize = () => {
-      const maxVisibleTags = Math.floor(window.innerWidth / 100);
-      setVisibleTags(filteredTags.slice(0, maxVisibleTags));
+      const maxVisibleTags = Math.floor(window.innerWidth / 130);
+
+      if (maxVisibleTags !== visibleTags.length) {
+        setVisibleTags(filteredTags.slice(0, maxVisibleTags));
+      }
     };
 
     handleResize();
@@ -49,7 +53,7 @@ export default function TagBar({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [filteredTags]);
+  }, [filteredTags, visibleTags.length]);
 
   return (
     <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
