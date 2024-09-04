@@ -75,7 +75,6 @@ export default function SearchResultsPage() {
     }
   };
   
-
   const filteredPosts = isLikedOnly
     ? postsData.filter((post) => post.like)
     : postsData;
@@ -129,9 +128,12 @@ export default function SearchResultsPage() {
     setSearchTerm(newKeyword);
   }, [searchParams]);
 
+  // 검색어에서 태그 추출
+  const activeTags = searchTerm.split(' ');
+
   return (
     <>
-      <TagBar onTagClick={handleTagClick} isLikedOnly={isLikedOnly} />
+      <TagBar onTagClick={handleTagClick} isLikedOnly={isLikedOnly} activeTags={activeTags} />
 
       {isLoading && postsData.length === 0 ? (
         <Loading />

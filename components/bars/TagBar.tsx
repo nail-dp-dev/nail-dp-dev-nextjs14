@@ -17,14 +17,17 @@ import { selectLoginStatus } from '../../store/slices/loginSlice';
 interface TagBarProps {
   onTagClick: (tag: string) => void;
   isLikedOnly: boolean;
+  activeTags: string[];  
 }
 
-export default function TagBar({ onTagClick, isLikedOnly }: TagBarProps) {
+export default function TagBar({ onTagClick, isLikedOnly, activeTags }: TagBarProps) {
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
   const isLoggedIn = useSelector(selectLoginStatus);
+
+  const filteredTags = tagElements.filter(tag => !activeTags.includes(tag.name));
 
   return (
     <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
@@ -33,7 +36,7 @@ export default function TagBar({ onTagClick, isLikedOnly }: TagBarProps) {
       justify-between border-b-[1px] border-navBotSolidGray"
       >
         <div className="flex flex-wrap gap-[5px]">
-          {tagElements.map((tag, index) => (
+          {filteredTags.map((tag, index) => (
             <button
               key={index}
               onClick={() => onTagClick(tag.name)}  
