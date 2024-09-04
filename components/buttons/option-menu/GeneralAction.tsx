@@ -28,7 +28,7 @@ interface GeneralActionProps {
   onCopyClick?: (e: React.MouseEvent, archiveId: number) => void;
   onEditClick?: (e: React.MouseEvent, archiveId: number) => void;
   onShareClick?: () => void;
-  onDeleteClick?: (id: number, type: 'archive' | 'post') => void; 
+  onDeleteClick?: (id: number, type: 'archive' | 'post') => void;
   initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
@@ -58,10 +58,16 @@ export default function GeneralAction({
   const dispatch = useDispatch();
   const [showSetting, setShowSetting] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
-  const [showDeleteModal, setShowDeleteModal] = useState(false); 
+  const [currentBoundary, setCurrentBoundary] = useState<
+    'ALL' | 'FOLLOW' | 'NONE'
+  >(initialBoundary);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const handleShareCount = useHandleShareCount(type, postId as number, setSharedCount);
+  const handleShareCount = useHandleShareCount(
+    type,
+    postId as number,
+    setSharedCount,
+  );
 
   useEffect(() => {
     setCurrentBoundary(initialBoundary);
@@ -74,68 +80,70 @@ export default function GeneralAction({
     setShowShareMenu(false);
   };
 
-const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number) => {
-  e.stopPropagation();
-  setShowDeleteModal(true);
+  const handleDeleteClick = (
+    e: React.MouseEvent<HTMLElement>,
+    archiveId?: number,
+  ) => {
+    e.stopPropagation();
+    setShowDeleteModal(true);
 
-  if (archiveId !== undefined) {
-    console.log('아카이브 삭제 모달이 열렸습니다.');
-    dispatch(
-      alarmModalData({
-        type: 'two',
-        button: '삭제',
-        user: archiveName || '아카이브 이름',
-        byte: 0,
-        imageType: '',
-        actionType: 'archive',
-      }),
-    );
+    if (archiveId !== undefined) {
+      console.log('아카이브 삭제 모달이 열렸습니다.');
+      dispatch(
+        alarmModalData({
+          type: 'two',
+          button: '삭제',
+          user: archiveName || '아카이브 이름',
+          byte: 0,
+          imageType: '',
+          actionType: 'archive',
+        }),
+      );
 
-    // 여기에 archiveId가 숫자임을 보장하기 때문에 archive 타입으로 전달
-    if (onDeleteClick) onDeleteClick(archiveId, 'archive');
-  } else if (postId !== undefined) {
-    console.log('포스트 삭제 모달이 열렸습니다.');
-    dispatch(
-      alarmModalData({
-        type: 'two',
-        button: '삭제',
-        user: '',
-        byte: 0,
-        imageType: '',
-        actionType: 'post',
-      }),
-    );
+      // 여기에 archiveId가 숫자임을 보장하기 때문에 archive 타입으로 전달
+      if (onDeleteClick) onDeleteClick(archiveId, 'archive');
+    } else if (postId !== undefined) {
+      console.log('포스트 삭제 모달이 열렸습니다.');
+      dispatch(
+        alarmModalData({
+          type: 'two',
+          button: '삭제',
+          user: '',
+          byte: 0,
+          imageType: '',
+          actionType: 'post',
+        }),
+      );
 
-    // 여기에 postId가 숫자임을 보장하기 때문에 post 타입으로 전달
-    if (onDeleteClick) onDeleteClick(postId, 'post');
-  } else {
-    console.error('ID is undefined');
-  }
-};
-
+      // 여기에 postId가 숫자임을 보장하기 때문에 post 타입으로 전달
+      if (onDeleteClick) onDeleteClick(postId, 'post');
+    } else {
+      console.error('ID is undefined');
+    }
+  };
 
   const handleDeleteConfirm = async () => {
     try {
       if (type === 'archive' && archiveId !== undefined) {
-        console.log('아카이브 삭제 확인 버튼 클릭됨'); 
+        console.log('아카이브 삭제 확인 버튼 클릭됨');
         const response = await deleteArchiveCreate(archiveId);
         if (response) {
           console.log('아카이브가 삭제되었습니다.');
-          if (onDeleteClick) onDeleteClick(archiveId, 'archive'); 
+          if (onDeleteClick) onDeleteClick(archiveId, 'archive');
         }
       } else if (type === 'post' && postId !== undefined) {
-        console.log('포스트 삭제 확인 버튼 클릭됨'); 
+        console.log('포스트 삭제 확인 버튼 클릭됨');
         const response = await deletePost(postId);
         if (response) {
           console.log('게시물이 삭제되었습니다.');
-          if (onDeleteClick) onDeleteClick(postId, 'post'); 
+          if (onDeleteClick) onDeleteClick(postId, 'post');
         }
       }
     } catch (error) {
       console.error('Failed to delete:', error);
     }
 
-    setShowDeleteModal(false); 
+    setShowDeleteModal(false);
     dispatch(commonModalClose());
   };
 
@@ -170,12 +178,13 @@ const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number)
         showBackButton={true}
         type={type}
         imageUrl={imageUrl as string}
-        id={type === 'post' ? postId! : archiveId!} 
+        id={type === 'post' ? postId! : archiveId!}
       />
     );
   }
 
-  const actionElements = type === 'archive' ? archiveActionElements : postActionElements;
+  const actionElements =
+    type === 'archive' ? archiveActionElements : postActionElements;
 
   return (
     <div className="text-14px-normal-dP absolute z-10 ml-2 mt-3 w-[120px] whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-[13px] shadow-option-modal-shadow">
@@ -184,17 +193,22 @@ const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number)
         const handleClick = item.label.includes('설정')
           ? handleSettingClick
           : item.label.includes('공유')
-          ? handleShareClick
-          : item.label.includes('복제') && archiveId !== undefined
-          ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
-          : item.label.includes('수정') && archiveId !== undefined
-          ? (e: React.MouseEvent) => onEditClick(e, archiveId)
-          : item.label.includes('삭제')
-          ? (e: React.MouseEvent<HTMLElement>) => handleDeleteClick(e, archiveId)
-          : item.onClick;
+            ? handleShareClick
+            : item.label.includes('복제') && archiveId !== undefined
+              ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
+              : item.label.includes('수정') && archiveId !== undefined
+                ? (e: React.MouseEvent) => onEditClick(e, archiveId)
+                : item.label.includes('삭제')
+                  ? (e: React.MouseEvent<HTMLElement>) =>
+                      handleDeleteClick(e, archiveId)
+                  : item.onClick;
 
         return (
-          <div key={index} onClick={handleClick} className="flex cursor-pointer items-center justify-center rounded-xl px-2 pb-[10px] hover:font-bold">
+          <div
+            key={index}
+            onClick={handleClick}
+            className="flex cursor-pointer items-center justify-center rounded-xl px-2 pb-[10px] hover:font-bold"
+          >
             {item.label.includes('수정') ? (
               <Link href={`/post/edit/${postId}`} className="flex items-center">
                 <IconComponent className="mr-2 fill-textDarkPurple" />
@@ -211,7 +225,7 @@ const handleDeleteClick = (e: React.MouseEvent<HTMLElement>, archiveId?: number)
       })}
       <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
       <button
-        className="group/item flex items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
+        className="group/item flex w-full items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
         onClick={(e) => handleDeleteClick(e, archiveId)}
       >
         <MenuDeleteIcon className="mr-2 fill-darkPurple group-hover/item:fill-red" />
