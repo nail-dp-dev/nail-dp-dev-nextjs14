@@ -4,8 +4,8 @@ import { posts } from '../../../constants/example';
 type TagResult = {
   tagName: string;
   tagImageUrl: string;
-  isPhoto: boolean;
-  isVideo: boolean;
+  photo: boolean;
+  video: boolean;
 };
 
 type SearchWordProps = {
@@ -15,6 +15,7 @@ type SearchWordProps = {
   tagResults: TagResult[];
 };
 
+// 연관 검색어 결과
 export default function SearchWord({
   searchWords,
   onTagClick,
@@ -24,12 +25,11 @@ export default function SearchWord({
   const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
-    // 태그 결과 필터링 로직 수정
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
 
       const filteredResults = tagResults.filter((result) =>
-        result.tagName.toLowerCase().includes(lowerCaseSearchTerm)
+        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
       );
 
       setDisplayWords(filteredResults);
@@ -40,15 +40,15 @@ export default function SearchWord({
         searchWords.map((post) => ({
           tagName: post.data.tags[0].tagName,
           tagImageUrl: post.data.postImageUrls[0],
-          isPhoto: true,
-          isVideo: false,
-        }))
+          photo: true,
+          video: false,
+        })),
       );
     }
   }, [searchWords, tagResults, searchTerm]);
 
   return (
-    <div className="">
+    <div>
       <p className="text-14px-normal-dP">
         {searchTerm.length > 0 ? '연관 검색어' : '추천 검색어'}
       </p>
@@ -59,30 +59,59 @@ export default function SearchWord({
         lg:max-h-[350px]
         xl:max-h-[230px]"
       >
-        {displayWords.map((item, index) => (
-          <button
-            key={index}
-            className="relative flex h-[110px] w-full 
-            snap-start flex-col
-            items-center
-            justify-center 
-            rounded-2xl
-            bg-textDarkPurple 
-            bg-cover 
-            bg-center p-3 xs:w-[calc(50%-6px)] 
-            sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
-            lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            style={{
-              backgroundImage: `url(${item.isPhoto ? item.tagImageUrl : ''})`,
-            }}
-            onClick={() => onTagClick(item.tagName)}
-          >
-            <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
-            <div className="relative text-[0.94rem] font-extrabold text-white">
-              {item.tagName}
-            </div>
-          </button>
-        ))}
+        {displayWords.map((item, index) => {
+          console.log(`렌더링할 아이템 ${index}:`, item);
+
+          return (
+            <button
+              key={index}
+              className="relative flex h-[110px] w-full 
+              snap-start flex-col
+              items-center
+              justify-center 
+              rounded-2xl
+              bg-textDarkPurple 
+              p-3 xs:w-[calc(50%-6px)] 
+              sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
+              lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
+              onClick={() => onTagClick(item.tagName)}
+            >
+              {item.video ? (
+                <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
+                  <video
+                    src={item.tagImageUrl}
+                    autoPlay
+                    loop
+                    muted
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                </div>
+              ) : item.photo && item.tagImageUrl ? (
+                <div
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    backgroundImage: `url(${item.tagImageUrl})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
+                </div>
+              ) : null}
+
+              <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
+                {item.tagName}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
