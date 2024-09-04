@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import RecentButton from '../../buttons/RecentButton';
 
 type SearchRecentProps = {
@@ -11,8 +12,8 @@ type SearchRecentProps = {
   onTagClick: (tag: string) => void;
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>; 
-  performSearch: (searchQuery: string, showError?: boolean) => void; 
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  performSearch: (searchQuery: string, showError?: boolean) => void;
 };
 
 // 로컬 스토리지 키
@@ -26,10 +27,11 @@ export default function SearchRecent({
   tags = [],
   onTagClick,
   setTags,
-  setSearchTerm, 
-  performSearch, 
+  setSearchTerm,
+  performSearch,
 }: SearchRecentProps) {
-  
+  const router = useRouter();
+
   // 로컬 스토리지에서 검색어 불러오기
   useEffect(() => {
     const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -54,15 +56,23 @@ export default function SearchRecent({
 
   // 태그 클릭 시 로직 업데이트
   const handleTagClick = (tag: string) => {
-    setSearchTerm(tag); 
+    setSearchTerm(tag);
+
+    // @로 시작하는 경우 프로필 페이지로 이동
+    if (tag.startsWith('@')) {
+      const nickname = tag.slice(1);
+      router.push(`/profile/${nickname}`);
+    } else {
+      // 그렇지 않으면 검색 페이지로 이동
+      performSearch(tag, true);
+      router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
+    }
 
     if (!tags.includes(tag) && isSearchRecentEnabled) {
       const updatedTags = [tag, ...tags].slice(0, 30);
       setTags(updatedTags);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTags));
     }
-
-    performSearch(tag, true);
   };
 
   return (
@@ -99,7 +109,7 @@ export default function SearchRecent({
             <RecentButton
               tags={tags}
               setTags={setTags}
-              onTagClick={handleTagClick}  
+              onTagClick={handleTagClick}
             />
           )
         ) : (

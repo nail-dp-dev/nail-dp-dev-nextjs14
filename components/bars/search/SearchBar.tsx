@@ -102,6 +102,7 @@ export default function SearchBar() {
           }
         }
       }
+      setIsDropdownOpen(false);
     } catch (error) {
       console.error('Error fetching search results:', error);
       setUserResults([]);
@@ -171,20 +172,28 @@ export default function SearchBar() {
   const handleTagClick = (tag: string) => {
     console.log('handleTagClick called with tag:', tag);
 
-    setSearchTerm(tag);
-    performSearch(tag, true);
+    // 만약 태그가 '@'로 시작하면 프로필 페이지로 이동
+    if (tag.startsWith('@')) {
+      const nickname = tag.slice(1);
+      router.push(`/profile/${nickname}`);
+    } else {
+      // 일반 태그일 경우 검색 수행
+      setSearchTerm(tag);
+      performSearch(tag, true);
 
-    if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
-      const updatedRecent = [tag, ...searchRecent].slice(0, 30);
-      setSearchRecent(updatedRecent);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
-      console.log('Updated searchRecent:', updatedRecent);
+      if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
+        const updatedRecent = [tag, ...searchRecent].slice(0, 30);
+        setSearchRecent(updatedRecent);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
+        console.log('Updated searchRecent:', updatedRecent);
+      }
+
+      router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
     }
 
     setIsDropdownOpen(false);
-
-    router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
   };
+
 
   const handleProfileClick = (nickname: string) => {
     const searchFormat = `@${nickname}`;
