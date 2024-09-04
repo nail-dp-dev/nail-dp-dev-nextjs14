@@ -12,12 +12,13 @@ import { useSelector } from 'react-redux';
 import { selectButtonState } from '../../../../../store/slices/getLikedPostsSlice';
 import { selectNumberOfBoxes } from '../../../../../store/slices/boxLayoutSlice';
 
+// 검색 결과 페이지
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState<string>(
-    searchParams.get('keyword') || ''
+    searchParams.get('keyword') || '',
   );
   const [postsData, setPostsData] = useState<
     PostSearchResponse['data']['postSummaryList']['content']
@@ -48,14 +49,16 @@ export default function SearchResultsPage() {
       setMessage('검색어가 제공되지 않았습니다.');
       setIsLoading(false);
     }
-  }, [searchTerm]);
+  }, [searchTerm, isLikedOnly]);
 
+  // 검색 결과 초기화
   const resetSearch = () => {
     setPostsData([]);
     setCursorId(null);
     setIsLastPage(false);
   };
 
+  // 검색 결과 가져오기
   const fetchSearchResults = async (keyword: string, cursor?: number) => {
     if (isLastPage) return;
 
@@ -64,19 +67,23 @@ export default function SearchResultsPage() {
       const response: PostSearchResponse | null = await getPostSearchResults(
         keyword,
         cursor,
-        layoutNum
+        layoutNum,
       );
 
       console.log('API 응답:', response);
       console.log('사용된 cursorId:', cursor);
 
       if (response && response.data && response.data.postSummaryList) {
-        const newPosts = response.data.postSummaryList.content;
+        let newPosts = response.data.postSummaryList.content;
+
+        if (isLikedOnly) {
+          newPosts = newPosts.filter((post) => post.like);
+        }
 
         setPostsData((prevData) => {
           const postIdSet = new Set(prevData.map((post) => post.postId));
           const uniqueNewPosts = newPosts.filter(
-            (post) => !postIdSet.has(post.postId)
+            (post) => !postIdSet.has(post.postId),
           );
           return [...prevData, ...uniqueNewPosts];
         });
@@ -104,18 +111,16 @@ export default function SearchResultsPage() {
     }
   };
 
-  const filteredPosts = isLikedOnly
-    ? postsData.filter((post) => post.like)
-    : postsData;
-
+  // 좋아요 토글 처리
   const handleLikeToggle = (postId: number) => {
     setPostsData((prevPosts) =>
       prevPosts.map((post) =>
-        post.postId === postId ? { ...post, like: !post.like } : post
-      )
+        post.postId === postId ? { ...post, like: !post.like } : post,
+      ),
     );
   };
 
+  // 검색어에 태그 추가
   const handleTagClick = (tag: string) => {
     const newSearchTerm = searchTerm ? `${searchTerm} ${tag}` : tag;
     const encodedSearchTerm = encodeURIComponent(newSearchTerm);
@@ -137,7 +142,7 @@ export default function SearchResultsPage() {
       },
       {
         threshold: 0.1,
-      }
+      },
     );
 
     if (bottomRef.current) {
@@ -169,7 +174,7 @@ export default function SearchResultsPage() {
         <div className="relative h-full overflow-y-scroll scrollbar-hide">
           <div className="SearchResultsPageContainer max-h-full">
             <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
-              {filteredPosts.map((item, index) => (
+              {postsData.map((item, index) => (
                 <PostBox
                   key={index}
                   postId={item.postId}

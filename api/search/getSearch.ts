@@ -56,10 +56,10 @@ export async function getPostSearchResults(
   try {
     const api =
       cursorId === undefined
-        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${size ?? 20}`
-        : size !== undefined && size <= 5
+        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${20}`
+        : size! <= 5
           ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}`
-          : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${size ?? 20}`;
+          : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${20}`;
 
     console.log('요청 URL:', api);
 

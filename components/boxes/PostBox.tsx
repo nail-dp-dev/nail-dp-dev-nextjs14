@@ -53,16 +53,10 @@ function PostBox({
 
     if (!isLiked && isLoggedIn === 'loggedIn') {
       let data = await postPostLike(postId);
-      if (data.code == 2001) {
-        setIsLiked((prev) => !prev);
-        if (onLikeToggle) onLikeToggle();
-      }
+      data.code == 2001 && setIsLiked((prev) => !prev);
     } else if (isLiked && isLoggedIn === 'loggedIn') {
       let data = await deletePostLike(postId);
-      if (data.code == 2001) {
-        setIsLiked((prev) => !prev);
-        if (onLikeToggle) onLikeToggle();
-      }
+      data.code == 2001 && setIsLiked((prev) => !prev);
     }
   };
 
