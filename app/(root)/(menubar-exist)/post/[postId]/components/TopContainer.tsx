@@ -77,7 +77,7 @@ export default function TopContainer({ user, postId }: userProps) {
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <div
           className="cursor-pointer"
-          onClick={(e) => test(userData?.data.nickname!)}
+          onClick={(e) => test(user.nickname)}
         >
           <UserImage
             src={user.profileUrl}
