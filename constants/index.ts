@@ -70,6 +70,19 @@ export const profileCategoryElements = [
   { name: '아카이브', url: '/profile/archive/' },
 ];
 
+export const tagElements = [
+  { name: '유광', desc: 'glossy' },
+  { name: '무광', desc: 'matte' },
+  { name: '긴손톱', desc: 'long-nails' },
+  { name: '짧은손톱', desc: 'short-nails' },
+  { name: '라운드', desc: 'round' },
+  { name: '스퀘어', desc: 'square' },
+  { name: '스틸레토', desc: 'stiletto' },
+  { name: '코핀', desc: 'coffin' },
+  { name: '오벌', desc: 'oval' },
+  { name: '아몬드', desc: 'almond' },
+];
+
 export const postBoxWidths: { [key: number]: string } = {
   '3': '32.86%',
   '4': '24.46%',

@@ -8,7 +8,10 @@ import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
 import { posts } from '../../../constants/example';
 import SearchNickname from './SearchNickname';
-import { getUserSearchResults, getTagSearchResults } from '../../../api/search/getSearch';
+import {
+  getUserSearchResults,
+  getTagSearchResults,
+} from '../../../api/search/getSearch';
 
 function debounce(fn: Function, delay: number) {
   let timer: NodeJS.Timeout;
@@ -24,6 +27,7 @@ export default function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState(initialKeyword);
   const [searchRecent, setSearchRecent] = useState<string[]>(() => {
@@ -34,12 +38,16 @@ export default function SearchBar() {
     return [];
   });
   const [recommendedWords, setRecommendedWords] = useState(() =>
-    posts.sort(() => 0.5 - Math.random()).slice(0, 14)
+    posts.sort(() => 0.5 - Math.random()).slice(0, 14),
   );
   const [searchError, setSearchError] = useState('');
   const [isSearchRecentEnabled, setIsSearchRecentEnabled] = useState(true);
   const [userResults, setUserResults] = useState<any[]>([]);
   const [tagResults, setTagResults] = useState<any[]>([]);
+
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, []);
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -52,10 +60,12 @@ export default function SearchBar() {
     setSearchError('');
     setUserResults([]);
     setTagResults([]);
-    setIsDropdownOpen(false);
   };
 
-  const performSearch = async (searchQuery: string, showError: boolean = false) => {
+  const performSearch = async (
+    searchQuery: string,
+    showError: boolean = false,
+  ) => {
     if (!searchQuery) {
       setUserResults([]);
       setTagResults([]);
@@ -64,15 +74,19 @@ export default function SearchBar() {
     }
 
     try {
+      let hasResults = false;
       if (searchQuery.startsWith('@') && searchQuery.length > 1) {
         const response = await getUserSearchResults(searchQuery.slice(1));
         if (response && response.data.length > 0) {
           setUserResults(response.data);
           setSearchError('');
+          hasResults = true;
         } else {
           setUserResults([]);
           if (showError) {
-            setSearchError(`'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`);
+            setSearchError(
+              `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
+            );
           }
         }
       } else {
@@ -80,6 +94,7 @@ export default function SearchBar() {
         if (response && response.data.length > 0) {
           setTagResults(response.data);
           setSearchError('');
+          hasResults = true;
         } else {
           setTagResults([]);
           if (showError) {
@@ -87,21 +102,21 @@ export default function SearchBar() {
           }
         }
       }
+
     } catch (error) {
       console.error('Error fetching search results:', error);
       setUserResults([]);
       setTagResults([]);
+      setIsDropdownOpen(false); 
       if (showError) {
         setSearchError('검색 중 오류가 발생했습니다.');
       }
     }
-
-    setIsDropdownOpen(true);
   };
 
   const debouncedSearch = useCallback(
     debounce((query: string) => performSearch(query, true), 300),
-    []
+    [],
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,11 +143,13 @@ export default function SearchBar() {
       if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
         const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
         setSearchRecent(updatedRecent);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
       }
+
     }
   };
 
+  // 검색 제출
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -146,22 +163,23 @@ export default function SearchBar() {
     if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
       const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
       setSearchRecent(updatedRecent);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
     }
+
+    setIsDropdownOpen(false); 
   };
 
+  // 태그 클릭
   const handleTagClick = (tag: string) => {
     console.log('handleTagClick called with tag:', tag);
 
-    // 검색어를 업데이트하고 검색을 수행
     setSearchTerm(tag);
     performSearch(tag, true);
 
-    // 최근 검색어에 추가
     if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
       const updatedRecent = [tag, ...searchRecent].slice(0, 30);
       setSearchRecent(updatedRecent);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent)); 
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
       console.log('Updated searchRecent:', updatedRecent);
     }
 
@@ -184,7 +202,10 @@ export default function SearchBar() {
 
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
-    if (!target.closest('.dropdown-container') && !target.closest('.search-input')) {
+    if (
+      !target.closest('.dropdown-container') &&
+      !target.closest('.search-input')
+    ) {
       setIsDropdownOpen(false);
     }
   };
@@ -209,7 +230,7 @@ export default function SearchBar() {
 
   const handleClearRecent = () => {
     setSearchRecent([]);
-    localStorage.removeItem(LOCAL_STORAGE_KEY); 
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
   const toggleSearchRecent = () => {
@@ -218,7 +239,9 @@ export default function SearchBar() {
 
   const filteredWords = searchTerm
     ? posts.filter((post) =>
-        post.data.tags[0].tagName.toLowerCase().includes(searchTerm.toLowerCase())
+        post.data.tags[0].tagName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()),
       )
     : recommendedWords;
 
@@ -233,7 +256,11 @@ export default function SearchBar() {
           <input
             className={`w-full rounded-full px-4 py-3 pl-12 placeholder:text-sm placeholder:font-normal placeholder:text-darkPurple 
             focus:outline-none ${
-              isDropdownOpen ? (searchTerm.startsWith('@') ? 'bg-orange bg-opacity-20' : 'bg-purple bg-opacity-20') : 'bg-lightGray'
+              isDropdownOpen
+                ? searchTerm.startsWith('@')
+                  ? 'bg-orange bg-opacity-20'
+                  : 'bg-purple bg-opacity-20'
+                : 'bg-lightGray'
             }`}
             type="text"
             value={searchTerm}

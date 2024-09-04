@@ -8,30 +8,32 @@ type SearchNicknameProps = {
   searchTerm: string;
   onTagClick: (tag: string) => void;
   followData: UserSearchData[];
-  onProfileClick: (nickname: string) => void; 
+  onProfileClick: (nickname: string) => void;
 };
 
-// 사용자 검색 결과 컴포넌트
 export default function SearchNickname({
   searchTerm,
   onTagClick,
   followData,
-  onProfileClick, 
+  onProfileClick,
 }: SearchNicknameProps) {
   const router = useRouter();
 
-  // 사용자 검색 필터링
   const filteredFollow =
-    searchTerm.startsWith('@') && searchTerm.length > 1
-      ? followData.filter(
-          (user) =>
-            user.nickname?.toLowerCase().includes(searchTerm.slice(1).toLowerCase()) ||
-            searchTerm.slice(1).toLowerCase().includes(user.nickname?.toLowerCase()),
-        )
+    searchTerm.length > 0
+      ? followData.filter((user) => {
+          const lowerCaseSearchTerm = searchTerm.toLowerCase();
+          const userNickname = user.nickname?.toLowerCase() || '';
+          if (searchTerm.startsWith('@')) {
+            return userNickname.includes(lowerCaseSearchTerm.slice(1));
+          } else {
+            return userNickname.includes(lowerCaseSearchTerm);
+          }
+        })
       : [];
 
   const handleProfileClick = (nickname: string) => {
-    onProfileClick(nickname); 
+    onProfileClick(nickname);
     router.push(`/profile/${nickname}`);
   };
 
@@ -62,7 +64,7 @@ export default function SearchNickname({
             <button
               className="nickname-wrap button-tr group flex w-[310px] snap-end items-center 
                 rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10"
-              onClick={() => handleProfileClick(user.nickname)}  
+              onClick={() => handleProfileClick(user.nickname)}
             >
               <div className="button-tr group-hover:brightness-75">
                 <UserImage

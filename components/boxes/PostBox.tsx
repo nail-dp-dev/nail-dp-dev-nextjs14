@@ -30,6 +30,7 @@ function PostBox({
   setIsSuggestLoginModalShow,
   setSharedCount,
   boundary: initialBoundary,
+  onLikeToggle,
 }: PostBoxNewProps) {
   const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -52,10 +53,16 @@ function PostBox({
 
     if (!isLiked && isLoggedIn === 'loggedIn') {
       let data = await postPostLike(postId);
-      data.code == 2001 && setIsLiked((prev) => !prev);
+      if (data.code == 2001) {
+        setIsLiked((prev) => !prev);
+        if (onLikeToggle) onLikeToggle();
+      }
     } else if (isLiked && isLoggedIn === 'loggedIn') {
       let data = await deletePostLike(postId);
-      data.code == 2001 && setIsLiked((prev) => !prev);
+      if (data.code == 2001) {
+        setIsLiked((prev) => !prev);
+        if (onLikeToggle) onLikeToggle();
+      }
     }
   };
 

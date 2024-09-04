@@ -75,6 +75,8 @@ export type PostArray = {
   saved: boolean;
   createdDate: any;
   boundary: string;
+  isPhoto?: boolean;
+  isVideo?: boolean; 
 };
 
 export type PostsData = {

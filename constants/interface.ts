@@ -31,6 +31,7 @@ export interface PostBoxNewProps {
   boundary: 'ALL' | 'FOLLOW' | 'NONE';
   isPhoto?: boolean;
   isVideo?: boolean;
+  onLikeToggle?: () => void; 
 }
 export interface ArchiveBoxNewProps {
   showType: string;

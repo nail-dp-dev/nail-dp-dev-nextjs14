@@ -48,13 +48,20 @@ export async function getTagSearchResults(keyword: string) {
   }
 }
 
-export async function getPostSearchResults(keyword: string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}`;
-
-  console.log('요청 URL:', url); 
-
+export async function getPostSearchResults(
+  keyword: string,
+  cursorId?: number,
+  size: number = 20 
+) {
   try {
-    const response = await fetch(url, {
+    const api =
+      cursorId == undefined
+        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${size}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${size}`;
+
+    console.log('요청 URL:', api);
+
+    const response = await fetch(api, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -71,7 +78,18 @@ export async function getPostSearchResults(keyword: string) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching post search results:', error);
-    return null;
+    if (error instanceof TypeError) {
+      console.error('Network error or invalid JSON:', error);
+      return null;
+    } else if (
+      error instanceof Error &&
+      error.message.startsWith('HTTP error!')
+    ) {
+      console.error('Server returned an error response:', error);
+      return null;
+    } else {
+      console.error('Unexpected error:', error);
+      return null;
+    }
   }
 }

@@ -24,7 +24,16 @@ export default function SearchWord({
   const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
-    if (tagResults.length > 0) {
+    // 태그 결과 필터링 로직 수정
+    if (searchTerm.length > 0) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+      const filteredResults = tagResults.filter((result) =>
+        result.tagName.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+
+      setDisplayWords(filteredResults);
+    } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
     } else {
       setDisplayWords(
@@ -33,10 +42,10 @@ export default function SearchWord({
           tagImageUrl: post.data.postImageUrls[0],
           isPhoto: true,
           isVideo: false,
-        })),
+        }))
       );
     }
-  }, [searchWords, tagResults]);
+  }, [searchWords, tagResults, searchTerm]);
 
   return (
     <div className="">
@@ -66,7 +75,7 @@ export default function SearchWord({
             style={{
               backgroundImage: `url(${item.isPhoto ? item.tagImageUrl : ''})`,
             }}
-            onClick={() => onTagClick(item.tagName)} 
+            onClick={() => onTagClick(item.tagName)}
           >
             <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
             <div className="relative text-[0.94rem] font-extrabold text-white">
