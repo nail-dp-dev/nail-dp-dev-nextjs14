@@ -11,6 +11,7 @@ import TagBar from '../../../../../components/bars/TagBar';
 import { useSelector } from 'react-redux';
 import { selectButtonState } from '../../../../../store/slices/getLikedPostsSlice';
 import { selectNumberOfBoxes } from '../../../../../store/slices/boxLayoutSlice';
+import SearchNotice from '../../../../../components/notice/SearchNotice';
 
 // 검색 결과 페이지
 export default function SearchResultsPage() {
@@ -76,30 +77,35 @@ export default function SearchResultsPage() {
       if (response && response.data && response.data.postSummaryList) {
         let newPosts = response.data.postSummaryList.content;
 
-        if (isLikedOnly) {
-          newPosts = newPosts.filter((post) => post.like);
-        }
-
-        setPostsData((prevData) => {
-          const postIdSet = new Set(prevData.map((post) => post.postId));
-          const uniqueNewPosts = newPosts.filter(
-            (post) => !postIdSet.has(post.postId),
-          );
-          return [...prevData, ...uniqueNewPosts];
-        });
-
-        setCursorId(response.data.cursorId);
-
-        if (response.data.postSummaryList.last) {
+        if (newPosts.length === 0) {
+          setMessage(`'${searchTerm}' 태그를 찾을 수 없습니다.`);
           setIsLastPage(true);
         } else {
-          setIsLastPage(false);
-        }
+          if (isLikedOnly) {
+            newPosts = newPosts.filter((post) => post.like);
+          }
 
-        console.log('다음 cursorId:', response.data.cursorId);
-        setMessage('');
+          setPostsData((prevData) => {
+            const postIdSet = new Set(prevData.map((post) => post.postId));
+            const uniqueNewPosts = newPosts.filter(
+              (post) => !postIdSet.has(post.postId),
+            );
+            return [...prevData, ...uniqueNewPosts];
+          });
+
+          setCursorId(response.data.cursorId);
+
+          if (response.data.postSummaryList.last) {
+            setIsLastPage(true);
+          } else {
+            setIsLastPage(false);
+          }
+
+          console.log('다음 cursorId:', response.data.cursorId);
+          setMessage('');
+        }
       } else {
-        setMessage('검색 결과가 없습니다.');
+        setMessage(`'${searchTerm}' 태그를 찾을 수 없습니다.`);
         setIsLastPage(true);
       }
     } catch (error) {
@@ -169,7 +175,7 @@ export default function SearchResultsPage() {
       {isLoading && postsData.length === 0 ? (
         <Loading />
       ) : message ? (
-        <p className="text-red-500">{message}</p>
+        <SearchNotice message={message} />
       ) : (
         <div className="relative h-full overflow-y-scroll scrollbar-hide">
           <div className="SearchResultsPageContainer max-h-full">
