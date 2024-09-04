@@ -51,13 +51,15 @@ export async function getTagSearchResults(keyword: string) {
 export async function getPostSearchResults(
   keyword: string,
   cursorId?: number,
-  size: number = 20 
+  size?: number,
 ) {
   try {
     const api =
-      cursorId == undefined
-        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${size}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${size}`;
+      cursorId === undefined
+        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${size ?? 20}`
+        : size !== undefined && size <= 5
+          ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${size ?? 20}`;
 
     console.log('요청 URL:', api);
 

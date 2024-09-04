@@ -28,9 +28,10 @@ export default function SearchResultsPage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
   const isLikedOnly = useSelector(selectButtonState);
-  const layoutNum = useSelector(selectNumberOfBoxes);
+  const layoutNum = useSelector(selectNumberOfBoxes); 
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -44,27 +45,42 @@ export default function SearchResultsPage() {
   }, [searchTerm]);
 
   const fetchSearchResults = async (keyword: string, cursor?: number) => {
+    if (isLastPage) return;
+
     setIsLoading(true);
     try {
       const response: PostSearchResponse | null = await getPostSearchResults(
         keyword,
         cursor,
-        20,
+        layoutNum, 
       );
-  
+
       console.log('API 응답:', response);
-      console.log('사용된 cursorId:', cursor); 
-  
+      console.log('사용된 cursorId:', cursor);
+
       if (response && response.data && response.data.postSummaryList) {
-        setPostsData((prevData) => [
-          ...prevData,
-          ...response.data.postSummaryList.content,
-        ]);
+        const newPosts = response.data.postSummaryList.content;
+
+        // 중복 게시물 방지
+        setPostsData((prevData) => {
+          const postIdSet = new Set(prevData.map(post => post.postId));
+          const uniqueNewPosts = newPosts.filter(post => !postIdSet.has(post.postId));
+          return [...prevData, ...uniqueNewPosts];
+        });
+
         setCursorId(response.data.cursorId);
-        console.log('다음 cursorId:', response.data.cursorId); 
+
+        if (response.data.postSummaryList.last) {
+          setIsLastPage(true); 
+        } else {
+          setIsLastPage(false);
+        }
+
+        console.log('다음 cursorId:', response.data.cursorId);
         setMessage('');
       } else {
         setMessage('검색 결과가 없습니다.');
+        setIsLastPage(true);  
       }
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -74,7 +90,7 @@ export default function SearchResultsPage() {
       setIsFetchingMore(false);
     }
   };
-  
+
   const filteredPosts = isLikedOnly
     ? postsData.filter((post) => post.like)
     : postsData;
@@ -93,6 +109,11 @@ export default function SearchResultsPage() {
 
     const encodedSearchTerm = encodeURIComponent(newSearchTerm);
     router.push(`/search/posts?keyword=${encodedSearchTerm}`);
+
+    setCursorId(null);
+    setIsLastPage(false);
+    setPostsData([]);
+    fetchSearchResults(newSearchTerm);
   };
 
   useEffect(() => {
@@ -101,7 +122,8 @@ export default function SearchResultsPage() {
         if (
           entries[0].isIntersecting &&
           !isFetchingMore &&
-          !isLoading
+          !isLoading &&
+          !isLastPage
         ) {
           setIsFetchingMore(true);
           fetchSearchResults(searchTerm, cursorId ?? undefined);
@@ -121,7 +143,7 @@ export default function SearchResultsPage() {
         observer.unobserve(bottomRef.current);
       }
     };
-  }, [cursorId, isFetchingMore, searchTerm]);
+  }, [cursorId, isFetchingMore, searchTerm, isLastPage]);
 
   useEffect(() => {
     const newKeyword = searchParams.get('keyword') || '';
