@@ -65,6 +65,7 @@ export default function MyPagePage() {
     setLading(false);
     if (!isLastPage) {
       const postData = await getPostsData(isNickname, isCursorId, layoutNum);
+      console.log(postData);
       setIsCursorId(postData.data.cursorId);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsMyPageData((prevData) => [
@@ -108,8 +109,7 @@ export default function MyPagePage() {
   return (
     <div
       id="scroll1"
-      className={`relative h-full overflow-y-scroll scrollbar-hide 
-        `}
+      className={`relative h-full overflow-y-scroll scrollbar-hide`}
     >
       {isLoggedIn === 'loggedIn' && userData && (
         <div className="flex min-h-[160px] items-center">

@@ -16,7 +16,12 @@ import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
-import { setCommonModal, setArchivePost } from '../../store/slices/modalSlice';
+import {
+  setCommonModal,
+  setArchivePost,
+  setStarState,
+  setPlusState,
+} from '../../store/slices/modalSlice';
 import { useVisibility } from '../../hooks/useVisibility';
 import BoxCommonButton from '../ui/BoxCommonButton';
 
@@ -79,7 +84,9 @@ function PostBox({
     }
 
     if (isLoggedIn === 'loggedIn') {
-      router.push(`/post/${postId}`);
+      dispatch(setStarState({ state: false }));
+      dispatch(setPlusState({ state: false }));
+      router.push(`post/${postId}`);
     }
   };
 
@@ -99,15 +106,12 @@ function PostBox({
       className="box relative  flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
-      {
-        tempPost == true && 
-        (
-          <>
-            <div className="absolute z-10 h-full w-full bg-darkPurple opacity-60"></div>
-            <p className="z-10 text-center text-white">임시저장된 게시물</p>
-          </>
-        )
-      }
+      {tempPost == true && (
+        <>
+          <div className="absolute z-10 h-full w-full bg-darkPurple opacity-60"></div>
+          <p className="z-10 text-center text-white">임시저장된 게시물</p>
+        </>
+      )}
       <button
         type="button"
         className="absolute inset-0 z-0 "
@@ -115,28 +119,20 @@ function PostBox({
           handlePostClick(e, postId);
         }}
       >
-        { 
-          isPhoto && 
-          (
-            <Image
-              src={photoUrl}
-              alt={createdDate}
-              id={photoId.toString()}
-              fill
-              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-              quality={100}
-              sizes="100vw, 50vw, 33vw"
-              blurDataURL="https://image-component.nextjs.gallery/placeholder"
-              placeholder="blur"
-            />
-          )
-        }
-        { 
-          isVideo && 
-          (
-            <Video src={photoUrl} width='100%' height='100%' />
-          )
-        }
+        {isPhoto && (
+          <Image
+            src={photoUrl}
+            alt={createdDate}
+            id={photoId.toString()}
+            fill
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            quality={100}
+            sizes="100vw, 50vw, 33vw"
+            blurDataURL="https://image-component.nextjs.gallery/placeholder"
+            placeholder="blur"
+          />
+        )}
+        {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
       <button
         onClick={handleHeartClick}
@@ -161,24 +157,19 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      <div className='absolute z-40 bg-kakaoYellow left-0 top-0'>
-      {
-        isOptional && 
-        (
-            <BoxCommonButton
-              type="toggle"
-              onClick={handleToggleClick}
-              width="4px"
-              height="20px"
-              showGeneralAction={showGeneralAction}
-              className="z-40 p-2 "
-              position='nothing'
-            />
-          )
-        }
-      {
-        showGeneralAction && isOptional && 
-        (
+      <div className="absolute left-0 top-0 z-40 bg-kakaoYellow">
+        {isOptional && (
+          <BoxCommonButton
+            type="toggle"
+            onClick={handleToggleClick}
+            width="4px"
+            height="20px"
+            showGeneralAction={showGeneralAction}
+            className="z-40 p-2 "
+            position="nothing"
+          />
+        )}
+        {showGeneralAction && isOptional && (
           <div ref={boxRef} className=" top-0 z-40">
             <GeneralAction
               type="post"
@@ -188,13 +179,12 @@ function PostBox({
               initialBoundary={currentBoundary}
               onBoundaryChange={setCurrentBoundary}
               onDeleteClick={handleDelete}
-              />
+            />
           </div>
-        )
-      }
+        )}
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default React.memo(PostBox);

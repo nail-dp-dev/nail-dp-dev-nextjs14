@@ -27,6 +27,7 @@ const initialCommonModalState: CommonModalState = {
   AlarmModalImageType: '',
   ArchiveModalPostId: 0,
   ArchiveSetState: false,
+  ArchiveModalPage:"",
   alarmActionType: undefined,
   PlusState:false
 };
@@ -49,6 +50,7 @@ const commonModalSlice = createSlice({
       state.AlarmModalByte = 0;
       state.AlarmModalImageType = '';
       state.alarmActionType = undefined;
+      state.ArchiveModalPage = ""
     },
     alarmModalData: (
       state,

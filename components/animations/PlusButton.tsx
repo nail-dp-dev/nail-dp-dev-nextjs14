@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { archiveArray, IconPlusButtonProps } from '../../constants/interface';
 import {
@@ -37,17 +37,22 @@ export default function PlusButton({
   );
   const dispatch = useDispatch();
   const [isArchiveDate, setIsArchiveData] = useState<archiveArray[]>([]);
+  const [isLading, setLading] = useState(true);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [isCursorId, setIsCursorId] = useState(0);
 
   const archiveData = async () => {
     const data = await getArchiveData();
     let content = data.data.postSummaryList.content;
-    console.log(content);
+    setIsCursorId(data.cursorId);
+    console.log('여기', data);
 
-    if (content[0]) {
+    if (content[0] && content.length <= 4) {
       content = [...content, ...Array(4 - content.length).fill([])];
+      console.log('여기1', content);
       setIsArchiveData(content);
-    } else if (content.length < 4) {
-      content = [...content, ...Array(4 - content.length).fill([])];
+    } else if (content.length > 4) {
+      console.log('여기2', content);
       setIsArchiveData(content);
     } else {
       console.log('에러');
@@ -82,8 +87,6 @@ export default function PlusButton({
       dispatch(setPlusState({ state: false }));
     } else if (!isClick) {
       dispatch(setArchivePost({ postId: postId }));
-      console.log(postId);
-      console.log(ArchivePostId);
       dispatch(
         setPlusState(
           postId === ArchivePostId ? { state: !postState } : { state: true },
@@ -107,9 +110,9 @@ export default function PlusButton({
   };
 
   const minusButtonClick = () => {
+    dispatch(setArchivePage({ state: 'deletePost' }));
     dispatch(setPlusState({ state: false }));
     dispatch(setCommonModal('archive'));
-    dispatch(setArchivePage({ state: 'deletePost' }));
   };
 
   const modalOpen = () => {
@@ -117,8 +120,49 @@ export default function PlusButton({
       return;
     }
     dispatch(setPlusState({ state: false }));
+    console.log('a');
     dispatch(setCommonModal('archive'));
+    dispatch(setArchivePage({ state: 'archiveCreate' }));
   };
+
+  const archiveScrollData = async () => {
+    setLading(false);
+    const archiveData = await getArchiveData(isCursorId);
+    console.log(postId);
+    setIsCursorId(archiveData.data.cursorId);
+    setIsLastPage(archiveData.data.postSummaryList.last);
+    setIsArchiveData((prevData) => [
+      ...prevData,
+      ...archiveData.data.postSummaryList.content,
+    ]);
+    setLading(true);
+  };
+
+  useEffect(() => {
+    function handleScroll() {
+      const element = document.getElementById('scroll');
+      if (element) {
+        const scrollTop = element.scrollTop;
+        const scrollHeight = element.scrollHeight;
+        const clientHeight = element.clientHeight;
+
+        if (
+          scrollTop + clientHeight >= scrollHeight * 0.8 &&
+          isLading &&
+          !isLastPage &&
+          postId == ArchivePostId
+        ) {
+          archiveScrollData();
+        }
+      }
+    }
+
+    const scrollElement = document.getElementById('scroll');
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+      return () => scrollElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [ArchivePostId, isLading]);
 
   return (
     <div className="absolute bottom-0 right-0 w-full">
@@ -174,13 +218,13 @@ export default function PlusButton({
         </div>
       </button>
       <button
-        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-10 right-2' : 'bottom-2 right-2'}`}
+        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-10 right-2' : 'bottom-2 right-2 opacity-0'}`}
         onClick={(e) => plusButtonClick()}
       >
         <PlusIcon width={`${width}`} hanging={`${height}`} />
       </button>
       <button
-        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-2 right-10' : 'bottom-2 right-2'}`}
+        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-2 right-10' : 'bottom-2 right-2 opacity-0'}`}
         onClick={(e) => minusButtonClick()}
       >
         <MinusIcon width={`${width}`} hanging={`${height}`} />
@@ -189,11 +233,17 @@ export default function PlusButton({
         <div
           className={`absolute ${isClick ? 'bottom-[4.5rem]' : 'bottom-9'} right-0 z-10 mr-[6px] min-h-[69px] w-[calc(100%-12px)] min-w-[202px]`}
         >
-          <div className="z-11 absolute bottom-[1.11rem] mt-[1px] min-h-[50px] w-full overflow-hidden rounded-[20px] bg-red">
-            <div className="flex w-full items-center justify-center">
+          <div
+            id="scroll"
+            className="z-11 absolute bottom-[1.11rem] mt-[1px] max-h-[110px] min-h-[50px] w-full overflow-y-auto rounded-[20px] bg-red flex justify-center"
+          >
+            <div className="flex w-[90%] flex-wrap items-center">
               {isArchiveDate.map((item, index) =>
                 item.archiveImgUrl == null ? (
-                  <div key={index} className="group relative m-[2.5px]">
+                  <div
+                    key={index}
+                    className="group relative m-[2.5px] my-[5px] aspect-square w-[22%] bg-black"
+                  >
                     <ArchivePlus />
                     <button
                       onClick={(e) => modalOpen()}
@@ -206,7 +256,7 @@ export default function PlusButton({
                   item.archiveImgUrl.endsWith('.mp4') ? (
                   <button
                     key={index}
-                    className="relative mx-[2.5px] my-[5px] aspect-square w-[20%] overflow-hidden rounded-[8px] bg-lightGray"
+                    className="relative mx-[2.5px] my-[5px] aspect-square w-[22%] overflow-hidden rounded-[8px] bg-lightGray"
                     onClick={(e) => archiveSet(item.archiveId)}
                   >
                     <div
@@ -221,7 +271,7 @@ export default function PlusButton({
                 ) : (
                   <button
                     key={index}
-                    className="relative m-[2.5px] aspect-square w-[20%] overflow-hidden rounded-[8px]"
+                    className="relative mx-[2.5px] my-[5px] aspect-square w-[22%] overflow-hidden rounded-[8px]"
                     onClick={(e) => archiveSet(item.archiveId)}
                   >
                     <div

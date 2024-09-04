@@ -34,13 +34,19 @@ export default function MyArchiveModal() {
   );
   const [isName, setIsName] = useState('');
   const [isBoundary, setIsBoundary] = useState('ALL');
-  const [isArchiveMenu, setIsArchiveMenu] = useState(ArchivePage);
+  const [isArchiveMenu, setIsArchiveMenu] = useState<string | undefined>(
+    ArchivePage,
+  );
   const [isArchive, setIsArchive] = useState<archiveArray[]>([]);
   const [isArchiveName, setIsArchiveName] = useState('');
   const [isSelectArchive, setIsSelectArchive] = useState(0);
   const [isType, setIsType] = useState('album');
   const [isSearch, setIsSearch] = useState('');
+  const [isDeleteArchive, setIsDeleteArchive] = useState<any[]>([]);
   const [isBell, setIsBell] = useState(false);
+  const [isLading, setLading] = useState(true);
+  const [isLastPage, setIsLastPage] = useState(false);
+  const [isCursorId, setIsCursorId] = useState(0);
   const dispatch = useDispatch();
 
   const closeModal = () => {
@@ -94,15 +100,18 @@ export default function MyArchiveModal() {
   };
 
   const archiveData = async () => {
-    if (isArchiveMenu == 'deletePost') {
-      const data = await getPostArchive(ArchivePostId);
-      console.log(data);
-    } else {
-      const data = await getArchiveData();
-      if (data.data.postSummaryList.content[0]) {
-        setIsArchive(data.data.postSummaryList.content);
-        setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
-        setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+    const data = await getArchiveData();
+    setIsCursorId(data.cursorId);
+    if (data.data.postSummaryList.content[0]) {
+      setIsArchive(data.data.postSummaryList.content);
+      setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
+      setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
+      
+      if (isArchiveMenu == 'deletePost') {
+        // const data = await getPostArchive(ArchivePostId);
+        // setIsCursorId(data.cursorId);
+        console.log("백엔드 미완료");
+        // setIsDeleteArchive(data)
       }
     }
   };
@@ -131,12 +140,46 @@ export default function MyArchiveModal() {
 
   useEffect(() => {
     archiveData();
-    setIsArchiveMenu(ArchivePage);
+    // setIsArchiveMenu(ArchivePage);
   }, []);
 
-  const test = (str: string) => {
-    console.log(str);
+  const archiveScrollData = async () => {
+    setLading(false);
+    const archiveData = await getArchiveData(isCursorId);
+    console.log('여기');
+    setIsCursorId(archiveData.data.cursorId);
+    setIsLastPage(archiveData.data.postSummaryList.last);
+    setIsArchive((prevData) => [
+      ...prevData,
+      ...archiveData.data.postSummaryList.content,
+    ]);
+    setLading(true);
   };
+
+  useEffect(() => {
+    function handleScroll() {
+      const element = document.getElementById('scroll');
+      if (element) {
+        const scrollTop = element.scrollTop;
+        const scrollHeight = element.scrollHeight;
+        const clientHeight = element.clientHeight;
+
+        if (
+          scrollTop + clientHeight >= scrollHeight * 0.8 &&
+          isLading &&
+          !isLastPage
+        ) {
+          archiveScrollData();
+        }
+      }
+    }
+
+    const scrollElement = document.getElementById('scroll');
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+      return () => scrollElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [isLading, isArchiveMenu]);
 
   return (
     whichCommonModal === 'archive' && (
@@ -144,37 +187,54 @@ export default function MyArchiveModal() {
         className={`commonModal ${!isCommonModalShow && 'hidden'} pointer-events-auto absolute z-50 flex h-screen w-screen items-center justify-center bg-modalBackgroundColor`}
       >
         <div className="flex h-[370px] w-[800px] flex-col items-center justify-start overflow-hidden rounded-[20px] border-[1px] border-purple bg-white">
-          {isArchiveMenu == 'myArchive' ? (
-            <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
-              <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
-                <MyArchiveFolder />
-                <p className="pl-[12px] text-[0.9rem] font-bold text-purple">
-                  내 아카이브
-                </p>
-              </div>
+          <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
+            <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
+              <MyArchiveFolder />
+              <p className="pl-[12px] text-[0.9rem] font-bold text-purple">
+                내 아카이브
+              </p>
+            </div>
+            {
               <div className="flex flex-1 items-center justify-between">
-                <div className="ml-[31px] flex h-[40px] w-[300px] items-center overflow-hidden rounded-full border-[1px] border-navMenuBotSolidGray shadow-sm">
-                  <SearchIcon className="ml-[16px]" />
-                  <input
-                    className="ml-[10px] h-[24px] w-[240px] border-none text-[0.9rem] outline-none"
-                    type="text"
-                    placeholder="폴더 이름을 입력해주세요."
-                    onKeyDown={(e) => searchKeyDown(e)}
-                  />
-                </div>
+                {isArchiveMenu == 'myArchive' &&
+                  ArchivePage !== 'deletePost' && (
+                    <div className="ml-[31px] flex h-[40px] w-[300px] items-center overflow-hidden rounded-full border-[1px] border-navMenuBotSolidGray shadow-sm">
+                      <SearchIcon className="ml-[16px]" />
+                      <input
+                        className="ml-[10px] h-[24px] w-[240px] border-none text-[0.9rem] outline-none"
+                        type="text"
+                        placeholder="폴더 이름을 입력해주세요."
+                        onKeyDown={(e) => searchKeyDown(e)}
+                      />
+                    </div>
+                  )}
+                {ArchivePage == 'deletePost' &&
+                  isArchiveMenu !== 'archiveCreate' && (
+                    <div className="ml-[31px] text-[16px] font-bold text-darkPurple">
+                      <p>이 게시물이 저장된 아카이브</p>
+                    </div>
+                  )}
+                {isArchiveMenu === 'archiveCreate' && (
+                  <p className="pl-[50px] text-[1rem] font-bold text-textDarkPurple">
+                    내 아카이브 만들기
+                  </p>
+                )}
                 <div className="flex">
-                  <div className="mr-[24px] flex h-[24px] w-[58px] justify-between">
-                    <button onClick={(e) => clickType(e, 'album')}>
-                      <AlbumMenu
-                        fill={`${isType === 'album' ? '#756982' : '#DADADA'}`}
-                      />
-                    </button>
-                    <button onClick={(e) => clickType(e, 'list')}>
-                      <ListMenu
-                        fill={`${isType === 'list' ? '#756982' : '#DADADA'}`}
-                      />
-                    </button>
-                  </div>
+                  {isArchiveMenu == 'myArchive' &&
+                    ArchivePage !== 'deletePost' && (
+                      <div className="mr-[24px] flex h-[24px] w-[58px] justify-between">
+                        <button onClick={(e) => clickType(e, 'album')}>
+                          <AlbumMenu
+                            fill={`${isType === 'album' ? '#756982' : '#DADADA'}`}
+                          />
+                        </button>
+                        <button onClick={(e) => clickType(e, 'list')}>
+                          <ListMenu
+                            fill={`${isType === 'list' ? '#756982' : '#DADADA'}`}
+                          />
+                        </button>
+                      </div>
+                    )}
                   <button className="mr-[14px]">
                     <CloseIcon
                       width={18}
@@ -186,56 +246,8 @@ export default function MyArchiveModal() {
                   </button>
                 </div>
               </div>
-            </div>
-          ) : isArchiveMenu == 'deletePost' ? (
-            <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
-              <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
-                <MyArchiveFolder />
-                <p className="pl-[12px] text-[0.9rem] font-bold text-purple">
-                  내 아카이브
-                </p>
-              </div>
-              <div className="flex flex-1 items-center justify-between">
-                <div className="ml-[31px] text-[16px] font-bold text-darkPurple">
-                  <p>이 게시물이 저장된 아카이브</p>
-                </div>
-                <div className="flex">
-                  <button className="mr-[14px]">
-                    <CloseIcon
-                      width={18}
-                      height={18}
-                      onClick={() => {
-                        closeModal();
-                      }}
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
-              <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
-                <MyArchiveFolder />
-                <p className="pl-[12px] text-[0.9rem] font-bold text-purple">
-                  내 아카이브
-                </p>
-              </div>
-              <div className="flex flex-1 items-center justify-between">
-                <p className="pl-[50px] text-[1rem] font-bold text-textDarkPurple">
-                  내 아카이브 만들기
-                </p>
-                <button className="mr-[14px]">
-                  <CloseIcon
-                    width={18}
-                    height={18}
-                    onClick={() => {
-                      closeModal();
-                    }}
-                  />
-                </button>
-              </div>
-            </div>
-          )}
+            }
+          </div>
           <div className="flex w-full flex-1">
             <div className="h-full w-[20%] min-w-[155px] bg-menuLightGray px-[10px] text-[0.9rem] font-bold">
               <div className="mt-[5px]">
@@ -243,11 +255,11 @@ export default function MyArchiveModal() {
                   return (
                     <button
                       key={index}
-                      className={`mt-[5px] h-[28px] w-full ${isArchiveMenu == item.name ? 'rounded-full bg-darkPurple' : ''}`}
+                      className={`mt-[5px] h-[28px] w-full ${isArchiveMenu == 'deletePost' ? 'myArchive' == item.name && 'rounded-full bg-darkPurple' : isArchiveMenu == item.name ? 'rounded-full bg-darkPurple' : ''}`}
                       onClick={(e) => archiveMenuChange(item.name)}
                     >
                       <p
-                        className={`${isArchiveMenu == item.name ? 'text-white' : ''}`}
+                        className={`${isArchiveMenu == 'deletePost' ? 'myArchive' == item.name && 'text-white' : isArchiveMenu == item.name ? 'text-white' : ''}`}
                       >
                         {item.desc}
                       </p>
@@ -357,8 +369,13 @@ export default function MyArchiveModal() {
               </div>
             )}
             {isArchiveMenu == 'myArchive' && isArchive[0] ? (
-              <div className="flex flex-1 flex-col justify-between">
-                <div className="max-h-[235px] overflow-y-auto px-[44px]">
+              <div
+                className={`${ArchivePage == 'deletePost' && 'hidden'} flex flex-1 flex-col justify-between`}
+              >
+                <div
+                  id="scroll"
+                  className="max-h-[235px] overflow-y-auto px-[44px]"
+                >
                   {/* <div className="hidden">
                     <p className="pt-[20px] text-[16px]">
                       최근에 사용한 아카이브
@@ -391,13 +408,13 @@ export default function MyArchiveModal() {
                             className={`${isType == 'album' ? `relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}` : `flex h-[72px] w-[50%] items-center`}`}
                           >
                             <button
-                              className={`relative flex items-center justify-center overflow-hidden rounded-[8px] ${isType == 'album' ? 'h-[130px] w-[130px]' : 'h-[66px] w-[66px]'} `}
+                              className={`relative flex items-center justify-center overflow-hidden rounded-[17px] ${isType == 'album' ? 'h-[120px] w-[120px]' : 'h-[66px] w-[66px]'} `}
                               onClick={(e) =>
                                 setArchiveName(item.archiveName, item.archiveId)
                               }
                             >
                               <div
-                                className={`absolute top-0 z-50 h-full w-full rounded-[8px] ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''}`}
+                                className={`absolute top-0 z-50 h-full w-full rounded-[17px] ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''}`}
                               ></div>
                               {item.archiveImgUrl !== null ? (
                                 item.archiveImgUrl.endsWith('.mov') ||
@@ -446,7 +463,7 @@ export default function MyArchiveModal() {
                 </div>
                 <div className={`flex h-[80px] w-full justify-center bg-white`}>
                   <button
-                    className="my-[20px] h-[40px] w-[250px] text-white rounded-full bg-purple"
+                    className="my-[20px] h-[40px] w-[250px] rounded-full bg-purple text-white"
                     onClick={(e) => setArchive(isSelectArchive, ArchivePostId!)}
                   >
                     ‘{isArchiveName}’ 아카이브에 저장
@@ -455,7 +472,7 @@ export default function MyArchiveModal() {
               </div>
             ) : (
               <div
-                className={`${isArchiveMenu == 'myArchive' ? '' : 'hidden'} relative flex flex-1 flex-col items-center justify-center`}
+                className={`${ArchivePage == 'deletePost' || isArchiveMenu != 'myArchive' ? 'hidden' : ''} relative flex flex-1 flex-col items-center justify-center`}
               >
                 <DottedAlbum />
                 <div className="absolute h-[30px] w-[90px] rounded-full bg-lightGray text-center">
@@ -466,17 +483,18 @@ export default function MyArchiveModal() {
                 </p>
               </div>
             )}
-            {isArchiveMenu == 'deletePost' && (
-              // isArchive[0] &&
-              <div className="flex flex-1 flex-col justify-between">
-                <div className="max-h-[235px] overflow-y-auto px-[44px]">
-                  <div className="pt-[20px]">
+            {ArchivePage == 'deletePost' &&
+              isArchiveMenu !== 'archiveCreate' && (
+                <div className="flex flex-1 flex-col justify-between">
+                  <div className="max-h-[235px] overflow-y-auto px-[44px]">
                     <div className="flex flex-wrap">
-                      <div className="flex w-full justify-between pb-[20px] text-darkPurple">
+                      <div className="sticky top-0 flex w-full justify-between bg-white py-[20px] text-darkPurple">
                         <p>어떤 아카이브에서 저장 해제 할까요?</p>
-                        <button>모두선택</button>
+                        <button className="h-[25px] w-[60px] rounded-full bg-lightGray text-[13px] hover:text-purple">
+                          모두선택
+                        </button>
                       </div>
-                      {filteredArchives.map((item, index) => {
+                      {isDeleteArchive.map((item, index) => {
                         return (
                           <div
                             key={index}
@@ -533,17 +551,20 @@ export default function MyArchiveModal() {
                       })}
                     </div>
                   </div>
-                </div>
-                <div className={`flex h-[80px] w-full justify-center bg-white`}>
-                  <button
-                    className="my-[20px] h-[40px] w-[250px] text-white rounded-full bg-purple"
-                    onClick={(e) => setArchive(isSelectArchive, ArchivePostId!)}
+                  <div
+                    className={`flex h-[80px] w-full justify-center bg-white`}
                   >
-                    선택한 아카이브에 저장 해제
-                  </button>
+                    <button
+                      className="my-[20px] h-[40px] w-[250px] rounded-full bg-purple text-white"
+                      onClick={(e) =>
+                        setArchive(isSelectArchive, ArchivePostId!)
+                      }
+                    >
+                      선택한 아카이브에 저장 해제
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
         {isBell && (
