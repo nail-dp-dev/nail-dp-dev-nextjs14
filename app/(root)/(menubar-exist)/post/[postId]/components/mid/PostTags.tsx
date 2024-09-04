@@ -49,10 +49,8 @@ export default function PostTags({ post, searchRecent, setSearchRecent }: PostTa
 
   // 해시태그 클릭 시 호출될 함수
   const handleTagClick = (tag: string) => {
-    // URL 이동
     router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
     
-    // 최근 검색어에 추가
     addSearchTermToRecent(tag);
   };
 

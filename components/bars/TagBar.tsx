@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { tagElements } from '../../constants';
 import MinusSVG from '../../public/assets/svg/minus.svg';
 import PlusSVG from '../../public/assets/svg/plus.svg';
@@ -17,37 +17,57 @@ import { selectLoginStatus } from '../../store/slices/loginSlice';
 interface TagBarProps {
   onTagClick: (tag: string) => void;
   isLikedOnly: boolean;
-  activeTags: string[];  
+  activeTags: string[];
 }
 
-export default function TagBar({ onTagClick, isLikedOnly, activeTags }: TagBarProps) {
+export default function TagBar({
+  onTagClick,
+  isLikedOnly,
+  activeTags,
+}: TagBarProps) {
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
   const isLoggedIn = useSelector(selectLoginStatus);
 
-  const filteredTags = tagElements.filter(tag => !activeTags.includes(tag.name));
+  const filteredTags = tagElements.filter(
+    (tag) => !activeTags.includes(tag.name),
+  );
+
+  const [visibleTags, setVisibleTags] = useState(filteredTags);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const maxVisibleTags = Math.floor(window.innerWidth / 100);
+      setVisibleTags(filteredTags.slice(0, maxVisibleTags));
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [filteredTags]);
 
   return (
     <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
-      <div
-        className="tagDiv flex h-[53px] w-full items-center 
-      justify-between border-b-[1px] border-navBotSolidGray"
-      >
-        <div className="flex flex-wrap gap-[5px]">
-          {filteredTags.map((tag, index) => (
+      <div className="tagDiv flex h-[53px] w-full items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
+        <div className="flex gap-[5px] overflow-hidden whitespace-nowrap">
+          {visibleTags.map((tag, index) => (
             <button
               key={index}
-              onClick={() => onTagClick(tag.name)}  
-              className={`hashtag-layout hashtag-hover-active button-tr button-tr-tf items-center justify-center
-                border-none bg-hashTagGray transition-all`}
+              onClick={() => onTagClick(tag.name)}
+              className={`hashtag-layout hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center
+                justify-center border-none bg-hashTagGray transition-all`}
             >
               <p className="text-[14px] font-[700]">{tag.name}</p>
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-[32px]">
+
+        <div className="flex flex-shrink-0 items-center gap-[32px]">
           <button
             onClick={() => dispatch(decreaseBoxes())}
             disabled={numberOfBoxes <= 3}
