@@ -72,7 +72,7 @@ export default function SearchResultsPage() {
       const keywordsArray = keyword.split(' ').filter(Boolean);
       console.log('전달된 키워드:', keywordsArray);
       const response: PostSearchResponse | null = await getPostSearchResults(
-        keywordsArray, 
+        keywordsArray,
         cursor,
         layoutNum,
       );
@@ -184,7 +184,7 @@ export default function SearchResultsPage() {
       ) : message ? (
         <SearchNotice message={message} />
       ) : (
-        <div className="relative h-full overflow-y-scroll scrollbar-hide">
+        <div className="relative h-full overflow-y-scroll">
           <div className="SearchResultsPageContainer max-h-full">
             <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
               {postsData.map((item, index) => (
