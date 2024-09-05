@@ -77,7 +77,7 @@ export default function LoginInfoBox() {
               className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
               disabled={isMiniModalShow}
             >
-              <UserImage src={userProfileUrl} alt={'profileIamge'} width={40} height={40}/>
+              <UserImage src={userProfileUrl} alt={'profileIamge'} width={40} height={40} />
             </button>
             <ProfileMiniModal
               isMiniModalShow={isMiniModalShow}

@@ -65,9 +65,9 @@ export default function ArchiveBox({
         className={`flex h-full w-full ${showType === 'album' && 'flex-col items-center gap-[20px]'} justify-between ${showType === 'list' && 'cursor-pointer items-center rounded-2xl  px-[16px] hover:bg-chatChooseButton'} z-0`}
       >
         <div
-          className={`box ${photoUrl === null && 'bg-noArchiveColor'} ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' && 'aspect-auto w-full	 transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px]`}
+          className={`box ${photoUrl === null && 'bg-noArchiveColor'} ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' && 'aspect-auto w-full	 transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent`}
         >
-          <div className={`inset-0 z-0 h-full w-full`}>
+          <div className={`inset-0 z-0 h-full w-full `}>
             {isPhoto && photoUrl !== null && (
               <Image
                 src={photoUrl}

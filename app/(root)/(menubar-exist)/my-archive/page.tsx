@@ -1,26 +1,128 @@
 'use client'
 
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 import { myArchiveElements } from '../../../../constants/index';
 import ListIcon from '../../../../public/assets/svg/my-archive-list.svg'
 import AlbumIcon from '../../../../public/assets/svg/my-archive-album.svg'
 import LoginSuggestModal from '../../../../components/modal/mini/LoginSuggestModal';
 import ArchiveBox from '../../../../components/boxes/ArchiveBox';
+import { getAllArchivesData } from '../../../../api/archive/getArchivesData';
+import { ArchiveArray } from '../../../../types/dataType';
 
 export default function MyArchivePage() {
 
   console.log('MyArchivePage rendered');
 
   const isLoggedIn = useSelector(selectLoginStatus);
-  const [category, setCategory] = useState('archive')
-  const [archiveData, setArchiveData] = useState<any>([])
+  const [category, setCategory] = useState<string>('archive')
+  const [archivesData, setArchivesData] = useState<ArchiveArray[]>([]);
   const [showType, setShowType] = useState('album')
   const [loading, setLoading] = useState(false)
-  const [isFirstRendering, setIsFirstRendering] = useState(true);
+  const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
+  const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
+    useState<boolean>(false);
+  const [isLast, setIsLast] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [cursorId, setCursorId] = useState<number>(0);
+  const [isContentExist, setIsContentExist] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [sharedCount, setSharedCount] = useState<number>(0);
 
-  console.log(archiveData)
+  const boxRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  console.log(archivesData, '찐 아이디')
+
+  // 게시글 더 가져오기 Function
+  const fetchMorePosts = async () => {
+    const currentCursorId = cursorId;
+    let data = await getAllArchivesData({ category, cursorId: currentCursorId });
+
+    console.log(data, 'fetchMorePosts에서의 cursorId')
+
+    console.log('게시글 더 가져오기...')
+    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
+      setIsLoading(true);
+      setCursorId(data.data.cursorId);
+      setArchivesData((prev: ArchiveArray[]) => [
+        ...prev,
+        ...data.data.postSummaryList.content,
+      ]);
+      setIsLast(data.data.postSummaryList.last);
+      setMessage(data.message);
+      setIsLoading(false);
+      setIsFirstRendering(false);
+      setIsContentExist(true);
+    } else if (
+      data.code === 2000 &&
+      data.data.postSummaryList.content.length === 0
+    ) {
+      setIsLoading(true);
+      setMessage('조회된 게시글이 없습니다.');
+      setIsLoading(false);
+      setIsContentExist(false);
+      return;
+    }
+  };
+  
+  // 좋아요 누른 게시글 가져오기 Function
+  const refreshPosts = async () => {
+    setCursorId(0);
+    setMessage('');
+    setIsContentExist(false);
+    setArchivesData([]);
+    setIsFirstRendering(true);
+    setIsLoading(true);
+    setIsLast(false);
+  };
+
+  // Refresh posts when category changes
+  useEffect(() => {
+    refreshPosts();
+  }, [category]);
+
+  // 
+  useEffect(() => {
+    console.log('기본 useEffect...')
+
+    // 처음 렌더링이면
+    if (isFirstRendering) {
+      // 게시글 가져오기
+      fetchMorePosts();
+    }
+
+    const currentRef = bottomRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          !isLast &&
+          !isLoading &&
+          isContentExist
+        ) {
+          fetchMorePosts();
+        }
+      },
+      {
+        threshold: 0.5,
+      },
+    );
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, isLast, cursorId]);
+
+
 
   const clickCategory = (e: any, name: string) => {
     e.stopPropagation()
@@ -33,36 +135,6 @@ export default function MyArchivePage() {
     console.log(`Show type clicked: ${type}`);
     setShowType(type)
   }
-
-  useEffect(() => {
-    console.log('useEffect triggered by category change:', category);
-    setLoading(true);
-
-    fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/archive`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      })
-      .then(res => res.json())
-      .then(res => {
-        if (res.code === 2000) {
-          setArchiveData(res.data.postSummaryList.content);
-          console.log('Data fetched:', res.data.archiveList);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching archive data:', error);
-      })
-      .finally(() => {
-        setIsFirstRendering(false);
-        setLoading(false);
-        console.log('Loading completed');
-      });
-  }, [category]);
 
   
   return (
@@ -98,9 +170,9 @@ export default function MyArchivePage() {
         </div>
         </div>
         {
-          showType === 'album' && archiveData ?
+          showType === 'album' && archivesData ?
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
-              {archiveData.map((item:any, index:any)=>(
+              {archivesData.map((item:any, index:any)=>(
                 <ArchiveBox
                   key={index}
                   showType={showType}
@@ -114,11 +186,12 @@ export default function MyArchivePage() {
                   initialBoundary={item.boundary} 
                 />
               ))}
+              <div ref={bottomRef} className="w-full h-[1px]"></div>
             </div>
             :
-          showType === 'list' && archiveData ? 
+          showType === 'list' && archivesData ? 
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
-              {archiveData.map((item:any, index:any)=>(
+              {archivesData.map((item:any, index:any)=>(
                 <ArchiveBox
                   key={index}
                   showType={showType}
@@ -132,11 +205,12 @@ export default function MyArchivePage() {
                   initialBoundary={item.boundary} 
                 />
               ))}
+              <div ref={bottomRef} className="w-full h-[1px]"></div>
             </div>
               :
             null
         }
-    </div>
+      </div>
     :
     isLoggedIn === 'pending' ?
     <div>

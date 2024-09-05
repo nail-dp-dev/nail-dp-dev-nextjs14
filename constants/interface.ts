@@ -9,6 +9,10 @@ export interface CategoryBarProps {
   setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export interface ControlBarProps {
+  archiveName: string;
+}
+
 export interface IconButtonProps {
   width: string;
   height: string;
@@ -121,10 +125,22 @@ export interface PostsDataProps {
   size: number;
   cursorId?: number;
 }
+
 export interface PostsLikedDataProps {
   category: string;
   size: number;
   cursorLikedId?: number;
+}
+
+export interface ArchiveDataProps{
+  archiveId: number;
+  size: number;
+  cursorId?: number;
+}
+
+export interface ArchivesDataProps {
+  category: string;
+  cursorId?: number;
 }
 
 export interface VideoProps {

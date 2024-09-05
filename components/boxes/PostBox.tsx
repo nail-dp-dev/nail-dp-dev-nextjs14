@@ -104,7 +104,7 @@ function PostBox({
       )}
       <button
         type="button"
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 "
         onClick={(e) => {
           handlePostClick(e, postId);
         }}
@@ -122,7 +122,7 @@ function PostBox({
             placeholder="blur"
           />
         )}
-        {isVideo && <Video src={photoUrl} width={'100%'} height={'100%'} />}
+        {isVideo && <Video src={photoUrl} width='100%' height='100%'/>}
       </button>
       <button
         onClick={handleHeartClick}
