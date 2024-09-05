@@ -13,7 +13,7 @@ import {
   postData,
   profileData,
 } from '../../../../../constants/interface';
-import { ProfileElements } from '../../../../../constants';
+import { postBoxWidths, ProfileElements } from '../../../../../constants';
 import { getProfilePost } from '../../../../../api/profile/getProfilePost';
 import { getProfileArchive } from '../../../../../api/profile/getProfileArchive';
 import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
@@ -22,6 +22,7 @@ import ListIcon from '../../../../../public/assets/svg/my-archive-list.svg';
 import AlbumIcon from '../../../../../public/assets/svg/my-archive-album.svg';
 import MinusSVG from '../../../../../public/assets/svg/minus.svg';
 import PlusSVG from '../../../../../public/assets/svg/plus.svg';
+import PrivateArchive from '../../../../../public/assets/img/privateArchive.png';
 import HeartButton from '../../../../../components/animations/HeartButton';
 import {
   decreaseBoxes,
@@ -30,6 +31,9 @@ import {
 } from '../../../../../store/slices/boxLayoutSlice';
 import { RootState } from '../../../../../store/store';
 import { followUser, unFollowUser } from '../../../../../api/user/followUser';
+import { getUserData } from '../../../../../api/user/getUserData';
+import Image from 'next/image';
+import { getArchiveData } from '../../../../../api/archive/getArchiveData';
 
 export default function ProfilePage() {
   const { userData } = useLoggedInUserData();
@@ -44,9 +48,14 @@ export default function ProfilePage() {
   const [isFollowState, setIsFollowState] = useState(false);
   const [isCategory, setIsCategory] = useState('post');
   const [isPost, setIsPost] = useState<postData[]>([]);
-  const [isPostLost, setIsPostLost] = useState();
-  const [isPostCursorId, setIsCursorId] = useState();
+  const [isNickName, setIsNickName] = useState('');
+  const [isPostLost, setIsPostLost] = useState(false);
+  const [isArchiveLost, setIsArchiveLost] = useState(false);
+  const [isPostCursorId, setIsPostCursorId] = useState(0);
+  const [isArchiveCursorId, setIsArchiveCursorId] = useState(0);
+  const [isLading, setLading] = useState(true);
   const [isArchive, setIsArchive] = useState<archiveArray[]>([]);
+  const layoutNum = useSelector(selectNumberOfBoxes);
   const router = useRouter();
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -60,19 +69,24 @@ export default function ProfilePage() {
     setIsFollowCount(profileData.data.followerCount);
     setIsFollowState(profileData.data.followingStatus);
   };
+
   const profilePostData = async () => {
     const postData = await getProfilePost(nickname);
     console.log(postData);
     if (postData.data.postSummaryList.content[0]) {
       setIsPostLost(postData.data.postSummaryList.last);
-      setIsCursorId(postData.data.cursorId);
+      setIsPostCursorId(postData.data.cursorId);
       setIsPost(postData.data.postSummaryList.content);
     }
   };
+
   const profileArchiveData = async () => {
     const archiveData = await getProfileArchive(nickname);
-    console.log('a', archiveData);
-    setIsArchive(archiveData.data.postSummaryList.content);
+    if (archiveData.data.postSummaryList.content[0]) {
+      setIsArchiveLost(archiveData.data.postSummaryList.last);
+      setIsArchiveCursorId(archiveData.data.cursorId);
+      setIsArchive(archiveData.data.postSummaryList.content);
+    }
   };
 
   const categoryClick = (e: any, category: string) => {
@@ -107,19 +121,89 @@ export default function ProfilePage() {
     }
   };
 
+  const checkNickName = async () => {
+    const data = await getUserData();
+    console.log(data.data.nickname, nickname);
+    if (data.data.nickname === nickname) {
+      router.push('/my-page');
+    }
+  };
+
+  const boxStyle = {
+    width: showType === 'album' ? postBoxWidths[layoutNum] : '49.65%',
+  };
+
+  const postScrollData = async () => {
+    setLading(false);
+    if (!isPostLost) {
+      console.log("a");
+      const postData = await getProfilePost(nickname, isPostCursorId);
+      console.log(postData);
+      setIsPostCursorId(postData.data.cursorId);
+      setIsPostLost(postData.data.postSummaryList.last);
+      setIsPost((prevData) => [
+        ...prevData,
+        ...postData.data.postSummaryList.content,
+      ]);
+
+      setLading(true);
+    }
+  };
+
+  const archiveScrollData = async () => {
+    setLading(false);
+    if (!isArchiveLost) {
+      const archiveData = await getProfileArchive(
+        nickname,
+        isArchiveCursorId,
+      );
+      console.log(archiveData);
+      setIsArchiveCursorId(archiveData.data.cursorId);
+      setIsArchiveLost(archiveData.data.postSummaryList.last);
+      setIsArchive((prevData) => [
+        ...prevData,
+        ...archiveData.data.postSummaryList.content,
+      ]);
+    
+      setLading(true);
+    }
+  };
+
   useEffect(() => {
-    // console.log(userData?.data.nickname);
-    // if (userData?.data.nickname === nickname) {
-    //   console.log('a');
-    //   router.push('/my-page');
-    // }
+    function handleScroll() {
+      const element1 = document.getElementById('scroll');
+      if (element1) {
+        const scrollTop = element1.scrollTop;
+        const scrollHeight = element1.scrollHeight;
+        const clientHeight = element1.clientHeight;
+
+        if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isPostLost) {
+          postScrollData();
+        }else if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isArchiveLost) {
+          archiveScrollData();
+        }
+      }
+    }
+
+    const scrollElement = document.getElementById('scroll');
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+      return () => scrollElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [isLading, layoutNum]);
+
+  useEffect(() => {
+    checkNickName();
     profileData();
     profilePostData();
     profileArchiveData();
   }, []);
 
   return (
-    <div className={`relative h-full overflow-y-scroll scrollbar-hide`}>
+    <div
+      id="scroll"
+      className={`relative h-full overflow-y-scroll scrollbar-hide`}
+    >
       {isLoggedIn === 'loggedIn' && isProfile && (
         <div className="flex min-h-[160px] items-center">
           <UserImage
@@ -224,7 +308,9 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-            <div className="h-[13px] w-full"></div>
+            {isCategory !== 'Archive' && (
+              <div className="h-[13px] w-full"></div>
+            )}
           </div>
         </div>
       </div>
@@ -248,25 +334,75 @@ export default function ProfilePage() {
               />
             ))}
           {isCategory == 'Archive' &&
-            isArchive ?
-            isArchive.map((item, index) => (
-              <ArchiveBox
-                key={index}
-                showType={showType}
-                archiveId={item.archiveId}
-                photoId={index}
-                photoUrl={item.archiveImgUrl}
-                saved={false}
-                createdDate={undefined}
-                archiveName={item.archiveName}
-                postCount={item.postCount}
-                initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-              />
-            )):
-            <div className='bg-#7569821A w-full h-[300px]'>
-
-            </div>
-            }
+            (isArchive[0] ? (
+              isArchive.map((item, index) =>
+                item.boundary == 'FOLLOW' && !isFollowState ? (
+                  <div
+                    key={index}
+                    className={` relative mb-[30px] flex ${showType === 'album' && 'flex-col '} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
+                    style={boxStyle}
+                  >
+                    <div
+                      className={`flex h-full w-full ${showType === 'album' && 'flex-col items-center gap-[20px]'} justify-between ${showType === 'list' && 'cursor-pointer items-center rounded-2xl  px-[16px] hover:bg-chatChooseButton'} z-0`}
+                    >
+                      <div
+                        className={`box bg-lightGray ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' && 'aspect-auto w-full	 transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px]`}
+                      >
+                        <div className={`inset-0 z-0 h-full w-full`}>
+                          <Image
+                            src={PrivateArchive}
+                            alt={""}
+                            id={item.archiveId.toString()}
+                            fill
+                            style={{
+                              objectFit: 'cover',
+                              width: '100%',
+                              height: '100%',
+                            }}
+                            quality={100}
+                            sizes="100vw, 50vw, 33vw"
+                            blurDataURL="https://image-component.nextjs.gallery/placeholder"
+                            placeholder="blur"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex h-full w-full flex-col items-start justify-center px-[10px]">
+                        <p className="text-[1rem] font-[700] text-textBlack">
+                          {item.archiveName}
+                        </p>
+                        <p className="text-text text-[0.875rem] font-[400]">
+                          {item.postCount} designs{' '}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <ArchiveBox
+                    key={index}
+                    showType={showType}
+                    archiveId={item.archiveId}
+                    photoId={index}
+                    photoUrl={item.archiveImgUrl}
+                    saved={false}
+                    createdDate={undefined}
+                    archiveName={item.archiveName}
+                    postCount={item.postCount}
+                    initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                  />
+                ),
+              )
+            ) : (
+              <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
+                <p className="text-darkModeGray text-[35px]">
+                  표시할 아카이브가 없어요.
+                </p>
+                <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
+                  <p className="text-darkModeGray text-[35px]">
+                    표시할 아카이브가 없어요.
+                  </p>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>

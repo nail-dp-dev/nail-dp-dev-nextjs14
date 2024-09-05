@@ -1,15 +1,16 @@
-export const getProfileArchive = async (nickname: string) => {
+export const getProfileArchive = async (nickname: string, cursorId?: number) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${nickname}/archive`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+    const api =
+      cursorId == null
+        ? `${process.env.NEXT_PUBLIC_API_URL}/user/${nickname}/archive?size=${30}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/user/${nickname}/archive?cursorId=${cursorId}&&size=${30}`;
+    const response = await fetch(api, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      credentials: 'include',
+    });
     return await response.json();
   } catch (error) {
     if (error instanceof TypeError) {

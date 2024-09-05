@@ -67,6 +67,7 @@ export default function TopContainer({ user, postId }: userProps) {
   //프로필 이동
   const test = (nickname: string) => {
     if (nickname !== undefined) {
+      localStorage.setItem("name",nickname)
       router.push(`/profile/${nickname}`);
     }
     console.log('에러');
