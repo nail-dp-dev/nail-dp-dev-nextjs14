@@ -37,6 +37,7 @@ export default function SearchResultsPage() {
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // 새로운 검색 결과 가져오기
   useEffect(() => {
     const newKeyword = searchParams.get('keyword') || '';
     setSearchTerm(newKeyword);
@@ -44,6 +45,7 @@ export default function SearchResultsPage() {
     fetchSearchResults(newKeyword);
   }, [searchParams]);
 
+  //검색 결과페이지 초기화 및 가져옴
   useEffect(() => {
     if (searchTerm) {
       resetSearch();

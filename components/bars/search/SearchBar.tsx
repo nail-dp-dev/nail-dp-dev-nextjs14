@@ -164,7 +164,6 @@ export default function SearchBar() {
   };
 
   const handleTagClick = (tag: string) => {
-    console.log('handleTagClick called with tag:', tag);
     setIsDropdownOpen(false);
     if (tag.startsWith('@')) {
       const nickname = tag.slice(1);
