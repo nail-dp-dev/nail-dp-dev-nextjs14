@@ -30,6 +30,7 @@ function PostBox({
   setIsSuggestLoginModalShow,
   setSharedCount,
   boundary: initialBoundary,
+  onLikeToggle,
 }: PostBoxNewProps) {
   const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -78,7 +79,7 @@ function PostBox({
     }
 
     if (isLoggedIn === 'loggedIn') {
-      router.push(`post/${postId}`);
+      router.push(`/post/${postId}`);
     }
   };
 

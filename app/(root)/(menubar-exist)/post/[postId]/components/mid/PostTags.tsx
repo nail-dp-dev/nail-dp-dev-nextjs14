@@ -1,15 +1,20 @@
 import React, { useRef } from 'react';
+import { useRouter } from 'next/navigation'; // useRouter를 import 합니다.
 import { PostsDetailData } from '../../../../../../../types/dataType';
 
 interface PostTagsProps {
   post: PostsDetailData['data'];
+  searchRecent: string[];
+  setSearchRecent: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export default function PostTags({ post }: PostTagsProps) {
+export default function PostTags({ post, searchRecent, setSearchRecent }: PostTagsProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  const router = useRouter();
+  const LOCAL_STORAGE_KEY = 'recentSearchTags';
 
   const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -42,6 +47,22 @@ export default function PostTags({ post }: PostTagsProps) {
     scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
   };
 
+  // 해시태그 클릭 시 호출될 함수
+  const handleTagClick = (tag: string) => {
+    router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
+    
+    addSearchTermToRecent(tag);
+  };
+
+  // 검색어를 최근 검색어에 추가하는 함수
+  const addSearchTermToRecent = (term: string) => {
+    if (!searchRecent.includes(term)) {
+      const updatedRecent = [term, ...searchRecent].slice(0, 30);
+      setSearchRecent(updatedRecent);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
+    }
+  };
+
   return (
     <div
       className="relative 
@@ -58,8 +79,9 @@ export default function PostTags({ post }: PostTagsProps) {
         {post.tags.map((tag, index) => (
           <div className="flex-shrink-0 whitespace-nowrap" key={index}>
             <button
-              className="hashtag-layout  hashtag-hover-active button-tr button-tr-tf
+              className="hashtag-layout hashtag-hover-active button-tr button-tr-tf
               bg-hashTagGray hover:text-white active:text-white"
+              onClick={() => handleTagClick(tag)}
             >
               {tag}
             </button>

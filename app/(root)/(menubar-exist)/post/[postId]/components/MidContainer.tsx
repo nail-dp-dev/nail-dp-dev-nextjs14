@@ -29,6 +29,8 @@ interface MidContainerProps {
   isLastPage: boolean;
   nickname: string;
   imageUrl: string;
+  searchRecent: string[];
+  setSearchRecent: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function MidContainer({
@@ -44,6 +46,8 @@ export default function MidContainer({
   isLastPage,
   nickname,
   imageUrl,
+  searchRecent,
+  setSearchRecent,
 }: MidContainerProps) {
   const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
   const [boundary, setBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
@@ -236,7 +240,7 @@ export default function MidContainer({
               sharedCount={sharedCount}
               setSharedCount={setSharedCount}
             />
-            <PostTags post={post} />
+            <PostTags post={post} searchRecent={searchRecent} setSearchRecent={setSearchRecent} />
           </div>
           <div>
             <CommentWrap

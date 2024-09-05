@@ -13,8 +13,16 @@ export default function PostDetailPage() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [searchRecent, setSearchRecent] = useState<string[]>(() => {
+    if (typeof window !== 'undefined') {
+      const storedTags = localStorage.getItem('recentSearchTags');
+      return storedTags ? JSON.parse(storedTags) : [];
+    }
+    return [];
+  });
+
   useEffect(() => {
-    console.log('PostDetailPage - userDetai,@!@!@!@!@!@!:', userDetail);
+    console.log('PostDetailPage - userDetail:', userDetail);
     console.log('PostDetailPage - numericPostId:', numericPostId);
     if (userDetail && numericPostId !== null) {
       setIsLoading(false);
@@ -37,6 +45,7 @@ export default function PostDetailPage() {
   if (!userDetail || numericPostId === null) {
     return <div>Loading...</div>;
   }
+
   const nickname = userDetail.post?.nickname ?? '';
   const imageUrl = userDetail.post?.files[0]?.fileUrl ?? '';
 
@@ -58,6 +67,8 @@ export default function PostDetailPage() {
         isLastPage={commentsData.isLastPage}
         nickname={nickname}
         imageUrl={imageUrl}
+        searchRecent={searchRecent} 
+        setSearchRecent={setSearchRecent} 
       />
       <BotContainer
         onAddComment={commentsData.handleAddComment}

@@ -75,6 +75,8 @@ export type PostArray = {
   saved: boolean;
   createdDate: any;
   boundary: string;
+  isPhoto?: boolean;
+  isVideo?: boolean; 
 };
 
 export type PostsData = {
@@ -194,4 +196,57 @@ export type TempPostCreateData = {
   tempSave: boolean;
   boundary: string;
   photos?: { media_file: string }[];
+};
+
+export type UserSearchData = {
+  nickname: string;
+  profileUrl: string;
+  postCount: number;
+  savedPostCount: number;
+  followerCount: number;
+  isFollowing: boolean;
+};
+
+export type PostSearchResponse = {
+  code: number;
+  message: string;
+  data: {
+    cursorId: number;
+    postSummaryList: {
+      content: {
+        postId: number;
+        photoId: number;
+        photoUrl: string;
+        isPhoto: boolean;
+        isVideo: boolean;
+        boundary: "ALL" | "FOLLOW" | "NONE";
+        like: boolean;
+        saved: boolean;
+        createdDate: string | null; 
+      }[];
+      pageable: {
+        pageNumber: number;
+        pageSize: number;
+        sort: {
+          empty: boolean;
+          sorted: boolean;
+          unsorted: boolean;
+        };
+        offset: number;
+        paged: boolean;
+        unpaged: boolean;
+      };
+      size: number;
+      number: number;
+      sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+      };
+      numberOfElements: number;
+      first: boolean;
+      last: boolean;
+      empty: boolean;
+    };
+  };
 };

@@ -1,29 +1,53 @@
 import { useEffect, useState } from 'react';
 import { posts } from '../../../constants/example';
 
+type TagResult = {
+  tagName: string;
+  tagImageUrl: string;
+  photo: boolean;
+  video: boolean;
+};
+
 type SearchWordProps = {
   searchWords: typeof posts;
   onTagClick: (tag: string) => void;
   searchTerm: string;
+  tagResults: TagResult[];
 };
 
-// 검색어 컴포넌트
 export default function SearchWord({
   searchWords,
   onTagClick,
   searchTerm,
+  tagResults,
 }: SearchWordProps) {
-  // 연관 검색어 랜덤 출력 (임시 함수)
-  const [displayWords, setDisplayWords] = useState(() =>
-    posts.sort(() => 0.5 - Math.random()).slice(0, 14),
-  );
+  const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
-    setDisplayWords(searchWords);
-  }, [searchWords]);
+    if (searchTerm.length > 0) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+      const filteredResults = tagResults.filter((result) =>
+        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
+      );
+
+      setDisplayWords(filteredResults);
+    } else if (tagResults.length > 0) {
+      setDisplayWords(tagResults);
+    } else {
+      setDisplayWords(
+        searchWords.map((post) => ({
+          tagName: post.data.tags[0].tagName,
+          tagImageUrl: post.data.postImageUrls[0],
+          photo: true,
+          video: false,
+        })),
+      );
+    }
+  }, [searchWords, tagResults, searchTerm]);
 
   return (
-    <div className="">
+    <div>
       <p className="text-14px-normal-dP">
         {searchTerm.length > 0 ? '연관 검색어' : '추천 검색어'}
       </p>
@@ -43,18 +67,45 @@ export default function SearchWord({
             justify-center 
             rounded-2xl
             bg-textDarkPurple 
-            bg-cover 
-            bg-center p-3 xs:w-[calc(50%-6px)] 
+            p-3 xs:w-[calc(50%-6px)] 
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            style={{
-              backgroundImage: `url(${item.data.postImageUrls[0]})`,
+            onClick={() => {
+              onTagClick(item.tagName);
             }}
-            onClick={() => onTagClick(item.data.tags[0].tagName)}
           >
-            <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
-            <div className="relative text-[0.94rem] font-extrabold text-white">
-              {item.data.tags[0].tagName}
+            {item.video ? (
+              <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
+                <video
+                  src={item.tagImageUrl}
+                  autoPlay
+                  loop
+                  muted
+                  style={{
+                    objectFit: 'cover',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                />
+              </div>
+            ) : item.photo && item.tagImageUrl ? (
+              <div
+                className="absolute inset-0 rounded-2xl"
+                style={{
+                  backgroundImage: `url(${item.tagImageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
+              </div>
+            ) : null}
+
+            <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
+              {item.tagName}
             </div>
           </button>
         ))}
