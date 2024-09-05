@@ -3,7 +3,7 @@
 import SearchIcon from '../../../public/assets/svg/search.svg';
 import CloseIcon from '../../../public/assets/svg/close.svg';
 import { useEffect, useState, useCallback } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import SearchRecent from './SearchRecent';
 import SearchWord from './SearchWord';
 import { posts } from '../../../constants/example';
@@ -25,6 +25,7 @@ const LOCAL_STORAGE_KEY = 'recentSearchTags';
 
 export default function SearchBar() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const initialKeyword = searchParams.get('keyword') || '';
 
@@ -45,10 +46,6 @@ export default function SearchBar() {
   const [userResults, setUserResults] = useState<any[]>([]);
   const [tagResults, setTagResults] = useState<any[]>([]);
 
-  useEffect(() => {
-    setIsDropdownOpen(false);
-  }, []);
-
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDropdownOpen(true);
@@ -60,6 +57,7 @@ export default function SearchBar() {
     setSearchError('');
     setUserResults([]);
     setTagResults([]);
+    setIsDropdownOpen(false);
   };
 
   const performSearch = async (
@@ -102,12 +100,10 @@ export default function SearchBar() {
           }
         }
       }
-      setIsDropdownOpen(false);
     } catch (error) {
       console.error('Error fetching search results:', error);
       setUserResults([]);
       setTagResults([]);
-      setIsDropdownOpen(false);
       if (showError) {
         setSearchError('검색 중 오류가 발생했습니다.');
       }
@@ -139,6 +135,7 @@ export default function SearchBar() {
 
       router.push(`/search/posts?keyword=${encodeURIComponent(searchTerm)}`);
       performSearch(searchTerm, true);
+      setIsDropdownOpen(false);
 
       if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
         const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
@@ -148,7 +145,6 @@ export default function SearchBar() {
     }
   };
 
-  // 검색 제출
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -158,26 +154,22 @@ export default function SearchBar() {
 
     router.push(`/search/posts?keyword=${encodeURIComponent(searchTerm)}`);
     performSearch(searchTerm, true);
+    setIsDropdownOpen(false);
 
     if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
       const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
       setSearchRecent(updatedRecent);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
     }
-
-    setIsDropdownOpen(false);
   };
 
-  // 태그 클릭
   const handleTagClick = (tag: string) => {
     console.log('handleTagClick called with tag:', tag);
-
-    // 만약 태그가 '@'로 시작하면 프로필 페이지로 이동
+    setIsDropdownOpen(false);
     if (tag.startsWith('@')) {
       const nickname = tag.slice(1);
       router.push(`/profile/${nickname}`);
     } else {
-      // 일반 태그일 경우 검색 수행
       setSearchTerm(tag);
       performSearch(tag, true);
 
@@ -193,7 +185,6 @@ export default function SearchBar() {
 
     setIsDropdownOpen(false);
   };
-
 
   const handleProfileClick = (nickname: string) => {
     const searchFormat = `@${nickname}`;
@@ -219,17 +210,15 @@ export default function SearchBar() {
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
     if (initialKeyword) {
       setSearchTerm(initialKeyword);
       performSearch(initialKeyword);
     }
-  }, [initialKeyword]);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [initialKeyword, pathname]);
 
   const handleClearRecent = () => {
     setSearchRecent([]);
@@ -305,12 +294,16 @@ export default function SearchBar() {
             setTags={setSearchRecent}
             setSearchTerm={setSearchTerm}
             performSearch={performSearch}
+            setIsDropdownOpen={setIsDropdownOpen}
           />
           <>
             {!searchTerm.startsWith('@') ? (
               <SearchWord
                 searchWords={filteredWords}
-                onTagClick={handleTagClick}
+                onTagClick={(tag) => {
+                  handleTagClick(tag);
+                  setIsDropdownOpen(false);
+                }}
                 searchTerm={searchTerm}
                 tagResults={tagResults}
               />

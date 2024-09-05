@@ -14,6 +14,7 @@ type SearchRecentProps = {
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   performSearch: (searchQuery: string, showError?: boolean) => void;
+  setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // 로컬 스토리지 키
@@ -29,6 +30,7 @@ export default function SearchRecent({
   setTags,
   setSearchTerm,
   performSearch,
+  setIsDropdownOpen,
 }: SearchRecentProps) {
   const router = useRouter();
 
@@ -73,6 +75,7 @@ export default function SearchRecent({
       setTags(updatedTags);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTags));
     }
+    setIsDropdownOpen(false);
   };
 
   return (

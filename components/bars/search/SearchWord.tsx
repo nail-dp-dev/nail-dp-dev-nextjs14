@@ -15,7 +15,6 @@ type SearchWordProps = {
   tagResults: TagResult[];
 };
 
-// 연관 검색어 결과
 export default function SearchWord({
   searchWords,
   onTagClick,
@@ -59,58 +58,57 @@ export default function SearchWord({
         lg:max-h-[350px]
         xl:max-h-[230px]"
       >
-        {displayWords.map((item, index) => {
-
-          return (
-            <button
-              key={index}
-              className="relative flex h-[110px] w-full 
-              snap-start flex-col
-              items-center
-              justify-center 
-              rounded-2xl
-              bg-textDarkPurple 
-              p-3 xs:w-[calc(50%-6px)] 
-              sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
-              lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-              onClick={() => onTagClick(item.tagName)}
-            >
-              {item.video ? (
-                <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
-                  <video
-                    src={item.tagImageUrl}
-                    autoPlay
-                    loop
-                    muted
-                    style={{
-                      objectFit: 'cover',
-                      width: '100%',
-                      height: '100%',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                    }}
-                  />
-                </div>
-              ) : item.photo && item.tagImageUrl ? (
-                <div
-                  className="absolute inset-0 rounded-2xl"
+        {displayWords.map((item, index) => (
+          <button
+            key={index}
+            className="relative flex h-[110px] w-full 
+            snap-start flex-col
+            items-center
+            justify-center 
+            rounded-2xl
+            bg-textDarkPurple 
+            p-3 xs:w-[calc(50%-6px)] 
+            sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
+            lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
+            onClick={() => {
+              onTagClick(item.tagName);
+            }}
+          >
+            {item.video ? (
+              <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
+                <video
+                  src={item.tagImageUrl}
+                  autoPlay
+                  loop
+                  muted
                   style={{
-                    backgroundImage: `url(${item.tagImageUrl})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    objectFit: 'cover',
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
                   }}
-                >
-                  <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
-                </div>
-              ) : null}
-
-              <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
-                {item.tagName}
+                />
               </div>
-            </button>
-          );
-        })}
+            ) : item.photo && item.tagImageUrl ? (
+              <div
+                className="absolute inset-0 rounded-2xl"
+                style={{
+                  backgroundImage: `url(${item.tagImageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
+              </div>
+            ) : null}
+
+            <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
+              {item.tagName}
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
