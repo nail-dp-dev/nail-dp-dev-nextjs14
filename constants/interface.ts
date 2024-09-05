@@ -14,6 +14,7 @@ export interface ControlBarProps {
 }
 
 export interface IconButtonProps {
+  postId?: number;
   width: string;
   height: string;
   isClicked?: boolean;
@@ -33,6 +34,9 @@ export interface PostBoxNewProps {
   setSharedCount: React.Dispatch<React.SetStateAction<number>>;
   boundary: 'ALL' | 'FOLLOW' | 'NONE';
   isOptional: boolean;
+  isPhoto?: boolean;
+  isVideo?: boolean;
+  onLikeToggle?: () => void; 
 }
 export interface ArchiveBoxNewProps {
   showType: string;

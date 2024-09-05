@@ -12,6 +12,7 @@ import GeneralAction from '../buttons/option-menu/GeneralAction';
 import BoxCommonButton from '../ui/BoxCommonButton';
 import { useGeneralAction } from '../../hooks/useGeneralAction';
 import NoArchiveImage from '../../public/assets/svg/no-archive.svg';
+import NoArchivePng from '../../public/assets/img/noArchiveImage.png'; 
 import NoArchiveFont from '../../public/assets/svg/no-archive-font.svg';
 import { useVisibility } from '../../hooks/useVisibility';
 
@@ -123,6 +124,7 @@ export default function ArchiveBox({
             initialBoundary={currentBoundary}
             onBoundaryChange={handleBoundaryChange}
             archiveName={archiveName}
+            imageUrl={photoUrl || ''}
             onDeleteClick={handleDelete}
           />
         </div>
@@ -150,6 +152,7 @@ export default function ArchiveBox({
                 initialBoundary={currentBoundary}
                 onBoundaryChange={handleBoundaryChange}
                 archiveName={archiveName}
+                imageUrl={photoUrl || ''}
                 onDeleteClick={handleDelete}
               />
             </div>

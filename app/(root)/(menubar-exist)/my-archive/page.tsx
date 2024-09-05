@@ -33,9 +33,6 @@ export default function MyArchivePage() {
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  console.log(archivesData, '찐 아이디')
-
-  // 게시글 더 가져오기 Function
   const fetchMorePosts = async () => {
     const currentCursorId = cursorId;
     let data = await getAllArchivesData({ category, cursorId: currentCursorId });
@@ -67,7 +64,6 @@ export default function MyArchivePage() {
     }
   };
   
-  // 좋아요 누른 게시글 가져오기 Function
   const refreshPosts = async () => {
     setCursorId(0);
     setMessage('');
@@ -78,18 +74,13 @@ export default function MyArchivePage() {
     setIsLast(false);
   };
 
-  // Refresh posts when category changes
   useEffect(() => {
     refreshPosts();
   }, [category]);
 
   // 
   useEffect(() => {
-    console.log('기본 useEffect...')
-
-    // 처음 렌더링이면
     if (isFirstRendering) {
-      // 게시글 가져오기
       fetchMorePosts();
     }
 
@@ -168,7 +159,7 @@ export default function MyArchivePage() {
             </button>
           </div>
         </div>
-        </div>
+      </div>
         {
           showType === 'album' && archivesData ?
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>

@@ -13,7 +13,6 @@ export default function HeartButton(
     height,
     isClicked,
     isGetAllLiked,
-    active,
   }
   : IconButtonProps
 ) {
@@ -23,7 +22,6 @@ export default function HeartButton(
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    console.log('클릭...!')
     setIsClick(!isClick);
     setIsAnimate(true); 
     setTimeout(() =>{

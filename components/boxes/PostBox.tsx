@@ -16,7 +16,7 @@ import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
-import { setCommonModal, setArchiveModal } from '../../store/slices/modalSlice';
+import { setCommonModal, setArchivePost } from '../../store/slices/modalSlice';
 import { useVisibility } from '../../hooks/useVisibility';
 import BoxCommonButton from '../ui/BoxCommonButton';
 
@@ -31,7 +31,8 @@ function PostBox({
   setIsSuggestLoginModalShow,
   setSharedCount,
   boundary: initialBoundary,
-  isOptional
+  isOptional,
+  onLikeToggle,
 }: PostBoxNewProps) {
   const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -41,7 +42,9 @@ function PostBox({
   const { isVisible, handleDelete } = useVisibility();
 
   const [isLiked, setIsLiked] = useState(like);
-  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+  const [currentBoundary, setCurrentBoundary] = useState<
+    'ALL' | 'FOLLOW' | 'NONE'
+  >(initialBoundary);
 
   const dispatch = useDispatch();
 
@@ -66,7 +69,7 @@ function PostBox({
 
     console.log('Click...Plus!');
     dispatch(setCommonModal('archive'));
-    dispatch(setArchiveModal({ postId }));
+    dispatch(setArchivePost({ postId }));
   };
 
   const handlePostClick = (e: any, postId: number) => {
@@ -78,7 +81,7 @@ function PostBox({
     }
 
     if (isLoggedIn === 'loggedIn') {
-      router.push(`post/${postId}`);
+      router.push(`/post/${postId}`);
     }
   };
 
@@ -95,7 +98,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="box relative bg-red flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+      className="box relative  flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       {
@@ -142,6 +145,7 @@ function PostBox({
         className="absolute right-2 top-2 z-10"
       >
         <HeartButton
+          postId={postId}
           width="21px"
           height="19px"
           isClicked={isLiked}
@@ -153,6 +157,7 @@ function PostBox({
         className="absolute bottom-2 right-2 z-10"
       >
         <PlusButton
+          postId={postId}
           width="24px"
           height="24px"
           isClicked={saved}

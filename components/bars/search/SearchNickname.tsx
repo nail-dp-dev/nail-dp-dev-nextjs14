@@ -2,36 +2,38 @@ import React from 'react';
 import UserInfo from '../../ui/UserInfo';
 import UserImage from '../../ui/UserImage';
 import { useRouter } from 'next/navigation';
+import { UserSearchData } from '../../../types/dataType';
 
 type SearchNicknameProps = {
   searchTerm: string;
   onTagClick: (tag: string) => void;
-  followData: any[];
+  followData: UserSearchData[];
+  onProfileClick: (nickname: string) => void;
 };
 
-// 사용자 검색 결과 컴포넌트
 export default function SearchNickname({
   searchTerm,
   onTagClick,
   followData,
+  onProfileClick,
 }: SearchNicknameProps) {
   const router = useRouter();
 
   const filteredFollow =
-    searchTerm.startsWith('@') && searchTerm.length > 1
-      ? followData.filter(
-          (user) =>
-            user.data.nickname
-              .toLowerCase()
-              .includes(searchTerm.slice(1).toLowerCase()) ||
-            searchTerm
-              .slice(1)
-              .toLowerCase()
-              .includes(user.data.nickname.toLowerCase()),
-        )
+    searchTerm.length > 0
+      ? followData.filter((user) => {
+          const lowerCaseSearchTerm = searchTerm.toLowerCase();
+          const userNickname = user.nickname?.toLowerCase() || '';
+          if (searchTerm.startsWith('@')) {
+            return userNickname.includes(lowerCaseSearchTerm.slice(1));
+          } else {
+            return userNickname.includes(lowerCaseSearchTerm);
+          }
+        })
       : [];
 
   const handleProfileClick = (nickname: string) => {
+    onProfileClick(nickname);
     router.push(`/profile/${nickname}`);
   };
 
@@ -49,7 +51,7 @@ export default function SearchNickname({
       <div className="flex flex-wrap">
         {filteredFollow.map((user) => (
           <div
-            key={user.data.nickname}
+            key={user.nickname}
             className="w-1/3 p-1 
               xs:w-full 
               sm:w-full 
@@ -62,22 +64,22 @@ export default function SearchNickname({
             <button
               className="nickname-wrap button-tr group flex w-[310px] snap-end items-center 
                 rounded-2xl p-2 active:bg-darkPurple active:bg-opacity-10"
-              onClick={() => handleProfileClick(user.data.nickname)}
+              onClick={() => handleProfileClick(user.nickname)}
             >
               <div className="button-tr group-hover:brightness-75">
                 <UserImage
-                  src={user.data.profileUrl}
-                  alt={`${user.data.nickname}'s profile`}
+                  src={user.profileUrl}
+                  alt={`${user.nickname}'s profile`}
                   width={40}
                   height={40}
                 />
               </div>
               <div className="ml-4">
                 <UserInfo
-                  nickname={user.data.nickname}
-                  postsCount={user.data.postsCount}
-                  saveCount={user.data.saveCount}
-                  followerCount={user.data.followerCount}
+                  nickname={user.nickname}
+                  postsCount={user.postCount}
+                  saveCount={user.savedPostCount}
+                  followerCount={user.followerCount}
                   hoverStyle="group-hover:text-orange button-tr"
                   nicknameStyle="text-base font-medium"
                   statsStyle="text-sm font-normal"

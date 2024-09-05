@@ -1,5 +1,5 @@
 import MenuBar from '../../components/bars/MenuBar';
-import CommonModalLayout from '../../components/modal/common/commonModalLayout';
+import CommonModalLayout from '../../components/modal/common/CommonModalLayout';
 import MessageModal from '../../components/modal/message/MessageModal';
 
 export default function HomeLayout({

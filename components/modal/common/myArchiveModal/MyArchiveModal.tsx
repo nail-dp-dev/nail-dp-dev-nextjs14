@@ -5,6 +5,7 @@ import {
   commonModalClose,
   selectArchiveModalStatus,
   selectCommonModalStatus,
+  setArchiveState
 } from '../../../../store/slices/modalSlice';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import MyArchiveFolder from '../../../../public/assets/svg/my-archive-folder.svg';
@@ -23,6 +24,7 @@ import { archiveModalElements } from '../../../../constants';
 import Image from 'next/image';
 import { postSetArchive } from '../../../../api/post/postSetArchive';
 import { archiveArray } from '../../../../constants/interface';
+import Video from '../../../ui/Video';
 
 export default function MyArchiveModal() {
   const [isName, setIsName] = useState('');
@@ -59,19 +61,23 @@ export default function MyArchiveModal() {
     setIsBoundary(e.target.value);
   };
 
-  const createArchive = async (isName: string, isBoundary: string) => {
-    if (isName.length > 0) {      
+  const createArchive = async (
+    isName: string,
+    isBoundary: string,
+    postId: number,
+  ) => {
+    if (isName.length > 0) {
       const success = await postArchiveCreate(isName, isBoundary);
-      archiveData()
-      setIsName("")
-    }else{
-      console.log("모달로 변경: 아카이브이름을 입력해주세요!");
+      setArchive(success.data, postId);
+    } else {
+      console.log('모달로 변경: 아카이브이름을 입력해주세요!');
     }
   };
 
   const setArchive = async (archiveId: number, postId: number) => {
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
+      dispatch(setArchiveState({state:true}))
       closeModal();
     } else {
       setIsBell(true);
@@ -304,8 +310,10 @@ export default function MyArchiveModal() {
                 </div>
                 <div className="flex flex-1 justify-center pt-[25px]">
                   <button
-                    className="h-[40px] w-[250px] rounded-full bg-purple"
-                    onClick={(e) => createArchive(isName, isBoundary)}
+                    className={`${isName.length >= 1 ? "text-white bg-purple": "text-darkModeGray bg-lightGray"} h-[40px] w-[250px] rounded-full font-bold`}
+                    onClick={(e) =>
+                      createArchive(isName, isBoundary, ArchivePostId!)
+                    }
                   >
                     아카이브 생성
                   </button>
@@ -353,13 +361,22 @@ export default function MyArchiveModal() {
                               className={`flex items-center justify-center ${isType == 'album' ? 'h-[130px] w-[130px] rounded-[17px]' : 'h-[66px] w-[66px] rounded-[11px]'} ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''} `}
                             >
                               {item.archiveImgUrl !== null ? (
-                                <Image
-                                  className={`${isType == 'album' ? 'h-[120px] w-[120px] rounded-[12px]' : 'h-[56px] w-[56px] rounded-[6px]'} `}
-                                  src={item.archiveImgUrl}
-                                  alt={''}
-                                  width={120}
-                                  height={120}
-                                />
+                                item.archiveImgUrl.endsWith('.mov') ||
+                                item.archiveImgUrl.endsWith('.mp4') ? (
+                                  <Video
+                                    src={item.archiveImgUrl}
+                                    width={'100%'}
+                                    height={'100%'}
+                                  />
+                                ) : (
+                                  <Image
+                                    className={`${isType == 'album' ? 'h-[120px] w-[120px] rounded-[12px]' : 'h-[56px] w-[56px] rounded-[6px]'} `}
+                                    src={item.archiveImgUrl}
+                                    alt={''}
+                                    width={120}
+                                    height={120}
+                                  />
+                                )
                               ) : (
                                 <ArchiveNullIcon
                                   width={`${isType == 'album' ? 120 : 56}`}
@@ -394,14 +411,14 @@ export default function MyArchiveModal() {
                 </div>
               </div>
             ) : (
-              <div className={`${isArchiveMenu == 'myArchive' ? "" : "hidden"} relative flex flex-1 flex-col items-center justify-center`}>
+              <div
+                className={`${isArchiveMenu == 'myArchive' ? '' : 'hidden'} relative flex flex-1 flex-col items-center justify-center`}
+              >
                 <DottedAlbum />
-                <div className="absolute w-[90px] h-[30px] rounded-full text-center bg-lightGray">
-                  <p className="text-[18px]">
-                    비어있음
-                  </p>
+                <div className="absolute h-[30px] w-[90px] rounded-full bg-lightGray text-center">
+                  <p className="text-[18px]">비어있음</p>
                 </div>
-                <p className="text-[18px] mt-[20px] text-darkGray">
+                <p className="mt-[20px] text-[18px] text-darkGray">
                   새로운 아카이브를 생성하세요.
                 </p>
               </div>

@@ -73,6 +73,7 @@ export default function ImageUploadContainer({
         type: 'one',
         button: '',
         user: '',
+        actionType: 'archive'
       }),
     );
     dispatch(setCommonModal('alarm'));

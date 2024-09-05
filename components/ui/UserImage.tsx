@@ -17,6 +17,7 @@ export default function UserImage({ src, alt, width, height }: UserImageProps) {
         position: 'relative',
         overflow: 'hidden',
         borderRadius: '50%',
+        flexShrink: 0,
       }}
     >
       <Image
