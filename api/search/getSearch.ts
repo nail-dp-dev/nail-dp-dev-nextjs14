@@ -49,17 +49,22 @@ export async function getTagSearchResults(keyword: string) {
 }
 
 export async function getPostSearchResults(
-  keyword: string,
+  keywords: string[],
   cursorId?: number,
   size?: number,
 ) {
   try {
+    const queryParams = keywords
+      .map((keyword) => `keywords=${encodeURIComponent(keyword)}`)
+      .join('&');
+    const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/search/posts?${queryParams}`;
+
     const api =
       cursorId === undefined
-        ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&size=${20}`
-        : size! <= 5
-          ? `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}`
-          : `${process.env.NEXT_PUBLIC_API_URL}/search/posts?keyword=${keyword}&cursorId=${cursorId}&size=${20}`;
+        ? `${baseUrl}&size=${20}`
+        : size !== undefined && size <= 5
+          ? `${baseUrl}&cursorId=${cursorId}`
+          : `${baseUrl}&cursorId=${cursorId}&size=${20}`;
 
     console.log('요청 URL:', api);
 

@@ -67,8 +67,10 @@ export default function SearchResultsPage() {
 
     setIsLoading(true);
     try {
+      const keywordsArray = keyword.split(' ').filter(Boolean);
+      console.log('전달된 키워드:', keywordsArray);
       const response: PostSearchResponse | null = await getPostSearchResults(
-        keyword,
+        keywordsArray, 
         cursor,
         layoutNum,
       );
