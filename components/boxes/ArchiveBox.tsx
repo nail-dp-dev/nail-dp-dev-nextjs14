@@ -57,7 +57,7 @@ export default function ArchiveBox({
 
   return (
     <div
-      className={` relative mb-[30px] flex ${showType === 'list' && 'h-[72px] items-center gap-[16px] px-[16px]'}`}
+      className={`relative mb-[30px] flex ${showType === 'list' && 'h-[72px] items-center gap-[16px] px-[16px]'}`}
       style={boxStyle}
     >
       <Link
@@ -137,7 +137,7 @@ export default function ArchiveBox({
             height="20px"
             showGeneralAction={showGeneralAction}
             position="nothing"
-            className="relative z-30 p-2"
+            className="relative z-30 p-2 bg-red"
           />
           {showType === 'list' && showGeneralAction && (
             <div

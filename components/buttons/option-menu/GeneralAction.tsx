@@ -169,7 +169,7 @@ export default function GeneralAction({
   const actionElements = type === 'archive' ? archiveActionElements : postActionElements;
 
   return (
-    <div className="text-14px-normal-dP absolute z-10 ml-2 mt-3 w-[120px] whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-[13px] shadow-option-modal-shadow">
+    <div className="text-14px-normal-dP absolute z-40 bg-white ml-2 mt-3 w-[120px] whitespace-nowrap rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow">
       {actionElements.map((item, index) => {
         const IconComponent = Icons[item.icon as keyof typeof Icons];
         const handleClick = item.label.includes('설정')

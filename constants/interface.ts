@@ -32,6 +32,7 @@ export interface PostBoxNewProps {
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setSharedCount: React.Dispatch<React.SetStateAction<number>>;
   boundary: 'ALL' | 'FOLLOW' | 'NONE';
+  isOptional: boolean;
 }
 export interface ArchiveBoxNewProps {
   showType: string;

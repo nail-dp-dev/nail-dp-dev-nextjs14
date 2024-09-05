@@ -252,6 +252,7 @@ export default function DetailArchivePage() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
+                  isOptional={false}
                 />
               ))}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
@@ -273,6 +274,7 @@ export default function DetailArchivePage() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
+                  isOptional={false}
                 />
               ))}
             {likedButtonState &&
