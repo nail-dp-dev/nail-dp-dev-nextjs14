@@ -13,6 +13,21 @@ import { selectButtonState } from '../../../../../store/slices/getLikedPostsSlic
 import { selectNumberOfBoxes } from '../../../../../store/slices/boxLayoutSlice';
 import SearchNotice from '../../../../../components/notice/SearchNotice';
 
+const LOCAL_STORAGE_KEY = 'recentSearchTags';
+
+// 검색어를 최근 검색어에 추가
+const addToRecentSearches = (term: string) => {
+  const isSearchRecentEnabled = true;
+  const searchRecent = JSON.parse(
+    localStorage.getItem(LOCAL_STORAGE_KEY) || '[]',
+  );
+
+  if (isSearchRecentEnabled && !searchRecent.includes(term)) {
+    const updatedRecent = [term, ...searchRecent].slice(0, 30);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
+  }
+};
+
 // 검색 결과 페이지
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
@@ -45,7 +60,7 @@ export default function SearchResultsPage() {
     fetchSearchResults(newKeyword);
   }, [searchParams]);
 
-  //검색 결과페이지 초기화 및 가져옴
+  // 검색 결과 초기화 및 가져옴
   useEffect(() => {
     if (searchTerm) {
       resetSearch();
@@ -135,8 +150,11 @@ export default function SearchResultsPage() {
   // 검색어에 태그 추가
   const handleTagClick = (tag: string) => {
     const newSearchTerm = searchTerm ? `${searchTerm} ${tag}` : tag;
+    setSearchTerm(newSearchTerm);
     const encodedSearchTerm = encodeURIComponent(newSearchTerm);
     router.push(`/search/posts?keyword=${encodedSearchTerm}`);
+
+    addToRecentSearches(newSearchTerm);
   };
 
   useEffect(() => {

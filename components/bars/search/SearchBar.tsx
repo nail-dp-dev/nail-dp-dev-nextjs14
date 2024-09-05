@@ -60,6 +60,20 @@ export default function SearchBar() {
     setIsDropdownOpen(false);
   };
 
+  const addToRecentSearches = (term: string) => {
+    const normalizedTerm = term.trim();
+    const existsInRecent = searchRecent.some(
+      (recent) => recent.trim() === normalizedTerm,
+    );
+
+    if (isSearchRecentEnabled && !existsInRecent) {
+      const updatedRecent = [normalizedTerm, ...searchRecent].slice(0, 30);
+      setSearchRecent(updatedRecent);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
+    }
+  };
+
+  // 검색 실행 함수
   const performSearch = async (
     searchQuery: string,
     showError: boolean = false,
@@ -115,6 +129,7 @@ export default function SearchBar() {
     [],
   );
 
+  // 검색 입력 값 변경 핸들러
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
@@ -137,11 +152,7 @@ export default function SearchBar() {
       performSearch(searchTerm, true);
       setIsDropdownOpen(false);
 
-      if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
-        const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
-        setSearchRecent(updatedRecent);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
-      }
+      addToRecentSearches(searchTerm);
     }
   };
 
@@ -156,30 +167,21 @@ export default function SearchBar() {
     performSearch(searchTerm, true);
     setIsDropdownOpen(false);
 
-    if (isSearchRecentEnabled && !searchRecent.includes(searchTerm)) {
-      const updatedRecent = [searchTerm, ...searchRecent].slice(0, 30);
-      setSearchRecent(updatedRecent);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
-    }
+    addToRecentSearches(searchTerm);
   };
 
   const handleTagClick = (tag: string) => {
-    setIsDropdownOpen(false);
+    const newSearchTerm = searchTerm ? `${searchTerm} ${tag}` : tag;
+    setSearchTerm(newSearchTerm);
+    performSearch(newSearchTerm, true);
+
+    addToRecentSearches(newSearchTerm);
+
     if (tag.startsWith('@')) {
       const nickname = tag.slice(1);
       router.push(`/profile/${nickname}`);
     } else {
-      setSearchTerm(tag);
-      performSearch(tag, true);
-
-      if (isSearchRecentEnabled && !searchRecent.includes(tag)) {
-        const updatedRecent = [tag, ...searchRecent].slice(0, 30);
-        setSearchRecent(updatedRecent);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
-        console.log('Updated searchRecent:', updatedRecent);
-      }
-
-      router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
+      router.push(`/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`);
     }
 
     setIsDropdownOpen(false);
@@ -190,11 +192,7 @@ export default function SearchBar() {
     router.push(`/profile/${nickname}`);
     setIsDropdownOpen(false);
 
-    if (isSearchRecentEnabled && !searchRecent.includes(searchFormat)) {
-      const updatedRecent = [searchFormat, ...searchRecent].slice(0, 30);
-      setSearchRecent(updatedRecent);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedRecent));
-    }
+    addToRecentSearches(searchFormat);
   };
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -224,6 +222,7 @@ export default function SearchBar() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
   };
 
+  // 최근 검색어 저장 기능 on/off
   const toggleSearchRecent = () => {
     setIsSearchRecentEnabled((prevState) => !prevState);
   };
