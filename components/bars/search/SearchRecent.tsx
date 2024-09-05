@@ -19,6 +19,7 @@ type SearchRecentProps = {
 
 // 로컬 스토리지 키
 const LOCAL_STORAGE_KEY = 'recentSearchTags';
+const LOCAL_STORAGE_SEARCH_ENABLED_KEY = 'isSearchRecentEnabled';
 
 // 최근 검색, 전체 삭제, 검색 기록 저장 끄기
 export default function SearchRecent({
@@ -34,11 +35,22 @@ export default function SearchRecent({
 }: SearchRecentProps) {
   const router = useRouter();
 
-  // 로컬 스토리지에서 검색어 불러오기
+  // 로컬 스토리지에서 검색어와 설정 불러오기
   useEffect(() => {
     const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (storedTags) {
       setTags(JSON.parse(storedTags));
+    }
+
+    // 로컬 스토리지에서 검색 기록 저장 설정 불러오기
+    const storedIsSearchRecentEnabled = localStorage.getItem(
+      LOCAL_STORAGE_SEARCH_ENABLED_KEY,
+    );
+    if (storedIsSearchRecentEnabled !== null) {
+      const isEnabled = JSON.parse(storedIsSearchRecentEnabled);
+      if (isEnabled !== isSearchRecentEnabled) {
+        toggleSearchRecent();
+      }
     }
   }, [setTags]);
 
@@ -48,6 +60,14 @@ export default function SearchRecent({
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tags));
     }
   }, [tags, isSearchRecentEnabled]);
+
+  // 검색 기록 저장 설정 변경 시 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_SEARCH_ENABLED_KEY,
+      JSON.stringify(isSearchRecentEnabled),
+    );
+  }, [isSearchRecentEnabled]);
 
   // 검색어 전체 삭제
   const handleClearRecent = () => {
