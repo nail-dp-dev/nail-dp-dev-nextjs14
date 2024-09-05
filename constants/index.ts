@@ -266,4 +266,9 @@ export const myArchiveElements = [
 export const archiveModalElements = [
   { name: 'archiveCreate', desc: '새로운 아카이브 생성' },
   { name: 'myArchive', desc: '내 아카이브' }
+]
+
+export const ProfileElements = [
+  { name: '게시물', desc: 'post' },
+  { name: '아카이브', desc: 'Archive' }
 ];
