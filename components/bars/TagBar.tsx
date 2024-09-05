@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { tagElements } from '../../constants';
 import MinusSVG from '../../public/assets/svg/minus.svg';
 import PlusSVG from '../../public/assets/svg/plus.svg';
@@ -14,16 +14,23 @@ import {
 } from '../../store/slices/boxLayoutSlice';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 
+interface Tag {
+  name: string;
+  desc: string;
+}
+
 interface TagBarProps {
   onTagClick: (tag: string) => void;
   isLikedOnly: boolean;
   activeTags: string[];
+  searchTerm: string;
 }
 
 export default function TagBar({
   onTagClick,
   isLikedOnly,
   activeTags,
+  searchTerm,
 }: TagBarProps) {
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -31,20 +38,25 @@ export default function TagBar({
   );
   const isLoggedIn = useSelector(selectLoginStatus);
 
-  const filteredTags = useMemo(
-    () => tagElements.filter((tag) => !activeTags.includes(tag.name)),
-    [activeTags],
-  );
+  const [visibleTags, setVisibleTags] = useState<Tag[]>([]);
 
-  const [visibleTags, setVisibleTags] = useState(filteredTags);
+  // 태그 필터링
+  useEffect(() => {
+    const allActiveTags = new Set(activeTags.map((tag) => tag.trim()));
+    if (searchTerm) {
+      searchTerm.split(' ').forEach((term) => allActiveTags.add(term.trim()));
+    }
+    const filteredTags = tagElements.filter(
+      (tag) => !allActiveTags.has(tag.name),
+    );
+
+    setVisibleTags(filteredTags);
+  }, [activeTags, searchTerm]);
 
   useEffect(() => {
     const handleResize = () => {
       const maxVisibleTags = Math.floor(window.innerWidth / 130);
-
-      if (maxVisibleTags !== visibleTags.length) {
-        setVisibleTags(filteredTags.slice(0, maxVisibleTags));
-      }
+      setVisibleTags((prevTags) => prevTags.slice(0, maxVisibleTags));
     };
 
     handleResize();
@@ -53,7 +65,7 @@ export default function TagBar({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [filteredTags, visibleTags.length]);
+  }, []);
 
   return (
     <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
@@ -63,8 +75,7 @@ export default function TagBar({
             <button
               key={index}
               onClick={() => onTagClick(tag.name)}
-              className={`hashtag-layout hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center
-                justify-center border-none bg-hashTagGray transition-all`}
+              className={`hashtag-layout hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center justify-center border-none bg-hashTagGray transition-all`}
             >
               <p className="text-[14px] font-[700]">{tag.name}</p>
             </button>

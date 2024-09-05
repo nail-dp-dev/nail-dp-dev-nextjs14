@@ -172,6 +172,7 @@ export default function SearchResultsPage() {
         onTagClick={handleTagClick}
         isLikedOnly={isLikedOnly}
         activeTags={activeTags}
+        searchTerm={searchTerm}
       />
 
       {isLoading && postsData.length === 0 ? (
