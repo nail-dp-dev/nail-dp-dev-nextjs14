@@ -49,13 +49,13 @@ export async function getTagSearchResults(keyword: string) {
 }
 
 export async function getPostSearchResults(
-  keywords: string[],
+  keyword: string[],
   cursorId?: number,
   size?: number,
 ) {
   try {
-    const queryParams = keywords
-      .map((keyword) => `keywords=${encodeURIComponent(keyword)}`)
+    const queryParams = keyword
+      .map((keyword) => `keyword=${encodeURIComponent(keyword)}`)
       .join('&');
     const baseUrl = `${process.env.NEXT_PUBLIC_API_URL}/search/posts?${queryParams}`;
 
