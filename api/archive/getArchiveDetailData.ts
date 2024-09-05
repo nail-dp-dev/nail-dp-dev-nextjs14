@@ -1,19 +1,19 @@
-import { PostsDataProps } from '../../constants/interface';
+import { ArchiveDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({ category, size, cursorId }: PostsDataProps) => {
-
+export const getArchiveDetailData = async ({ archiveId, size, cursorId }: ArchiveDataProps) => {
+      
   try {
-
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/archive/${archiveId}?`
     
     if (size) {
-      url += `&size=${size}`
+      url += `size=${size}`
     }
 
-    console.log(size, 'size...')
     if (cursorId !== 0) {
-      url += `&oldestPostId=${cursorId}`
+      url += `&cursorId=${cursorId}`
     }
+
+    console.log(url)
 
     const response = await fetch(url, {
       method: "GET",
@@ -23,22 +23,24 @@ export const getAllPostsData = async ({ category, size, cursorId }: PostsDataPro
       credentials: 'include',
     })
 
+    console.log(response,'리슴폰슨...')
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     return await response.json();
-
+    
   } catch (error) {
-
     if (error instanceof TypeError) {
       console.error('Network error or invalid JSON:', error);
-    } else if (error instanceof Error && error.message.startsWith('HTTP error!')) {
+    } else if (
+      error instanceof Error &&
+      error.message.startsWith('HTTP error!')
+    ) {
       console.error('Server returned an error response:', error);
     } else {
       console.error('Unexpected error:', error);
     }
-
   }
-
 };

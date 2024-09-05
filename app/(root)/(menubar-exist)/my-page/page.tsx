@@ -2,9 +2,7 @@
 
 import PostBox from '../../../../components/boxes/PostBox';
 import PostCreate from '../../../../components/animations/PostCreateIcon';
-import CategoryBar from '../../../../components/bars/CategoryBar';
-import { myPageCategoryElements } from '../../../../constants';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserImage from '../../../../components/ui/UserImage';
 import UserInfo from '../../../../components/ui/UserInfo';
 import { useSelector } from 'react-redux';

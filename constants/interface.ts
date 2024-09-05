@@ -9,6 +9,10 @@ export interface CategoryBarProps {
   setCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export interface ControlBarProps {
+  archiveName: string;
+}
+
 export interface IconButtonProps {
   postId?: number;
   width: string;
@@ -29,6 +33,7 @@ export interface PostBoxNewProps {
   setIsSuggestLoginModalShow: React.Dispatch<React.SetStateAction<boolean>>;
   setSharedCount: React.Dispatch<React.SetStateAction<number>>;
   boundary: 'ALL' | 'FOLLOW' | 'NONE';
+  isOptional: boolean;
   isPhoto?: boolean;
   isVideo?: boolean;
   onLikeToggle?: () => void; 
@@ -125,10 +130,22 @@ export interface PostsDataProps {
   size: number;
   cursorId?: number;
 }
+
 export interface PostsLikedDataProps {
   category: string;
   size: number;
   cursorLikedId?: number;
+}
+
+export interface ArchiveDataProps{
+  archiveId: number;
+  size: number;
+  cursorId?: number;
+}
+
+export interface ArchivesDataProps {
+  category: string;
+  cursorId?: number;
 }
 
 export interface VideoProps {

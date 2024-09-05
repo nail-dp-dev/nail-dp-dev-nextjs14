@@ -79,6 +79,28 @@ export type PostArray = {
   isVideo?: boolean; 
 };
 
+export type ArchiveArray = {
+  postId: number;
+  photoId: number;
+  photoUrl: string;
+  like: boolean;
+  saved: boolean;
+  createdDate: any;
+  boundary: string;
+};
+
+export type ArchivesData = {
+  success: boolean;
+  code: number;
+  data: Array<{
+    postId: number;
+    photoId: number;
+    photo_url: string;
+    like: boolean;
+    saved: boolean;
+  }>;
+}
+
 export type PostsData = {
   success: boolean;
   code: number;

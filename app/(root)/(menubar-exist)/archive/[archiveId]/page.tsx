@@ -1,28 +1,28 @@
 'use client';
 
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import CategoryBar from '../../../../components/bars/CategoryBar';
-import { archiveCategoryElements, getPostsNumber } from '../../../../constants';
-import Loading from '../../../loading';
-import LoginSuggestModal from '../../../../components/modal/mini/LoginSuggestModal';
 import { useSelector } from 'react-redux';
-import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
-import { selectButtonState } from '../../../../store/slices/getLikedPostsSlice';
-import { getAllPostsData } from '../../../../api/post/getAllPostsData';
-import { PostArray } from '../../../../types/dataType';
-import { getLikedPosts } from '../../../../api/post/getLikedPostsData';
-import PostBox from '../../../../components/boxes/PostBox';
-import { selectLoginStatus } from '../../../../store/slices/loginSlice';
+import { selectLoginStatus } from '../../../../../store/slices/loginSlice';
+import { useParams } from 'next/navigation';
+import Loading from '../../../../loading';
+import { getArchiveDetailData } from '../../../../../api/archive/getArchiveDetailData';
+import ControlBar from './components/ControlBar';
+import { selectNumberOfBoxes } from '../../../../../store/slices/boxLayoutSlice';
+import { getPostsNumber } from '../../../../../constants';
+import { PostArray } from '../../../../../types/dataType';
+import { selectButtonState } from '../../../../../store/slices/getLikedPostsSlice';
+import PostBox from '../../../../../components/boxes/PostBox';
 
-export default function ArchivePage() {
+
+export default function DetailArchivePage() {
   const isLoggedIn = useSelector(selectLoginStatus);
+  const { archiveId } = useParams<{ archiveId: string }>();
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
-
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
-  const [category, setCategory] = useState<string>('trending');
+  const [archiveName, setArchiveName] = useState<string>('');
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cursorId, setCursorId] = useState<number>(0);
@@ -46,8 +46,16 @@ export default function ArchivePage() {
   const likedButtonState = useSelector(selectButtonState);
 
   const fetchMorePosts = async () => {
+
     const currentCursorId = cursorId;
-    let data = await getAllPostsData({ category, size, cursorId: currentCursorId });
+    const currentArchiveId = Number(archiveId)
+    let data = await getArchiveDetailData({archiveId:currentArchiveId , size, cursorId: currentCursorId });
+
+    console.log(data)
+
+    if(isFirstRendering){
+      setArchiveName(data.data.archiveName)
+    }
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLoading(true);
@@ -74,7 +82,10 @@ export default function ArchivePage() {
   };
 
   const fetchMorePostsByLikedButton = async () => {
-    let data = await getLikedPosts({ category, size, cursorLikedId });
+      
+    const currentCursorId = cursorId;
+    const currentArchiveId = Number(archiveId)
+    let data = await getArchiveDetailData({archiveId:currentArchiveId , size, cursorId: currentCursorId });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
@@ -100,31 +111,7 @@ export default function ArchivePage() {
     }
   };
 
-  const refreshPosts = async () => {
-    setCursorId(0);
-    setMessage('');
-    setIsContentExist(false);
-    setPostsData([]);
-    setIsFirstRendering(true);
-    setIsLoading(true);
-    setIsLast(false);
-  };
-
-  useEffect(() => {
-    console.log('isLoggedIn useEffect...')
-    if (isLoggedIn === 'loggedIn') {
-      setCategory('for-you');
-    } else if (isLoggedIn === 'loggedOut') {
-      setCategory('trending');
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    refreshPosts();
-  }, [category]);
-
-  // 
-  useEffect(() => {
+    useEffect(() => {
     if (likedButtonState) {
       return;
     }
@@ -168,7 +155,7 @@ export default function ArchivePage() {
     }
 
     if (isLikedPostsFirstRendering && likedButtonState) {
-      fetchMorePostsByLikedButton();
+      // fetchMorePostsByLikedButton();
     }
 
     const likedButtonCurrentRef = likedPostsBottomRef.current;
@@ -180,6 +167,7 @@ export default function ArchivePage() {
           !isLikedPostsLoading &&
           isLikedPostsContentExist
         ) {
+          console.log('Fetching more posts due to intersection observer...');
           fetchMorePostsByLikedButton();
         }
       },
@@ -229,21 +217,22 @@ export default function ArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
+  useEffect(() => {
+    setCursorId(0);
+    setMessage('');
+    setIsContentExist(false);
+    setPostsData([]);
+    setIsFirstRendering(true);
+    setIsLoading(true);
+    setIsLast(false);
+  }, [isLoggedIn]);
 
-  const itemsToRender = postsData
-    ? postsData.length <= layoutNum
-      ? postsData
-      : postsData.slice(0, postsData.length - (postsData.length % layoutNum))
-    : [];
 
   return (
     <>
-      <CategoryBar
-        elements={archiveCategoryElements}
-        category={category}
-        setCategory={setCategory}
-      />
-      <div className="ForYouContainer max-h-full overflow-hidden relative">
+      <ControlBar archiveName={archiveName}/>
+      <div className="ForYouContainer max-h-full overflow-hidden">
+        <Suspense fallback={<Loading />}>
           <div
             ref={boxRef}
             className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
@@ -251,7 +240,7 @@ export default function ArchivePage() {
             {!likedButtonState &&
               isContentExist &&
               !isLoading &&
-              itemsToRender.map((item, index) => (
+              postsData.map((item, index) => (
                 <PostBox
                   key={index}
                   postId={item.postId}
@@ -263,7 +252,7 @@ export default function ArchivePage() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
-                  isOptional={true}
+                  isOptional={false}
                 />
               ))}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
@@ -285,7 +274,7 @@ export default function ArchivePage() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
-                  isOptional={true}
+                  isOptional={false}
                 />
               ))}
             {likedButtonState &&
@@ -294,10 +283,10 @@ export default function ArchivePage() {
             {likedButtonState &&
               !isLikedPostsContentExist &&
               !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
-            <div ref={bottomRef} className="w-full h-[1px] translate-y-[-1300px]"></div>
+            <div ref={bottomRef} className="bottom-0 h-[1px] w-full"></div>
           </div>
+        </Suspense>
       </div>
-      {isSuggestLoginModalShow && <LoginSuggestModal />}
     </>
   );
 }

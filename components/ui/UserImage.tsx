@@ -24,8 +24,9 @@ export default function UserImage({ src, alt, width, height }: UserImageProps) {
         src={src}
         alt={alt}
         sizes="(max-width: 480px) 100vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, 40vw"
-        style={{ objectFit: 'cover' }}
+        style={{ objectFit: 'cover'}}
         fill
+        priority={true}
         quality={100}
         className="rounded-full"
       />

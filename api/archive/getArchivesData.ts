@@ -1,18 +1,13 @@
-import { PostsDataProps } from '../../constants/interface';
+import { ArchivesDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({ category, size, cursorId }: PostsDataProps) => {
+export const getAllArchivesData = async ({ category, cursorId }: ArchivesDataProps) => {
 
   try {
 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
-    
-    if (size) {
-      url += `&size=${size}`
-    }
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/archive?`
 
-    console.log(size, 'size...')
     if (cursorId !== 0) {
-      url += `&oldestPostId=${cursorId}`
+      url += `&cursorId=${cursorId}`
     }
 
     const response = await fetch(url, {
