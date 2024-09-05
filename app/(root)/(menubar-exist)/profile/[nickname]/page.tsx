@@ -329,8 +329,8 @@ export default function ProfilePage() {
                 createdDate={item.createdDate}
                 setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                 setSharedCount={setSharedCount}
-                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-              />
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                isOptional={false}              />
             ))}
           {isCategory == 'Archive' &&
             (isArchive[0] ? (
@@ -395,11 +395,6 @@ export default function ProfilePage() {
                 <p className="text-darkModeGray text-[35px]">
                   표시할 아카이브가 없어요.
                 </p>
-                <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
-                  <p className="text-darkModeGray text-[35px]">
-                    표시할 아카이브가 없어요.
-                  </p>
-                </div>
               </div>
             ))}
         </div>

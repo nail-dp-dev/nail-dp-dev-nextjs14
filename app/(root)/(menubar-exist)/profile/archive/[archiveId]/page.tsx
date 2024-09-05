@@ -29,6 +29,8 @@ export default function ProfileArchive() {
   const [isArchiveName, setIsArchiveName] = useState('');
   const [isNickName, setIsNickName] = useState('');
   const [isCursorId, setIsCursorId] = useState(0);
+  const [isLading, setIsLading] = useState(true)
+  const [isLost, setIsLost] = useState(false)
   const router = useRouter();
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -42,30 +44,75 @@ export default function ProfileArchive() {
       setIsPost(archiveData.data.postSummaryList.content);
       setIsArchiveName(archiveData.data.archiveName);
       setIsCursorId(archiveData.data.cursorId);
+      setIsLost(archiveData.data.postSummaryList.last)
       setIsNickName(archiveData.data.nickname);
     }
   };
 
   const profileMove = () => {
-    router.push(`/profile/${isNickName}`)
-  }
+    router.push(`/profile/${isNickName}`);
+  };
+
+  // const archiveScrollData = async () => {
+  //   setIsLading(false);
+  //   if (!isArchiveLost) {
+  //     const archiveData = await getProfileArchive(
+  //       nickname,
+  //       isArchiveCursorId,
+  //     );
+  //     console.log(archiveData);
+  //     setIsArchiveCursorId(archiveData.data.cursorId);
+  //     setIsArchiveLost(archiveData.data.postSummaryList.last);
+  //     setIsArchive((prevData) => [
+  //       ...prevData,
+  //       ...archiveData.data.postSummaryList.content,
+  //     ]);
+    
+  //     setIsLading(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   function handleScroll() {
+  //     const element1 = document.getElementById('scroll');
+  //     if (element1) {
+  //       const scrollTop = element1.scrollTop;
+  //       const scrollHeight = element1.scrollHeight;
+  //       const clientHeight = element1.clientHeight;
+
+  //       if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !) {
+  //         postScrollData();
+  //       }else if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isArchiveLost) {
+  //         archiveScrollData();
+  //       }
+  //     }
+  //   }
+
+  //   const scrollElement = document.getElementById('scroll');
+  //   if (scrollElement) {
+  //     scrollElement.addEventListener('scroll', handleScroll);
+  //     return () => scrollElement.removeEventListener('scroll', handleScroll);
+  //   }
+  // }, [isLading, layoutNum]);
 
   useEffect(() => {
     archiveData();
   }, []);
 
   return (
-    <div className="CreatePostContainer overflow-y-scroll">
+    <div id="scroll" className="CreatePostContainer overflow-y-scroll">
       <div className="flex flex-col items-center">
-        {isNickName && <button
-          onClick={profileMove}
-          className="flex h-[72px] w-full flex-row items-center pl-[14px]"
-        >
-          <LessThan />
-          <p className="pl-[14px] text-[28px] font-bold">
-            {isNickName}님의 아카이브
-          </p>
-        </button>}
+        {isNickName && (
+          <button
+            onClick={profileMove}
+            className="flex h-[72px] w-full flex-row items-center pl-[14px]"
+          >
+            <LessThan />
+            <p className="pl-[14px] text-[28px] font-bold">
+              {isNickName}님의 아카이브
+            </p>
+          </button>
+        )}
         <div className={`sticky top-0 z-30 w-full bg-white`}>
           <div className="flex h-[54px] w-full items-center justify-between border-b-[1px] border-b-navBotSolidGray">
             <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
@@ -122,6 +169,7 @@ export default function ProfileArchive() {
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                  isOptional={false}
                 />
               ))}
           </div>

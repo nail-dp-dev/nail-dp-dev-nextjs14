@@ -138,7 +138,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  />
+                    isOptional={false}                  />
                 );
               }
               return null;
@@ -159,6 +159,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                    isOptional={false} 
                   />
                 );
               }
