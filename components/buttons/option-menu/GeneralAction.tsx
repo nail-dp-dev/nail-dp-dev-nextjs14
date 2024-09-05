@@ -99,9 +99,6 @@ export default function GeneralAction({
           actionType: 'archive',
         }),
       );
-
-      // 여기에 archiveId가 숫자임을 보장하기 때문에 archive 타입으로 전달
-      if (onDeleteClick) onDeleteClick(archiveId, 'archive');
     } else if (postId !== undefined) {
       console.log('포스트 삭제 모달이 열렸습니다.');
       dispatch(
@@ -114,9 +111,6 @@ export default function GeneralAction({
           actionType: 'post',
         }),
       );
-
-      // 여기에 postId가 숫자임을 보장하기 때문에 post 타입으로 전달
-      if (onDeleteClick) onDeleteClick(postId, 'post');
     } else {
       console.error('ID is undefined');
     }
@@ -231,7 +225,6 @@ export default function GeneralAction({
         <MenuDeleteIcon className="mr-2 fill-darkPurple group-hover/item:fill-red" />
         {type === 'archive' ? '아카이브 삭제' : '게시물 삭제'}
       </button>
-      {/* 모달 상태에 따라 모달 렌더링 */}
       {showDeleteModal && (
         <AlarmModal
           onConfirm={handleDeleteConfirm}
