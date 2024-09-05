@@ -67,6 +67,7 @@ export default function TopContainer({ user, postId }: userProps) {
   //프로필 이동
   const test = (nickname: string) => {
     if (nickname !== undefined) {
+      localStorage.setItem("name",nickname)
       router.push(`/profile/${nickname}`);
     }
     console.log('에러');
@@ -77,7 +78,7 @@ export default function TopContainer({ user, postId }: userProps) {
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <div
           className="cursor-pointer"
-          onClick={(e) => test(userData?.data.nickname!)}
+          onClick={(e) => test(user.nickname)}
         >
           <UserImage
             src={user.profileUrl}

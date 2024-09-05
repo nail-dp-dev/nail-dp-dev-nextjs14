@@ -189,3 +189,14 @@ export interface tempData {
   postId: number;
   boundary: string;
 }
+
+export interface profileData {
+  followerCount: number;
+  followingCount: number;
+  followingStatus: boolean;
+  nickname: string;
+  point: null;
+  postsCount: number;
+  profileUrl: string;
+  saveCount: number;
+}

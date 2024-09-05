@@ -27,6 +27,8 @@ export default function MyPagePage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
 
+  console.log(userData);
+  
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
@@ -121,7 +123,7 @@ export default function MyPagePage() {
       <div className="MyPageContainer max-h-full ">
         <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
           <PostCreate />
-          {isTempData.length === 1 &&
+          {isTempData[0] !== null &&
             isTempData.map((item, index) => {
               if (item && item.postId) {
                 return (
@@ -136,7 +138,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  />
+                    isOptional={false}                  />
                 );
               }
               return null;
@@ -157,6 +159,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                    isOptional={false} 
                   />
                 );
               }
