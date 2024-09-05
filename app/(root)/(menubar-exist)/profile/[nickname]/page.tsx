@@ -48,7 +48,6 @@ export default function ProfilePage() {
   const [isFollowState, setIsFollowState] = useState(false);
   const [isCategory, setIsCategory] = useState('post');
   const [isPost, setIsPost] = useState<postData[]>([]);
-  const [isNickName, setIsNickName] = useState('');
   const [isPostLost, setIsPostLost] = useState(false);
   const [isArchiveLost, setIsArchiveLost] = useState(false);
   const [isPostCursorId, setIsPostCursorId] = useState(0);
