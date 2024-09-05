@@ -111,7 +111,7 @@ export default function SearchBar() {
   };
 
   const debouncedSearch = useCallback(
-    debounce((query: string) => performSearch(query, true), 300),
+    debounce((query: string) => performSearch(query, true), 100),
     [],
   );
 
