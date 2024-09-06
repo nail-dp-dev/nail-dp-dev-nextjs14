@@ -23,33 +23,24 @@ export async function getUserSearchResults(keyword: string) {
   }
 }
 
-export async function getTagSearchResults(keywords: string[]) {
+export async function getTagSearchResults(keyword: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/search/tags?keyword=${keyword}`;
+
   try {
-    const promises = keywords.map((keyword) =>
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/search/tags?keyword=${encodeURIComponent(keyword)}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        },
-      ),
-    );
-    const responses = await Promise.all(promises);
-    const dataArr = await Promise.all(responses.map((res) => res.json()));
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
 
-    const combinedResults = dataArr.reduce((acc, data) => {
-      if (data && data.data.length > 0) {
-        acc.push(...data.data);
-      }
-      return acc;
-    }, []);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-    console.log('API 응답 데이터:', combinedResults);
-
-    return combinedResults;
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Error fetching tag search results:', error);
     alert('태그 검색 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.');
