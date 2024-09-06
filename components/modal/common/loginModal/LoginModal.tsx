@@ -9,12 +9,11 @@ import UsedLoginPlatform from '../../../../public/assets/svg/used_login_platform
 import KakaoIcon from '../../../../public/assets/svg/kakao.svg'
 import GoogleIcon from '../../../../public/assets/svg/google.svg'
 import NaverIcon from '../../../../public/assets/svg/naver.svg'
+import Link from 'next/link';
 import { easyLoginElements } from '../../../../constants';
-import { useRouter } from 'next/navigation';
 
 export default function LoginModal() {
 
-  const router = useRouter()
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
 
   const dispatch = useDispatch();
@@ -22,12 +21,6 @@ export default function LoginModal() {
     e.stopPropagation()
     dispatch(commonModalClose());
   };
-
-  const routeClick = (e:any,uri: any,data:any) => {
-    e.stopPropagation()
-    router.push(`${uri}`)
-    localStorage.setItem('loggedInPlatform', data)
-  }
 
   let getLoginedBefore = localStorage.getItem('loggedInPlatform')
   
@@ -65,18 +58,14 @@ export default function LoginModal() {
               <div className='w-full h-[52px] flex items-center justify-between gap-[10px]'>
                 {
                   easyLoginElements.map((ele, index) => (
-                    <button
-                      key={index}
-                      onClick={(e) => {routeClick(e, ele.uri, ele.data)  }}
-                      className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] button-tr button-tr-tf2 ${ele.data === 'kakao' && 'bg-kakaoYellow' || ele.data === 'google' && 'bg-googleGray' || ele.data === 'naver' && 'bg-naverGreen'} rounded-[5px]`}
-                    >
+                    <Link key={index} href={`${ele.uri}`} className={`w-[150px] h-[50px] flex items-center justify-center gap-[11px] button-tr button-tr-tf2 ${ele.data === 'kakao' && 'bg-kakaoYellow' || ele.data === 'google' && 'bg-googleGray' || ele.data === 'naver' && 'bg-naverGreen'} rounded-[5px]`}>
                       {
                         ele.data === 'kakao' && <KakaoIcon /> ||
                         ele.data === 'google' && <GoogleIcon /> ||
                         ele.data === 'naver' && <NaverIcon />
                       }
                       <span className={`font-[600] text-[0.875rem] ${ele.data === 'naver' && 'text-white'}`}>{ ele.name }</span>
-                    </button>
+                    </Link>
                 ))
                 }
               </div>

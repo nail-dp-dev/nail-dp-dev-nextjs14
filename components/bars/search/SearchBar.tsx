@@ -86,29 +86,21 @@ export default function SearchBar() {
     }
 
     try {
-      let hasResults = false;
-      if (searchQuery.startsWith('@') && searchQuery.length > 1) {
-        const response = await getUserSearchResults(searchQuery.slice(1));
-        if (response && response.data.length > 0) {
-          setUserResults(response.data);
+      const searchTerms = searchQuery.split(' ').filter(Boolean);
+
+      // 이미 있는 태그 요청 X
+      const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
+      const newSearchTerms = searchTerms.filter(
+        (term) => !existingTags.includes(term.toLowerCase()),
+      );
+
+      if (newSearchTerms.length > 0) {
+        const newTagResults = await getTagSearchResults(newSearchTerms);
+
+        if (newTagResults && newTagResults.length > 0) {
+          setTagResults((prevResults) => [...prevResults, ...newTagResults]);
           setSearchError('');
-          hasResults = true;
         } else {
-          setUserResults([]);
-          if (showError) {
-            setSearchError(
-              `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-            );
-          }
-        }
-      } else {
-        const response = await getTagSearchResults(searchQuery);
-        if (response && response.data.length > 0) {
-          setTagResults(response.data);
-          setSearchError('');
-          hasResults = true;
-        } else {
-          setTagResults([]);
           if (showError) {
             setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
           }
@@ -125,8 +117,11 @@ export default function SearchBar() {
   };
 
   const debouncedSearch = useCallback(
-    debounce((query: string) => performSearch(query, true), 100),
-    [],
+    debounce((query: string) => {
+      console.log('검색어 쿼리:', query);
+      performSearch(query, true);
+    }, 100),
+    [tagResults],
   );
 
   // 검색 입력 값 변경 핸들러
@@ -171,12 +166,21 @@ export default function SearchBar() {
   };
 
   const handleTagClick = (tag: string) => {
-    const newSearchTerm = searchTerm ? `${searchTerm} ${tag}` : tag;
+    const searchTerms = searchTerm.split(' ').filter(Boolean);
+
+    // 중복된 단어 확인
+    if (!searchTerms.includes(tag)) {
+      searchTerms[searchTerms.length - 1] = tag;
+    }
+
+    const newSearchTerm = searchTerms.join(' ');
+
     setSearchTerm(newSearchTerm);
     performSearch(newSearchTerm, true);
 
     addToRecentSearches(newSearchTerm);
 
+    // 프로필 검색인 경우
     if (tag.startsWith('@')) {
       const nickname = tag.slice(1);
       router.push(`/profile/${nickname}`);
