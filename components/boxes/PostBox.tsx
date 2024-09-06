@@ -145,18 +145,18 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      <button
+      {/* <button
         onClick={handlePlusClick}
         className="absolute bottom-2 right-2 z-10"
-      >
-        <PlusButton
-          postId={postId}
-          width="24px"
-          height="24px"
-          isClicked={saved}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </button>
+      > */}
+      <PlusButton
+        postId={postId}
+        width="24px"
+        height="24px"
+        isClicked={saved}
+        active={isLoggedIn === 'loggedIn'}
+      />
+      {/* </button> */}
       <div className="absolute left-0 top-0 z-40 bg-kakaoYellow">
         {isOptional && (
           <BoxCommonButton
