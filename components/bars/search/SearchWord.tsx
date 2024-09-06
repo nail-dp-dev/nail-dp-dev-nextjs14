@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { posts } from '../../../constants/example';
 
 type TagResult = {
@@ -24,9 +24,6 @@ export default function SearchWord({
   const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
-    console.log('검색어:', searchTerm);
-    console.log('Tag Results:', tagResults);
-
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
       const searchTerms = lowerCaseSearchTerm.split(' ').filter(Boolean);
@@ -45,8 +42,24 @@ export default function SearchWord({
       setDisplayWords(uniqueResults as TagResult[]);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
+    } else {
+      const recommendedWords = searchWords.map((post) => ({
+        tagName: post.data.tags[0].tagName,
+        tagImageUrl: post.data.postImageUrls[0],
+        photo: true,
+        video: false,
+      }));
+
+      setDisplayWords(recommendedWords);
     }
   }, [searchWords, tagResults, searchTerm]);
+
+  const handleTagClick = useCallback(
+    (tagName: string) => {
+      onTagClick(tagName);
+    },
+    [onTagClick],
+  );
 
   return (
     <div>
@@ -72,9 +85,7 @@ export default function SearchWord({
             p-3 xs:w-[calc(50%-6px)] 
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            onClick={() => {
-              onTagClick(item.tagName);
-            }}
+            onClick={() => handleTagClick(item.tagName)}
           >
             {item.video ? (
               <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
