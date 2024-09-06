@@ -33,10 +33,8 @@ import { RootState } from '../../../../../store/store';
 import { followUser, unFollowUser } from '../../../../../api/user/followUser';
 import { getUserData } from '../../../../../api/user/getUserData';
 import Image from 'next/image';
-import { getArchiveData } from '../../../../../api/archive/getArchiveData';
 
 export default function ProfilePage() {
-  const { userData } = useLoggedInUserData();
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -60,6 +58,7 @@ export default function ProfilePage() {
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
+  const decodedNickname = decodeURIComponent(nickname);
 
   const profileData = async () => {
     const profileData = await getProfileData(nickname);
@@ -71,7 +70,7 @@ export default function ProfilePage() {
 
   const profilePostData = async () => {
     const postData = await getProfilePost(nickname);
-    console.log(postData);
+    console.log(postData.data.cursorId);
     if (postData.data.postSummaryList.content[0]) {
       setIsPostLost(postData.data.postSummaryList.last);
       setIsPostCursorId(postData.data.cursorId);
@@ -96,7 +95,6 @@ export default function ProfilePage() {
 
   const clickShowType = (e: any, type: string) => {
     e.stopPropagation();
-    console.log(`Show type clicked: ${type}`);
     setShowType(type);
   };
 
@@ -122,8 +120,8 @@ export default function ProfilePage() {
 
   const checkNickName = async () => {
     const data = await getUserData();
-    console.log(data.data.nickname, nickname);
-    if (data.data.nickname === nickname) {
+    console.log(data.data.nickname, decodedNickname);
+    if (data.data.nickname === decodedNickname) {
       router.push('/my-page');
     }
   };
@@ -135,15 +133,15 @@ export default function ProfilePage() {
   const postScrollData = async () => {
     setLading(false);
     if (!isPostLost) {
-      console.log("a");
+      console.log(isPostCursorId);
       const postData = await getProfilePost(nickname, isPostCursorId);
-      console.log(postData);
-      setIsPostCursorId(postData.data.cursorId);
+      console.log(postData, isArchiveCursorId);
+      {postData.data.postSummaryList.content[0] && setIsPostCursorId(postData.data.cursorId);
       setIsPostLost(postData.data.postSummaryList.last);
       setIsPost((prevData) => [
         ...prevData,
         ...postData.data.postSummaryList.content,
-      ]);
+      ])};
 
       setLading(true);
     }
@@ -152,18 +150,15 @@ export default function ProfilePage() {
   const archiveScrollData = async () => {
     setLading(false);
     if (!isArchiveLost) {
-      const archiveData = await getProfileArchive(
-        nickname,
-        isArchiveCursorId,
-      );
+      const archiveData = await getProfileArchive(nickname, isArchiveCursorId);
       console.log(archiveData);
-      setIsArchiveCursorId(archiveData.data.cursorId);
+      {archiveData.data.postSummaryList.content[0] && setIsArchiveCursorId(archiveData.data.cursorId);
       setIsArchiveLost(archiveData.data.postSummaryList.last);
       setIsArchive((prevData) => [
         ...prevData,
         ...archiveData.data.postSummaryList.content,
-      ]);
-    
+      ])};
+
       setLading(true);
     }
   };
@@ -176,9 +171,17 @@ export default function ProfilePage() {
         const scrollHeight = element1.scrollHeight;
         const clientHeight = element1.clientHeight;
 
-        if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isPostLost) {
+        if (
+          scrollTop + clientHeight >= scrollHeight * 0.8 &&
+          isLading &&
+          !isPostLost
+        ) {
           postScrollData();
-        }else if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isArchiveLost) {
+        } else if (
+          scrollTop + clientHeight >= scrollHeight * 0.8 &&
+          isLading &&
+          !isArchiveLost
+        ) {
           archiveScrollData();
         }
       }
@@ -189,7 +192,7 @@ export default function ProfilePage() {
       scrollElement.addEventListener('scroll', handleScroll);
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
-  }, [isLading, layoutNum]);
+  }, [isLading, layoutNum, isPostCursorId, isArchiveCursorId]);
 
   useEffect(() => {
     checkNickName();
@@ -226,7 +229,7 @@ export default function ProfilePage() {
           <div>
             <button
               onClick={(e) => follow()}
-              className={`mr-[12px] h-[32px] w-[84px] rounded-full border-2 ${isFollowState ? 'border-black bg-white text-black hover:bg-black hover:text-white' : 'border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+              className={`mr-[12px] h-[32px] w-[84px] rounded-full border-2 ${isFollowState ? 'border-darkPurple bg-white text-darkPurple hover:bg-darkPurple hover:text-white' : 'border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
             >
               {isFollowState ? '팔로잉' : '팔로우'}
             </button>
@@ -329,8 +332,9 @@ export default function ProfilePage() {
                 createdDate={item.createdDate}
                 setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                 setSharedCount={setSharedCount}
-                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                isOptional={false}              />
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                isOptional={false}
+              />
             ))}
           {isCategory == 'Archive' &&
             (isArchive[0] ? (
@@ -350,7 +354,7 @@ export default function ProfilePage() {
                         <div className={`inset-0 z-0 h-full w-full`}>
                           <Image
                             src={PrivateArchive}
-                            alt={""}
+                            alt={''}
                             id={item.archiveId.toString()}
                             fill
                             style={{
