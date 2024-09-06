@@ -42,7 +42,6 @@ export default function SearchWord({
         filteredResults.find((item) => item.tagName === tagName),
       );
 
-      console.log('필터링된 결과(중복 제거):', uniqueResults);
       setDisplayWords(uniqueResults as TagResult[]);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
