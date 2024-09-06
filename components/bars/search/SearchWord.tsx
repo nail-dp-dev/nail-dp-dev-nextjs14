@@ -36,8 +36,14 @@ export default function SearchWord({
         return searchTerms.some((term) => tagNameLower.includes(term));
       });
 
-      console.log('필터링된 결과:', filteredResults);
-      setDisplayWords(filteredResults);
+      const uniqueResults = Array.from(
+        new Set(filteredResults.map((item) => item.tagName)),
+      ).map((tagName) =>
+        filteredResults.find((item) => item.tagName === tagName),
+      );
+
+      console.log('필터링된 결과(중복 제거):', uniqueResults);
+      setDisplayWords(uniqueResults as TagResult[]);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
     }
