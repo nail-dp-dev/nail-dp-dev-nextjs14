@@ -16,7 +16,6 @@ import {
 import { postBoxWidths, ProfileElements } from '../../../../../constants';
 import { getProfilePost } from '../../../../../api/profile/getProfilePost';
 import { getProfileArchive } from '../../../../../api/profile/getProfileArchive';
-import useLoggedInUserData from '../../../../../hooks/user/useLoggedInUserData';
 import ArchiveBox from '../../../../../components/boxes/ArchiveBox';
 import ListIcon from '../../../../../public/assets/svg/my-archive-list.svg';
 import AlbumIcon from '../../../../../public/assets/svg/my-archive-album.svg';

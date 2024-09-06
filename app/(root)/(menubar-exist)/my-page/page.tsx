@@ -5,13 +5,22 @@ import PostCreate from '../../../../components/animations/PostCreateIcon';
 import { useEffect, useState } from 'react';
 import UserImage from '../../../../components/ui/UserImage';
 import UserInfo from '../../../../components/ui/UserInfo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPostsData } from '../../../../api/post/getPostsData';
 import { getPostsTempData } from '../../../../api/post/getPostsTempData';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 import useLoggedInUserData from '../../../../hooks/user/useLoggedInUserData';
-import { selectNumberOfBoxes } from '../../../../store/slices/boxLayoutSlice';
+import {
+  decreaseBoxes,
+  increaseBoxes,
+  selectNumberOfBoxes,
+} from '../../../../store/slices/boxLayoutSlice';
 import { postData, tempData } from '../../../../constants/interface';
+import HeartButton from '../../../../components/animations/HeartButton';
+import { myPageCategoryElements } from '../../../../constants';
+import MinusSVG from '../../../../../public/assets/svg/minus.svg';
+import PlusSVG from '../../../../../public/assets/svg/plus.svg';
+import { RootState } from '../../../../store/store';
 
 export default function MyPagePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -24,11 +33,19 @@ export default function MyPagePage() {
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setLading] = useState(true);
   const [isNickname, setIsNickname] = useState('');
+  const [isCategory, setIsCategory] = useState('myPost');
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
+  const dispatch = useDispatch();
+  const numberOfBoxes = useSelector((state: RootState) =>
+    selectNumberOfBoxes(state),
+  );
+  const categoryClick = (e: any, category: string) => {
+    e.stopPropagation();
+    setIsCategory(category);
+    console.log(category);
+  };
 
-  console.log(userData);
-  
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
@@ -119,6 +136,50 @@ export default function MyPagePage() {
       <div className={`sticky top-0 z-30 w-full bg-white`}>
         {/* 여기수정 */}
         {/* <CategoryBar elements={myPageCategoryElements} /> */}
+        <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
+          <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
+            <div className="flex h-[53px] gap-[32px]">
+              {myPageCategoryElements.map((item, index) => {
+                return (
+                  <button
+                    key={index}
+                    onClick={(e) => {
+                      categoryClick(e, item.desc);
+                    }}
+                    className={`inline-flex h-[100%] items-center justify-center transition-all ${isCategory === item.desc ? 'border-purple' : 'border-navMenuBotSolidGray'} border-b-[3px]`}
+                  >
+                    <p className="text-[14px] font-[700]">{item.name}</p>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-[32px]">
+              <button
+                onClick={() => dispatch(increaseBoxes())}
+                disabled={numberOfBoxes >= 7}
+                className="h-[24px]"
+              >
+                <MinusSVG />
+              </button>
+              <button
+                onClick={() => dispatch(decreaseBoxes())}
+                disabled={numberOfBoxes <= 3}
+                className="h-[24px]"
+              >
+                <PlusSVG />
+              </button>
+              {isLoggedIn === 'loggedIn' && (
+                <HeartButton
+                  width="29"
+                  height="24"
+                  isClicked={false}
+                  isGetAllLiked={true}
+                />
+              )}
+            </div>
+          </div>
+          <div className="h-[13px] w-full"></div>
+        </div>
       </div>
       <div className="MyPageContainer max-h-full ">
         <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
@@ -137,8 +198,9 @@ export default function MyPagePage() {
                     tempPost={true}
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                    isOptional={false}                  />
+                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                    isOptional={false}
+                  />
                 );
               }
               return null;
@@ -158,8 +220,8 @@ export default function MyPagePage() {
                     tempPost={false}
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                    isOptional={false} 
+                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                    isOptional={false}
                   />
                 );
               }
