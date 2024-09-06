@@ -9,7 +9,6 @@ import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
-import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
 import PlusButton from '../../../../../../components/animations/PlusButton';
 import {
   setArchivePost,
@@ -74,9 +73,7 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
-  const dispatch = useDispatch();
-  const { userData } = useLoggedInUserData();
-  const isLoggedIn = useSelector(selectLoginStatus);
+  const dispatch = useDispatch();  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -275,11 +272,7 @@ export default function MidContainer({
               sharedCount={sharedCount}
               setSharedCount={setSharedCount}
             />
-            <PostTags
-              post={post}
-              searchRecent={searchRecent}
-              setSearchRecent={setSearchRecent}
-            />
+            <PostTags post={post} searchRecent={searchRecent} setSearchRecent={setSearchRecent} />
           </div>
           <div>
             <CommentWrap

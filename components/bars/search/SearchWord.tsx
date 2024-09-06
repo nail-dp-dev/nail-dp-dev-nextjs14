@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { posts } from '../../../constants/example';
 
 type TagResult = {
@@ -26,40 +26,25 @@ export default function SearchWord({
   useEffect(() => {
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      const searchTerms = lowerCaseSearchTerm.split(' ').filter(Boolean);
 
-      const filteredResults = tagResults.filter((result) => {
-        const tagNameLower = result.tagName.toLowerCase();
-        return searchTerms.some((term) => tagNameLower.includes(term));
-      });
-
-      const uniqueResults = Array.from(
-        new Set(filteredResults.map((item) => item.tagName)),
-      ).map((tagName) =>
-        filteredResults.find((item) => item.tagName === tagName),
+      const filteredResults = tagResults.filter((result) =>
+        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
       );
 
-      setDisplayWords(uniqueResults as TagResult[]);
+      setDisplayWords(filteredResults);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
     } else {
-      const recommendedWords = searchWords.map((post) => ({
-        tagName: post.data.tags[0].tagName,
-        tagImageUrl: post.data.postImageUrls[0],
-        photo: true,
-        video: false,
-      }));
-
-      setDisplayWords(recommendedWords);
+      setDisplayWords(
+        searchWords.map((post) => ({
+          tagName: post.data.tags[0].tagName,
+          tagImageUrl: post.data.postImageUrls[0],
+          photo: true,
+          video: false,
+        })),
+      );
     }
   }, [searchWords, tagResults, searchTerm]);
-
-  const handleTagClick = useCallback(
-    (tagName: string) => {
-      onTagClick(tagName);
-    },
-    [onTagClick],
-  );
 
   return (
     <div>
@@ -79,7 +64,9 @@ export default function SearchWord({
             className="relative flex h-[110px] 
             w-full  items-center
             justify-center rounded-2xl bg-purple p-3"
-            onClick={() => handleTagClick(item.tagName)}
+            onClick={() => {
+              onTagClick(item.tagName);
+            }}
           >
             {item.video ? (
               <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">

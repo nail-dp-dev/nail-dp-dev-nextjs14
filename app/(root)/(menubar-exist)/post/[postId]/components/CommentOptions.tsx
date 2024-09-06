@@ -31,10 +31,7 @@ export default function CommentOptions({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        optionsRef.current &&
-        !optionsRef.current.contains(event.target as Node)
-      ) {
+      if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
         onClose();
       }
     };
@@ -52,22 +49,21 @@ export default function CommentOptions({
   return (
     <div
       ref={optionsRef}
-      className="Options-box absolute right-0 top-0 mr-4 mt-2 w-auto rounded-xl 
-      bg-white p-2 opacity-75 shadow-lg"
+      className="Options-box absolute right-0 top-0 mt-2 w-auto rounded-xl bg-white p-2 opacity-75 shadow-lg"
     >
       {isOwnComment ? (
         <div className="box-one">
           <button
             onClick={onEditClick}
             className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
-            block w-auto whitespace-nowrap p-1 text-center hover:text-purple"
+            block w-auto text-center p-1 hover:text-purple whitespace-nowrap"
           >
             댓글 수정하기
           </button>
           <button
             onClick={onDeleteClick}
             className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
-            block w-auto whitespace-nowrap p-1 text-center hover:text-red"
+            block w-auto text-center p-1 hover:text-red whitespace-nowrap"
           >
             댓글 삭제하기
           </button>
@@ -76,15 +72,15 @@ export default function CommentOptions({
         <div className="box-two">
           <button
             onClick={onReportClick}
-            className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
-            block w-auto whitespace-nowrap p-1 text-center hover:text-purple"
+              className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
+            block w-auto text-center p-1 hover:text-purple whitespace-nowrap"
           >
             이 댓글 신고하기
           </button>
           <button
             onClick={onBlockUserClick}
-            className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
-            block w-auto whitespace-nowrap p-1 text-center hover:text-red"
+              className="text-gray-700 hover:bg-gray-100 text-14px-normal-dP 
+            block w-auto text-center p-1 hover:text-red whitespace-nowrap"
           >
             사용자 차단하기
           </button>
