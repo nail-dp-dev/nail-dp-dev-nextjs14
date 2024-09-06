@@ -275,11 +275,7 @@ export default function MidContainer({
               sharedCount={sharedCount}
               setSharedCount={setSharedCount}
             />
-            <PostTags
-              post={post}
-              searchRecent={searchRecent}
-              setSearchRecent={setSearchRecent}
-            />
+            <PostTags post={post} searchRecent={searchRecent} setSearchRecent={setSearchRecent} />
           </div>
           <div>
             <CommentWrap

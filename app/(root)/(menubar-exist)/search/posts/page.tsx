@@ -220,7 +220,6 @@ export default function SearchResultsPage() {
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
                   onLikeToggle={() => handleLikeToggle(item.postId)}
-                  isOptional={false}
                 />
               ))}
               <div ref={bottomRef} className="h-[1px] w-full"></div>
