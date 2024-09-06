@@ -9,7 +9,6 @@ import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
-import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -65,8 +64,6 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
-
-  const { userData } = useLoggedInUserData();
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -189,31 +186,26 @@ export default function MidContainer({
               }))}
               onImageChange={setCurrentImageUrl}
             />
-
-            {userData?.data?.nickname === post.nickname && (
-              <>
-                <BoxCommonButton
-                  onClick={handleToggleClick}
-                  type="toggle"
-                  width="4px"
-                  height="20px"
-                  position="top-left"
-                  className="p-3"
-                  showGeneralAction={showGeneralAction}
+            <BoxCommonButton
+              onClick={handleToggleClick}
+              type="toggle"
+              width="4px"
+              height="20px"
+              position="top-left"
+              className="p-3"
+              showGeneralAction={showGeneralAction}
+            />
+            {showGeneralAction && (
+              <div ref={boxRef} className=" absolute left-5 top-0 z-20">
+                <GeneralAction
+                  type="post"
+                  postId={postId}
+                  imageUrl={currentImageUrl}
+                  setSharedCount={setSharedCount}
+                  initialBoundary={boundary}
+                  onBoundaryChange={setBoundary}
                 />
-                {showGeneralAction && (
-                  <div ref={boxRef} className=" absolute left-5 top-0 z-20">
-                    <GeneralAction
-                      type="post"
-                      postId={postId}
-                      imageUrl={currentImageUrl}
-                      setSharedCount={setSharedCount}
-                      initialBoundary={boundary}
-                      onBoundaryChange={setBoundary}
-                    />
-                  </div>
-                )}
-              </>
+              </div>
             )}
             <BoxCommonButton
               onClick={() => console.log('Plus Clicked')}
@@ -248,11 +240,7 @@ export default function MidContainer({
               sharedCount={sharedCount}
               setSharedCount={setSharedCount}
             />
-            <PostTags
-              post={post}
-              searchRecent={searchRecent}
-              setSearchRecent={setSearchRecent}
-            />
+            <PostTags post={post} searchRecent={searchRecent} setSearchRecent={setSearchRecent} />
           </div>
           <div>
             <CommentWrap

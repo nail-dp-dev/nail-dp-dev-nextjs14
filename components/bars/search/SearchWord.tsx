@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { posts } from '../../../constants/example';
 
 type TagResult = {
@@ -26,40 +26,25 @@ export default function SearchWord({
   useEffect(() => {
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
-      const searchTerms = lowerCaseSearchTerm.split(' ').filter(Boolean);
 
-      const filteredResults = tagResults.filter((result) => {
-        const tagNameLower = result.tagName.toLowerCase();
-        return searchTerms.some((term) => tagNameLower.includes(term));
-      });
-
-      const uniqueResults = Array.from(
-        new Set(filteredResults.map((item) => item.tagName)),
-      ).map((tagName) =>
-        filteredResults.find((item) => item.tagName === tagName),
+      const filteredResults = tagResults.filter((result) =>
+        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
       );
 
-      setDisplayWords(uniqueResults as TagResult[]);
+      setDisplayWords(filteredResults);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
     } else {
-      const recommendedWords = searchWords.map((post) => ({
-        tagName: post.data.tags[0].tagName,
-        tagImageUrl: post.data.postImageUrls[0],
-        photo: true,
-        video: false,
-      }));
-
-      setDisplayWords(recommendedWords);
+      setDisplayWords(
+        searchWords.map((post) => ({
+          tagName: post.data.tags[0].tagName,
+          tagImageUrl: post.data.postImageUrls[0],
+          photo: true,
+          video: false,
+        })),
+      );
     }
   }, [searchWords, tagResults, searchTerm]);
-
-  const handleTagClick = useCallback(
-    (tagName: string) => {
-      onTagClick(tagName);
-    },
-    [onTagClick],
-  );
 
   return (
     <div>
@@ -85,7 +70,9 @@ export default function SearchWord({
             p-3 xs:w-[calc(50%-6px)] 
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            onClick={() => handleTagClick(item.tagName)}
+            onClick={() => {
+              onTagClick(item.tagName);
+            }}
           >
             {item.video ? (
               <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">

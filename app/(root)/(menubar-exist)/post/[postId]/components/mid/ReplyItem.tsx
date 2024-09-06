@@ -7,12 +7,7 @@
 // import CommentOptions from '../CommentOptions';
 // import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
 // import { useDispatch, useSelector } from 'react-redux';
-// import {
-//   alarmModalData,
-//   commonModalClose,
-//   selectCommonModalStatus,
-//   setCommonModal,
-// } from '../../../../../../../store/slices/modalSlice';
+// import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
 // import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
 
 // interface ReplyItemProps {
@@ -58,13 +53,12 @@
 //       textarea.current.style.height = `${textarea.current.scrollHeight}px`;
 //     }
 //   };
-
 //   // 대댓글로 스크롤 이동
 //   const handleReplyClick = () => {
 //     onReply(parentId, item.commentUserNickname);
 //     scrollToComment();
 //   };
-
+//   // 댓글 스크롤 이동
 //   const scrollToComment = () => {
 //     if (commentRef.current) {
 //       commentRef.current.scrollIntoView({
@@ -85,12 +79,6 @@
 //     setShowOptions(false);
 //   };
 
-//   // 댓글 삭제 취소
-//   const handleCancelDelete = () => {
-//     setShowDeleteModal(false);
-//     dispatch(commonModalClose());
-//   };
-
 //   // 삭제 모달 표시
 //   const handleDeleteClick = () => {
 //     dispatch(setCommonModal(`alarm-${item.replyId}`));
@@ -98,13 +86,15 @@
 //       alarmModalData({
 //         type: 'two',
 //         button: '삭제',
-//         user: '',
+//         user: item.commentUserNickname,
 //         byte: 0,
 //         imageType: '',
-//         actionType: 'comment',
 //       }),
 //     );
 //   };
+
+  
+
 
 //   // 수정 취소
 //   const handleCancelEdit = () => {
@@ -151,14 +141,12 @@
 //   return (
 //     <div
 //       ref={commentRef}
-//       className="reply-item button-tr mx-2 mb-4 mt-[10px] rounded-xl transition-all duration-300"
+//       className="reply-item button-tr mx-2 mb-4 mt-[10px] 
+//         rounded-xl transition-all duration-300"
 //     >
 //       <div
-//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px] pt-[10px] ${
-//           showOptions
-//             ? 'bg-darkPurple bg-opacity-20'
-//             : 'hover:bg-darkPurple hover:bg-opacity-20'
-//         }`}
+//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px] 
+//           pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}
 //       >
 //         <div className="flex">
 //           <div className="mr-3">
@@ -183,7 +171,9 @@
 //                   ref={textarea}
 //                   rows={1}
 //                   onInput={handleResizeHeight}
-//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm font-normal outline-none"
+//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none
+//                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm 
+//                     font-normal outline-none"
 //                   value={editedContent}
 //                   onChange={(e) => setEditedContent(e.target.value)}
 //                   onKeyDown={handleKeyDown}
@@ -201,7 +191,8 @@
 //                   <span>
 //                     Enter키로
 //                     <button
-//                       className="ml-1 text-purple hover:underline active:text-darkPurple"
+//                       className="ml-1 text-purple hover:underline 
+//                       active:text-darkPurple"
 //                       onClick={handleSaveEdit}
 //                     >
 //                       저장
@@ -223,14 +214,10 @@
 //             </div>
 //           </div>
 //         </div>
-
-//         <div
-//           className={`relative mr-3 ${showOptions ? 'block' : 'hidden group-hover/toggle2:block'}`}
-//         >
+//         <div className="relative mr-3 hidden h-full group-hover/toggle2:block ">
 //           <Toggle
-//             className={`${showOptions ? 'fill-darkPurple' : 'fill-white'}`}
+//             className="fill-white"
 //             onClick={() => setShowOptions(!showOptions)}
-//             showGeneralAction={showOptions}
 //           />
 //           {showOptions && (
 //             <CommentOptions
@@ -244,11 +231,8 @@
 //           )}
 //         </div>
 //       </div>
-//       {showDeleteModal && (
-//         <AlarmModal
-//           onConfirm={handleDeleteConfirm}
-//           onCancel={handleCancelDelete}
-//         />
+//       {whichCommonModal === `alarm-${item.replyId}` && isCommonModalShow && (
+//         <AlarmModal onConfirm={handleDeleteConfirm} />
 //       )}
 //     </div>
 //   );
