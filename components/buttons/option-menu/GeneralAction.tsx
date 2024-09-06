@@ -181,9 +181,7 @@ export default function GeneralAction({
     type === 'archive' ? archiveActionElements : postActionElements;
 
   return (
-    <div className={`text-14px-normal-dP absolute z-40 bg-white 
-    ${type !== 'archive' ? 'ml-5' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
-    rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow`}>
+    <div className="text-14px-normal-dP absolute z-40 bg-white ml-2 mt-3 w-[120px] whitespace-nowrap rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow">
       {actionElements.map((item, index) => {
         const IconComponent = Icons[item.icon as keyof typeof Icons];
         const handleClick = item.label.includes('설정')
@@ -203,8 +201,7 @@ export default function GeneralAction({
           <div
             key={index}
             onClick={handleClick}
-            className="flex cursor-pointer items-center justify-center 
-            rounded-xl px-2 pb-[10px] hover:font-bold"
+            className="flex cursor-pointer items-center justify-center rounded-xl px-2 pb-[10px] hover:font-bold"
           >
             {item.label.includes('수정') ? (
               <Link href={`/post/edit/${postId}`} className="flex items-center">
