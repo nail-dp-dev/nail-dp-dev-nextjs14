@@ -61,10 +61,8 @@ export default function GeneralSetting({
   }));
 
   return (
-    <div
-      className={`text-14px-normal-dP absolute z-10 mt-3  ${type !== 'archive' ? 'ml-5' : 'ml-2'} w-[120px] 
-    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow`}
-    >
+    <div className={`text-14px-normal-dP absolute z-10 mt-3  ${type !== 'archive' ? 'ml-5' : 'ml-2'} w-[120px] 
+    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow`}>
       <div className="flex items-center px-3 text-lg font-bold">
         <button onClick={onBack} className="mr-2">
           <MenuBack />
