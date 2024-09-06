@@ -86,32 +86,16 @@ export default function SearchBar() {
     }
 
     try {
-      let hasResults = false;
-      if (searchQuery.startsWith('@') && searchQuery.length > 1) {
-        const response = await getUserSearchResults(searchQuery.slice(1));
-        if (response && response.data.length > 0) {
-          setUserResults(response.data);
-          setSearchError('');
-          hasResults = true;
-        } else {
-          setUserResults([]);
-          if (showError) {
-            setSearchError(
-              `'${searchQuery.slice(1)}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-            );
-          }
-        }
+      const searchTerms = searchQuery.split(' ').filter(Boolean);
+
+      const tagResults = await getTagSearchResults(searchTerms);
+      if (tagResults && tagResults.length > 0) {
+        setTagResults(tagResults);
+        setSearchError('');
       } else {
-        const response = await getTagSearchResults(searchQuery);
-        if (response && response.data.length > 0) {
-          setTagResults(response.data);
-          setSearchError('');
-          hasResults = true;
-        } else {
-          setTagResults([]);
-          if (showError) {
-            setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
-          }
+        setTagResults([]);
+        if (showError) {
+          setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
         }
       }
     } catch (error) {
@@ -125,7 +109,10 @@ export default function SearchBar() {
   };
 
   const debouncedSearch = useCallback(
-    debounce((query: string) => performSearch(query, true), 100),
+    debounce((query: string) => {
+      console.log('검색어 쿼리:', query);
+      performSearch(query, true);
+    }, 100),
     [],
   );
 

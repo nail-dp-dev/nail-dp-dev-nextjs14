@@ -24,25 +24,22 @@ export default function SearchWord({
   const [displayWords, setDisplayWords] = useState<TagResult[]>([]);
 
   useEffect(() => {
+    console.log('검색어:', searchTerm);
+    console.log('Tag Results:', tagResults);
+
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const searchTerms = lowerCaseSearchTerm.split(' ').filter(Boolean);
 
-      const filteredResults = tagResults.filter((result) =>
-        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
-      );
+      const filteredResults = tagResults.filter((result) => {
+        const tagNameLower = result.tagName.toLowerCase();
+        return searchTerms.some((term) => tagNameLower.includes(term));
+      });
 
+      console.log('필터링된 결과:', filteredResults);
       setDisplayWords(filteredResults);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
-    } else {
-      setDisplayWords(
-        searchWords.map((post) => ({
-          tagName: post.data.tags[0].tagName,
-          tagImageUrl: post.data.postImageUrls[0],
-          photo: true,
-          video: false,
-        })),
-      );
     }
   }, [searchWords, tagResults, searchTerm]);
 
