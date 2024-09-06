@@ -70,7 +70,9 @@ export default function SearchWord({
             p-3 xs:w-[calc(50%-6px)] 
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            onClick={() => handleTagClick(item.tagName)}
+            onClick={() => {
+              onTagClick(item.tagName);
+            }}
           >
             {item.video ? (
               <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">

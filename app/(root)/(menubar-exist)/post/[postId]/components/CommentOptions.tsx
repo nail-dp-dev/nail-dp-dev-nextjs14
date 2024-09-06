@@ -49,8 +49,7 @@ export default function CommentOptions({
   return (
     <div
       ref={optionsRef}
-      className="Options-box absolute right-0 top-0 mr-4 mt-2 w-auto rounded-xl 
-      bg-white p-2 opacity-75 shadow-lg"
+      className="Options-box absolute right-0 top-0 mt-2 w-auto rounded-xl bg-white p-2 opacity-75 shadow-lg"
     >
       {isOwnComment ? (
         <div className="box-one">
