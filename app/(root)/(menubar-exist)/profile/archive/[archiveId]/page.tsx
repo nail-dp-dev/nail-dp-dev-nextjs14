@@ -29,8 +29,8 @@ export default function ProfileArchive() {
   const [isArchiveName, setIsArchiveName] = useState('');
   const [isNickName, setIsNickName] = useState('');
   const [isCursorId, setIsCursorId] = useState(0);
-  const [isLading, setIsLading] = useState(true)
-  const [isLost, setIsLost] = useState(false)
+  const [isLading, setIsLading] = useState(true);
+  const [isLost, setIsLost] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -44,7 +44,7 @@ export default function ProfileArchive() {
       setIsPost(archiveData.data.postSummaryList.content);
       setIsArchiveName(archiveData.data.archiveName);
       setIsCursorId(archiveData.data.cursorId);
-      setIsLost(archiveData.data.postSummaryList.last)
+      setIsLost(archiveData.data.postSummaryList.last);
       setIsNickName(archiveData.data.nickname);
     }
   };
@@ -53,47 +53,45 @@ export default function ProfileArchive() {
     router.push(`/profile/${isNickName}`);
   };
 
-  // const archiveScrollData = async () => {
-  //   setIsLading(false);
-  //   if (!isArchiveLost) {
-  //     const archiveData = await getProfileArchive(
-  //       nickname,
-  //       isArchiveCursorId,
-  //     );
-  //     console.log(archiveData);
-  //     setIsArchiveCursorId(archiveData.data.cursorId);
-  //     setIsArchiveLost(archiveData.data.postSummaryList.last);
-  //     setIsArchive((prevData) => [
-  //       ...prevData,
-  //       ...archiveData.data.postSummaryList.content,
-  //     ]);
-    
-  //     setIsLading(true);
-  //   }
-  // };
+  const archiveScrollData = async () => {
+    setIsLading(false);
+    if (!isLost) {
+      const archiveData = await getArchiveSelectData(archiveId, isCursorId);
+      console.log(archiveData);
+      {
+        archiveData.data.postSummaryList.content[0] &&
+          setIsCursorId(archiveData.data.cursorId);
+        setIsLost(archiveData.data.postSummaryList.last);
+        setIsPost((prevData) => [
+          ...prevData,
+          ...archiveData.data.postSummaryList.content,
+        ]);
+      }
 
-  // useEffect(() => {
-  //   function handleScroll() {
-  //     const element1 = document.getElementById('scroll');
-  //     if (element1) {
-  //       const scrollTop = element1.scrollTop;
-  //       const scrollHeight = element1.scrollHeight;
-  //       const clientHeight = element1.clientHeight;
+      setIsLading(true);
+    }
+  };
 
-  //       if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !) {
-  //         postScrollData();
-  //       }else if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading && !isArchiveLost) {
-  //         archiveScrollData();
-  //       }
-  //     }
-  //   }
+  useEffect(() => {
+    function handleScroll() {
+      const element1 = document.getElementById('scroll');
+      if (element1) {
+        const scrollTop = element1.scrollTop;
+        const scrollHeight = element1.scrollHeight;
+        const clientHeight = element1.clientHeight;
 
-  //   const scrollElement = document.getElementById('scroll');
-  //   if (scrollElement) {
-  //     scrollElement.addEventListener('scroll', handleScroll);
-  //     return () => scrollElement.removeEventListener('scroll', handleScroll);
-  //   }
-  // }, [isLading, layoutNum]);
+        if (scrollTop + clientHeight >= scrollHeight * 0.8 && isLading) {
+          archiveScrollData();
+        }
+      }
+    }
+
+    const scrollElement = document.getElementById('scroll');
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+      return () => scrollElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [isLading, isCursorId]);
 
   useEffect(() => {
     archiveData();

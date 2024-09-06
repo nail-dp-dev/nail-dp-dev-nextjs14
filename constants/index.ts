@@ -60,9 +60,9 @@ export const archiveCategoryElements = [
 ]
 
 export const myPageCategoryElements = [
-  { name: '내 게시물', url: '/my-page' },
-  { name: '예약', url: '/my-page/reservation' },
-  { name: '구매', url: '/my-page/buy' },
+  { name: '내 게시물', desc: 'myPost' },
+  { name: '예약', desc: 'reservation' },
+  { name: '구매', desc: 'buy' },
 ];
 
 export const profileCategoryElements = [
