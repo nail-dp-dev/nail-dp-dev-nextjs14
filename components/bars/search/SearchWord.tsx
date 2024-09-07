@@ -81,7 +81,6 @@ export default function SearchWord({
             items-center
             justify-center 
             rounded-2xl
-            bg-textDarkPurple 
             p-3 xs:w-[calc(50%-6px)] 
             sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
             lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
@@ -103,6 +102,7 @@ export default function SearchWord({
                     left: 0,
                   }}
                 />
+                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
               </div>
             ) : item.photo && item.tagImageUrl ? (
               <div
@@ -115,7 +115,15 @@ export default function SearchWord({
               >
                 <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
               </div>
-            ) : null}
+            ) : (
+              <div
+                className={`absolute inset-0 rounded-2xl ${
+                  item.video || item.photo
+                    ? 'bg-black bg-opacity-50'
+                    : 'bg-purple'
+                }`}
+              ></div>
+            )}
 
             <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
               {item.tagName}
