@@ -71,6 +71,10 @@ const nextConfig = {
 >>>>>>> c54c0ec (Revert "[FEAT] 토글/슬라이드 그림자 추가, 옵션모달ON일때 토글 다크보라 색상 유지, 중복검색X, 연관검색어 클릭시 마지막 단어에 적용Feature postdetailpage")
       },
       {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+      },
+      {
         protocol: 'http',
         hostname: 'img1.kakaocdn.net',
       },
