@@ -166,7 +166,7 @@ export default function CommentItem({
       >
         <div
           className={`comment-box button-tr group/toggle flex justify-between rounded-xl pb-[10px] pl-[10px] 
-          pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}
+                pt-[10px] ${showOptions ? 'bg-darkPurple bg-opacity-20' : 'hover:bg-darkPurple hover:bg-opacity-20'}`}
         >
           <div className="flex">
             <div className="mr-3">
@@ -260,10 +260,13 @@ export default function CommentItem({
               </div>
             </div>
           </div>
-          <div className="relative mr-3 hidden h-full group-hover/toggle:block ">
+          <div
+            className={`relative mr-3 ${showOptions ? 'block' : 'hidden group-hover/toggle:block'}`}
+          >
             <Toggle
-              className="fill-white"
+              className={`${showOptions ? 'fill-darkPurple' : 'fill-white'}`}
               onClick={() => setShowOptions(!showOptions)}
+              showGeneralAction={showOptions}
             />
             {showOptions && (
               <CommentOptions

@@ -4,7 +4,7 @@ import PlusButton from '../animations/PlusButton';
 import Toggle from '../buttons/Toggle';
 
 interface ButtonProps {
-  onClick: (e:any) => void;
+  onClick: (e: any) => void;
   showType?: string;
   type: 'heart' | 'plus' | 'toggle';
   isClicked?: boolean;
@@ -39,13 +39,22 @@ const BoxCommonButton: React.FC<ButtonProps> = ({
   className,
 }) => {
   const ButtonComponent = buttonComponents[type];
+
   return (
-    <button onClick={onClick} className={`${showType !== 'list' && 'absolute'} z-10 ${position !== 'nothing' && positionClasses[position]} ${className}`}>
+    <button
+      onClick={onClick}
+      className={`${showType !== 'list' && 'absolute'} z-10 ${position !== 'nothing' && positionClasses[position]} ${className}`}
+    >
       <ButtonComponent
         width={width}
         height={height}
         isClicked={isClicked}
-        className={type === 'toggle' ? `${showGeneralAction ? 'fill-purple' : showType === 'list' ? 'fill-darkPurple' :'fill-white'}` : ''}
+        showGeneralAction={showGeneralAction}
+        className={
+          type === 'toggle'
+            ? `${showGeneralAction ? 'fill-darkPurple' : showType === 'list' ? 'fill-darkPurple' : 'fill-white'}`
+            : ''
+        }
       />
     </button>
   );
