@@ -67,24 +67,18 @@ export default function SearchWord({
         {searchTerm.length > 0 ? '연관 검색어' : '추천 검색어'}
       </p>
       <div
-        className="mt-[5px] flex snap-y flex-wrap gap-2.5 overflow-auto
+        className="mt-[5px] grid auto-rows-auto grid-cols-5 gap-2.5 overflow-auto 
         xs:max-h-[470px]
-        sm:max-h-[470px]
-        lg:max-h-[350px]
+        sm:max-h-[470px] 
+        lg:max-h-[350px] 
         xl:max-h-[230px]"
       >
         {displayWords.map((item, index) => (
           <button
             key={index}
-            className="relative flex h-[110px] w-full 
-            snap-start flex-col
-            items-center
-            justify-center 
-            rounded-2xl
-          bg-purple
-            p-3 xs:w-[calc(50%-6px)] 
-            sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
-            lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
+            className="relative flex h-[110px] 
+            w-full  items-center
+            justify-center rounded-2xl bg-purple p-3"
             onClick={() => handleTagClick(item.tagName)}
           >
             {item.video ? (
