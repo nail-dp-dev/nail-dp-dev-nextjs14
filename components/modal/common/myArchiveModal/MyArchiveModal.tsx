@@ -26,6 +26,7 @@ import { postSetArchive } from '../../../../api/archive/postSetArchive';
 import { archiveArray } from '../../../../constants/interface';
 import Video from '../../../ui/Video';
 import { getPostArchive } from '../../../../api/archive/getPostArchive';
+import { deletePostArchive } from '../../../../api/archive/deletePostArchive';
 
 export default function MyArchiveModal() {
   const { ArchivePostId, ArchivePage } = useSelector(selectArchiveModalStatus);
@@ -47,6 +48,7 @@ export default function MyArchiveModal() {
   const [isLading, setLading] = useState(true);
   const [isLastPage, setIsLastPage] = useState(false);
   const [isCursorId, setIsCursorId] = useState(0);
+  const [isDeleteSelect, setIsDeleteSelect] = useState<number[]>([]);
   const dispatch = useDispatch();
 
   const closeModal = () => {
@@ -75,13 +77,18 @@ export default function MyArchiveModal() {
   ) => {
     if (isName.length > 0) {
       const success = await postArchiveCreate(isName, isBoundary);
-      setArchive(success.data, postId);
+      if (success.data) {
+        setArchive(success.data, postId);
+      }else{
+        console.log("백엔드 아카이브 제한을 확인해주세요.");
+      }
     } else {
       console.log('모달로 변경: 아카이브이름을 입력해주세요!');
     }
   };
 
   const setArchive = async (archiveId: number, postId: number) => {
+    console.log(archiveId,postId);
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
       dispatch(setArchiveState({ state: true }));
@@ -94,24 +101,50 @@ export default function MyArchiveModal() {
     }
   };
 
+  const allDeleteSelect = () => {
+    const data = isDeleteArchive.map((item) => item.archiveId);
+    setIsDeleteSelect(data);
+  };
+
+  const selectDeletePost = async (postId: number, archiveId: number[]) => {
+    const data = await deletePostArchive(archiveId, postId);
+    if (data.code === 2001) {
+      archiveData();
+    }
+  };
+
   const setArchiveName = (name: string, id: number) => {
-    setIsArchiveName(name);
-    setIsSelectArchive(id);
+    if (isArchiveMenu == 'deletePost') {
+      if (isDeleteSelect.includes(id)) {
+        const updatedDeleteSelect = isDeleteSelect.filter(
+          (item) => item !== id,
+        );
+        setIsDeleteSelect(updatedDeleteSelect);
+      } else {
+        setIsDeleteSelect([...isDeleteSelect, id]);
+      }
+    } else {
+      setIsArchiveName(name);
+      setIsSelectArchive(id);
+    }
   };
 
   const archiveData = async () => {
-    const data = await getArchiveData();
-    setIsCursorId(data.cursorId);
-    if (data.data.postSummaryList.content[0]) {
-      setIsArchive(data.data.postSummaryList.content);
-      setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
-      setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
-      
-      if (isArchiveMenu == 'deletePost') {
-        // const data = await getPostArchive(ArchivePostId);
-        // setIsCursorId(data.cursorId);
-        console.log("백엔드 미완료");
-        // setIsDeleteArchive(data)
+    console.log(isArchiveMenu);
+    if (isArchiveMenu == 'deletePost') {
+      const data = await getPostArchive(ArchivePostId);
+      console.log(data.data.postSummaryList.last);
+      setIsCursorId(data.data.cursorId);
+      setIsDeleteArchive(data.data.postSummaryList.content);
+      setIsLastPage(data.data.postSummaryList.last);
+    } else {
+      console.log('c');
+      const data = await getArchiveData();
+      setIsCursorId(data.cursorId);
+      if (data.data.postSummaryList.content[0]) {
+        setIsArchive(data.data.postSummaryList.content);
+        setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
+        setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
       }
     }
   };
@@ -140,13 +173,11 @@ export default function MyArchiveModal() {
 
   useEffect(() => {
     archiveData();
-    // setIsArchiveMenu(ArchivePage);
   }, []);
 
   const archiveScrollData = async () => {
     setLading(false);
     const archiveData = await getArchiveData(isCursorId);
-    console.log('여기');
     setIsCursorId(archiveData.data.cursorId);
     setIsLastPage(archiveData.data.postSummaryList.last);
     setIsArchive((prevData) => [
@@ -484,87 +515,109 @@ export default function MyArchiveModal() {
               </div>
             )}
             {ArchivePage == 'deletePost' &&
-              isArchiveMenu !== 'archiveCreate' && (
-                <div className="flex flex-1 flex-col justify-between">
-                  <div className="max-h-[235px] overflow-y-auto px-[44px]">
-                    <div className="flex flex-wrap">
-                      <div className="sticky top-0 flex w-full justify-between bg-white py-[20px] text-darkPurple">
-                        <p>어떤 아카이브에서 저장 해제 할까요?</p>
-                        <button className="h-[25px] w-[60px] rounded-full bg-lightGray text-[13px] hover:text-purple">
+            isArchiveMenu !== 'archiveCreate' &&
+            isDeleteArchive[0] ? (
+              <div className="flex flex-1 flex-col justify-between">
+                <div
+                  className={`max-h-[235px] ${isDeleteArchive.length > 4 && 'overflow-y-auto'} px-[44px]`}
+                >
+                  <div className="flex flex-wrap">
+                    <div className="sticky top-0 z-50 flex w-full justify-between bg-white py-[10px] text-darkPurple">
+                      <p>어떤 아카이브에서 저장 해제 할까요?</p>
+                      <div className="flex items-center">
+                        <p className="mr-[20px] rounded-full border-[1px] border-purple px-[9px] text-[13px]">
+                          {isDeleteArchive.length}개 중에{' '}
+                          {isDeleteSelect.length}개 선택됨
+                        </p>
+                        <button
+                          onClick={allDeleteSelect}
+                          className={`h-[25px] w-[60px] rounded-full text-[13px] hover:text-purple ${isDeleteArchive.length === isDeleteSelect.length ? 'bg-purple/20 text-purple' : 'bg-lightGray'}`}
+                        >
                           모두선택
                         </button>
                       </div>
-                      {isDeleteArchive.map((item, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className={`relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}`}
-                          >
-                            <button
-                              className={`relative flex h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-[8px]`}
-                              onClick={(e) =>
-                                setArchiveName(item.archiveName, item.archiveId)
-                              }
-                            >
-                              <div
-                                className={`absolute top-0 z-50 h-full w-full rounded-[8px] ${isSelectArchive == item.archiveId ? 'border-[5px] border-purple' : ''}`}
-                              ></div>
-                              {item.archiveImgUrl !== null ? (
-                                item.archiveImgUrl.endsWith('.mov') ||
-                                item.archiveImgUrl.endsWith('.mp4') ? (
-                                  <Video
-                                    src={item.archiveImgUrl}
-                                    width={'100%'}
-                                    height={'100%'}
-                                  />
-                                ) : (
-                                  <Image
-                                    src={item.archiveImgUrl}
-                                    alt={''}
-                                    fill
-                                    style={{
-                                      width: '100%',
-                                      height: '100%',
-                                    }}
-                                    sizes="100vw, 50vw, 33vw"
-                                    quality={100}
-                                  />
-                                )
-                              ) : (
-                                <ArchiveNullIcon
-                                  width={120}
-                                  height={120}
-                                  viewBox="0 0 120 120"
-                                />
-                              )}
-                            </button>
-                            <div className={`mt-[7px] w-full text-start`}>
-                              <p className="text-[1rem] font-bold">
-                                {item.archiveName}
-                              </p>
-                              <p className="text-[0.9rem] text-darkPurple">
-                                {item.postCount} designs
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
                     </div>
-                  </div>
-                  <div
-                    className={`flex h-[80px] w-full justify-center bg-white`}
-                  >
-                    <button
-                      className="my-[20px] h-[40px] w-[250px] rounded-full bg-purple text-white"
-                      onClick={(e) =>
-                        setArchive(isSelectArchive, ArchivePostId!)
-                      }
-                    >
-                      선택한 아카이브에 저장 해제
-                    </button>
+                    {isDeleteArchive.map((item, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={`relative mb-[20px] flex h-[190px] w-[130px] flex-col items-center overflow-hidden px-[5px] ${(index + 1) % 4 !== 0 ? 'mr-[7px]' : ''}`}
+                        >
+                          <button
+                            className={`relative flex h-[130px] w-[130px] items-center justify-center overflow-hidden rounded-[8px]`}
+                            onClick={(e) =>
+                              setArchiveName(item.archiveName, item.archiveId)
+                            }
+                          >
+                            <div
+                              className={`absolute top-0 z-20 h-full w-full rounded-[8px] ${isDeleteSelect.includes(item.archiveId) ? 'border-[5px] border-purple' : ''}`}
+                            ></div>
+                            {item.archiveImgUrl !== null ? (
+                              item.archiveImgUrl.endsWith('.mov') ||
+                              item.archiveImgUrl.endsWith('.mp4') ? (
+                                <Video
+                                  src={item.archiveImgUrl}
+                                  width={'100%'}
+                                  height={'100%'}
+                                />
+                              ) : (
+                                <Image
+                                  src={item.archiveImgUrl}
+                                  alt={''}
+                                  fill
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                  }}
+                                  sizes="100vw, 50vw, 33vw"
+                                  quality={100}
+                                />
+                              )
+                            ) : (
+                              <ArchiveNullIcon
+                                width={120}
+                                height={120}
+                                viewBox="0 0 120 120"
+                              />
+                            )}
+                          </button>
+                          <div className={`mt-[7px] w-full text-start`}>
+                            <p className="text-[1rem] font-bold">
+                              {item.archiveName}
+                            </p>
+                            <p className="text-[0.9rem] text-darkPurple">
+                              {item.postCount} designs
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              )}
+                <div className={`flex h-[80px] w-full justify-center bg-white`}>
+                  <button
+                    className="mb-[20px] mt-[15px] h-[40px] w-[250px] rounded-full bg-purple text-white"
+                    onClick={(e) =>
+                      selectDeletePost(ArchivePostId, isDeleteSelect)
+                    }
+                  >
+                    선택한 아카이브에 저장 해제
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div
+                className={`${ArchivePage == 'deletePost'? "":"hidden" } relative flex flex-1 flex-col items-center justify-center`}
+              >
+                <DottedAlbum />
+                <div className="absolute h-[30px] w-[90px] rounded-full bg-lightGray text-center">
+                  <p className="text-[18px]">비어있음</p>
+                </div>
+                <p className="mt-[20px] text-[18px] text-darkGray">
+                  선택 해제할 아카이브가 없습니다.
+                </p>
+              </div>
+            )}
           </div>
         </div>
         {isBell && (

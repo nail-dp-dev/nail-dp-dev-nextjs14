@@ -67,6 +67,13 @@ function PostBox({
     }
   };
 
+  const handleTempClick = async () => {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+    router.push(`/post/edit/${postId}`)
+  };
+
   const handlePlusClick = () => {
     if (isLoggedIn === 'loggedOut') {
       return;
@@ -108,7 +115,7 @@ function PostBox({
     >
       {tempPost == true && (
         <>
-          <div className="absolute z-10 h-full w-full bg-darkPurple opacity-60"></div>
+          <div onClick={handleTempClick} className="absolute cursor-pointer z-10 h-full w-full bg-darkPurple opacity-60"></div>
           <p className="z-10 text-center text-white">임시저장된 게시물</p>
         </>
       )}

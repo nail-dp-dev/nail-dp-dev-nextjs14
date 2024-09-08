@@ -1,15 +1,14 @@
-export const deleteArchiveCreate = async (archiveId: number,postId:number) => {
-    
+export const deletePostArchive = async (archiveId: number[],postId:number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/archive/${archiveId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/archive/unsave`,
       {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ postId }),
+        body: JSON.stringify({ postId,archiveId}),
       },
     );
 

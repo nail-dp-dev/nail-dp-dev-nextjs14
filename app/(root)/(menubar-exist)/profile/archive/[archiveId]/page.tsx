@@ -30,7 +30,7 @@ export default function ProfileArchive() {
   const [isNickName, setIsNickName] = useState('');
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setIsLading] = useState(true);
-  const [isLost, setIsLost] = useState(false);
+  const [isLast, setIsLast] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -44,7 +44,7 @@ export default function ProfileArchive() {
       setIsPost(archiveData.data.postSummaryList.content);
       setIsArchiveName(archiveData.data.archiveName);
       setIsCursorId(archiveData.data.cursorId);
-      setIsLost(archiveData.data.postSummaryList.last);
+      setIsLast(archiveData.data.postSummaryList.last);
       setIsNickName(archiveData.data.nickname);
     }
   };
@@ -55,13 +55,13 @@ export default function ProfileArchive() {
 
   const archiveScrollData = async () => {
     setIsLading(false);
-    if (!isLost) {
+    if (!isLast) {
       const archiveData = await getArchiveSelectData(archiveId, isCursorId);
       console.log(archiveData);
       {
         archiveData.data.postSummaryList.content[0] &&
           setIsCursorId(archiveData.data.cursorId);
-        setIsLost(archiveData.data.postSummaryList.last);
+        setIsLast(archiveData.data.postSummaryList.last);
         setIsPost((prevData) => [
           ...prevData,
           ...archiveData.data.postSummaryList.content,
@@ -117,7 +117,7 @@ export default function ProfileArchive() {
               <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
                 <div className="flex h-[53px] gap-[32px]">
                   <button
-                    className={`inline-flex h-[100%] min-w-[53px] items-center justify-center border-b-[3px] border-purple transition-all`}
+                    className={`inline-flex h-[100%] min-w-[30px] items-center justify-center border-b-[3px] border-purple transition-all`}
                   >
                     <p className="text-[14px] font-[700]">{isArchiveName}</p>
                   </button>

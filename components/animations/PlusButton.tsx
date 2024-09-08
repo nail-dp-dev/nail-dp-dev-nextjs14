@@ -10,6 +10,7 @@ import {
   setPlusState,
   setStarState,
   setArchivePage,
+  selectCommonModalStatus,
 } from '../../store/slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import PlusIcon from '../../public/assets/svg/puls-icon.svg';
@@ -21,6 +22,9 @@ import { getArchiveData } from '../../api/archive/getArchiveData';
 import Video from '../ui/Video';
 import Image from 'next/image';
 import { postSetArchive } from '../../api/archive/postSetArchive';
+import { useParams } from 'next/navigation';
+import { deletePostArchive } from '../../api/archive/deletePostArchive';
+import { getPostArchive } from '../../api/archive/getPostArchive';
 
 export default function PlusButton({
   postId,
@@ -40,19 +44,20 @@ export default function PlusButton({
   const [isLading, setLading] = useState(true);
   const [isLastPage, setIsLastPage] = useState(false);
   const [isCursorId, setIsCursorId] = useState(0);
+  const { archiveId } = useParams<{ archiveId: string }>();
+  const { isCommonModalShow } = useSelector(selectCommonModalStatus);
 
   const archiveData = async () => {
     const data = await getArchiveData();
+
     let content = data.data.postSummaryList.content;
     setIsCursorId(data.cursorId);
-    console.log('여기', data);
-
+    setIsLastPage(data.data.postSummaryList.last);
+    console.log(data);
     if (content[0] && content.length <= 4) {
       content = [...content, ...Array(4 - content.length).fill([])];
-      console.log('여기1', content);
       setIsArchiveData(content);
     } else if (content.length > 4) {
-      console.log('여기2', content);
       setIsArchiveData(content);
     } else {
       console.log('에러');
@@ -76,8 +81,36 @@ export default function PlusButton({
   };
 
   // 클릭 핸들러
-  const buttonClick = () => {
-    if (isClick) {
+  const buttonClick = async () => {
+    if (isClick && archiveId) {
+      const data = await deletePostArchive([+archiveId], postId);
+      console.log(data);
+      if (data.code === 2001) {
+        dispatch(setPlusState({ state: false }));
+        setIsClick(false);
+        setIsAnimate(false);
+        setTimeout(() => {
+          setIsBackGround(false);
+        }, 300);
+        dispatch(setArchivePost({ postId: 0 }));
+      } else {
+        console.log('에러');
+      }
+    } else if (!isClick && archiveId) {
+      const data = await postSetArchive(postId, +archiveId);
+      console.log(data);
+      if (data.code === 2001) {
+        dispatch(setPlusState({ state: false }));
+        setIsClick(true);
+        setIsAnimate(true);
+        setTimeout(() => {
+          setIsBackGround(true);
+        }, 300);
+        dispatch(setArchivePost({ postId: 0 }));
+      } else {
+        console.log('에러');
+      }
+    } else if (isClick) {
       dispatch(setArchivePost({ postId: postId }));
       dispatch(
         setStarState(
@@ -120,7 +153,6 @@ export default function PlusButton({
       return;
     }
     dispatch(setPlusState({ state: false }));
-    console.log('a');
     dispatch(setCommonModal('archive'));
     dispatch(setArchivePage({ state: 'archiveCreate' }));
   };
@@ -163,6 +195,26 @@ export default function PlusButton({
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
   }, [ArchivePostId, isLading]);
+
+  useEffect(() => {
+    if (postId === ArchivePostId) {
+      archiveData();
+      postArchive();
+    }
+  }, [isCommonModalShow]);
+
+  const postArchive = async () => {
+    const data = await getPostArchive(postId);
+    if (!data.data.postSummaryList.content[0]) {
+      dispatch(setPlusState({ state: false }));
+      setIsClick(false);
+      setIsAnimate(false);
+      setTimeout(() => {
+        setIsBackGround(false);
+      }, 300);
+      dispatch(setArchivePost({ postId: 0 }));
+    }
+  };
 
   return (
     <div className="absolute bottom-0 right-0 w-full">
@@ -235,7 +287,7 @@ export default function PlusButton({
         >
           <div
             id="scroll"
-            className="z-11 absolute bottom-[1.11rem] mt-[1px] max-h-[110px] min-h-[50px] w-full overflow-y-auto rounded-[20px] bg-red flex justify-center"
+            className="z-11 absolute bottom-[1.11rem] mt-[1px] flex max-h-[110px] min-h-[50px] w-full justify-center overflow-y-auto rounded-[20px] bg-white"
           >
             <div className="flex w-[90%] flex-wrap items-center">
               {isArchiveDate.map((item, index) =>
@@ -291,6 +343,22 @@ export default function PlusButton({
                   </button>
                 ),
               )}
+              <div className="group relative m-[2.5px] my-[5px] aspect-square w-[22%]">
+                <ArchivePlus />
+                <button
+                  onClick={(e) => modalOpen()}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
+                    <div className="relative h-[30%] w-[30%] rounded-full bg-white">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-[80%] w-[1px] bg-purple rounded-full"></div>
+                        <div className="absolute h-[1px] w-[80%] bg-purple rounded-full"></div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex justify-end">

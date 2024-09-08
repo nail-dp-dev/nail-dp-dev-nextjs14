@@ -17,10 +17,11 @@ import {
 } from '../../../../store/slices/boxLayoutSlice';
 import { postData, tempData } from '../../../../constants/interface';
 import HeartButton from '../../../../components/animations/HeartButton';
-import { myPageCategoryElements } from '../../../../constants';
+import { myPageCategoryElements, postBoxWidths } from '../../../../constants';
 import MinusSVG from '../../../../public/assets/svg/minus.svg';
 import PlusSVG from '../../../../public/assets/svg/plus.svg';
 import { RootState } from '../../../../store/store';
+import { useRouter } from 'next/navigation';
 
 export default function MyPagePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -37,13 +38,21 @@ export default function MyPagePage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
+  const router = useRouter();
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
+
+  const handleTempClick = async () => {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+    router.push(`/post/edit/${isTempData[0].postId}`);
+  };
+
   const categoryClick = (e: any, category: string) => {
     e.stopPropagation();
     setIsCategory(category);
-    console.log(category);
   };
 
   const fetchPostData = async () => {
@@ -187,7 +196,7 @@ export default function MyPagePage() {
           {isTempData[0] !== null &&
             isTempData.map((item, index) => {
               if (item && item.postId) {
-                return (
+                return item.photoUrl ? (
                   <PostBox
                     key={index}
                     postId={item.postId}
@@ -201,6 +210,19 @@ export default function MyPagePage() {
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                     isOptional={false}
                   />
+                ) : (
+                  <div
+                    key={index}
+                    className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                    style={{ width: postBoxWidths[layoutNum] }}
+                    onClick={handleTempClick}
+                  >
+                    <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                      <p className="z-10 text-center text-[16px] ">
+                        임시저장된 게시물
+                      </p>
+                    </div>
+                  </div>
                 );
               }
               return null;

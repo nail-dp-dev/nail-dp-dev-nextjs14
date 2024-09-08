@@ -46,9 +46,9 @@ export default function HashTagContainer({
 
   useEffect(() => {
     if (editUserHashTags !== undefined) {
-      setIsUserHashTags(editUserHashTags)
-      setIsHashTagButton(true)
-      setIsHashTagState(false)
+      setIsUserHashTags(editUserHashTags);
+      setIsHashTagButton(true);
+      // setIsHashTagState(false);
     }
   }, [editUserHashTags]);
 
@@ -59,7 +59,7 @@ export default function HashTagContainer({
     e.preventDefault();
     if (isUserHashTags.includes(i)) {
       setIsUserHashTags(isUserHashTags.filter((tag) => tag !== i));
-      onHashTagChange(isUserHashTags.filter((tag) => tag !== i))
+      onHashTagChange(isUserHashTags.filter((tag) => tag !== i));
       if (isUserHashTags.length == 1) {
         setIsHashTagState(true);
         setIsHashTagButton(false);
@@ -72,9 +72,14 @@ export default function HashTagContainer({
   };
 
   const addUserHashTagKey = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === 'Enter' || e.key === 'Space') {
       e.preventDefault();
-      if (e.nativeEvent.isComposing === false && isTagValue.trim() !== '') {
+      if (
+        e.nativeEvent.isComposing === false &&
+        isTagValue.trim() !== '' &&
+        /^[a-zA-Z0-9\u3131-\u318E\uAC00-\uD7A3]+$/.test(isTagValue) &&
+        !isUserHashTags.includes(isTagValue)
+      ) {
         setIsUserHashTags([...isUserHashTags, `${isTagValue.trim()}`]);
         onHashTagChange([...isUserHashTags, `${isTagValue.trim()}`]);
         setIsTagValue('');
@@ -82,6 +87,8 @@ export default function HashTagContainer({
         if (isHashTagButton != isHashTagState) {
           setIsHashTagState(false);
         }
+      } else {
+        console.log('숫자,영문,한글만 사용할 수 있습니다. or 이미 태그에 존재합니다.');
       }
     }
   };
@@ -122,7 +129,7 @@ export default function HashTagContainer({
         </div>
       </div>
       {isHashTagButton && (
-        <div className="flex p-[12px]">
+        <div className="flex flex-wrap p-[12px]">
           {isUserHashTags.map((item, index) => (
             <button
               onClick={(e) => addUserHashTagClick(e, item)}
