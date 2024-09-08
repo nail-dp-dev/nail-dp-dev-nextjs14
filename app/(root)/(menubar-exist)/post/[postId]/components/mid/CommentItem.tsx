@@ -16,6 +16,8 @@ import {
   setCommonModal,
 } from '../../../../../../../store/slices/modalSlice';
 import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
+import { useGoToProfile } from '../../../../../../../hooks/useGoToProfile';
+import useLoggedInUserData from '../../../../../../../hooks/user/useLoggedInUserData';
 
 interface CommentItemProps {
   item: Comment;
@@ -43,6 +45,8 @@ export default function CommentItem({
   const [showOptions, setShowOptions] = useState(false);
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const { goToProfile } = useGoToProfile();
+  const { userData } = useLoggedInUserData();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -175,6 +179,7 @@ export default function CommentItem({
                 alt="임시이미지"
                 width={40}
                 height={40}
+                onClick={() => goToProfile(item.commentUserNickname)}
               />
             </div>
             <div className="leading-4">

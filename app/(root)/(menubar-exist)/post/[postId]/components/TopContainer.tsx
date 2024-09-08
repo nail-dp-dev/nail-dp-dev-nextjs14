@@ -4,7 +4,7 @@ import UserInfo from '../../../../../../components/ui/UserInfo';
 import { PostsDetailData } from '../../../../../../types/dataType';
 import Link from 'next/link';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
-import { useRouter } from 'next/navigation';
+import { useGoToProfile } from '../../../../../../hooks/useGoToProfile';
 import {
   followUser,
   unFollowUser,
@@ -23,7 +23,7 @@ export default function TopContainer({ user, postId }: userProps) {
     user.followerCount,
   );
   const [isOwner, setIsOwner] = useState(false);
-  const router = useRouter();
+  const { goToProfile } = useGoToProfile(); 
 
   useEffect(() => {
     if (userData && userData.data.nickname === user.nickname) {
@@ -64,21 +64,13 @@ export default function TopContainer({ user, postId }: userProps) {
   if (!user) {
     return <div>사용자를 찾을 수 없습니다.</div>;
   }
-  //프로필 이동
-  const test = (nickname: string) => {
-    if (nickname !== undefined) {
-      localStorage.setItem("name",nickname)
-      router.push(`/profile/${nickname}`);
-    }
-    console.log('에러');
-  };
 
   return (
     <div className="flex flex-wrap items-center justify-between bg-white p-2">
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <div
           className="cursor-pointer"
-          onClick={(e) => test(user.nickname)}
+          onClick={() => goToProfile(user.nickname)} 
         >
           <UserImage
             src={user.profileUrl}
