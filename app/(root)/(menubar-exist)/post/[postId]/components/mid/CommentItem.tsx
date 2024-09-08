@@ -46,7 +46,6 @@ export default function CommentItem({
   const commentRef = useRef<HTMLDivElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const { goToProfile } = useGoToProfile();
-  const { userData } = useLoggedInUserData();
   const dispatch = useDispatch();
 
   useEffect(() => {

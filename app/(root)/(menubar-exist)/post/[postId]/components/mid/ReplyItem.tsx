@@ -14,6 +14,7 @@
 //   setCommonModal,
 // } from '../../../../../../../store/slices/modalSlice';
 // import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
+// import { useGoToProfile } from '../../../../../../../hooks/useGoToProfile';
 
 // interface ReplyItemProps {
 //   item: Reply;
@@ -42,6 +43,7 @@
 //   const [showOptions, setShowOptions] = useState(false);
 //   const commentRef = useRef<HTMLDivElement>(null);
 //   const textarea = useRef<HTMLTextAreaElement>(null);
+// const { goToProfile } = useGoToProfile();
 //   const dispatch = useDispatch();
 //   const { isCommonModalShow, whichCommonModal } = useSelector(
 //     selectCommonModalStatus,
@@ -167,6 +169,7 @@
 //               alt="임시이미지"
 //               width={40}
 //               height={40}
+//  onClick={() => goToProfile(item.commentUserNickname)}
 //             />
 //           </div>
 //           <div className="leading-4">
