@@ -53,29 +53,15 @@ export default function TagBar({
     setVisibleTags(filteredTags);
   }, [activeTags, searchTerm]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      const maxVisibleTags = Math.floor(window.innerWidth / 130);
-      setVisibleTags((prevTags) => prevTags.slice(0, maxVisibleTags));
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
-    <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
-      <div className="tagDiv flex h-[53px] w-full items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
-        <div className="flex gap-[5px] overflow-hidden whitespace-nowrap">
+    <div className="tagBar  flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
+      <div className="tagDiv  flex h-[53px] w-full items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
+        <div className="flex gap-[5px] overflow-hidden ">
           {visibleTags.map((tag, index) => (
             <button
               key={index}
               onClick={() => onTagClick(tag.name)}
-              className={`hashtag-layout hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center justify-center border-none bg-hashTagGray transition-all`}
+              className={`hashtag-layout  hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center justify-center border-none bg-hashTagGray transition-all`}
             >
               <p className="text-[14px] font-[700]">{tag.name}</p>
             </button>
