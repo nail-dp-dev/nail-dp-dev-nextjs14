@@ -142,6 +142,7 @@ export type PostsDetailData = {
     sharedCount: number;
     tags: string[];
     boundary: 'ALL' | 'FOLLOW' | 'NONE';
+    saved?: boolean;
   };
 };
 export type CommentData = {

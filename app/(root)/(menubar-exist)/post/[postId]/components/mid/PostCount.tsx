@@ -34,7 +34,7 @@ export default function PostCount({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleShareCount = useHandleShareCount(postId, setSharedCount);
+  const handleShareCount = useHandleShareCount('post', postId, setSharedCount);
 
   useEffect(() => {
     const fetchLikeCount = async () => {

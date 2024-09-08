@@ -13,6 +13,8 @@ export default function PostDetailPage() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [saved, setSaved] = useState(false);
+
   const [searchRecent, setSearchRecent] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const storedTags = localStorage.getItem('recentSearchTags');
@@ -67,8 +69,9 @@ export default function PostDetailPage() {
         isLastPage={commentsData.isLastPage}
         nickname={nickname}
         imageUrl={imageUrl}
-        searchRecent={searchRecent} 
-        setSearchRecent={setSearchRecent} 
+        searchRecent={searchRecent}
+        setSearchRecent={setSearchRecent}
+        saved={saved}
       />
       <BotContainer
         onAddComment={commentsData.handleAddComment}

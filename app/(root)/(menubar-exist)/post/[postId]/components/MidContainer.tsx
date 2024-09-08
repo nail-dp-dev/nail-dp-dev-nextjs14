@@ -10,6 +10,13 @@ import GeneralAction from '../../../../../../components/buttons/option-menu/Gene
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
+import PlusButton from '../../../../../../components/animations/PlusButton';
+import {
+  setArchivePost,
+  setCommonModal,
+} from '../../../../../../store/slices/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -32,6 +39,7 @@ interface MidContainerProps {
   imageUrl: string;
   searchRecent: string[];
   setSearchRecent: React.Dispatch<React.SetStateAction<string[]>>;
+  saved: boolean;
 }
 
 export default function MidContainer({
@@ -49,6 +57,7 @@ export default function MidContainer({
   imageUrl,
   searchRecent,
   setSearchRecent,
+  saved,
 }: MidContainerProps) {
   const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
   const [boundary, setBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
@@ -65,8 +74,9 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
-
+  const dispatch = useDispatch();
   const { userData } = useLoggedInUserData();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -159,6 +169,16 @@ export default function MidContainer({
     };
   }, [imageBoxWidth]);
 
+  const handlePlusClick = () => {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+
+    console.log('Click...Plus!');
+    dispatch(setCommonModal('archive'));
+    dispatch(setArchivePost({ postId }));
+  };
+
   return (
     <div ref={containerRef} className="h-screen overflow-y-scroll">
       <div className="mx-auto my-0 flex w-full flex-col  justify-center">
@@ -215,14 +235,18 @@ export default function MidContainer({
                 )}
               </>
             )}
-            <BoxCommonButton
-              onClick={() => console.log('Plus Clicked')}
-              type="plus"
-              width="36px"
-              height="36px"
-              position="bottom-right"
-              className="p-2"
-            />
+            <button
+              onClick={handlePlusClick}
+              className="absolute bottom-2 right-2 z-10"
+            >
+              <PlusButton
+                postId={postId}
+                width="24px"
+                height="24px"
+                isClicked={saved}
+                active={isLoggedIn === 'loggedIn'}
+              />
+            </button>
           </div>
           <div
             className={`ContentBox rounded-2xl bg-lightGray px-3 pt-[10px] text-sm font-light
