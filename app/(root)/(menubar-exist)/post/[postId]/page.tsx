@@ -13,8 +13,6 @@ export default function PostDetailPage() {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [saved, setSaved] = useState(false);
-
   const [searchRecent, setSearchRecent] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       const storedTags = localStorage.getItem('recentSearchTags');
@@ -50,6 +48,7 @@ export default function PostDetailPage() {
 
   const nickname = userDetail.post?.nickname ?? '';
   const imageUrl = userDetail.post?.files[0]?.fileUrl ?? '';
+  const saved = userDetail.post?.saved ?? false;
 
   return (
     <div className="hide-scrollbar overflow-auto">
