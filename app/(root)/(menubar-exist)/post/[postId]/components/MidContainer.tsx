@@ -9,6 +9,14 @@ import BoxCommonButton from '../../../../../../components/ui/BoxCommonButton';
 import GeneralAction from '../../../../../../components/buttons/option-menu/GeneralAction';
 import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
+import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
+import PlusButton from '../../../../../../components/animations/PlusButton';
+import {
+  setArchivePost,
+  setCommonModal,
+} from '../../../../../../store/slices/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
 
 interface MidContainerProps {
   post: PostsDetailData['data'];
@@ -31,6 +39,7 @@ interface MidContainerProps {
   imageUrl: string;
   searchRecent: string[];
   setSearchRecent: React.Dispatch<React.SetStateAction<string[]>>;
+  saved: boolean;
 }
 
 export default function MidContainer({
@@ -48,6 +57,7 @@ export default function MidContainer({
   imageUrl,
   searchRecent,
   setSearchRecent,
+  saved,
 }: MidContainerProps) {
   const [sharedCount, setSharedCount] = useState<number>(post.sharedCount ?? 0);
   const [boundary, setBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
@@ -64,6 +74,9 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
+  const dispatch = useDispatch();
+  const { userData } = useLoggedInUserData();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -157,7 +170,10 @@ export default function MidContainer({
   }, [imageBoxWidth]);
 
   return (
-    <div ref={containerRef} className="h-screen overflow-y-scroll">
+    <div
+      ref={containerRef}
+      className="flex min-h-[calc(100vh-200px)] flex-col justify-between"
+    >
       <div className="mx-auto my-0 flex w-full flex-col  justify-center">
         <div
           className="BoxWrap sticky flex justify-center   
@@ -186,34 +202,39 @@ export default function MidContainer({
               }))}
               onImageChange={setCurrentImageUrl}
             />
-            <BoxCommonButton
-              onClick={handleToggleClick}
-              type="toggle"
-              width="4px"
-              height="20px"
-              position="top-left"
-              className="p-3"
-              showGeneralAction={showGeneralAction}
-            />
-            {showGeneralAction && (
-              <div ref={boxRef} className=" absolute left-5 top-0 z-20">
-                <GeneralAction
-                  type="post"
-                  postId={postId}
-                  imageUrl={currentImageUrl}
-                  setSharedCount={setSharedCount}
-                  initialBoundary={boundary}
-                  onBoundaryChange={setBoundary}
+
+            {userData?.data?.nickname === post.nickname && (
+              <>
+                <BoxCommonButton
+                  onClick={handleToggleClick}
+                  type="toggle"
+                  width="4px"
+                  height="20px"
+                  position="top-left"
+                  className="p-3"
+                  showGeneralAction={showGeneralAction}
                 />
-              </div>
+                {showGeneralAction && (
+                  <div ref={boxRef} className=" absolute left-5 top-0 z-20">
+                    <GeneralAction
+                      type="post"
+                      postId={postId}
+                      imageUrl={currentImageUrl}
+                      setSharedCount={setSharedCount}
+                      initialBoundary={boundary}
+                      onBoundaryChange={setBoundary}
+                    />
+                  </div>
+                )}
+              </>
             )}
-            <BoxCommonButton
-              onClick={() => console.log('Plus Clicked')}
-              type="plus"
-              width="36px"
-              height="36px"
-              position="bottom-right"
-              className="p-2"
+
+            <PlusButton
+              postId={postId}
+              width="24px"
+              height="24px"
+              isClicked={saved}
+              active={isLoggedIn === 'loggedIn'}
             />
           </div>
           <div
@@ -240,7 +261,11 @@ export default function MidContainer({
               sharedCount={sharedCount}
               setSharedCount={setSharedCount}
             />
-            <PostTags post={post} searchRecent={searchRecent} setSearchRecent={setSearchRecent} />
+            <PostTags
+              post={post}
+              searchRecent={searchRecent}
+              setSearchRecent={setSearchRecent}
+            />
           </div>
           <div>
             <CommentWrap
