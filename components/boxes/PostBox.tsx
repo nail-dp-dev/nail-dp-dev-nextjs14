@@ -71,7 +71,7 @@ function PostBox({
     if (isLoggedIn === 'loggedOut') {
       return;
     }
-    router.push(`/post/edit/${postId}`)
+    router.push(`/post/edit/${postId}`);
   };
 
   const handlePostClick = (e: any, postId: number) => {
@@ -84,7 +84,7 @@ function PostBox({
     if (isLoggedIn === 'loggedIn') {
       dispatch(setStarState({ state: false }));
       dispatch(setPlusState({ state: false }));
-      router.push(`post/${postId}`);
+      router.push(`/post/${postId}`);
     }
   };
 
@@ -106,7 +106,10 @@ function PostBox({
     >
       {tempPost == true && (
         <>
-          <div onClick={handleTempClick} className="absolute cursor-pointer z-10 h-full w-full bg-darkPurple opacity-60"></div>
+          <div
+            onClick={handleTempClick}
+            className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+          ></div>
           <p className="z-10 text-center text-white">임시저장된 게시물</p>
         </>
       )}
