@@ -169,15 +169,16 @@ export default function SearchBar() {
     const searchTerms = searchTerm.split(' ').filter(Boolean);
 
     // 중복된 단어 확인
-    if (!searchTerms.includes(tag)) {
+    if (searchTerms.length > 0) {
       searchTerms[searchTerms.length - 1] = tag;
+    } else {
+      searchTerms.push(tag);
     }
 
     const newSearchTerm = searchTerms.join(' ');
 
     setSearchTerm(newSearchTerm);
     performSearch(newSearchTerm, true);
-
     addToRecentSearches(newSearchTerm);
 
     // 프로필 검색인 경우
