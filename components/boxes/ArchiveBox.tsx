@@ -136,7 +136,6 @@ export default function ArchiveBox({
                   src={profileUrl}
                   alt={'profileImage'}
                   id={profileUrl.toString()}
-                  fill
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                   quality={100}
                   sizes="100vw, 50vw, 33vw "
