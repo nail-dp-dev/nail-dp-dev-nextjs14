@@ -67,7 +67,6 @@ function PostBox({
       return;
     }
 
-    console.log('Click...Plus!');
     dispatch(setCommonModal('archive'));
     dispatch(setArchivePost({ postId }));
   };
@@ -76,7 +75,6 @@ function PostBox({
     e.stopPropagation();
 
     if (isLoggedIn === 'loggedOut') {
-      console.log('찍찍...');
       setIsSuggestLoginModalShow(true);
     }
 

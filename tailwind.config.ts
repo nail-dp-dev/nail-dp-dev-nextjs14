@@ -130,7 +130,9 @@ const config: Config = {
       loginSuggestModal: 'rgba(185, 140, 224, 0.9)',
       chatChooseButton: 'rgba(185, 140, 224, 0.2)',
       loginModal: 'rgba(255, 255, 255, 0.25)',
-      noArchiveColor: 'rgba(117, 105, 130, 0.6)'
+      noArchiveColor: 'rgba(117, 105, 130, 0.6)',
+      moreArchiveColor: 'rgba(0, 0, 0, 0.4)',
+      archiveCountInfo: 'rgba(117, 105, 130, 1)',
     },
     screens: {
       xs: { max: '640px' },

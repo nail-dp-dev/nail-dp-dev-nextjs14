@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArchiveBoxNewProps } from '../../constants/interface';
@@ -18,15 +18,20 @@ import { useVisibility } from '../../hooks/useVisibility';
 
 export default function ArchiveBox({
   showType,
+  category,
   archiveId,
   photoId,
   photoUrl,
+  profileUrl,
+  nickname,
+  archiveCount,
   archiveName,
   postCount,
   createdDate,
   initialBoundary,
 }: ArchiveBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const [link, setLink] = useState('')
   const layoutNum = useSelector(selectNumberOfBoxes);
   const { isVisible, handleDelete } = useVisibility();
   const [currentBoundary, setCurrentBoundary] = useState<
@@ -54,19 +59,29 @@ export default function ArchiveBox({
     setCurrentBoundary(newBoundary);
   };
 
-  if (!isVisible) return null;
+  // if (!isVisible) return null;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(()=>{
+    if(archiveId){
+      setLink(`archive/${archiveId}`)
+    }
+    if(nickname){
+      setLink(`profile/${nickname}`)
+    }
+  },[])
 
   return (
     <div
-      className={`relative mb-[30px] flex ${showType === 'list' && 'h-[72px] items-center gap-[16px] px-[16px]'}`}
+      className={`relative ${showType === 'album' && 'mb-[10px]'} flex ${showType === 'list'  && 'h-[72px] items-center gap-[16px] px-[16px] hover:border-purple'}`}
       style={boxStyle}
     >
       <Link
-        href={`archive/${archiveId}`}
+        href={link}
         className={`flex h-full w-full ${showType === 'album' && 'flex-col items-center gap-[20px]'} justify-between ${showType === 'list' && 'cursor-pointer items-center rounded-2xl  px-[16px] hover:bg-chatChooseButton'} z-0`}
       >
         <div
-          className={`box ${photoUrl === null && 'bg-noArchiveColor'} ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' && 'aspect-auto w-full	 transition-all duration-500 hover:border-purple'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent`}
+          className={`box relative ${photoUrl === null && 'bg-noArchiveColor'} ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' &&  category === 'archive' && 'aspect-auto w-full hover:border-purple'} ${showType === 'album' &&  category === 'following' && 'aspect-auto w-full'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent z-0`}
         >
           <div className={`inset-0 z-0 h-full w-full `}>
             {isPhoto && photoUrl !== null && (
@@ -82,6 +97,20 @@ export default function ArchiveBox({
                 placeholder="blur"
               />
             )}
+            {
+              <div className="relative group" style={{ width: '100%', height: '100%' }}>
+                {isPhoto && photoUrl !== null && showType === 'album' && category === 'following' && (
+                  <div
+                    className="hover:bg-moreArchiveColor z-20 absolute flex items-center justify-center w-full h-full"
+                    style={{ objectFit: 'cover' }}
+                  >
+                    <span className="group-hover:block text-white text-[1.3125rem] hidden">
+                      아카이브 더보기
+                    </span>
+                  </div>
+                )}
+              </div>
+            }
             {photoUrl === null && postCount === 0 && (
               <div
                 className="flex items-center justify-center"
@@ -96,15 +125,64 @@ export default function ArchiveBox({
             )}
           </div>
         </div>
-        <div className="flex h-full w-full flex-col items-start justify-center px-[10px]">
-          <p className="text-[1rem] font-[700] text-textBlack">{archiveName}</p>
-          <p className="text-text text-[0.875rem] font-[400]">
-            {postCount} designs{' '}
-          </p>
-        </div>
+        {
+          category === 'following' && showType === 'list' && profileUrl &&
+          <div className='flex-1 flex flex-col items-start justify-center h-full px-[16px] py-[8px]'>
+            <div className='flex items-center gap-[10px]'>
+              <div className='w-[20px] h-[20px] rounded-full overflow-hidden'>
+                <Image   
+                  width={50}
+                  height={50}
+                  src={profileUrl}
+                  alt={'profileImage'}
+                  id={profileUrl.toString()}
+                  style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                  quality={100}
+                  sizes="100vw, 50vw, 33vw "
+                  blurDataURL="https://image-component.nextjs.gallery/placeholder"
+                  placeholder="blur"/>
+              </div>
+              <span className='font-[700] text-[0.875rem]'>{nickname} 님의 아카이브</span>
+            </div>
+            <span className='font-[400] text-[0.875rem] text-textDarkPurple'>{archiveCount}개의 아카이브</span>
+          </div>
+        }
+        {
+          category === 'archive' &&
+          <div className="flex h-full w-full flex-col items-start justify-center px-[10px]">
+            <p className="text-[1rem] font-[700] text-textBlack">{archiveName}</p>
+            <p className="text-text text-[0.875rem] font-[400]">
+              {postCount} designs{' '}
+            </p>
+          </div>
+        }
+        {
+          showType === 'album' && category === 'following' && profileUrl &&
+          <div
+            className="h-[50px] w-full flex items-start justify-between gap-[12px] px-[10px]"
+          >
+            <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
+              <Image   
+                width={50}
+                height={50}
+                src={profileUrl}
+                alt={'profileImage'}
+                id={profileUrl.toString()}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                quality={100}
+                sizes="100vw, 50vw, 33vw "
+                blurDataURL="https://image-component.nextjs.gallery/placeholder"
+                placeholder="blur"/>
+              </div>
+              <div className='flex-1 h-[50px] flex flex-col items-end'>
+                <p className='font-[500]'>{nickname}</p>
+                <p className='font-[400] text-[0.875rem] font-archiveCountInfo font-Epilogue'>{archiveCount}<span>archive</span></p>
+              </div>
+          </div>
+        }
       </Link>
 
-      {showType === 'album' && (
+      {showType === 'album' && category === 'archive' && (
         <BoxCommonButton
           showType={showType}
           type="toggle"
@@ -116,7 +194,7 @@ export default function ArchiveBox({
           className="z-30 p-2 "
         />
       )}
-      {showType === 'album' && showGeneralAction && (
+      {showType === 'album' && category === 'archive' && showGeneralAction && (
         <div ref={boxRef} className="absolute left-5 top-0 z-40">
           <GeneralAction
             type="archive"
@@ -129,8 +207,8 @@ export default function ArchiveBox({
           />
         </div>
       )}
-      {showType === 'list' && (
-        <div className="absolute right-0 translate-x-[-20px]">
+      {showType === 'list' && category === 'archive' && (
+        <div className="absolute right-0 translate-x-[-20px] z-40">
           <BoxCommonButton
             showType={showType}
             type="toggle"
@@ -139,9 +217,9 @@ export default function ArchiveBox({
             height="20px"
             showGeneralAction={showGeneralAction}
             position="nothing"
-            className="relative z-30 p-2 bg-red"
+            className="relative z-40 p-2"
           />
-          {showType === 'list' && showGeneralAction && (
+          {showType === 'list' && category === 'archive' && showGeneralAction && (
             <div
               ref={boxRef}
               className="absolute bottom-0 right-0 z-40 translate-x-[-150px] translate-y-[-30px]"

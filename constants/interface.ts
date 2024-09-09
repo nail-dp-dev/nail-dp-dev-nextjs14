@@ -40,9 +40,13 @@ export interface PostBoxNewProps {
 }
 export interface ArchiveBoxNewProps {
   showType: string;
+  category: string;
   archiveId: number;
   photoId: number;
   photoUrl: string;
+  profileUrl?: string;
+  nickname?: string;
+  archiveCount?: number;
   like?: boolean;
   saved?: boolean;
   createdDate?: any;
