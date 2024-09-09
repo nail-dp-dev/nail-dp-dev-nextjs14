@@ -83,7 +83,7 @@ export default function ArchiveBox({
         <div
           className={`box relative ${photoUrl === null && 'bg-noArchiveColor'} ${showType === 'list' && 'h-[56px] w-[56px]'} ${showType === 'album' &&  category === 'archive' && 'aspect-auto w-full hover:border-purple'} ${showType === 'album' &&  category === 'following' && 'aspect-auto w-full'} relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent z-0`}
         >
-          <div className={`inset-0 z-0 h-full w-full `}>
+          <div className={`inset-0 z-0 h-full w-full relative`}>
             {isPhoto && photoUrl !== null && (
               <Image
                 src={photoUrl}
@@ -98,8 +98,8 @@ export default function ArchiveBox({
               />
             )}
             {
+              isPhoto && photoUrl !== null && showType === 'album' && category === 'following' && (
               <div className="relative group" style={{ width: '100%', height: '100%' }}>
-                {isPhoto && photoUrl !== null && showType === 'album' && category === 'following' && (
                   <div
                     className="hover:bg-moreArchiveColor z-20 absolute flex items-center justify-center w-full h-full"
                     style={{ objectFit: 'cover' }}
@@ -108,12 +108,12 @@ export default function ArchiveBox({
                       아카이브 더보기
                     </span>
                   </div>
-                )}
               </div>
+              )
             }
-            {photoUrl === null && postCount === 0 && (
+            {photoUrl === null  && (
               <div
-                className="flex items-center justify-center"
+                className="flex items-center justify-center bg-red"
                 style={{ width: '100%', height: '100%' }}
               >
                 <NoArchiveImage className="absolute" />
@@ -129,13 +129,14 @@ export default function ArchiveBox({
           category === 'following' && showType === 'list' && profileUrl &&
           <div className='flex-1 flex flex-col items-start justify-center h-full px-[16px] py-[8px]'>
             <div className='flex items-center gap-[10px]'>
-              <div className='w-[20px] h-[20px] rounded-full overflow-hidden'>
+              <div className='w-[20px] h-[20px] rounded-full overflow-hidden relative'>
                 <Image   
                   width={50}
                   height={50}
                   src={profileUrl}
                   alt={'profileImage'}
                   id={profileUrl.toString()}
+                  fill
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                   quality={100}
                   sizes="100vw, 50vw, 33vw "
@@ -161,7 +162,7 @@ export default function ArchiveBox({
           <div
             className="h-[50px] w-full flex items-start justify-between gap-[12px] px-[10px]"
           >
-            <div className='w-[50px] h-[50px] rounded-full overflow-hidden '>
+            <div className='w-[50px] h-[50px] rounded-full overflow-hidden relative'>
               <Image   
                 width={50}
                 height={50}
