@@ -13,8 +13,6 @@ import { ArchiveArray } from '../../../../types/dataType';
 
 export default function MyArchivePage() {
 
-  console.log('MyArchivePage rendered');
-
   const isLoggedIn = useSelector(selectLoginStatus);
   const [category, setCategory] = useState<string>('archive')
   const [archivesData, setArchivesData] = useState<ArchiveArray[]>([]);
@@ -29,7 +27,6 @@ export default function MyArchivePage() {
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sharedCount, setSharedCount] = useState<number>(0);
-
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -37,9 +34,6 @@ export default function MyArchivePage() {
     const currentCursorId = cursorId;
     let data = await getAllArchivesData({ category, cursorId: currentCursorId });
 
-    console.log(data, 'fetchMorePosts에서의 cursorId')
-
-    console.log('게시글 더 가져오기...')
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLoading(true);
       setCursorId(data.data.cursorId);
@@ -126,11 +120,10 @@ export default function MyArchivePage() {
     console.log(`Show type clicked: ${type}`);
     setShowType(type)
   }
-
   
   return (
     isLoggedIn === 'loggedIn' ?
-    <div className="MyArchiveContainer w-full h-fit flex flex-col px-[5px] overflow-hidden">
+    <div className="MyArchiveContainer w-full h-dvh flex flex-col px-[5px] overflow-hidden ">
       <div className='w-full h-[66px] bg-white flex items-start justify-start'>
         <div className='flex items-center justify-between w-full h-[54px] border-b-navBotSolidGray border-b-[1px]'>
           <nav className='flex items-center justify-between gap-[32px] h-[54px]'>
@@ -161,12 +154,13 @@ export default function MyArchivePage() {
         </div>
       </div>
         {
-          showType === 'album' && archivesData ?
-            <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
+          showType === 'album' && category === 'archive' && archivesData ?
+            <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all '>
               {archivesData.map((item:any, index:any)=>(
                 <ArchiveBox
                   key={index}
                   showType={showType}
+                  category={category}
                   archiveId={item.archiveId}
                   photoId={index}
                   photoUrl={item.archiveImgUrl}
@@ -180,15 +174,62 @@ export default function MyArchivePage() {
               <div ref={bottomRef} className="w-full h-[1px]"></div>
             </div>
             :
-          showType === 'list' && archivesData ? 
+          showType === 'list' && category === 'archive' && archivesData ? 
+            <div className='w-full relative flex flex-1 flex-wrap content-start items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
+              {archivesData.map((item:any, index:any)=>(
+                <ArchiveBox
+                  key={index}
+                  showType={showType}
+                  category={category}
+                  archiveId={item.archiveId}
+                  photoId={index}
+                  photoUrl={item.archiveImgUrl}
+                  saved={false}
+                  createdDate={undefined}
+                  archiveName={item.archiveName}
+                  postCount={item.postCount}
+                  initialBoundary={item.boundary} 
+                />
+              ))}
+              <div ref={bottomRef} className="w-full h-[1px]"></div>
+            </div>
+              :
+          showType === 'album' && category === 'following' && archivesData ?
             <div className='w-full relative flex flex-1 flex-wrap items-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all'>
               {archivesData.map((item:any, index:any)=>(
                 <ArchiveBox
                   key={index}
                   showType={showType}
+                  category={category}
                   archiveId={item.archiveId}
                   photoId={index}
                   photoUrl={item.archiveImgUrl}
+                  profileUrl={item.profileUrl}
+                  nickname={item.nickname}
+                  archiveCount={item.archiveCount}
+                  saved={false}
+                  createdDate={undefined}
+                  archiveName={item.archiveName}
+                  postCount={item.postCount}
+                  initialBoundary={item.boundary} 
+                />
+              ))}
+              <div ref={bottomRef} className="w-full h-[1px]"></div>
+            </div>
+            :
+          showType === 'list' && category === 'following' && archivesData ? 
+            <div className='w-full relative flex flex-1 flex-wrap content-start gap-[0.7%] overflow-auto overflow-y-scroll transition-all '>
+              {archivesData.map((item:any, index:any)=>(
+                <ArchiveBox
+                  key={index}
+                  showType={showType}
+                  category={category}
+                  archiveId={item.archiveId}
+                  photoId={index}
+                  photoUrl={item.archiveImgUrl}
+                  profileUrl={item.profileUrl}
+                  nickname={item.nickname}
+                  archiveCount={item.archiveCount}
                   saved={false}
                   createdDate={undefined}
                   archiveName={item.archiveName}

@@ -12,6 +12,7 @@ import { getPostsNumber } from '../../../../../constants';
 import { PostArray } from '../../../../../types/dataType';
 import { selectButtonState } from '../../../../../store/slices/getLikedPostsSlice';
 import PostBox from '../../../../../components/boxes/PostBox';
+import { getArchiveDetailLikedData } from '../../../../../api/archive/getArchiveDetailLikedData';
 
 
 export default function DetailArchivePage() {
@@ -19,6 +20,7 @@ export default function DetailArchivePage() {
   const { archiveId } = useParams<{ archiveId: string }>();
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
+
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
@@ -51,8 +53,6 @@ export default function DetailArchivePage() {
     const currentArchiveId = Number(archiveId)
     let data = await getArchiveDetailData({archiveId:currentArchiveId , size, cursorId: currentCursorId });
 
-    console.log(data)
-
     if(isFirstRendering){
       setArchiveName(data.data.archiveName)
     }
@@ -83,9 +83,9 @@ export default function DetailArchivePage() {
 
   const fetchMorePostsByLikedButton = async () => {
       
-    const currentCursorId = cursorId;
+    const currentCursorId = cursorLikedId;
     const currentArchiveId = Number(archiveId)
-    let data = await getArchiveDetailData({archiveId:currentArchiveId , size, cursorId: currentCursorId });
+    let data = await getArchiveDetailLikedData({archiveId:currentArchiveId , size, cursorId: currentCursorId });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
@@ -155,7 +155,7 @@ export default function DetailArchivePage() {
     }
 
     if (isLikedPostsFirstRendering && likedButtonState) {
-      // fetchMorePostsByLikedButton();
+      fetchMorePostsByLikedButton();
     }
 
     const likedButtonCurrentRef = likedPostsBottomRef.current;
@@ -217,21 +217,21 @@ export default function DetailArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
-  useEffect(() => {
-    setCursorId(0);
-    setMessage('');
-    setIsContentExist(false);
-    setPostsData([]);
-    setIsFirstRendering(true);
-    setIsLoading(true);
-    setIsLast(false);
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   setCursorId(0);
+  //   setMessage('');
+  //   setIsContentExist(false);
+  //   setPostsData([]);
+  //   setIsFirstRendering(true);
+  //   setIsLoading(true);
+  //   setIsLast(false);
+  // }, [isLoggedIn]);
 
 
   return (
     <>
       <ControlBar archiveName={archiveName}/>
-      <div className="ForYouContainer max-h-full overflow-hidden">
+      <div className="ForYouContainer h-dvh overflow-hidden">
         <Suspense fallback={<Loading />}>
           <div
             ref={boxRef}
@@ -257,7 +257,7 @@ export default function DetailArchivePage() {
               ))}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
             {!likedButtonState && !isContentExist && !isLoading && (
-              <div>{message}</div>
+              <div className='h-dvh w-full'>{message}</div>
             )}
             {likedButtonState &&
               isLikedPostsContentExist &&
