@@ -113,20 +113,6 @@ export default function ArchiveBox({
                 placeholder="blur"
               />
             )}
-            {
-              <div className="relative group" style={{ width: '100%', height: '100%' }}>
-                {isPhoto && photoUrl !== null && showType === 'album' && category === 'following' && (
-                  <div
-                    className="hover:bg-moreArchiveColor z-20 absolute flex items-center justify-center w-full h-full"
-                    style={{ objectFit: 'cover' }}
-                  >
-                    <span className="group-hover:block text-white text-[1.3125rem] hidden">
-                      아카이브 더보기
-                    </span>
-                  </div>
-                )}
-              </div>
-            }
             {photoUrl === null && postCount === 0 && (
               <div
                 className="flex items-center justify-center bg-red"
