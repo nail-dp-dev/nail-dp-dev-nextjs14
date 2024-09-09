@@ -18,6 +18,7 @@ import AlbumMenu from '../../../../public/assets/svg/my-archive-album.svg';
 import SearchIcon from '../../../../public/assets/svg/search.svg';
 import BellIcon from '../../../../public/assets/svg/bell.svg';
 import DottedAlbum from '../../../../public/assets/svg/dotted_album.svg';
+import Cross from '../../../../public/assets/svg/input-clear.svg';
 import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
 import { getArchiveData } from '../../../../api/archive/getArchiveData';
 import { archiveModalElements } from '../../../../constants';
@@ -55,6 +56,10 @@ export default function MyArchiveModal() {
     dispatch(commonModalClose());
   };
 
+  const inputClear = () =>{
+    setIsName("")
+  }
+
   const archiveMenuChange = (menu: string) => {
     setIsArchiveMenu(menu);
   };
@@ -79,8 +84,8 @@ export default function MyArchiveModal() {
       const success = await postArchiveCreate(isName, isBoundary);
       if (success.data) {
         setArchive(success.data, postId);
-      }else{
-        console.log("백엔드 아카이브 제한을 확인해주세요.");
+      } else {
+        console.log('백엔드 아카이브 제한을 확인해주세요.');
       }
     } else {
       console.log('모달로 변경: 아카이브이름을 입력해주세요!');
@@ -88,7 +93,7 @@ export default function MyArchiveModal() {
   };
 
   const setArchive = async (archiveId: number, postId: number) => {
-    console.log(archiveId,postId);
+    console.log(archiveId, postId);
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
       dispatch(setArchiveState({ state: true }));
@@ -138,10 +143,10 @@ export default function MyArchiveModal() {
       setIsDeleteArchive(data.data.postSummaryList.content);
       setIsLastPage(data.data.postSummaryList.last);
     } else {
-      console.log('c');
       const data = await getArchiveData();
-      setIsCursorId(data.cursorId);
       if (data.data.postSummaryList.content[0]) {
+        setIsCursorId(data.cursorId);
+        setIsLastPage(data.data.postSummaryList.last);
         setIsArchive(data.data.postSummaryList.content);
         setIsArchiveName(data.data.postSummaryList.content[0].archiveName);
         setIsSelectArchive(data.data.postSummaryList.content[0].archiveId);
@@ -173,7 +178,7 @@ export default function MyArchiveModal() {
 
   useEffect(() => {
     archiveData();
-  }, []);
+  }, [isArchiveMenu]);
 
   const archiveScrollData = async () => {
     setLading(false);
@@ -321,14 +326,22 @@ export default function MyArchiveModal() {
                     </p>
                   </div>
                   <div className="flex flex-col">
-                    <input
-                      onInput={(e) => handleOnInput(e, 8)}
-                      className="my-[16px] h-[40px] w-[320px] rounded-full border-none bg-darkGray pl-[12px] text-[0.9rem] outline-none"
-                      type="text"
-                      placeholder="폴더 이름을 입력해주세요.(최대 8글자)"
-                      value={isName}
-                      onChange={(e) => archiveName(e)}
-                    />
+                    <div className="relative flex items-center">
+                      <input
+                        onInput={(e) => handleOnInput(e, 8)}
+                        className={`my-[16px] h-[40px] w-[320px] rounded-full border-none ${isName.length == 0 ? "bg-darkGray":"bg-purple/20"} pl-[12px] text-[0.9rem] outline-none`}
+                        type="text"
+                        placeholder="폴더 이름을 입력해주세요.(최대 8글자)"
+                        value={isName}
+                        onChange={(e) => archiveName(e)}
+                      />
+                      <button
+                        className="absolute right-0 mr-[14px] h-[15px] w-[15px]"
+                        onClick={inputClear}
+                      >
+                        <Cross />
+                      </button>
+                    </div>
                     <div className="pl-[14px] pt-[20px]">
                       <p className="font-bold">공개 범위 설정</p>
                       <div className="flex pt-[10px]">
@@ -607,14 +620,14 @@ export default function MyArchiveModal() {
               </div>
             ) : (
               <div
-                className={`${ArchivePage == 'deletePost'? "":"hidden" } relative flex flex-1 flex-col items-center justify-center`}
+                className={`${ArchivePage == 'deletePost' && isArchiveMenu !== 'archiveCreate' ? '' : 'hidden'} relative flex flex-1 flex-col items-center justify-center`}
               >
                 <DottedAlbum />
                 <div className="absolute h-[30px] w-[90px] rounded-full bg-lightGray text-center">
                   <p className="text-[18px]">비어있음</p>
                 </div>
-                <p className="mt-[20px] text-[18px] text-darkGray">
-                  선택 해제할 아카이브가 없습니다.
+                <p className="mt-[20px] text-[18px] text-purple">
+                  선택하신 게시물이 저장된 아카이브가 없습니다.
                 </p>
               </div>
             )}

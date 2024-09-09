@@ -74,15 +74,6 @@ function PostBox({
     router.push(`/post/edit/${postId}`)
   };
 
-  const handlePlusClick = () => {
-    if (isLoggedIn === 'loggedOut') {
-      return;
-    }
-
-    dispatch(setCommonModal('archive'));
-    dispatch(setArchivePost({ postId }));
-  };
-
   const handlePostClick = (e: any, postId: number) => {
     e.stopPropagation();
 
@@ -110,7 +101,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="box relative  flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+      className="box relative flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       {tempPost == true && (
@@ -152,10 +143,6 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      {/* <button
-        onClick={handlePlusClick}
-        className="absolute bottom-2 right-2 z-10"
-      > */}
       <PlusButton
         postId={postId}
         width="24px"
@@ -163,7 +150,6 @@ function PostBox({
         isClicked={saved}
         active={isLoggedIn === 'loggedIn'}
       />
-      {/* </button> */}
       <div className="absolute left-0 top-0 z-40 bg-kakaoYellow">
         {isOptional && (
           <BoxCommonButton

@@ -51,9 +51,8 @@ export default function PlusButton({
     const data = await getArchiveData();
 
     let content = data.data.postSummaryList.content;
-    setIsCursorId(data.cursorId);
+    setIsCursorId(data.data.cursorId);
     setIsLastPage(data.data.postSummaryList.last);
-    console.log(data);
     if (content[0] && content.length <= 4) {
       content = [...content, ...Array(4 - content.length).fill([])];
       setIsArchiveData(content);
@@ -84,7 +83,6 @@ export default function PlusButton({
   const buttonClick = async () => {
     if (isClick && archiveId) {
       const data = await deletePostArchive([+archiveId], postId);
-      console.log(data);
       if (data.code === 2001) {
         dispatch(setPlusState({ state: false }));
         setIsClick(false);
@@ -98,7 +96,6 @@ export default function PlusButton({
       }
     } else if (!isClick && archiveId) {
       const data = await postSetArchive(postId, +archiveId);
-      console.log(data);
       if (data.code === 2001) {
         dispatch(setPlusState({ state: false }));
         setIsClick(true);
@@ -160,7 +157,6 @@ export default function PlusButton({
   const archiveScrollData = async () => {
     setLading(false);
     const archiveData = await getArchiveData(isCursorId);
-    console.log(postId);
     setIsCursorId(archiveData.data.cursorId);
     setIsLastPage(archiveData.data.postSummaryList.last);
     setIsArchiveData((prevData) => [
@@ -194,7 +190,7 @@ export default function PlusButton({
       scrollElement.addEventListener('scroll', handleScroll);
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
-  }, [ArchivePostId, isLading]);
+  }, [ArchivePostId, isLading,isLastPage]);
 
   useEffect(() => {
     if (postId === ArchivePostId) {
