@@ -87,7 +87,7 @@ export default function SearchBar() {
 
     try {
       const searchTerms = searchQuery.split(' ').filter(Boolean);
-      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase();
+      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase(); // 마지막 단어만 검색
 
       // 이미 있는 태그 요청 X
       const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
@@ -98,7 +98,7 @@ export default function SearchBar() {
       const newTagResults = await getTagSearchResults([lastSearchTerm]);
 
       if (newTagResults && newTagResults.length > 0) {
-        setTagResults((prevResults) => [...prevResults, ...newTagResults]);
+        setTagResults(newTagResults);
         setSearchError('');
       } else {
         if (showError) {
@@ -115,6 +115,19 @@ export default function SearchBar() {
     }
   };
 
+  // 검색 입력 값 변경 핸들러 수정
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    setSearchError('');
+
+    if (newSearchTerm !== '@') {
+      const searchTerms = newSearchTerm.split(' ').filter(Boolean);
+      const lastSearchTerm = searchTerms[searchTerms.length - 1];
+      debouncedSearch(lastSearchTerm);
+    }
+  };
+
   const debouncedSearch = useCallback(
     debounce((query: string) => {
       console.log('검색어 쿼리:', query);
@@ -122,17 +135,6 @@ export default function SearchBar() {
     }, 100),
     [tagResults],
   );
-
-  // 검색 입력 값 변경 핸들러
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-    setSearchError('');
-
-    if (newSearchTerm !== '@') {
-      debouncedSearch(newSearchTerm);
-    }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
