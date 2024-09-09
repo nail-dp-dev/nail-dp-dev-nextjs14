@@ -1,15 +1,16 @@
-export const getArchiveData = async (cursorId?: number) => {
+export const deletePostArchive = async (archiveId: number[],postId:number) => {
   try {
-    const api = cursorId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/archive?cursorId=${cursorId}`
-      : `${process.env.NEXT_PUBLIC_API_URL}/archive`
-    const response = await fetch(api, {
-      method: 'Get',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/archive/unsave`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ postId,archiveId}),
       },
-      credentials: 'include',
-    });
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

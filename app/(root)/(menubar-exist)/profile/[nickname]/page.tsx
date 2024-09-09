@@ -45,8 +45,8 @@ export default function ProfilePage() {
   const [isFollowState, setIsFollowState] = useState(false);
   const [isCategory, setIsCategory] = useState('post');
   const [isPost, setIsPost] = useState<postData[]>([]);
-  const [isPostLost, setIsPostLost] = useState(false);
-  const [isArchiveLost, setIsArchiveLost] = useState(false);
+  const [isPostLast, setIsPostLast] = useState(false);
+  const [isArchiveLast, setIsArchiveLast] = useState(false);
   const [isPostCursorId, setIsPostCursorId] = useState(0);
   const [isArchiveCursorId, setIsArchiveCursorId] = useState(0);
   const [isLading, setLading] = useState(true);
@@ -71,7 +71,7 @@ export default function ProfilePage() {
     const postData = await getProfilePost(nickname);
     console.log(postData.data.cursorId);
     if (postData.data.postSummaryList.content[0]) {
-      setIsPostLost(postData.data.postSummaryList.last);
+      setIsPostLast(postData.data.postSummaryList.last);
       setIsPostCursorId(postData.data.cursorId);
       setIsPost(postData.data.postSummaryList.content);
     }
@@ -80,7 +80,7 @@ export default function ProfilePage() {
   const profileArchiveData = async () => {
     const archiveData = await getProfileArchive(nickname);
     if (archiveData.data.postSummaryList.content[0]) {
-      setIsArchiveLost(archiveData.data.postSummaryList.last);
+      setIsArchiveLast(archiveData.data.postSummaryList.last);
       setIsArchiveCursorId(archiveData.data.cursorId);
       setIsArchive(archiveData.data.postSummaryList.content);
     }
@@ -131,16 +131,19 @@ export default function ProfilePage() {
 
   const postScrollData = async () => {
     setLading(false);
-    if (!isPostLost) {
+    if (!isPostLast) {
       console.log(isPostCursorId);
       const postData = await getProfilePost(nickname, isPostCursorId);
       console.log(postData, isArchiveCursorId);
-      {postData.data.postSummaryList.content[0] && setIsPostCursorId(postData.data.cursorId);
-      setIsPostLost(postData.data.postSummaryList.last);
-      setIsPost((prevData) => [
-        ...prevData,
-        ...postData.data.postSummaryList.content,
-      ])};
+      {
+        postData.data.postSummaryList.content[0] &&
+          setIsPostCursorId(postData.data.cursorId);
+        setIsPostLast(postData.data.postSummaryList.last);
+        setIsPost((prevData) => [
+          ...prevData,
+          ...postData.data.postSummaryList.content,
+        ]);
+      }
 
       setLading(true);
     }
@@ -148,15 +151,18 @@ export default function ProfilePage() {
 
   const archiveScrollData = async () => {
     setLading(false);
-    if (!isArchiveLost) {
+    if (!isArchiveLast) {
       const archiveData = await getProfileArchive(nickname, isArchiveCursorId);
       console.log(archiveData);
-      {archiveData.data.postSummaryList.content[0] && setIsArchiveCursorId(archiveData.data.cursorId);
-      setIsArchiveLost(archiveData.data.postSummaryList.last);
-      setIsArchive((prevData) => [
-        ...prevData,
-        ...archiveData.data.postSummaryList.content,
-      ])};
+      {
+        archiveData.data.postSummaryList.content[0] &&
+          setIsArchiveCursorId(archiveData.data.cursorId);
+        setIsArchiveLast(archiveData.data.postSummaryList.last);
+        setIsArchive((prevData) => [
+          ...prevData,
+          ...archiveData.data.postSummaryList.content,
+        ]);
+      }
 
       setLading(true);
     }
@@ -173,13 +179,13 @@ export default function ProfilePage() {
         if (
           scrollTop + clientHeight >= scrollHeight * 0.8 &&
           isLading &&
-          !isPostLost
+          !isPostLast
         ) {
           postScrollData();
         } else if (
           scrollTop + clientHeight >= scrollHeight * 0.8 &&
           isLading &&
-          !isArchiveLost
+          !isArchiveLast
         ) {
           archiveScrollData();
         }
@@ -286,7 +292,7 @@ export default function ProfilePage() {
                   )}
                 </div>
               )}
-              {isCategory === 'Archive' && (
+              {isCategory === 'archive' && (
                 <div className="flex items-center gap-[10px]">
                   <button
                     onClick={(e) => {
@@ -309,7 +315,7 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-            {isCategory !== 'Archive' && (
+            {isCategory !== 'archive' && (
               <div className="h-[13px] w-full"></div>
             )}
           </div>
@@ -335,13 +341,13 @@ export default function ProfilePage() {
                 isOptional={false}
               />
             ))}
-          {isCategory == 'Archive' &&
+          {isCategory == 'archive' &&
             (isArchive[0] ? (
               isArchive.map((item, index) =>
                 item.boundary == 'FOLLOW' && !isFollowState ? (
                   <div
                     key={index}
-                    className={` relative mb-[30px] flex ${showType === 'album' && 'flex-col '} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
+                    className={` relative flex ${showType === 'album' ? 'flex-col mb-[10px]':""} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
                     style={boxStyle}
                   >
                     <div
@@ -380,17 +386,18 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <ArchiveBox
-                    key={index}
-                    showType={showType}
-                    archiveId={item.archiveId}
-                    photoId={index}
-                    photoUrl={item.archiveImgUrl}
-                    saved={false}
-                    createdDate={undefined}
-                    archiveName={item.archiveName}
-                    postCount={item.postCount}
-                    initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                  />
+                      key={index}
+                      showType={showType}
+                      archiveId={item.archiveId}
+                      photoId={index}
+                      photoUrl={item.archiveImgUrl}
+                      saved={false}
+                      createdDate={undefined}
+                      archiveName={item.archiveName}
+                      postCount={item.postCount}
+                      initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                      category={isCategory}                  
+                      />
                 ),
               )
             ) : (

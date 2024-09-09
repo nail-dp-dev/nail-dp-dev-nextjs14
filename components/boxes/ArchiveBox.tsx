@@ -113,7 +113,7 @@ export default function ArchiveBox({
             }
             {photoUrl === null  && (
               <div
-                className="flex items-center justify-center bg-red"
+                className="flex items-center justify-center"
                 style={{ width: '100%', height: '100%' }}
               >
                 <NoArchiveImage className="absolute" />

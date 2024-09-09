@@ -17,10 +17,11 @@ import {
 } from '../../../../store/slices/boxLayoutSlice';
 import { postData, tempData } from '../../../../constants/interface';
 import HeartButton from '../../../../components/animations/HeartButton';
-import { myPageCategoryElements } from '../../../../constants';
+import { myPageCategoryElements, postBoxWidths } from '../../../../constants';
 import MinusSVG from '../../../../public/assets/svg/minus.svg';
 import PlusSVG from '../../../../public/assets/svg/plus.svg';
 import { RootState } from '../../../../store/store';
+import { useRouter } from 'next/navigation';
 
 export default function MyPagePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -37,13 +38,21 @@ export default function MyPagePage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
+  const router = useRouter()
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
+
+  const handleTempClick = async () => {
+    if (isLoggedIn === 'loggedOut') {
+      return;
+    }
+    router.push(`/post/edit/${isTempData[0].postId}`)
+  };
+
   const categoryClick = (e: any, category: string) => {
     e.stopPropagation();
     setIsCategory(category);
-    console.log(category);
   };
 
   const fetchPostData = async () => {
@@ -65,6 +74,7 @@ export default function MyPagePage() {
     setLading(false);
     if (!isLastPage) {
       const postData = await getPostsData(isNickname, isCursorId, layoutNum);
+      console.log(postData);
       setIsCursorId(postData.data.cursorId);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsMyPageData((prevData) => [
@@ -108,8 +118,7 @@ export default function MyPagePage() {
   return (
     <div
       id="scroll1"
-      className={`relative h-full overflow-y-scroll scrollbar-hide 
-        `}
+      className={`relative h-full overflow-y-scroll scrollbar-hide`}
     >
       {isLoggedIn === 'loggedIn' && userData && (
         <div className="flex min-h-[160px] items-center">
@@ -187,7 +196,7 @@ export default function MyPagePage() {
           {isTempData[0] !== null &&
             isTempData.map((item, index) => {
               if (item && item.postId) {
-                return (
+                return item.photoUrl ? (
                   <PostBox
                     key={index}
                     postId={item.postId}
@@ -201,6 +210,19 @@ export default function MyPagePage() {
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                     isOptional={false}
                   />
+                ) : (
+                  <div
+                  key={index}
+                    className="box cursor-pointer relative flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                    style={{ width: postBoxWidths[layoutNum] }}
+                    onClick={handleTempClick}
+                  >
+                    <div className='absolute flex flex-col justify-center w-full h-full bg-lightGray'>
+                      <p className="text-[16px] z-10 text-center ">
+                        임시저장된 게시물
+                      </p>
+                    </div>
+                  </div>
                 );
               }
               return null;

@@ -270,5 +270,5 @@ export const archiveModalElements = [
 
 export const ProfileElements = [
   { name: '게시물', desc: 'post' },
-  { name: '아카이브', desc: 'Archive' }
+  { name: '아카이브', desc: 'archive' }
 ];

@@ -20,8 +20,8 @@ export default function CreatePost() {
 
   return (
     <div
-      className="box relative mb-[16px] rounded-2xl overflow-hidden transition-all duration-500 border-[5px] border-dashed border-purple p-[5px] snap-start"
-      style={{ width: postBoxWidths[layoutNum] }}
+      className="box relative rounded-2xl overflow-hidden transition-all duration-500 border-[5px] mx-[5px] border-dashed border-purple"
+      style={{ width: `calc(${ postBoxWidths[layoutNum]} - 10px)` }}
     >
       <Link href={`/post/create`} className="absolute inset-0 z-0">
         <div

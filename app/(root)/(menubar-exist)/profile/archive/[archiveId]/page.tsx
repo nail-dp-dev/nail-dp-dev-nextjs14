@@ -30,7 +30,7 @@ export default function ProfileArchive() {
   const [isNickName, setIsNickName] = useState('');
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setIsLading] = useState(true);
-  const [isLost, setIsLost] = useState(false);
+  const [isLast, setIsLast] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const numberOfBoxes = useSelector((state: RootState) =>
@@ -40,13 +40,11 @@ export default function ProfileArchive() {
   const archiveData = async () => {
     const archiveData = await getArchiveSelectData(archiveId);
     console.log(archiveData);
-    if (archiveData.data.postSummaryList.content[0]) {
-      setIsPost(archiveData.data.postSummaryList.content);
-      setIsArchiveName(archiveData.data.archiveName);
-      setIsCursorId(archiveData.data.cursorId);
-      setIsLost(archiveData.data.postSummaryList.last);
-      setIsNickName(archiveData.data.nickname);
-    }
+    setIsPost(archiveData.data.postSummaryList.content);
+    setIsArchiveName(archiveData.data.archiveName);
+    setIsCursorId(archiveData.data.cursorId);
+    setIsLast(archiveData.data.postSummaryList.last);
+    setIsNickName(archiveData.data.nickname);
   };
 
   const profileMove = () => {
@@ -55,13 +53,13 @@ export default function ProfileArchive() {
 
   const archiveScrollData = async () => {
     setIsLading(false);
-    if (!isLost) {
+    if (!isLast) {
       const archiveData = await getArchiveSelectData(archiveId, isCursorId);
       console.log(archiveData);
       {
         archiveData.data.postSummaryList.content[0] &&
           setIsCursorId(archiveData.data.cursorId);
-        setIsLost(archiveData.data.postSummaryList.last);
+        setIsLast(archiveData.data.postSummaryList.last);
         setIsPost((prevData) => [
           ...prevData,
           ...archiveData.data.postSummaryList.content,
@@ -117,7 +115,7 @@ export default function ProfileArchive() {
               <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
                 <div className="flex h-[53px] gap-[32px]">
                   <button
-                    className={`inline-flex h-[100%] min-w-[53px] items-center justify-center border-b-[3px] border-purple transition-all`}
+                    className={`inline-flex h-[100%] min-w-[30px] items-center justify-center border-b-[3px] border-purple transition-all`}
                   >
                     <p className="text-[14px] font-[700]">{isArchiveName}</p>
                   </button>
@@ -155,7 +153,7 @@ export default function ProfileArchive() {
           <div
             className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
           >
-            {isPost &&
+            {isPost[0] ? (
               isPost.map((item, index) => (
                 <PostBox
                   key={index}
@@ -169,7 +167,14 @@ export default function ProfileArchive() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                   isOptional={false}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
+                <p className="text-darkModeGray text-[35px]">
+                  표시할 게시물이 없어요.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
