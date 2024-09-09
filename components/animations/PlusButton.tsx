@@ -46,6 +46,7 @@ export default function PlusButton({
   const [isCursorId, setIsCursorId] = useState(0);
   const { archiveId } = useParams<{ archiveId: string }>();
   const { isCommonModalShow } = useSelector(selectCommonModalStatus);
+  const [isTrueArray, setIsTrueArray] = useState(false)
 
   const archiveData = async () => {
     const data = await getArchiveData();
@@ -53,11 +54,13 @@ export default function PlusButton({
     let content = data.data.postSummaryList.content;
     setIsCursorId(data.data.cursorId);
     setIsLastPage(data.data.postSummaryList.last);
-    if (content[0] && content.length <= 4) {
+    if (content[0] && content.length < 4) {
       content = [...content, ...Array(4 - content.length).fill([])];
       setIsArchiveData(content);
-    } else if (content.length > 4) {
+      setIsTrueArray(false)
+    } else if (content.length >= 4) {
       setIsArchiveData(content);
+      setIsTrueArray(true)
     } else {
       console.log('에러');
     }
@@ -81,6 +84,7 @@ export default function PlusButton({
 
   // 클릭 핸들러
   const buttonClick = async () => {
+    dispatch(setArchivePost({ postId: postId }));
     if (isClick && archiveId) {
       const data = await deletePostArchive([+archiveId], postId);
       if (data.code === 2001) {
@@ -108,7 +112,6 @@ export default function PlusButton({
         console.log('에러');
       }
     } else if (isClick) {
-      dispatch(setArchivePost({ postId: postId }));
       dispatch(
         setStarState(
           postId === ArchivePostId ? { state: !starState } : { state: true },
@@ -116,7 +119,6 @@ export default function PlusButton({
       );
       dispatch(setPlusState({ state: false }));
     } else if (!isClick) {
-      dispatch(setArchivePost({ postId: postId }));
       dispatch(
         setPlusState(
           postId === ArchivePostId ? { state: !postState } : { state: true },
@@ -190,7 +192,7 @@ export default function PlusButton({
       scrollElement.addEventListener('scroll', handleScroll);
       return () => scrollElement.removeEventListener('scroll', handleScroll);
     }
-  }, [ArchivePostId, isLading,isLastPage]);
+  }, [ArchivePostId, isLading, isLastPage]);
 
   useEffect(() => {
     if (postId === ArchivePostId) {
@@ -200,15 +202,24 @@ export default function PlusButton({
   }, [isCommonModalShow]);
 
   const postArchive = async () => {
-    const data = await getPostArchive(postId);
-    if (!data.data.postSummaryList.content[0]) {
-      dispatch(setPlusState({ state: false }));
-      setIsClick(false);
-      setIsAnimate(false);
-      setTimeout(() => {
-        setIsBackGround(false);
-      }, 300);
-      dispatch(setArchivePost({ postId: 0 }));
+    if (!isCommonModalShow) {   
+      const data = await getPostArchive(postId);
+      if (!data.data.postSummaryList.content[0]) {
+        dispatch(setPlusState({ state: false }));
+        setIsClick(false);
+        setIsAnimate(false);
+        setTimeout(() => {
+          setIsBackGround(false);
+        }, 300);
+        dispatch(setArchivePost({ postId: 0 }));
+      }else{
+        dispatch(setPlusState({ state: true }));
+        setIsClick(true);
+        setIsAnimate(true);
+        setTimeout(() => {
+          setIsBackGround(true);
+        }, 300);
+      }
     }
   };
 
@@ -290,14 +301,21 @@ export default function PlusButton({
                 item.archiveImgUrl == null ? (
                   <div
                     key={index}
-                    className="group relative m-[2.5px] my-[5px] aspect-square w-[22%] bg-black"
+                    className="group relative m-[2.5px] my-[5px] aspect-square w-[22%]"
                   >
                     <ArchivePlus />
                     <button
                       onClick={(e) => modalOpen()}
-                      className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      className="absolute inset-0 flex items-center justify-center"
                     >
-                      <ArchivePurplePlus className="scale-110" />
+                      <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
+                        <div className="relative h-[30%] w-[30%] rounded-full bg-white">
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-[80%] w-[1px] rounded-full bg-purple"></div>
+                            <div className="absolute h-[1px] w-[80%] rounded-full bg-purple"></div>
+                          </div>
+                        </div>
+                      </div>
                     </button>
                   </div>
                 ) : item.archiveImgUrl.endsWith('.mov') ||
@@ -339,7 +357,7 @@ export default function PlusButton({
                   </button>
                 ),
               )}
-              <div className="group relative m-[2.5px] my-[5px] aspect-square w-[22%]">
+              {isTrueArray && <div className="group relative m-[2.5px] my-[5px] aspect-square w-[22%]">
                 <ArchivePlus />
                 <button
                   onClick={(e) => modalOpen()}
@@ -348,13 +366,13 @@ export default function PlusButton({
                   <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
                     <div className="relative h-[30%] w-[30%] rounded-full bg-white">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-[80%] w-[1px] bg-purple rounded-full"></div>
-                        <div className="absolute h-[1px] w-[80%] bg-purple rounded-full"></div>
+                        <div className="h-[80%] w-[1px] rounded-full bg-purple"></div>
+                        <div className="absolute h-[1px] w-[80%] rounded-full bg-purple"></div>
                       </div>
                     </div>
                   </div>
                 </button>
-              </div>
+              </div>}
             </div>
           </div>
           <div className="flex justify-end">

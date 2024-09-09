@@ -135,7 +135,6 @@ export default function MyArchiveModal() {
   };
 
   const archiveData = async () => {
-    console.log(isArchiveMenu);
     if (isArchiveMenu == 'deletePost') {
       const data = await getPostArchive(ArchivePostId);
       console.log(data.data.postSummaryList.last);
@@ -176,6 +175,8 @@ export default function MyArchiveModal() {
     isSearch === '' ? true : item.archiveName.includes(isSearch),
   );
 
+  console.log(ArchivePostId);
+  
   useEffect(() => {
     archiveData();
   }, [isArchiveMenu]);

@@ -208,7 +208,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={false}
+                    isOptional={true}
                   />
                 ) : (
                   <div
@@ -243,7 +243,7 @@ export default function MyPagePage() {
                     setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={false}
+                    isOptional={true}
                   />
                 );
               }
