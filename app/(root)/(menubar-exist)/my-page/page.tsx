@@ -18,8 +18,8 @@ import {
 import { postData, tempData } from '../../../../constants/interface';
 import HeartButton from '../../../../components/animations/HeartButton';
 import { myPageCategoryElements } from '../../../../constants';
-import MinusSVG from '../../../../../public/assets/svg/minus.svg';
-import PlusSVG from '../../../../../public/assets/svg/plus.svg';
+import MinusSVG from '../../../../public/assets/svg/minus.svg';
+import PlusSVG from '../../../../public/assets/svg/plus.svg';
 import { RootState } from '../../../../store/store';
 
 export default function MyPagePage() {
