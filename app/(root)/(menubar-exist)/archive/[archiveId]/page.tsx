@@ -235,7 +235,7 @@ export default function DetailArchivePage() {
         <Suspense fallback={<Loading />}>
           <div
             ref={boxRef}
-            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
+            className="outBox relative flex h-full flex-wrap content-start items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
           >
             {!likedButtonState &&
               isContentExist &&
