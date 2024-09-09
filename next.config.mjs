@@ -47,7 +47,7 @@ const nextConfig = {
       },
       {
         protocol: 'http',
-        hostname: 'img1.kakaocdn.net',
+        hostname: 'k.kakaocdn.net',
       },
       {
         protocol: 'https',

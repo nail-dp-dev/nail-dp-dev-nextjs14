@@ -19,6 +19,7 @@ import { useVisibility } from '../../hooks/useVisibility';
 export default function ArchiveBox({
   showType,
   category,
+  category,
   archiveId,
   photoId,
   photoUrl,
@@ -31,6 +32,7 @@ export default function ArchiveBox({
   initialBoundary,
 }: ArchiveBoxNewProps) {
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
+  const [link, setLink] = useState('')
   const [link, setLink] = useState('')
   const layoutNum = useSelector(selectNumberOfBoxes);
   const { isVisible, handleDelete } = useVisibility();
@@ -70,9 +72,21 @@ export default function ArchiveBox({
       setLink(`profile/${nickname}`)
     }
   },[])
+  // if (!isVisible) return null;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(()=>{
+    if(archiveId){
+      setLink(`archive/${archiveId}`)
+    }
+    if(nickname){
+      setLink(`profile/${nickname}`)
+    }
+  },[])
 
   return (
     <div
+      className={`relative ${showType === 'album' && 'mb-[10px]'} flex ${showType === 'list'  && 'h-[72px] items-center gap-[16px] px-[16px] hover:border-purple'}`}
       className={`relative ${showType === 'album' && 'mb-[10px]'} flex ${showType === 'list'  && 'h-[72px] items-center gap-[16px] px-[16px] hover:border-purple'}`}
       style={boxStyle}
     >
@@ -211,6 +225,8 @@ export default function ArchiveBox({
       )}
       {showType === 'list' && category === 'archive' && (
         <div className="absolute right-0 translate-x-[-20px] z-40">
+      {showType === 'list' && category === 'archive' && (
+        <div className="absolute right-0 translate-x-[-20px] z-40">
           <BoxCommonButton
             showType={showType}
             type="toggle"
@@ -220,7 +236,9 @@ export default function ArchiveBox({
             showGeneralAction={showGeneralAction}
             position="nothing"
             className="relative z-40 p-2"
+            className="relative z-40 p-2"
           />
+          {showType === 'list' && category === 'archive' && showGeneralAction && (
           {showType === 'list' && category === 'archive' && showGeneralAction && (
             <div
               ref={boxRef}
