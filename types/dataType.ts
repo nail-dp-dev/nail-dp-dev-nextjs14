@@ -125,6 +125,7 @@ export type PostsDetailData = {
   success: boolean;
   code: number;
   data: {
+    saved: boolean;
     postId: number;
     nickname: string;
     profileUrl: string;

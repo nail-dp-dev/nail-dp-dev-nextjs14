@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { posts } from '../../../constants/example';
 
 type TagResult = {
@@ -26,25 +26,40 @@ export default function SearchWord({
   useEffect(() => {
     if (searchTerm.length > 0) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
+      const searchTerms = lowerCaseSearchTerm.split(' ').filter(Boolean);
 
-      const filteredResults = tagResults.filter((result) =>
-        result.tagName.toLowerCase().includes(lowerCaseSearchTerm),
+      const filteredResults = tagResults.filter((result) => {
+        const tagNameLower = result.tagName.toLowerCase();
+        return searchTerms.some((term) => tagNameLower.includes(term));
+      });
+
+      const uniqueResults = Array.from(
+        new Set(filteredResults.map((item) => item.tagName)),
+      ).map((tagName) =>
+        filteredResults.find((item) => item.tagName === tagName),
       );
 
-      setDisplayWords(filteredResults);
+      setDisplayWords(uniqueResults as TagResult[]);
     } else if (tagResults.length > 0) {
       setDisplayWords(tagResults);
     } else {
-      setDisplayWords(
-        searchWords.map((post) => ({
-          tagName: post.data.tags[0].tagName,
-          tagImageUrl: post.data.postImageUrls[0],
-          photo: true,
-          video: false,
-        })),
-      );
+      const recommendedWords = searchWords.map((post) => ({
+        tagName: post.data.tags[0].tagName,
+        tagImageUrl: post.data.postImageUrls[0],
+        photo: true,
+        video: false,
+      }));
+
+      setDisplayWords(recommendedWords);
     }
   }, [searchWords, tagResults, searchTerm]);
+
+  const handleTagClick = useCallback(
+    (tagName: string) => {
+      onTagClick(tagName);
+    },
+    [onTagClick],
+  );
 
   return (
     <div>
@@ -52,27 +67,19 @@ export default function SearchWord({
         {searchTerm.length > 0 ? '연관 검색어' : '추천 검색어'}
       </p>
       <div
-        className="mt-[5px] flex snap-y flex-wrap gap-2.5 overflow-auto
+        className="mt-[5px] grid auto-rows-auto grid-cols-5 gap-2.5 overflow-auto 
         xs:max-h-[470px]
-        sm:max-h-[470px]
-        lg:max-h-[350px]
+        sm:max-h-[470px] 
+        lg:max-h-[350px] 
         xl:max-h-[230px]"
       >
         {displayWords.map((item, index) => (
           <button
             key={index}
-            className="relative flex h-[110px] w-full 
-            snap-start flex-col
-            items-center
-            justify-center 
-            rounded-2xl
-            bg-textDarkPurple 
-            p-3 xs:w-[calc(50%-6px)] 
-            sm:w-[calc(50%-6px)] md:w-[calc(33.333%-7px)]
-            lg:w-[calc(25%-8px)] xl:w-[calc(20%-8px)] 2xl:w-[calc(14.444%-12px)] 2xl:max-w-[13.88%]  2xl:grow 3xl:w-[calc(14.444%-12px)] 3xl:max-w-[9.59%]"
-            onClick={() => {
-              onTagClick(item.tagName);
-            }}
+            className="relative flex h-[110px] 
+            w-full  items-center
+            justify-center rounded-2xl bg-purple p-3"
+            onClick={() => handleTagClick(item.tagName)}
           >
             {item.video ? (
               <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
@@ -90,6 +97,7 @@ export default function SearchWord({
                     left: 0,
                   }}
                 />
+                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
               </div>
             ) : item.photo && item.tagImageUrl ? (
               <div
@@ -102,7 +110,15 @@ export default function SearchWord({
               >
                 <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
               </div>
-            ) : null}
+            ) : (
+              <div
+                className={`absolute inset-0 rounded-2xl ${
+                  item.video || item.photo
+                    ? 'bg-black bg-opacity-50'
+                    : 'bg-purple'
+                }`}
+              ></div>
+            )}
 
             <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
               {item.tagName}

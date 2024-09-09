@@ -48,6 +48,7 @@ export default function PostDetailPage() {
 
   const nickname = userDetail.post?.nickname ?? '';
   const imageUrl = userDetail.post?.files[0]?.fileUrl ?? '';
+  const saved = userDetail.post?.saved ?? false;
 
   return (
     <div className="hide-scrollbar overflow-auto">
@@ -67,8 +68,9 @@ export default function PostDetailPage() {
         isLastPage={commentsData.isLastPage}
         nickname={nickname}
         imageUrl={imageUrl}
-        searchRecent={searchRecent} 
-        setSearchRecent={setSearchRecent} 
+        searchRecent={searchRecent}
+        setSearchRecent={setSearchRecent}
+        saved={saved}
       />
       <BotContainer
         onAddComment={commentsData.handleAddComment}

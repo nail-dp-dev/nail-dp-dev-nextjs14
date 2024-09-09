@@ -6,6 +6,7 @@ import { selectLoginStatus } from '../../../../../../../store/slices/loginSlice'
 import { useSelector } from 'react-redux';
 import useLoggedInUserData from '../../../../../../../hooks/user/useLoggedInUserData';
 import ReplyBar from './ReplyBar';
+import { useGoToProfile } from '../../../../../../../hooks/useGoToProfile';
 
 type ChattingBarProps = {
   onAddComment: (newComment: AddCommentType) => void;
@@ -24,6 +25,7 @@ export default function ChattingBar({
   const [commentContent, setCommentContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isLoggedIn = useSelector(selectLoginStatus);
+  const { goToProfile } = useGoToProfile();
 
   useEffect(() => {
     if (replyUser.name) {
@@ -80,6 +82,7 @@ export default function ChattingBar({
             alt={'profileImage'}
             width={40}
             height={40}
+            onClick={() => goToProfile(userData.data.nickname)}
           />
         )}
         <form className="relative h-12 w-full ">
