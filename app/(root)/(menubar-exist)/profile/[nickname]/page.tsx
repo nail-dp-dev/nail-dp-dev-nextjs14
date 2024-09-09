@@ -292,7 +292,7 @@ export default function ProfilePage() {
                   )}
                 </div>
               )}
-              {isCategory === 'Archive' && (
+              {isCategory === 'archive' && (
                 <div className="flex items-center gap-[10px]">
                   <button
                     onClick={(e) => {
@@ -315,7 +315,7 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-            {isCategory !== 'Archive' && (
+            {isCategory !== 'archive' && (
               <div className="h-[13px] w-full"></div>
             )}
           </div>
@@ -341,13 +341,13 @@ export default function ProfilePage() {
                 isOptional={false}
               />
             ))}
-          {isCategory == 'Archive' &&
+          {isCategory == 'archive' &&
             (isArchive[0] ? (
               isArchive.map((item, index) =>
                 item.boundary == 'FOLLOW' && !isFollowState ? (
                   <div
                     key={index}
-                    className={` relative mb-[30px] flex ${showType === 'album' && 'flex-col '} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
+                    className={` relative flex ${showType === 'album' ? 'flex-col mb-[10px]':""} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
                     style={boxStyle}
                   >
                     <div
@@ -386,18 +386,18 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <ArchiveBox
-                    key={index}
-                    showType={showType}
-                    archiveId={item.archiveId}
-                    photoId={index}
-                    photoUrl={item.archiveImgUrl}
-                    saved={false}
-                    createdDate={undefined}
-                    archiveName={item.archiveName}
-                    postCount={item.postCount}
-                    initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    category={isCategory}
-                  />
+                      key={index}
+                      showType={showType}
+                      archiveId={item.archiveId}
+                      photoId={index}
+                      photoUrl={item.archiveImgUrl}
+                      saved={false}
+                      createdDate={undefined}
+                      archiveName={item.archiveName}
+                      postCount={item.postCount}
+                      initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
+                      category={isCategory}                  
+                      />
                 ),
               )
             ) : (

@@ -40,13 +40,11 @@ export default function ProfileArchive() {
   const archiveData = async () => {
     const archiveData = await getArchiveSelectData(archiveId);
     console.log(archiveData);
-    if (archiveData.data.postSummaryList.content[0]) {
-      setIsPost(archiveData.data.postSummaryList.content);
-      setIsArchiveName(archiveData.data.archiveName);
-      setIsCursorId(archiveData.data.cursorId);
-      setIsLast(archiveData.data.postSummaryList.last);
-      setIsNickName(archiveData.data.nickname);
-    }
+    setIsPost(archiveData.data.postSummaryList.content);
+    setIsArchiveName(archiveData.data.archiveName);
+    setIsCursorId(archiveData.data.cursorId);
+    setIsLast(archiveData.data.postSummaryList.last);
+    setIsNickName(archiveData.data.nickname);
   };
 
   const profileMove = () => {
@@ -155,7 +153,7 @@ export default function ProfileArchive() {
           <div
             className={`outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all`}
           >
-            {isPost &&
+            {isPost[0] ? (
               isPost.map((item, index) => (
                 <PostBox
                   key={index}
@@ -169,7 +167,14 @@ export default function ProfileArchive() {
                   boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                   isOptional={false}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
+                <p className="text-darkModeGray text-[35px]">
+                  표시할 게시물이 없어요.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
