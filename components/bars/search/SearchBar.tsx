@@ -87,23 +87,22 @@ export default function SearchBar() {
 
     try {
       const searchTerms = searchQuery.split(' ').filter(Boolean);
+      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase();
 
       // 이미 있는 태그 요청 X
       const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
-      const newSearchTerms = searchTerms.filter(
-        (term) => !existingTags.includes(term.toLowerCase()),
-      );
+      if (existingTags.includes(lastSearchTerm)) {
+        return;
+      }
 
-      if (newSearchTerms.length > 0) {
-        const newTagResults = await getTagSearchResults(newSearchTerms);
+      const newTagResults = await getTagSearchResults([lastSearchTerm]);
 
-        if (newTagResults && newTagResults.length > 0) {
-          setTagResults((prevResults) => [...prevResults, ...newTagResults]);
-          setSearchError('');
-        } else {
-          if (showError) {
-            setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
-          }
+      if (newTagResults && newTagResults.length > 0) {
+        setTagResults((prevResults) => [...prevResults, ...newTagResults]);
+        setSearchError('');
+      } else {
+        if (showError) {
+          setSearchError(`'${lastSearchTerm}' 태그를 찾을 수 없습니다.`);
         }
       }
     } catch (error) {
@@ -169,27 +168,37 @@ export default function SearchBar() {
     const searchTerms = searchTerm.split(' ').filter(Boolean);
 
     // 중복된 단어 확인
-    if (searchTerms.length > 0) {
-      searchTerms[searchTerms.length - 1] = tag;
+    const isTagAlreadyExist = searchTerms.some(
+      (existingTag) => existingTag.toLowerCase() === tag.toLowerCase(),
+    );
+
+    if (isTagAlreadyExist) {
+      setSearchError(`'${tag}'는 이미 입력된 태그입니다.`);
     } else {
-      searchTerms.push(tag);
+      if (searchTerms.length > 0) {
+        searchTerms[searchTerms.length - 1] = tag;
+      } else {
+        searchTerms.push(tag);
+      }
+
+      const newSearchTerm = searchTerms.join(' ');
+
+      setSearchTerm(newSearchTerm);
+      performSearch(newSearchTerm, true);
+      addToRecentSearches(newSearchTerm);
+
+      // 프로필 검색인 경우
+      if (tag.startsWith('@')) {
+        const nickname = tag.slice(1);
+        router.push(`/profile/${nickname}`);
+      } else {
+        router.push(
+          `/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`,
+        );
+      }
+
+      setIsDropdownOpen(false);
     }
-
-    const newSearchTerm = searchTerms.join(' ');
-
-    setSearchTerm(newSearchTerm);
-    performSearch(newSearchTerm, true);
-    addToRecentSearches(newSearchTerm);
-
-    // 프로필 검색인 경우
-    if (tag.startsWith('@')) {
-      const nickname = tag.slice(1);
-      router.push(`/profile/${nickname}`);
-    } else {
-      router.push(`/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`);
-    }
-
-    setIsDropdownOpen(false);
   };
 
   const handleProfileClick = (nickname: string) => {
@@ -305,7 +314,6 @@ export default function SearchBar() {
                 searchWords={filteredWords}
                 onTagClick={(tag) => {
                   handleTagClick(tag);
-                  setIsDropdownOpen(false);
                 }}
                 searchTerm={searchTerm}
                 tagResults={tagResults}
