@@ -205,7 +205,8 @@ export default function GeneralAction({
           <div
             key={index}
             onClick={handleClick}
-            className="flex cursor-pointer items-center justify-center rounded-xl px-2 pb-[10px] hover:font-bold"
+            className="flex cursor-pointer items-center justify-center 
+            rounded-xl px-2 pb-[10px] hover:font-bold"
           >
             {item.label.includes('수정') ? (
               <Link href={`/post/edit/${postId}`} className="flex items-center">

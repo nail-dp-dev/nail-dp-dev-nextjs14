@@ -8,7 +8,7 @@ import { patchArchiveBoundary } from '../../../api/archive/patchArchiveBoundary'
 interface GeneralSettingProps {
   type: 'archive' | 'post';
   postId?: number;
-  archiveId?: number; 
+  archiveId?: number;
   onBack: () => void;
   initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
@@ -23,7 +23,9 @@ export default function GeneralSetting({
   initialBoundary,
   onBoundaryChange,
 }: GeneralSettingProps) {
-  const [selected, setSelected] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
+  const [selected, setSelected] = useState<'ALL' | 'FOLLOW' | 'NONE'>(
+    initialBoundary,
+  );
 
   const handleSettingChange = async (newSetting: 'ALL' | 'FOLLOW' | 'NONE') => {
     setSelected(newSetting);
@@ -47,9 +49,9 @@ export default function GeneralSetting({
   };
 
   const boundaryMap: { [key: string]: 'ALL' | 'FOLLOW' | 'NONE' } = {
-    '전체공개': 'ALL',
-    '팔로워공개': 'FOLLOW',
-    '비공개': 'NONE',
+    전체공개: 'ALL',
+    팔로워공개: 'FOLLOW',
+    비공개: 'NONE',
   };
 
   const items = settingElements.map((item) => ({
@@ -59,8 +61,10 @@ export default function GeneralSetting({
   }));
 
   return (
-    <div className="text-14px-normal-dP absolute z-10 mt-3 ml-2 w-[120px] 
-    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow">
+    <div
+      className={`text-14px-normal-dP absolute z-10 mt-3  ${type !== 'archive' ? 'ml-5' : 'ml-2'} w-[120px] 
+    whitespace-nowrap rounded-xl bg-white bg-opacity-90 py-2 shadow-option-modal-shadow`}
+    >
       <div className="flex items-center px-3 text-lg font-bold">
         <button onClick={onBack} className="mr-2">
           <MenuBack />
