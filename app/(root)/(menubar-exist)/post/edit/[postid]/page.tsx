@@ -78,7 +78,7 @@ export default function PostEdit() {
     }
   }, [isModal]);
 
-  const editButton = isUserHashTags.length > 0 && isImages.length > 0;
+  const editButton = isUserHashTags.length > 0 && isImages.length > 0 || isUrlImages.length > 0;
   
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
