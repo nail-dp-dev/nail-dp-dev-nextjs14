@@ -27,7 +27,7 @@ jobs:
         context: .
         file: DockerFile
         push: true
-        tags: lkw9/amu-fe:v1.0
+        tags: lkw9/ndp-fe:v1.0
         
     
         
