@@ -13,6 +13,7 @@ import useLoggedInUserData from '../../hooks/user/useLoggedInUserData';
 import { useAppDispatch } from '../../store/store';
 import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg'
 import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg'
+import EditProfileIcon from "../../public/assets/svg/edit-profile.svg";
 
 
 export default function LoginInfoBox() {
@@ -74,10 +75,15 @@ export default function LoginInfoBox() {
           <>
             <button
               onClick={handleMiniModalToggle}
-              className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px]"
+              className="profileButton w-[40px] h-[40px] rounded-full overflow-hidden mr-[12px] relative"
               disabled={isMiniModalShow}
             >
               <UserImage src={userProfileUrl} alt={'profileIamge'} width={40} height={40} />
+              <div
+                className="absolute inset-0 bg-[rgba(0,0,0,0.2)] flex items-center justify-center opacity-0 transition-opacity duration-300 hover:opacity-100"
+              >
+                <EditProfileIcon />
+              </div>
             </button>
             <ProfileMiniModal
               isMiniModalShow={isMiniModalShow}
