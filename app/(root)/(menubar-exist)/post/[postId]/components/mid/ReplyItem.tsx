@@ -93,9 +93,6 @@
 //     );
 //   };
 
-  
-
-
 //   // 수정 취소
 //   const handleCancelEdit = () => {
 //     setIsEditing(false);
@@ -141,11 +138,11 @@
 //   return (
 //     <div
 //       ref={commentRef}
-//       className="reply-item button-tr mx-2 mb-4 mt-[10px] 
+//       className="reply-item button-tr mx-2 mb-4 mt-[10px]
 //         rounded-xl transition-all duration-300"
 //     >
 //       <div
-//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px] 
+//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px]
 //           pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}
 //       >
 //         <div className="flex">
@@ -171,8 +168,8 @@
 //                   ref={textarea}
 //                   rows={1}
 //                   onInput={handleResizeHeight}
-//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none
-//                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm 
+//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[600px] resize-none
+//                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm
 //                     font-normal outline-none"
 //                   value={editedContent}
 //                   onChange={(e) => setEditedContent(e.target.value)}
@@ -191,7 +188,7 @@
 //                   <span>
 //                     Enter키로
 //                     <button
-//                       className="ml-1 text-purple hover:underline 
+//                       className="ml-1 text-purple hover:underline
 //                       active:text-darkPurple"
 //                       onClick={handleSaveEdit}
 //                     >
@@ -201,7 +198,7 @@
 //                 </div>
 //               </div>
 //             ) : (
-//               <p className="comment w-full max-w-[800px] text-sm font-normal">
+//               <p className="comment w-full max-w-[600px] break-words text-sm font-normal">
 //                 {item.commentContent}
 //               </p>
 //             )}

@@ -169,7 +169,7 @@ export default function CommentItem({
           ${replyData.length > 0 && isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
       >
         <div
-          className={`comment-box button-tr group/toggle flex justify-between rounded-xl pb-[10px] pl-[10px] 
+          className={`comment-box button-tr group/toggle flex justify-between  rounded-xl pb-[10px] pl-[10px] 
                 pt-[10px] ${showOptions ? 'bg-darkPurple bg-opacity-20' : 'hover:bg-darkPurple hover:bg-opacity-20'}`}
         >
           <div className="flex">
@@ -196,14 +196,14 @@ export default function CommentItem({
                     ref={textarea}
                     rows={1}
                     onInput={handleResizeHeight}
-                    className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none
+                    className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[600px] resize-none 
                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm 
                     font-normal outline-none"
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                     onKeyDown={handleKeyDown}
                   />
-                  <div className="text-[0.6875rem]">
+                  <div className="text-[0.6875rem] ">
                     <span className="mr-2">
                       Esc로
                       <button
@@ -225,7 +225,7 @@ export default function CommentItem({
                   </div>
                 </div>
               ) : (
-                <p className="comment w-full max-w-[800px] text-sm font-normal">
+                <p className="comment w-full max-w-[600px] break-words text-sm font-normal">
                   {item.commentContent}
                 </p>
               )}
