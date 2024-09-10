@@ -1,8 +1,8 @@
 name: FE Docker Hub Image
 
 on:
-  push:
-    branches: [ "main" ] 
+  # push:
+  #   branches: [ "main" ] 
   pull_request:
     branches: [ "main" ]
 
@@ -29,5 +29,13 @@ jobs:
         push: true
         tags: lkw9/ndp-fe:v1.0
         
-    
-        
+    - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.REMOTE_SSH_ID }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            whoami
+            git pull origin master
