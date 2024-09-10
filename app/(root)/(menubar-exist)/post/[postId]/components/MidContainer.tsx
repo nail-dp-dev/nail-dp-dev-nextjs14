@@ -176,21 +176,22 @@ export default function MidContainer({
     >
       <div className="mx-auto my-0 flex w-full flex-col  justify-center">
         <div
-          className="BoxWrap sticky flex justify-center   
+          className={`BoxWrap sticky flex justify-center   
             xs:mb-[45px] xs:mt-[25px] xs:flex-col xs:items-center
-            sm:mb-[30px] sm:mt-[10px] sm:flex-col sm:items-center
-            md:mb-[20px] md:mt-[14px] 
-            lg:mb-[170px] lg:mt-[50px] lg:flex-row lg:place-items-stretch
+            sm:mb-[40px] sm:mt-[40px] sm:flex-col sm:items-center
+            md:mb-[30px] md:mt-[14px] 
+            lg:mb-[120px] lg:mt-[60px] lg:flex-row lg:place-items-stretch
             xl:mb-[70px] xl:mt-[50px]
             2xl:mb-[50px] 2xl:mt-5
             3xl:mb-[140px] 3xl:mt-[100px]
-            "
+            ${!post.postContent ? 'xs:mb-[100px] xs:mt-[40px] sm:mb-[80px] sm:mt-[40px]  md:mb-[50px] md:mt-[40px] lg:mb-[55px] lg:mt-[30px] ' : ''}
+          `}
         >
           <div
             className={`ImageBox relative aspect-square rounded-2xl transition-all 
             duration-300 ${
               imageBoxWidth >= 500
-                ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
+                ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[450px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
                 : 'xs:min-w-[280px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[300px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
             }`}
           >

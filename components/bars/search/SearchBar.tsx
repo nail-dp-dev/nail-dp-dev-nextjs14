@@ -87,23 +87,22 @@ export default function SearchBar() {
 
     try {
       const searchTerms = searchQuery.split(' ').filter(Boolean);
+      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase(); // 마지막 단어만 검색
 
       // 이미 있는 태그 요청 X
       const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
-      const newSearchTerms = searchTerms.filter(
-        (term) => !existingTags.includes(term.toLowerCase()),
-      );
+      if (existingTags.includes(lastSearchTerm)) {
+        return;
+      }
 
-      if (newSearchTerms.length > 0) {
-        const newTagResults = await getTagSearchResults(newSearchTerms);
+      const newTagResults = await getTagSearchResults([lastSearchTerm]);
 
-        if (newTagResults && newTagResults.length > 0) {
-          setTagResults((prevResults) => [...prevResults, ...newTagResults]);
-          setSearchError('');
-        } else {
-          if (showError) {
-            setSearchError(`'${searchQuery}' 태그를 찾을 수 없습니다.`);
-          }
+      if (newTagResults && newTagResults.length > 0) {
+        setTagResults(newTagResults);
+        setSearchError('');
+      } else {
+        if (showError) {
+          setSearchError(`'${lastSearchTerm}' 태그를 찾을 수 없습니다.`);
         }
       }
     } catch (error) {
@@ -116,6 +115,19 @@ export default function SearchBar() {
     }
   };
 
+  // 검색 입력 값 변경 핸들러 수정
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    setSearchError('');
+
+    if (newSearchTerm !== '@') {
+      const searchTerms = newSearchTerm.split(' ').filter(Boolean);
+      const lastSearchTerm = searchTerms[searchTerms.length - 1];
+      debouncedSearch(lastSearchTerm);
+    }
+  };
+
   const debouncedSearch = useCallback(
     debounce((query: string) => {
       console.log('검색어 쿼리:', query);
@@ -123,17 +135,6 @@ export default function SearchBar() {
     }, 100),
     [tagResults],
   );
-
-  // 검색 입력 값 변경 핸들러
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-    setSearchError('');
-
-    if (newSearchTerm !== '@') {
-      debouncedSearch(newSearchTerm);
-    }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -168,28 +169,62 @@ export default function SearchBar() {
   const handleTagClick = (tag: string) => {
     const searchTerms = searchTerm.split(' ').filter(Boolean);
 
-    // 중복된 단어 확인
-    if (searchTerms.length > 0) {
-      searchTerms[searchTerms.length - 1] = tag;
-    } else {
-      searchTerms.push(tag);
+    // 하나의 태그만 있을 때 중복 검사 없이 바로 검색 실행
+    if (
+      searchTerms.length === 1 &&
+      searchTerms[0].toLowerCase() === tag.toLowerCase()
+    ) {
+      const newSearchTerm = tag;
+      setSearchTerm(newSearchTerm);
+      performSearch(newSearchTerm, true);
+      addToRecentSearches(newSearchTerm);
+
+      // 프로필 검색인 경우
+      if (tag.startsWith('@')) {
+        const nickname = tag.slice(1);
+        router.push(`/profile/${nickname}`);
+      } else {
+        router.push(
+          `/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`,
+        );
+      }
+
+      setIsDropdownOpen(false);
+      return;
     }
 
-    const newSearchTerm = searchTerms.join(' ');
+    // 여러 개의 태그가 있을 때는 중복된 단어 확인
+    const isTagAlreadyExist = searchTerms.some(
+      (existingTag) => existingTag.toLowerCase() === tag.toLowerCase(),
+    );
 
-    setSearchTerm(newSearchTerm);
-    performSearch(newSearchTerm, true);
-    addToRecentSearches(newSearchTerm);
-
-    // 프로필 검색인 경우
-    if (tag.startsWith('@')) {
-      const nickname = tag.slice(1);
-      router.push(`/profile/${nickname}`);
+    if (isTagAlreadyExist) {
+      setSearchError(`'${tag}'는 이미 입력된 태그입니다.`);
     } else {
-      router.push(`/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`);
-    }
+      if (searchTerms.length > 0) {
+        searchTerms[searchTerms.length - 1] = tag;
+      } else {
+        searchTerms.push(tag);
+      }
 
-    setIsDropdownOpen(false);
+      const newSearchTerm = searchTerms.join(' ');
+
+      setSearchTerm(newSearchTerm);
+      performSearch(newSearchTerm, true);
+      addToRecentSearches(newSearchTerm);
+
+      // 프로필 검색인 경우
+      if (tag.startsWith('@')) {
+        const nickname = tag.slice(1);
+        router.push(`/profile/${nickname}`);
+      } else {
+        router.push(
+          `/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`,
+        );
+      }
+
+      setIsDropdownOpen(false);
+    }
   };
 
   const handleProfileClick = (nickname: string) => {
@@ -305,7 +340,6 @@ export default function SearchBar() {
                 searchWords={filteredWords}
                 onTagClick={(tag) => {
                   handleTagClick(tag);
-                  setIsDropdownOpen(false);
                 }}
                 searchTerm={searchTerm}
                 tagResults={tagResults}

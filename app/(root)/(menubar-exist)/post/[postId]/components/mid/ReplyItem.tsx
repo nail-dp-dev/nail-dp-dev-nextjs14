@@ -7,7 +7,12 @@
 // import CommentOptions from '../CommentOptions';
 // import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
 // import { useDispatch, useSelector } from 'react-redux';
-// import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
+// import {
+//   alarmModalData,
+//   commonModalClose,
+//   selectCommonModalStatus,
+//   setCommonModal,
+// } from '../../../../../../../store/slices/modalSlice';
 // import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
 
 // interface ReplyItemProps {
@@ -81,20 +86,23 @@
 
 //   // 삭제 모달 표시
 //   const handleDeleteClick = () => {
-//     dispatch(setCommonModal(`alarm-${item.replyId}`));
+//     setShowDeleteModal(true);
 //     dispatch(
 //       alarmModalData({
 //         type: 'two',
 //         button: '삭제',
-//         user: item.commentUserNickname,
+//         user: '',
 //         byte: 0,
 //         imageType: '',
+//         actionType: 'comment',
 //       }),
 //     );
 //   };
-
-  
-
+//   // 댓글 삭제 취소
+//   const handleCancelDelete = () => {
+//     setShowDeleteModal(false);
+//     dispatch(commonModalClose());
+//   };
 
 //   // 수정 취소
 //   const handleCancelEdit = () => {
@@ -141,11 +149,11 @@
 //   return (
 //     <div
 //       ref={commentRef}
-//       className="reply-item button-tr mx-2 mb-4 mt-[10px] 
+//       className="reply-wrap button-tr mx-2 mb-3
 //         rounded-xl transition-all duration-300"
 //     >
 //       <div
-//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px] 
+//         className={`reply-box button-tr group/toggle2 flex justify-between rounded-xl pb-[10px] pl-[10px]
 //           pt-[10px] hover:bg-darkPurple hover:bg-opacity-20`}
 //       >
 //         <div className="flex">
@@ -171,8 +179,8 @@
 //                   ref={textarea}
 //                   rows={1}
 //                   onInput={handleResizeHeight}
-//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[800px] resize-none
-//                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm 
+//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[520px] resize-none
+//                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm
 //                     font-normal outline-none"
 //                   value={editedContent}
 //                   onChange={(e) => setEditedContent(e.target.value)}
@@ -191,7 +199,7 @@
 //                   <span>
 //                     Enter키로
 //                     <button
-//                       className="ml-1 text-purple hover:underline 
+//                       className="ml-1 text-purple hover:underline
 //                       active:text-darkPurple"
 //                       onClick={handleSaveEdit}
 //                     >
@@ -201,7 +209,7 @@
 //                 </div>
 //               </div>
 //             ) : (
-//               <p className="comment w-full max-w-[800px] text-sm font-normal">
+//               <p className="comment w-full max-w-[520px] break-words text-sm font-normal">
 //                 {item.commentContent}
 //               </p>
 //             )}
@@ -231,8 +239,11 @@
 //           )}
 //         </div>
 //       </div>
-//       {whichCommonModal === `alarm-${item.replyId}` && isCommonModalShow && (
-//         <AlarmModal onConfirm={handleDeleteConfirm} />
+//       {showDeleteModal && (
+//         <AlarmModal
+//           onConfirm={handleDeleteConfirm}
+//           onCancel={handleCancelDelete}
+//         />
 //       )}
 //     </div>
 //   );

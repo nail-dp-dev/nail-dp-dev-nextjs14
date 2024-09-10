@@ -67,11 +67,12 @@ export default function SearchWord({
         {searchTerm.length > 0 ? '연관 검색어' : '추천 검색어'}
       </p>
       <div
-        className="mt-[5px] grid auto-rows-auto grid-cols-5 gap-2.5 overflow-auto 
-        xs:max-h-[470px]
-        sm:max-h-[470px] 
-        lg:max-h-[350px] 
-        xl:max-h-[230px]"
+        className="tag-wrap mt-[5px] grid max-h-[200px] 
+          auto-rows-auto grid-cols-2 gap-2.5 overflow-auto 
+          xs:max-h-[300px] xs:grid-cols-2
+          sm:max-h-[300px] sm:grid-cols-2 
+          md:max-h-[350px] md:grid-cols-5 
+          lg:max-h-[400px] xl:max-h-[450px]"
       >
         {displayWords.map((item, index) => (
           <button

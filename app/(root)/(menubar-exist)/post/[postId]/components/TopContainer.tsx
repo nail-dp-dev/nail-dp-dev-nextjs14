@@ -23,7 +23,7 @@ export default function TopContainer({ user, postId }: userProps) {
     user.followerCount,
   );
   const [isOwner, setIsOwner] = useState(false);
-  const { goToProfile } = useGoToProfile(); 
+  const { goToProfile } = useGoToProfile();
 
   useEffect(() => {
     if (userData && userData.data.nickname === user.nickname) {
@@ -70,7 +70,7 @@ export default function TopContainer({ user, postId }: userProps) {
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <div
           className="cursor-pointer"
-          onClick={() => goToProfile(user.nickname)} 
+          onClick={() => goToProfile(user.nickname)}
         >
           <UserImage
             src={user.profileUrl}
@@ -81,11 +81,16 @@ export default function TopContainer({ user, postId }: userProps) {
         </div>
 
         <div className="wrap-info pb-2 leading-3 ">
-          <UserInfo
-            nickname={user.nickname}
-            nicknameStyle="text-base font-medium"
-            statsStyle="text-14px-normal-dP"
-          />
+          <div
+            onClick={() => goToProfile(user.nickname)}
+            className="cursor-pointer"
+          >
+            <UserInfo
+              nickname={user.nickname}
+              nicknameStyle="text-base font-medium"
+              statsStyle="text-14px-normal-dP"
+            />
+          </div>
           {followerCount !== null ? (
             <span className="text-14px-normal-dP">{followerCount} 팔로워</span>
           ) : (
