@@ -1,12 +1,16 @@
-# version: "3.7"
-# services:
-#     # nginx:
-#     #     build:
-#     #         context: ./nginx
-#     #         dockerfile: Dockerfile
-#     #     ports:
-#     #         - "80:80"
-#     #     container_name: cst-nginx
-#     #     depends_on:
-#     #         - web
-#     #         - api
+version: '3'
+services:
+  frontend:
+    image: lkw9/ndp-fe:${DOCKER_TAG}
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production 
+    volumes:
+      - ./frontend_data:/app/data
+
+networks:
+  default:
+    driver: bridge
