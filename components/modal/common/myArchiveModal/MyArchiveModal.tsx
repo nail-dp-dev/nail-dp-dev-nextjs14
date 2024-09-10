@@ -18,7 +18,7 @@ import AlbumMenu from '../../../../public/assets/svg/my-archive-album.svg';
 import SearchIcon from '../../../../public/assets/svg/search.svg';
 import BellIcon from '../../../../public/assets/svg/bell.svg';
 import DottedAlbum from '../../../../public/assets/svg/dotted_album.svg';
-import Cross from '../../../../public/assets/svg/input-clear.svg';
+import Cross from '../../../../public/assets/svg/input_clear.svg';
 import { postArchiveCreate } from '../../../../api/archive/postArchiveCreate';
 import { getArchiveData } from '../../../../api/archive/getArchiveData';
 import { archiveModalElements } from '../../../../constants';
