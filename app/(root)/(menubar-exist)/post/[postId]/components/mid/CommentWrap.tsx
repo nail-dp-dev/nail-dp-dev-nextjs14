@@ -117,31 +117,35 @@ const CommentWrap = ({
           </button>
         </div>
       </div>
-      <div className="comment-wrap max-h-[500px] w-full 
-      overflow-y-scroll rounded-2.5xl bg-purple bg-opacity-20
-      transition-all duration-300">
-        {sortedComments.length > 0 ? (
-          sortedComments.map((item, index) => (
-            <CommentItem
-              key={`${item.commentId}-${index}`}
-              item={item}
-              onLike={onLike}
-              onReply={onReply}
-              onSaveEdit={onSaveEdit}
-              onDelete={onDelete}
-            />
-          ))
-        ) : (
-          <div className="my-7 flex flex-col items-center justify-center">
-            <BigChatIcon />
-            <div className="mt-4 text-center text-base font-medium text-darkPurple">
-              <p>아직 작성된 댓글이 없습니다.</p>
-              <p>제일 먼저 댓글을 작성해보세요!</p>
+      <div
+        className="comments-wrap max-h-[500px] w-full rounded-2.5xl
+      bg-purple bg-opacity-20 pb-[10px] pt-[8px]
+      transition-all duration-300"
+      >
+        <div className="scroll-wrap  mr-3 max-h-[480px] overflow-y-scroll ">
+          {sortedComments.length > 0 ? (
+            sortedComments.map((item, index) => (
+              <CommentItem
+                key={`${item.commentId}-${index}`}
+                item={item}
+                onLike={onLike}
+                onReply={onReply}
+                onSaveEdit={onSaveEdit}
+                onDelete={onDelete}
+              />
+            ))
+          ) : (
+            <div className="my-7 flex flex-col items-center justify-center">
+              <BigChatIcon />
+              <div className="mt-4 text-center text-base font-medium text-darkPurple">
+                <p>아직 작성된 댓글이 없습니다.</p>
+                <p>제일 먼저 댓글을 작성해보세요!</p>
+              </div>
             </div>
-          </div>
-        )}
-        <div ref={bottomRef} className="h-3"></div>
-        {showLoadingSpinner && <LoadingSpinner />}
+          )}
+          <div ref={bottomRef} className="h-1"></div>
+          {showLoadingSpinner && <LoadingSpinner />}
+        </div>
       </div>
     </>
   );

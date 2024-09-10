@@ -7,7 +7,12 @@
 // import CommentOptions from '../CommentOptions';
 // import { formatTimeAgo } from '../../../../../../../lib/formatTimeAgo';
 // import { useDispatch, useSelector } from 'react-redux';
-// import { alarmModalData, commonModalClose, selectCommonModalStatus, setCommonModal } from '../../../../../../../store/slices/modalSlice';
+// import {
+//   alarmModalData,
+//   commonModalClose,
+//   selectCommonModalStatus,
+//   setCommonModal,
+// } from '../../../../../../../store/slices/modalSlice';
 // import AlarmModal from '../../../../../../../components/modal/common/AlarmModal';
 
 // interface ReplyItemProps {
@@ -81,16 +86,22 @@
 
 //   // 삭제 모달 표시
 //   const handleDeleteClick = () => {
-//     dispatch(setCommonModal(`alarm-${item.replyId}`));
+//     setShowDeleteModal(true);
 //     dispatch(
 //       alarmModalData({
 //         type: 'two',
 //         button: '삭제',
-//         user: item.commentUserNickname,
+//         user: '',
 //         byte: 0,
 //         imageType: '',
+//         actionType: 'comment',
 //       }),
 //     );
+//   };
+//   // 댓글 삭제 취소
+//   const handleCancelDelete = () => {
+//     setShowDeleteModal(false);
+//     dispatch(commonModalClose());
 //   };
 
 //   // 수정 취소
@@ -138,7 +149,7 @@
 //   return (
 //     <div
 //       ref={commentRef}
-//       className="reply-item button-tr mx-2 mb-4 mt-[10px]
+//       className="reply-wrap button-tr mx-2 mb-3
 //         rounded-xl transition-all duration-300"
 //     >
 //       <div
@@ -228,8 +239,11 @@
 //           )}
 //         </div>
 //       </div>
-//       {whichCommonModal === `alarm-${item.replyId}` && isCommonModalShow && (
-//         <AlarmModal onConfirm={handleDeleteConfirm} />
+//       {showDeleteModal && (
+//         <AlarmModal
+//           onConfirm={handleDeleteConfirm}
+//           onCancel={handleCancelDelete}
+//         />
 //       )}
 //     </div>
 //   );

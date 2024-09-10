@@ -131,3 +131,40 @@ color: #756982
   scrollbar-width: thin;
   scrollbar-color: rgba(117, 105, 130, 0.2) transparent;
 }
+
+/* .scroll-wrapd 일 때 hover시 */
+.scroll-wrap {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-wrap::-webkit-scrollbar {
+  width: 0;
+}
+
+.scroll-wrap:hover::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-wrap::-webkit-scrollbar-thumb {
+  background-color: rgba(117, 105, 130, 0.2);
+  border-radius: 10px;
+}
+
+.scroll-wrap:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(117, 105, 130, 0.2);
+}
+
+.scroll-wrap {
+  scrollbar-width: none;
+}
+
+.scroll-wrap:hover {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(117, 105, 130, 0.2) transparent;
+}

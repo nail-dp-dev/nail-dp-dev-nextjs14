@@ -164,13 +164,14 @@ export default function CommentItem({
   return (
     <div ref={commentRef}>
       <div
-        className={`comment-wrap button-tr mx-2 mb-4 mt-[10px] 
-          rounded-xl transition-all duration-300
+        className={`comment-wrap button-tr mx-2 mb-3
+          rounded-xl transition-all duration-300 
           ${replyData.length > 0 && isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
       >
         <div
-          className={`comment-box button-tr group/toggle flex justify-between  rounded-xl pb-[10px] pl-[10px] 
-                pt-[10px] ${showOptions ? 'bg-darkPurple bg-opacity-20' : 'hover:bg-darkPurple hover:bg-opacity-20'}`}
+          className={`comment-box button-tr group/toggle flex justify-between  rounded-xl 
+          pb-[10px] pl-[10px] pt-[10px] 
+          ${showOptions ? 'bg-darkPurple bg-opacity-20' : 'hover:bg-darkPurple hover:bg-opacity-20'}`}
         >
           <div className="flex">
             <div className="mr-3">
