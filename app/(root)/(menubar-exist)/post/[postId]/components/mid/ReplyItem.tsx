@@ -179,7 +179,7 @@
 //                   ref={textarea}
 //                   rows={1}
 //                   onInput={handleResizeHeight}
-//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[600px] resize-none
+//                   className="comment-edit  hide-scrollbar mt-[5px] w-full min-w-[520px] resize-none
 //                     overflow-hidden rounded-lg bg-white bg-opacity-70 px-[10px] py-[5px] text-sm
 //                     font-normal outline-none"
 //                   value={editedContent}
@@ -209,7 +209,7 @@
 //                 </div>
 //               </div>
 //             ) : (
-//               <p className="comment w-full max-w-[600px] break-words text-sm font-normal">
+//               <p className="comment w-full max-w-[520px] break-words text-sm font-normal">
 //                 {item.commentContent}
 //               </p>
 //             )}
