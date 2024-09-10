@@ -14,7 +14,10 @@ export default function PostShareButton({ onClick, imageUrl }: MenuProps) {
       z-10 mt-2 whitespace-nowrap rounded-xl bg-white bg-opacity-90
       shadow-option-modal-shadow"
     >
-      <ShareMenuList onClick={onClick} imageUrl={imageUrl} />{' '}
+      <ShareMenuList
+        onClick={onClick}
+        imageUrl={imageUrl}
+      />{' '}
     </div>
   );
 }
