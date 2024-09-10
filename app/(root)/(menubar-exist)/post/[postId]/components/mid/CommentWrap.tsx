@@ -117,11 +117,9 @@ const CommentWrap = ({
           </button>
         </div>
       </div>
-
-      <div
-        className="w-full overflow-y-hidden rounded-2.5xl 
-      bg-purple bg-opacity-20 transition-all duration-300"
-      >
+      <div className="comment-wrap max-h-[500px] w-full 
+      overflow-y-scroll rounded-2.5xl bg-purple bg-opacity-20
+      transition-all duration-300">
         {sortedComments.length > 0 ? (
           sortedComments.map((item, index) => (
             <CommentItem

@@ -68,7 +68,7 @@ body {
   /* 기본 버튼 레이아웃 */
   /* 색상, py 와 px 는 따로 지정 */
   .button-layout {
-    @apply rounded-2.5xl text-sm font-bold  border-2 box-border;
+    @apply box-border rounded-2.5xl border-2  text-sm font-bold;
   }
 
   /* transition */
@@ -110,4 +110,24 @@ color: #756982
     format('truetype');
   font-weight: normal;
   font-style: normal;
+}
+
+/* 웹킷 기반 브라우저 (Chrome, Safari 등) */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(117, 105, 130, 0.2);
+  border-radius: 10px;
+}
+
+/* 파이어폭스 (Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(117, 105, 130, 0.2) transparent;
 }
