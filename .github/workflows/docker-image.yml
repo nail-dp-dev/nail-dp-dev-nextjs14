@@ -27,7 +27,7 @@ jobs:
         context: .
         file: DockerFile
         push: true
-        tags: lkw9/ndp-fe:${{DOCKER_TAG}}
+        tags: lkw9/ndp-fe:${{secrets.DOCKER_TAG}}
         
     - name: Deploy
       uses: appleboy/ssh-action@master
@@ -38,5 +38,5 @@ jobs:
         port: ${{ secrets.REMOTE_SSH_PORT }}
         script: |
             # sudo docker-compose -f $COMPOSE down
-            sudo docker pull lkw9/ndp-fe:${{DOCKER_TAG}}
+            sudo docker pull lkw9/ndp-fe:${{secrets.DOCKER_TAG}}
             # sudo docker-compose -f $COMPOSE up -d
