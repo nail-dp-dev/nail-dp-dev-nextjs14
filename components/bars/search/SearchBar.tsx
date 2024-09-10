@@ -169,7 +169,31 @@ export default function SearchBar() {
   const handleTagClick = (tag: string) => {
     const searchTerms = searchTerm.split(' ').filter(Boolean);
 
-    // 중복된 단어 확인
+    // 하나의 태그만 있을 때 중복 검사 없이 바로 검색 실행
+    if (
+      searchTerms.length === 1 &&
+      searchTerms[0].toLowerCase() === tag.toLowerCase()
+    ) {
+      const newSearchTerm = tag;
+      setSearchTerm(newSearchTerm);
+      performSearch(newSearchTerm, true);
+      addToRecentSearches(newSearchTerm);
+
+      // 프로필 검색인 경우
+      if (tag.startsWith('@')) {
+        const nickname = tag.slice(1);
+        router.push(`/profile/${nickname}`);
+      } else {
+        router.push(
+          `/search/posts?keyword=${encodeURIComponent(newSearchTerm)}`,
+        );
+      }
+
+      setIsDropdownOpen(false);
+      return;
+    }
+
+    // 여러 개의 태그가 있을 때는 중복된 단어 확인
     const isTagAlreadyExist = searchTerms.some(
       (existingTag) => existingTag.toLowerCase() === tag.toLowerCase(),
     );
