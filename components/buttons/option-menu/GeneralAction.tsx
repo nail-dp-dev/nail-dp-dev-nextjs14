@@ -31,6 +31,7 @@ interface GeneralActionProps {
   onDeleteClick?: (id: number, type: 'archive' | 'post') => void;
   initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
+  showOnlyShareButton?: boolean;
 }
 
 // 옵션 메뉴 동작
@@ -43,6 +44,7 @@ export default function GeneralAction({
   setSharedCount,
   initialBoundary,
   onDeleteClick,
+  showOnlyShareButton = false,
   onCopyClick = (e: React.MouseEvent, archiveId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -186,50 +188,61 @@ export default function GeneralAction({
     ${type !== 'archive' ? 'ml-5' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
     rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow`}
     >
-      {actionElements.map((item, index) => {
-        const IconComponent = Icons[item.icon as keyof typeof Icons];
-        const handleClick = item.label.includes('설정')
-          ? handleSettingClick
-          : item.label.includes('공유')
-            ? handleShareClick
-            : item.label.includes('복제') && archiveId !== undefined
-              ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
-              : item.label.includes('수정') && archiveId !== undefined
-                ? (e: React.MouseEvent) => onEditClick(e, archiveId)
-                : item.label.includes('삭제')
-                  ? (e: React.MouseEvent<HTMLElement>) =>
-                      handleDeleteClick(e, archiveId)
-                  : item.onClick;
+      {actionElements
+        .filter((item) =>
+          showOnlyShareButton ? item.label.includes('공유') : true,
+        )
+        .map((item, index) => {
+          const IconComponent = Icons[item.icon as keyof typeof Icons];
+          const handleClick = item.label.includes('설정')
+            ? handleSettingClick
+            : item.label.includes('공유')
+              ? handleShareClick
+              : item.label.includes('복제') && archiveId !== undefined
+                ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
+                : item.label.includes('수정') && archiveId !== undefined
+                  ? (e: React.MouseEvent) => onEditClick(e, archiveId)
+                  : item.label.includes('삭제')
+                    ? (e: React.MouseEvent<HTMLElement>) =>
+                        handleDeleteClick(e, archiveId)
+                    : item.onClick;
 
-        return (
-          <div
-            key={index}
-            onClick={handleClick}
-            className="flex cursor-pointer items-center justify-center 
-            rounded-xl px-2 pb-[10px] hover:font-bold"
+          return (
+            <div
+              key={index}
+              onClick={handleClick}
+              className={`flex cursor-pointer items-center justify-center rounded-xl px-2 
+              ${!showOnlyShareButton ? 'pb-[10px]' : ''} hover:font-bold`}
+            >
+              {item.label.includes('수정') ? (
+                <Link
+                  href={`/post/edit/${postId}`}
+                  className="flex items-center"
+                >
+                  <IconComponent className="mr-2 fill-textDarkPurple" />
+                  {item.label}
+                </Link>
+              ) : (
+                <>
+                  <IconComponent className="mr-2 fill-textDarkPurple" />
+                  {item.label}
+                </>
+              )}
+            </div>
+          );
+        })}
+      {!showOnlyShareButton && (
+        <>
+          <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
+          <button
+            className="group/item flex w-full items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
+            onClick={(e) => handleDeleteClick(e, archiveId)}
           >
-            {item.label.includes('수정') ? (
-              <Link href={`/post/edit/${postId}`} className="flex items-center">
-                <IconComponent className="mr-2 fill-textDarkPurple" />
-                {item.label}
-              </Link>
-            ) : (
-              <>
-                <IconComponent className="mr-2 fill-textDarkPurple" />
-                {item.label}
-              </>
-            )}
-          </div>
-        );
-      })}
-      <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
-      <button
-        className="group/item flex w-full items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
-        onClick={(e) => handleDeleteClick(e, archiveId)}
-      >
-        <MenuDeleteIcon className="mr-2 fill-darkPurple group-hover/item:fill-red" />
-        {type === 'archive' ? '아카이브 삭제' : '게시물 삭제'}
-      </button>
+            <MenuDeleteIcon className="mr-2 fill-darkPurple group-hover/item:fill-red" />
+            {type === 'archive' ? '아카이브 삭제' : '게시물 삭제'}
+          </button>
+        </>
+      )}
       {showDeleteModal && (
         <AlarmModal
           onConfirm={handleDeleteConfirm}

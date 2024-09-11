@@ -38,6 +38,7 @@ function PostBox({
   boundary: initialBoundary,
   isOptional,
   onLikeToggle,
+  showOnlyShareButton,
 }: PostBoxNewProps) {
   const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -101,7 +102,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="box relative flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+      className="group/button box relative flex items-center justify-center"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       {tempPost == true && (
@@ -115,7 +116,7 @@ function PostBox({
       )}
       <button
         type="button"
-        className="absolute inset-0 z-0 "
+        className="absolute inset-0 z-0 overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
           handlePostClick(e, postId);
         }}
@@ -137,7 +138,7 @@ function PostBox({
       </button>
       <button
         onClick={handleHeartClick}
-        className="absolute right-2 top-2 z-10"
+        className="z-9 absolute right-3 top-3 group-hover/button:border-purple"
       >
         <HeartButton
           width="21px"
@@ -146,39 +147,40 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      <PlusButton
-        postId={postId}
-        width="24px"
-        height="24px"
-        isClicked={saved}
-        active={isLoggedIn === 'loggedIn'}
-      />
-      <div className="absolute left-0 top-0 z-40 bg-kakaoYellow">
-        {isOptional && (
-          <BoxCommonButton
-            type="toggle"
-            onClick={handleToggleClick}
-            width="4px"
-            height="20px"
-            showGeneralAction={showGeneralAction}
-            className="z-40 p-2 "
-            position="nothing"
-          />
-        )}
-        {showGeneralAction && isOptional && (
-          <div ref={boxRef} className=" top-0 z-40">
-            <GeneralAction
-              type="post"
-              postId={postId}
-              imageUrl={photoUrl}
-              setSharedCount={setSharedCount}
-              initialBoundary={currentBoundary}
-              onBoundaryChange={setCurrentBoundary}
-              onDeleteClick={handleDelete}
-            />
-          </div>
-        )}
+      <div className="absolute bottom-1 right-1 z-20 group-hover/button:border-purple">
+        <PlusButton
+          postId={postId}
+          width="24px"
+          height="24px"
+          isClicked={saved}
+          active={isLoggedIn === 'loggedIn'}
+        />
       </div>
+      {isOptional && (
+        <BoxCommonButton
+          type="toggle"
+          onClick={handleToggleClick}
+          width="4px"
+          height="20px"
+          showGeneralAction={showGeneralAction}
+          className="absolute left-1 top-1 z-10 p-2 group-hover/button:border-purple"
+          position="nothing"
+        />
+      )}
+      {showGeneralAction && isOptional && (
+        <div ref={boxRef} className="absolute left-1 top-1 z-40">
+          <GeneralAction
+            type="post"
+            postId={postId}
+            imageUrl={photoUrl}
+            setSharedCount={setSharedCount}
+            initialBoundary={currentBoundary}
+            onBoundaryChange={setCurrentBoundary}
+            onDeleteClick={handleDelete}
+            showOnlyShareButton={showOnlyShareButton}
+          />
+        </div>
+      )}
     </div>
   );
 }
