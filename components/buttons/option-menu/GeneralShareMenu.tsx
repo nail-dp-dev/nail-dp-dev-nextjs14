@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MenuBack from '../../../public/assets/svg/menu-back.svg';
-import ShareMenuList from '../../ui/ShareMenuList';
+import ShareMenuList from '../../share/ShareMenuList';
 
 interface GeneralShareMenuProps {
   onClick: (message: string) => void;
@@ -8,17 +8,17 @@ interface GeneralShareMenuProps {
   showBackButton?: boolean;
   type: 'archive' | 'post';
   imageUrl: string;
-  id: number; 
+  id: number;
 }
 
-// (옵션메뉴에 있는)공유메뉴 게시물/아카이브
+// (토글) 게시물/아카이브 공유
 export default function GeneralShareMenu({
   onClick,
   onBack,
   showBackButton = false,
   type,
   imageUrl,
-  id, 
+  id,
 }: GeneralShareMenuProps) {
   const [selected, setSelected] = useState('');
 
@@ -50,8 +50,8 @@ export default function GeneralShareMenu({
         onClick={handleClick}
         selected={selected}
         imageUrl={imageUrl}
-        type={type} 
-        id={id} 
+        type={type}
+        id={id}
       />
     </div>
   );

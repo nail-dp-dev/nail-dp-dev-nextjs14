@@ -13,6 +13,7 @@ type ThumbsUpCountProps = {
   onLike: (id: number, increment: number, isReply: boolean) => void;
 };
 
+// 댓글/대댓글 좋아요 숫자
 export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
   const [isThumbsUpStatus, setIsThumbsUpStatus] = useState(item.liked || false);
   const [isThumbsUpCount, setIsThumbsUpCount] = useState(item.likeCount);

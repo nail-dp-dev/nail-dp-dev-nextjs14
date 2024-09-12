@@ -9,7 +9,7 @@ interface ShareMenuListProps {
   type: 'post' | 'archive';
   id: number;
 }
-// 공유 리스트( 채팅, 카카오톡, URL복사)
+// 공유 리스트 (채팅으로 공유, 카카오톡 공유, URL복사)
 export default function ShareMenuList({
   onClick,
   selected,

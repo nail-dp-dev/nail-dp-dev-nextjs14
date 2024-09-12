@@ -27,7 +27,8 @@ const positionClasses = {
   'bottom-right': 'bottom-2 right-2',
 };
 
-const BoxCommonButton: React.FC<ButtonProps> = ({
+// Box 공통 버튼 위치
+export default function BoxCommonButton({
   showType,
   onClick,
   type,
@@ -37,7 +38,7 @@ const BoxCommonButton: React.FC<ButtonProps> = ({
   width,
   height,
   className,
-}) => {
+}: ButtonProps) {
   const ButtonComponent = buttonComponents[type];
 
   return (
@@ -58,6 +59,4 @@ const BoxCommonButton: React.FC<ButtonProps> = ({
       />
     </button>
   );
-};
-
-export default BoxCommonButton;
+}

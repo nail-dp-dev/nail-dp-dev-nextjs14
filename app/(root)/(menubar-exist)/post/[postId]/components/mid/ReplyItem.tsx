@@ -27,7 +27,7 @@
 //   ) => void;
 //   onDelete: (replyId: number, parentId: number | null) => void;
 // }
-
+// 대댓글
 // export default function ReplyItem({
 //   item,
 //   parentId,

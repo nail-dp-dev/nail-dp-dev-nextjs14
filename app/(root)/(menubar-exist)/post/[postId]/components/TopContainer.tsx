@@ -16,6 +16,7 @@ interface userProps {
   postId: number;
 }
 
+// 디테일 게시물 페이지의 상단 영역(프로필, 팔로우/팔로잉, 게시글 수정)
 export default function TopContainer({ user, postId }: userProps) {
   const { userData } = useLoggedInUserData();
   const [isFollowing, setIsFollowing] = useState(user.followingStatus);

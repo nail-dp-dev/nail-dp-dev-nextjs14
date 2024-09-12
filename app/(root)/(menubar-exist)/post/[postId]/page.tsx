@@ -7,6 +7,7 @@ import usePostDetail from '../../../../../hooks/usePostDetail';
 import BotContainer from './components/BotContainer';
 import useComments from '../../../../../hooks/useComments';
 
+// 디테일 게시물 페이지
 export default function PostDetailPage() {
   const { userDetail, numericPostId } = usePostDetail();
   const commentsData = useComments(numericPostId, userDetail?.comments || []);

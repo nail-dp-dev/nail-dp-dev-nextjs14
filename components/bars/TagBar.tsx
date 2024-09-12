@@ -26,6 +26,7 @@ interface TagBarProps {
   searchTerm: string;
 }
 
+// 검색결과페이지에 있는 태그바
 export default function TagBar({
   onTagClick,
   isLikedOnly,

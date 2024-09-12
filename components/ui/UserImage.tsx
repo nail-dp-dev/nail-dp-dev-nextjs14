@@ -9,6 +9,7 @@ type UserImageProps = {
   onClick?: () => void;  
 };
 
+// 사용자 이미지 공통UI
 export default function UserImage({ src, alt, width, height, onClick }: UserImageProps) {
   return (
     <div

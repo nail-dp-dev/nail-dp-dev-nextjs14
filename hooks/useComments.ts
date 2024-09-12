@@ -18,6 +18,7 @@ export type AddCommentType = {
   replies?: any[];
 };
 
+// 댓글/대댓글 기능들 (댓글/대댓글 삭제, 수정, 좋아요)
 export default function useComments(
   postId: number | null,
   initialComments: Comment[],

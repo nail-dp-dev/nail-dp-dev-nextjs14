@@ -34,7 +34,7 @@ interface GeneralActionProps {
   showOnlyShareButton?: boolean;
 }
 
-// 옵션 메뉴 동작
+// (토글) 옵션 메뉴 동작
 export default function GeneralAction({
   archiveId,
   archiveName,

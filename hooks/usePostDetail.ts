@@ -9,6 +9,7 @@ type UserDetail = {
   comments: CommentData['data']['contents']['content'];
 };
 
+// 게시물 상세 데이터, 댓글 데이터 가져옴
 export default function usePostDetail() {
   const { postId } = useParams();
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);

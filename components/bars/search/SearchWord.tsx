@@ -15,6 +15,7 @@ type SearchWordProps = {
   tagResults: TagResult[];
 };
 
+// 태그 검색 결과
 export default function SearchWord({
   searchWords,
   onTagClick,

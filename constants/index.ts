@@ -57,7 +57,7 @@ export const archiveCategoryElements = [
   { name: 'For You', desc: 'for-you' },
   { name: 'Trending', desc: 'trending' },
   { name: 'New', desc: 'new' },
-]
+];
 
 export const myPageCategoryElements = [
   { name: '내 게시물', desc: 'myPost' },
@@ -236,12 +236,10 @@ export const postActionElements = [
   {
     icon: 'MenuPostEditIcon',
     label: '게시물 수정',
-    onClick: () => console.log('게시물 수정 클릭됨'),
   },
   {
     icon: 'MenuShareIcon',
     label: '게시물 공유',
-    onClick: () => console.log('게시물 공유 클릭됨'),
   },
 ];
 
@@ -258,17 +256,17 @@ export const shareMenuElements = [
 ];
 
 export const myArchiveElements = [
-  { name:'archive', desc: '아카이브별'},
-  { name:'made', desc: '제작된 디자인'},
-  { name:'following', desc: '팔로잉'},
-]
+  { name: 'archive', desc: '아카이브별' },
+  { name: 'made', desc: '제작된 디자인' },
+  { name: 'following', desc: '팔로잉' },
+];
 
 export const archiveModalElements = [
   { name: 'archiveCreate', desc: '새로운 아카이브 생성' },
-  { name: 'myArchive', desc: '내 아카이브' }
-]
+  { name: 'myArchive', desc: '내 아카이브' },
+];
 
 export const ProfileElements = [
   { name: '게시물', desc: 'post' },
-  { name: '아카이브', desc: 'archive' }
+  { name: '아카이브', desc: 'archive' },
 ];

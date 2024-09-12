@@ -11,13 +11,10 @@ import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
 import PlusButton from '../../../../../../components/animations/PlusButton';
-import {
-  setArchivePost,
-  setCommonModal,
-} from '../../../../../../store/slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
 
+// 디테일 게시물 페이지의 중간 영역(이미지, 본문, 댓글, 게시물 옵션)
 interface MidContainerProps {
   post: PostsDetailData['data'];
   postId: number;
@@ -54,7 +51,6 @@ export default function MidContainer({
   isLoading,
   isLastPage,
   nickname,
-  imageUrl,
   searchRecent,
   setSearchRecent,
   saved,
@@ -74,7 +70,6 @@ export default function MidContainer({
   const [currentImageUrl, setCurrentImageUrl] = useState(
     post.files[0]?.fileUrl || '',
   );
-  const dispatch = useDispatch();
   const { userData } = useLoggedInUserData();
   const isLoggedIn = useSelector(selectLoginStatus);
 
@@ -91,10 +86,6 @@ export default function MidContainer({
 
     fetchSharedCount();
   }, [postId, post.sharedCount]);
-
-  useEffect(() => {
-    console.log('Received comments in MidContainer:', comments);
-  }, [comments]);
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
