@@ -14,6 +14,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Generate Environment Variables File for Production
+      run: |
+         echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env
+         echo "NEXT_PUBLIC_KAKAO_REDIRECT_URI=$NEXT_PUBLIC_KAKAO_REDIRECT_URI" >> .env
+         echo "NEXT_PUBLIC_GOOGLE_REDIRECT_URI=$NEXT_PUBLIC_GOOGLE_REDIRECT_URI" >> .env
+         echo "NEXT_PUBLIC_NAVER_REDIRECT_URI=$NEXT_PUBLIC_NAVER_REDIRECT_URI" >> .env
+         echo "NEXT_PUBLIC_FORBIDDENWORDS=$NEXT_PUBLIC_FORBIDDENWORDS" >> .env
+         echo "NEXT_PUBLIC_KAKAO_API_KEY=$NEXT_PUBLIC_KAKAO_API_KEY" >> .env
+      env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_KAKAO_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_KAKAO_REDIRECT_URI }}
+          NEXT_PUBLIC_GOOGLE_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }}
+          NEXT_PUBLIC_NAVER_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
+          NEXT_PUBLIC_FORBIDDENWORDS: ${{ secrets.NEXT_PUBLIC_FORBIDDENWORDS }}
+          NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
     
     - name: Login to DockerHub
       uses: docker/login-action@v1
