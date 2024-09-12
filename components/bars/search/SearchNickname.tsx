@@ -11,6 +11,7 @@ type SearchNicknameProps = {
   onProfileClick: (nickname: string) => void;
 };
 
+// 닉네임 검색 결과
 export default function SearchNickname({
   searchTerm,
   onTagClick,

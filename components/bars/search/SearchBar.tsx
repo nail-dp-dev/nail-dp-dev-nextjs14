@@ -23,6 +23,7 @@ function debounce(fn: Function, delay: number) {
 
 const LOCAL_STORAGE_KEY = 'recentSearchTags';
 
+// 검색바
 export default function SearchBar() {
   const router = useRouter();
   const pathname = usePathname();

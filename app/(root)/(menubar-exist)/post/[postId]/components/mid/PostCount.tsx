@@ -20,6 +20,7 @@ interface PostCountProps {
   setSharedCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
+// 게시글 좋아요 숫자
 export default function PostCount({
   post,
   toggleScroll,

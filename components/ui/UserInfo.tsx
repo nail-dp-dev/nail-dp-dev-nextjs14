@@ -13,6 +13,7 @@ type UserInfoProps = {
   children?: React.ReactNode;
 };
 
+// 사용자 정보(게시물/저장됨/팔로워/팔로잉) 공통UI
 export default function UserInfo({
   nickname,
   postsCount,

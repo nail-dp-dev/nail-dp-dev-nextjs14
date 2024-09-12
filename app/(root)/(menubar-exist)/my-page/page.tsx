@@ -209,6 +209,7 @@ export default function MyPagePage() {
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                     isOptional={true}
+                    showOnlyShareButton={false}
                   />
                 ) : (
                   <div
@@ -244,6 +245,7 @@ export default function MyPagePage() {
                     setSharedCount={setSharedCount}
                     boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
                     isOptional={true}
+                    showOnlyShareButton={false}
                   />
                 );
               }

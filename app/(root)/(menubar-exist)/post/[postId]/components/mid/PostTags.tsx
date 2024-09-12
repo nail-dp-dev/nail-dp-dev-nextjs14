@@ -8,6 +8,7 @@ interface PostTagsProps {
   setSearchRecent: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
+// 게시글 태그들
 export default function PostTags({ post, searchRecent, setSearchRecent }: PostTagsProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);

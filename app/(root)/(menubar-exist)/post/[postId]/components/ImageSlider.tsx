@@ -8,20 +8,24 @@ import ArrowRight from '../../../../../../public/assets/svg/arrow-right.svg';
 interface File {
   fileUrl: string;
   isPhoto: boolean;
-  isVideo: boolean; 
+  isVideo: boolean;
 }
 
 interface ImageSliderProps {
   files: File[];
-  onImageChange?: (url: string) => void; 
+  onImageChange?: (url: string) => void;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ files, onImageChange }) => {
+// 이미지 슬라이드
+export default function ImageSlider({
+  files,
+  onImageChange,
+}: ImageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     if (onImageChange) {
-      onImageChange(files[currentIndex].fileUrl);  
+      onImageChange(files[currentIndex].fileUrl);
     }
   }, [currentIndex, files, onImageChange]);
 
@@ -77,6 +81,4 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ files, onImageChange }) => {
       )}
     </div>
   );
-};
-
-export default ImageSlider;
+}

@@ -19,6 +19,7 @@ interface UserProps {
   isLastPage: boolean;
 }
 
+// 댓글의 전체적인 영역
 const CommentWrap = ({
   user,
   onLike,

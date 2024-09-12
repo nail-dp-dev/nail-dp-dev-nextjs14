@@ -75,8 +75,6 @@ export async function getPostSearchResults(
           ? `${baseUrl}&cursorId=${cursorId}`
           : `${baseUrl}&cursorId=${cursorId}&size=${20}`;
 
-    console.log('요청 URL:', api);
-
     const response = await fetch(api, {
       method: 'GET',
       headers: {

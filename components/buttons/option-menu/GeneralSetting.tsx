@@ -14,7 +14,7 @@ interface GeneralSettingProps {
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
 }
 
-// 메뉴-설정 게시물/아카이브
+// (토글) 게시물/아카이브 설정
 export default function GeneralSetting({
   type,
   onBack,

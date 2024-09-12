@@ -85,7 +85,6 @@ export default function SearchResultsPage() {
     setIsLoading(true);
     try {
       const keywordsArray = keyword.split(' ').filter(Boolean);
-      console.log('전달된 키워드:', keywordsArray);
       const response: PostSearchResponse | null = await getPostSearchResults(
         keywordsArray,
         cursor,
@@ -93,7 +92,6 @@ export default function SearchResultsPage() {
       );
 
       console.log('API 응답:', response);
-      console.log('사용된 cursorId:', cursor);
 
       if (response && response.data && response.data.postSummaryList) {
         let newPosts = response.data.postSummaryList.content;
@@ -122,7 +120,6 @@ export default function SearchResultsPage() {
             setIsLastPage(false);
           }
 
-          console.log('다음 cursorId:', response.data.cursorId);
           setMessage('');
         }
       } else {
@@ -220,7 +217,8 @@ export default function SearchResultsPage() {
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
                   onLikeToggle={() => handleLikeToggle(item.postId)}
-                  isOptional={false}
+                  isOptional={true}
+                  showOnlyShareButton={true}
                 />
               ))}
               <div ref={bottomRef} className="h-[1px] w-full"></div>

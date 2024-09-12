@@ -264,6 +264,7 @@ export default function ArchivePage() {
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
                   isOptional={true}
+                  showOnlyShareButton={true}
                 />
               ))}
             {!likedButtonState && !isContentExist && isLoading && <Loading />}
@@ -286,6 +287,7 @@ export default function ArchivePage() {
                   setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
                   setSharedCount={setSharedCount}
                   isOptional={true}
+                  showOnlyShareButton={true}
                 />
               ))}
             {likedButtonState &&

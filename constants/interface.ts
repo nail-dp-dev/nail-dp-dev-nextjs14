@@ -48,7 +48,8 @@ export interface PostBoxNewProps {
   isOptional: boolean;
   isPhoto?: boolean;
   isVideo?: boolean;
-  onLikeToggle?: () => void; 
+  onLikeToggle?: () => void;
+  showOnlyShareButton?: boolean;
 }
 export interface ArchiveBoxNewProps {
   showType: string;
@@ -153,7 +154,7 @@ export interface PostsLikedDataProps {
   cursorLikedId?: number;
 }
 
-export interface ArchiveDataProps{
+export interface ArchiveDataProps {
   archiveId: number;
   size: number;
   cursorId?: number;

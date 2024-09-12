@@ -31,6 +31,7 @@ interface CommentItemProps {
   onDelete: (commentId: number, parentId: number | null) => void;
 }
 
+// 댓글
 export default function CommentItem({
   item,
   onLike,

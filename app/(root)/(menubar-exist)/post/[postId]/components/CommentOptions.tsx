@@ -10,6 +10,7 @@ interface CommentOptionsProps {
   commentUserNickname: string;
 }
 
+// 댓글 토글 옵션
 export default function CommentOptions({
   onEditClick,
   onDeleteClick,
