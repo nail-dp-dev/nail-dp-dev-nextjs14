@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   output: "standalone",
+  crossOrigin: 'anonymous',
 
   webpack: (config) => {
     config.module.rules.push({
