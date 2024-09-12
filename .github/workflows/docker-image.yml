@@ -60,5 +60,5 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
-            sudo docker-compose -f docker-compose.yml down
-            sudo docker-compose -f docker-compose.yml up
+            sudo docker-compose -f $COMPOSE down
+            sudo docker-compose -f $COMPOSE up
