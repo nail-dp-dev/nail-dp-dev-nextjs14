@@ -4,7 +4,7 @@ export const getAllPostsData = async ({ category, size, cursorId }: PostsDataPro
 
   try {
 
-    let url = `http://3.36.54.132:8080/home?choice=${category}`
+    let url = `http://127.0.0.1:8080/home?choice=${category}`
     
     if (size) {
       url += `&size=${size}`
