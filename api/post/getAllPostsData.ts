@@ -4,7 +4,7 @@ export const getAllPostsData = async ({ category, size, cursorId }: PostsDataPro
 
   try {
 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
+    let url = `http://localhost:8080/home?choice=${category}`
     
     if (size) {
       url += `&size=${size}`
