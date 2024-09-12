@@ -49,11 +49,16 @@ jobs:
         
     - name: Deploy
       uses: appleboy/ssh-action@master
+      env:
+          APP: "preonb"
+          COMPOSE: "/home/ubuntu/compose/docker-compose.yml"
       with:
         host: ${{ secrets.REMOTE_IP }}
         username: ${{ secrets.REMOTE_SSH_ID }}
         key: ${{ secrets.REMOTE_SSH_KEY }}
         port: ${{ secrets.REMOTE_SSH_PORT }}
+        envs: APP, COMPOSE
+        script_stop: true
         script: |
             sudo docker-compose -f docker-compose.yml down
             sudo docker-compose -f docker-compose.yml up
