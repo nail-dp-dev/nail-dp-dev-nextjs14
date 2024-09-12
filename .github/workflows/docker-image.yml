@@ -45,6 +45,7 @@ jobs:
     #     file: DockerFile
     #     push: true
     #     tags: lkw9/ndp-fe:${{secrets.DOCKER_TAG}}
+                # sudo apt install docker-compose
         
     - name: Deploy
       uses: appleboy/ssh-action@master
@@ -54,6 +55,5 @@ jobs:
         key: ${{ secrets.REMOTE_SSH_KEY }}
         port: ${{ secrets.REMOTE_SSH_PORT }}
         script: |
-            sudo apt install docker-compose
             sudo docker-compose -f down
             sudo docker-compose -f up
