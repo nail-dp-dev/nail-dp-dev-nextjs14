@@ -9,7 +9,7 @@ services:
       container_name: myweb-proxy
       depends_on:
         - frontend
-        - backend
+        # - backend
   frontend:
     image: 'lkw9/ndp-fe:${DOCKER_TAG}'
     container_name: front
@@ -17,12 +17,12 @@ services:
     ports:
       - "3000:3000"
 
-  backend:
-    image: minjik0525/ndp-back:latest
-    container_name: back
-    restart: always
-    ports:
-      - "8080:8080"
+  # backend:
+  #   image: minjik0525/ndp-back:latest
+  #   container_name: back
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
 
   # networks:
   #   default:
