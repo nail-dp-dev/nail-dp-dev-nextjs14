@@ -32,7 +32,9 @@ export default function ThumbsUpIcon({
               rotate: [0, -25, 0],
               y: [0, -5, 0],
             }
-          : {}
+          : {
+              opacity: [1, 0.5, 0.7, 0.5, 1],
+            }
       }
       transition={{
         duration: 0.5,
