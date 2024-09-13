@@ -163,7 +163,7 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex min-h-[calc(100vh-200px)] flex-col justify-between"
+      className="flex min-h-[calc(100vh-200px)]  justify-between"
     >
       <div className="mx-auto my-0 flex w-full flex-col  justify-center">
         <div

@@ -120,7 +120,7 @@ const CommentWrap = ({
       </div>
       <div
         className="comments-wrap max-h-[500px] w-full rounded-2.5xl
-      bg-purple bg-opacity-20 pb-[10px] pt-[8px]
+      bg-purple bg-opacity-20  pt-[8px] pb-[8px]
       transition-all duration-300"
       >
         <div className="scroll-wrap  mr-3 max-h-[480px] overflow-y-scroll ">

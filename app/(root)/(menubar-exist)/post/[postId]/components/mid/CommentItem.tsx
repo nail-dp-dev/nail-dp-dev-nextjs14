@@ -165,7 +165,7 @@ export default function CommentItem({
   return (
     <div ref={commentRef}>
       <div
-        className={`comment-wrap button-tr mx-2 mb-3
+        className={`comment-wrap button-tr mx-2 
           rounded-xl transition-all duration-300 
           ${replyData.length > 0 && isRotated ? 'bg-purple bg-opacity-20 px-[10px] pt-[10px] transition-all duration-300' : ''}`}
       >
