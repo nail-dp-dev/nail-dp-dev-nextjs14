@@ -46,6 +46,7 @@ jobs:
         push: true
         tags: lkw9/ndp-fe:latest
         # ${{secrets.DOCKER_TAG}}
+        # sudo docker-compose -f $COMPOSE down
          
     - name: Deploy
       uses: appleboy/ssh-action@master
@@ -60,5 +61,4 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
-            sudo docker-compose -f $COMPOSE down
             sudo docker-compose -f $COMPOSE up
