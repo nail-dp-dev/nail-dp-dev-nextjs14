@@ -46,7 +46,7 @@ jobs:
         push: true
         tags: lkw9/ndp-fe:latest
         # ${{secrets.DOCKER_TAG}}
-        
+         
     - name: Deploy
       uses: appleboy/ssh-action@master
       env:
