@@ -45,10 +45,6 @@ jobs:
         file: DockerFile
         push: true
         tags: lkw9/ndp-fe:latest
-        # ${{secrets.DOCKER_TAG}}
-                    # sudo chmod +x /usr/local/bin/docker-compose sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            # sudo docker-compose -f $COMPOSE down
-            # sudo docker-compose -f $COMPOSE up -d 
 
          
     - name: Deploy
@@ -64,4 +60,5 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
+            sudo docker-compose -f $COMPOSE up -d 
 
