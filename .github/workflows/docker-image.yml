@@ -45,9 +45,8 @@ jobs:
         file: DockerFile
         push: true
         tags: lkw9/ndp-fe:latest
-
-         
-    - name: Deploy
+        
+    - name: Deploy 1
       uses: appleboy/ssh-action@master
       env:
           APP: "preonb"
@@ -60,5 +59,15 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
+            mkdir -p /home/ubuntu/compose
+            cd /home/ubuntu/compose
+            if [ -f "./docker-compose.yml" ]; then
+              echo "${{ secrets.COMPOSE }}" > ./docker-compose.yml
+            else
+              touch ./docker-compose.yml
+              echo "${{ secrets.COMPOSE }}" > ./docker-compose.yml
+            fi
+            
+            sudo docker-compose -f $COMPOSE down --rmi all
             sudo docker-compose -f $COMPOSE up -d
 
