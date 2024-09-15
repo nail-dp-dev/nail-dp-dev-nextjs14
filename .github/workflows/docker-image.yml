@@ -60,5 +60,5 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
-            sudo docker-compose -f $COMPOSE up -d 
+            sudo docker-compose -f $COMPOSE up -d
 
