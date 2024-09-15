@@ -61,5 +61,6 @@ jobs:
         script: |
             mkdir -p /home/${{ secrets.REMOTE_SSH_ID }}/compose
             cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
+            echo ${{ secrets.COMPOSE }} >> ./docker-compose.yml
 
 
