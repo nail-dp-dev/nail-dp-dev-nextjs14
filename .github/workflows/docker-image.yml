@@ -61,11 +61,11 @@ jobs:
         script: |
             mkdir -p /home/ubuntu/compose
             cd /home/ubuntu/compose
-            if [ -f "./docker-compose.yml" ]; then
+            if [ -f "./docker-compose.yml" ] then
               echo "${{ secrets.COMPOSE }}" > ./docker-compose.yml
             else
               touch ./docker-compose.yml
-              echo "${{ secrets.COMPOSE }}" > ./docker-compose.yml
+              echo "${{ secrets.COMPOSE }}" >> ./docker-compose.yml
             fi
             
             sudo docker-compose -f $COMPOSE down --rmi all
