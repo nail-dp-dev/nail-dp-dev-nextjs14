@@ -60,8 +60,6 @@ jobs:
         script_stop: true
         script: |
             mkdir -p /home/${{ secrets.REMOTE_SSH_ID }}/compose
+            cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
 
-            
-            sudo docker-compose -f $COMPOSE down --rmi all
-            sudo docker-compose -f $COMPOSE up -d 
 
