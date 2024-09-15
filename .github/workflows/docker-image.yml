@@ -61,7 +61,7 @@ jobs:
         script: |
             mkdir -p /home/ubuntu/compose
             cd /home/ubuntu/compose
-            echo "${{ secrets.COMPOSE }}" > ./docker-compose.yml
+            echo ${{ secrets.COMPOSE }} > ./docker-compose.yml
             
             sudo docker-compose -f $COMPOSE down --rmi all
             sudo docker-compose -f $COMPOSE up -d 
