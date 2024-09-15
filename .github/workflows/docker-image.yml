@@ -63,8 +63,8 @@ jobs:
             cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
             echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
             cd /etc/nginx
-            sudo echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf
-            cd
+            sudo su
+            echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml down --rmi all
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml up -d 
 
