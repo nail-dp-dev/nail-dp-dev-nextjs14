@@ -64,5 +64,5 @@ jobs:
             echo ${{ secrets.COMPOSE }} > ./docker-compose.yml
             
             sudo docker-compose -f $COMPOSE down --rmi all
-            sudo docker-compose -f $COMPOSE up -d 
+            sudo docker-compose -f $COMPOSE up -d
 
