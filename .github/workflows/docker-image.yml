@@ -1,10 +1,10 @@
 name: FE Docker Hub Image
 
 on:
-  push:
-    branches: [ "main" ] 
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ] 
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
 
@@ -61,6 +61,8 @@ jobs:
         script: |
             mkdir -p /home/${{ secrets.REMOTE_SSH_ID }}/compose
             cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
-            echo ${{ secrets.COMPOSE }} >> ./docker-compose.yml
+            echo ${{ secrets.COMPOSE }} >> ./docker-compose.yml            
+            sudo docker-compose -f $COMPOSE down --rmi all
+            sudo docker-compose -f $COMPOSE up -d 
 
 
