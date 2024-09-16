@@ -74,7 +74,5 @@ jobs:
             echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml down --rmi all
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml up -d 
-            sudo rm docker-compose.yml 
-            sudo rm nginx.conf
 
 
