@@ -67,7 +67,6 @@ jobs:
             sudo apt install -y docker-ce
             sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
-            sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
             sudo apt install -y nginx
             mkdir -p /home/${{ secrets.REMOTE_SSH_ID }}/compose
             cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
