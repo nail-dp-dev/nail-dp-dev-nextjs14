@@ -52,8 +52,8 @@ jobs:
           APP: "preonb"
           COMPOSE: "/home/ubuntu/compose/docker-compose.yml"
       with:
-        host: ${{ secrets.REMOTE_IP }}
-        username: ${{ secrets.REMOTE_SSH_ID }}
+        host: ${{ secrets.REMOTE_IP_1 }}
+        username: ${{ secrets.REMOTE_SSH_ID_1 }}
         key: ${{ secrets.REMOTE_SSH_KEY }}
         port: ${{ secrets.REMOTE_SSH_PORT }}
         envs: APP, COMPOSE
@@ -77,5 +77,38 @@ jobs:
 
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml down --rmi all
             sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml up -d 
+
+    - name: Deploy 2
+      uses: appleboy/ssh-action@master
+      env:
+          APP: "preonb"
+          COMPOSE: "/home/ubuntu/compose/docker-compose.yml"
+      with:
+        host: ${{ secrets.REMOTE_IP_2 }}
+        username: ${{ secrets.REMOTE_SSH_ID_2 }}
+        key: ${{ secrets.REMOTE_SSH_KEY }}
+        port: ${{ secrets.REMOTE_SSH_PORT }}
+        envs: APP, COMPOSE
+        script_stop: true
+        script: |
+            sudo apt update && sudo apt-get install -y \
+            apt-transport-https ca-certificates curl gnupg-agent software-properties-common \
+            docker-ce
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+
+            sudo usermod -aG docker ${{ secrets.REMOTE_SSH_ID }}
+            newgrp docker
+
+            mkdir -p /home/${{ secrets.REMOTE_SSH_ID }}/compose
+            cd /home/${{ secrets.REMOTE_SSH_ID }}/compose
+            echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
+            echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
+
+            sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml down --rmi all
+            sudo docker-compose -f /home/ubuntu/compose/docker-compose.yml up -d 
+
 
 
