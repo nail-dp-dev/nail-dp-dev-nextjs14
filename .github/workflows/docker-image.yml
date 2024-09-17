@@ -135,5 +135,5 @@ jobs:
           sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml down --rmi all
           sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml up -d
 
-
+ 
 
