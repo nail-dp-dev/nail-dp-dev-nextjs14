@@ -43,12 +43,12 @@ export default function ImageSlider({
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center overflow-hidden rounded-2xl ">
         {files[currentIndex].isPhoto ? (
           <img
             src={files[currentIndex].fileUrl}
             alt={`slide-${currentIndex}`}
-            className="h-full w-full rounded-2xl object-cover"
+            className="h-full w-full object-cover"
           />
         ) : (
           <Video src={files[currentIndex].fileUrl} width="100%" height="100%" />
