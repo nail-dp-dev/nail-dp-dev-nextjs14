@@ -116,7 +116,8 @@ function PostBox({
       )}
       <button
         type="button"
-        className="absolute inset-0 z-0 overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-0 overflow-hidden rounded-2xl border-[5px] 
+        border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
           handlePostClick(e, postId);
         }}
@@ -134,6 +135,7 @@ function PostBox({
             placeholder="blur"
           />
         )}
+
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
       <button
