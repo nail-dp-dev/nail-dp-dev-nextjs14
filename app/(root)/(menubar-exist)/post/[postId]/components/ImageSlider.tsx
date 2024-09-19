@@ -70,22 +70,16 @@ export default function ImageSlider({
       {/* 좌우 이동 버튼 */}
       {files.length > 1 && (
         <>
-          <div
-            className="absolute left-0 top-0 z-20 flex h-full w-full 
-            items-center justify-between"
-            style={{ pointerEvents: 'none' }}
-          >
+          <div className="pointer-events-none absolute left-0 top-0 z-20 flex h-full w-full items-center justify-between">
             <button
               onClick={goToPrevious}
-              className="z-30 p-2 py-8 pr-8 text-white"
-              style={{ pointerEvents: 'auto' }}
+              className="pointer-events-auto z-30 p-2 py-8 pr-8 text-white"
             >
               <ArrowLeft />
             </button>
             <button
               onClick={goToNext}
-              className="z-30 p-2 py-8 pl-8 text-white"
-              style={{ pointerEvents: 'auto' }}
+              className="pointer-events-auto z-30 p-2 py-8 pl-8 text-white"
             >
               <ArrowRight />
             </button>
@@ -95,18 +89,14 @@ export default function ImageSlider({
 
       {/* 페이지 인디케이터 */}
       {files.length > 1 && (
-        <div
-          className="absolute bottom-0 left-0 z-20 
-          flex w-full items-center justify-center p-3"
-          style={{ pointerEvents: 'none' }}
-        >
+        <div className="pointer-events-none absolute bottom-0 left-0 z-20 flex w-full items-center justify-center p-3">
           {files.map((_, index) => (
             <div
               key={index}
-              className={`mx-2 h-2 w-2 cursor-pointer rounded-full 
-              ${index === currentIndex ? 'bg-darkPurple' : 'bg-addFolderGray'}`}
+              className={`pointer-events-auto mx-2 h-2 w-2 cursor-pointer rounded-full ${
+                index === currentIndex ? 'bg-darkPurple' : 'bg-addFolderGray'
+              }`}
               onClick={() => setCurrentIndex(index)}
-              style={{ pointerEvents: 'auto' }}
             ></div>
           ))}
         </div>
