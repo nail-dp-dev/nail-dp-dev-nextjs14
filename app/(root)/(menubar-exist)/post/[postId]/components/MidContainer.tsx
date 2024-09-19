@@ -220,8 +220,8 @@ export default function MidContainer({
                 )}
               </>
             )}
-
             <PlusButton
+              className="m-2"
               postId={postId}
               width="24px"
               height="24px"
