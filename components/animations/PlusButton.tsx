@@ -32,6 +32,7 @@ export default function PlusButton({
   height,
   isClicked,
   active,
+  className
 }: IconPlusButtonProps) {
   const [isClick, setIsClick] = useState(isClicked);
   const [isBackGround, setIsBackGround] = useState(isClicked);
@@ -224,7 +225,7 @@ export default function PlusButton({
   };
 
   return (
-    <div className="absolute bottom-0 right-0 w-full">
+    <div className={`absolute bottom-0 right-0 w-full ${className}`}>
       <button
         onClick={buttonClick}
         className="absolute bottom-2 right-2 z-[12] transition-all duration-500"

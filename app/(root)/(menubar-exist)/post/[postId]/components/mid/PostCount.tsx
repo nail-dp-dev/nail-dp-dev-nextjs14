@@ -92,7 +92,7 @@ export default function PostCount({
   return (
     <div className="flex justify-between py-4">
       <div className="flex gap-[44px] pr-[54px] text-[0.8125rem] font-bold text-darkPurple">
-        <div className="flex items-center">
+        <div className="flex items-center ml-1">
           <button onClick={handleHeartClick}>
             {isHeartStatus ? (
               <PostHeartFillIcon className="mr-2 fill-red" />

@@ -6,11 +6,17 @@ type UserImageProps = {
   alt: string;
   width?: number;
   height?: number;
-  onClick?: () => void;  
+  onClick?: () => void;
 };
 
 // 사용자 이미지 공통UI
-export default function UserImage({ src, alt, width, height, onClick }: UserImageProps) {
+export default function UserImage({
+  src,
+  alt,
+  width,
+  height,
+  onClick,
+}: UserImageProps) {
   return (
     <div
       style={{
@@ -20,9 +26,9 @@ export default function UserImage({ src, alt, width, height, onClick }: UserImag
         overflow: 'hidden',
         borderRadius: '50%',
         flexShrink: 0,
-        cursor: 'pointer', 
+        cursor: 'pointer',
       }}
-      onClick={onClick}  
+      onClick={onClick}
     >
       <Image
         src={src}

@@ -6,6 +6,7 @@ import MidContainer from './components/MidContainer';
 import usePostDetail from '../../../../../hooks/usePostDetail';
 import BotContainer from './components/BotContainer';
 import useComments from '../../../../../hooks/useComments';
+import Loading from '../../../../loading';
 
 // 디테일 게시물 페이지
 export default function PostDetailPage() {
@@ -44,7 +45,11 @@ export default function PostDetailPage() {
   }, []);
 
   if (!userDetail || numericPostId === null) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 
   const nickname = userDetail.post?.nickname ?? '';

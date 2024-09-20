@@ -32,6 +32,7 @@ export interface IconPlusButtonProps {
   isClicked?: boolean;
   isGetAllLiked?: boolean;
   active?: boolean;
+  className?: string;
 }
 
 export interface PostBoxNewProps {

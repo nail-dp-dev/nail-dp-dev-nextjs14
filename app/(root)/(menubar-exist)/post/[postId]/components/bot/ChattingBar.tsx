@@ -66,7 +66,7 @@ export default function ChattingBar({
   };
 
   return (
-    <div className="z-9 sticky bottom-0  flex flex-col gap-3  bg-white p-4">
+    <div className="z-9 sticky bottom-0 flex flex-col gap-3 overflow-hidden  bg-white pb-1 pr-1 pt-4 ">
       {replyUser.name && (
         <ReplyBar
           replyTo={`@${replyUser.name} 님에게 댓글 남기는 중...`}

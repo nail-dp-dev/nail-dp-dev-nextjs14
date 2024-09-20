@@ -12,7 +12,7 @@ interface BotContainerProps {
 // 디테일 게시물 페이지의 하단 영역(채팅바)
 export default function BotContainer({ onAddComment, onAddReply, replyUser, onCancelReply }: BotContainerProps) {
   return (
-    <div className="sticky bottom-0">
+    <div className="sticky bottom-0 ">
       <ChattingBar
         onAddComment={onAddComment}
         onAddReply={onAddReply}

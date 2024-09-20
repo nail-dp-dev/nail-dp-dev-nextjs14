@@ -43,6 +43,7 @@ export default function ThumbsUpCount({ item, onLike }: ThumbsUpCountProps) {
       <ThumbsUpIcon
         className={`peer fill-darkPurple
         hover:fill-purple ${isThumbsUpStatus ? 'fill-red' : ''}`}
+        isClicked={isThumbsUpStatus}
         onClick={handleThumbsUp}
       />
       <p

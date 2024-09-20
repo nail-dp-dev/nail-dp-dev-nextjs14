@@ -163,7 +163,7 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex min-h-[calc(100vh-200px)] flex-col justify-between"
+      className="flex min-h-[calc(100vh-200px)] justify-between "
     >
       <div className="mx-auto my-0 flex w-full flex-col  justify-center">
         <div
@@ -171,9 +171,9 @@ export default function MidContainer({
             xs:mb-[45px] xs:mt-[25px] xs:flex-col xs:items-center
             sm:mb-[40px] sm:mt-[40px] sm:flex-col sm:items-center
             md:mb-[30px] md:mt-[14px] 
-            lg:mb-[120px] lg:mt-[60px] lg:flex-row lg:place-items-stretch
-            xl:mb-[70px] xl:mt-[50px]
-            2xl:mb-[50px] 2xl:mt-5
+            lg:mb-[130px] lg:mt-[60px] lg:flex-row lg:place-items-stretch
+            xl:mb-[90px] xl:mt-[55px]
+            2xl:mb-[60px] 2xl:mt-10 
             3xl:mb-[140px] 3xl:mt-[100px]
             ${!post.postContent ? 'xs:mb-[100px] xs:mt-[40px] sm:mb-[80px] sm:mt-[40px]  md:mb-[50px] md:mt-[40px] lg:mb-[55px] lg:mt-[30px] ' : ''}
           `}
@@ -220,8 +220,8 @@ export default function MidContainer({
                 )}
               </>
             )}
-
             <PlusButton
+              className="m-2"
               postId={postId}
               width="24px"
               height="24px"
