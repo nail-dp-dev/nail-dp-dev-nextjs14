@@ -11,7 +11,7 @@ import { useGeneralAction } from '../../../../../../hooks/useGeneralAction';
 import { getPostSharedCount } from '../../../../../../api/post/getPostSharedCount';
 import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserData';
 import PlusButton from '../../../../../../components/animations/PlusButton';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
 
 // 디테일 게시물 페이지의 중간 영역(이미지, 본문, 댓글, 게시물 옵션)
@@ -163,20 +163,15 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex min-h-[calc(100vh-200px)] justify-between "
+      className="flex min-h-[calc(100vh-245px)] flex-col justify-between"
     >
-      <div className="mx-auto my-0 flex w-full flex-col  justify-center">
+      <div className="top mx-auto my-0 flex w-full flex-grow flex-col justify-center">
         <div
-          className={`BoxWrap sticky flex justify-center   
-            xs:mb-[45px] xs:mt-[25px] xs:flex-col xs:items-center
-            sm:mb-[40px] sm:mt-[40px] sm:flex-col sm:items-center
-            md:mb-[30px] md:mt-[14px] 
-            lg:mb-[130px] lg:mt-[60px] lg:flex-row lg:place-items-stretch
-            xl:mb-[90px] xl:mt-[55px]
-            2xl:mb-[60px] 2xl:mt-10 
-            3xl:mb-[140px] 3xl:mt-[100px]
-            ${!post.postContent ? 'xs:mb-[100px] xs:mt-[40px] sm:mb-[80px] sm:mt-[40px]  md:mb-[50px] md:mt-[40px] lg:mb-[55px] lg:mt-[30px] ' : ''}
-          `}
+          className={`BoxWrap sticky mb-[50px] mt-5 flex justify-center 
+              xs:xs:flex-col xs:items-center
+              sm:sm:flex-col sm:items-center
+              lg:flex-row lg:place-items-stretch
+        `}
         >
           <div
             className={`ImageBox relative aspect-square rounded-2xl transition-all 
@@ -242,36 +237,41 @@ export default function MidContainer({
             {post.postContent}
           </div>
         </div>
-        <div>
-          <div className="postInfo flex flex-wrap items-center justify-between">
-            <PostCount
-              post={post}
-              postId={postId}
-              toggleScroll={toggleScroll}
-              nickname={nickname}
-              imageUrl={currentImageUrl}
-              sharedCount={sharedCount}
-              setSharedCount={setSharedCount}
-            />
-            <PostTags
-              post={post}
-              searchRecent={searchRecent}
-              setSearchRecent={setSearchRecent}
-            />
-          </div>
-          <div>
-            <CommentWrap
-              user={comments}
-              onLike={onLike}
-              onReply={onReply}
-              onSaveEdit={onSaveEdit}
-              onDelete={onDelete}
-              fetchMoreComments={fetchMoreComments}
-              isLoading={isLoading}
-              isLastPage={isLastPage}
-            />
-          </div>
+        <div className="postInfo mt-auto flex flex-row items-center justify-between">
+          <PostCount
+            post={post}
+            postId={postId}
+            toggleScroll={toggleScroll}
+            nickname={nickname}
+            imageUrl={currentImageUrl}
+            sharedCount={sharedCount}
+            setSharedCount={setSharedCount}
+          />
+          <PostTags
+            post={post}
+            searchRecent={searchRecent}
+            setSearchRecent={setSearchRecent}
+          />
         </div>
+      </div>
+      <div
+        className={`bot overflow-hidden transition-all duration-200 ease-in-out ${
+          imageBoxWidth >= 500
+            ? 'max-h-0 opacity-0'
+            : 'max-h-[1000px] opacity-100'
+        }`}
+        style={{ transitionProperty: 'opacity, max-height' }}
+      >
+        <CommentWrap
+          user={comments}
+          onLike={onLike}
+          onReply={onReply}
+          onSaveEdit={onSaveEdit}
+          onDelete={onDelete}
+          fetchMoreComments={fetchMoreComments}
+          isLoading={isLoading}
+          isLastPage={isLastPage}
+        />
       </div>
     </div>
   );
