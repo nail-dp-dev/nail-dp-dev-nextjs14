@@ -28,7 +28,14 @@ export default function ImageSlider({
     }
 
     if (files[currentIndex].isVideo && videoRef.current) {
-      videoRef.current.play();
+      const isPlaying =
+        !videoRef.current.paused &&
+        !videoRef.current.ended &&
+        videoRef.current.readyState > 2;
+
+      if (!isPlaying) {
+        videoRef.current.pause();
+      }
     }
   }, [currentIndex, files, onImageChange]);
 
