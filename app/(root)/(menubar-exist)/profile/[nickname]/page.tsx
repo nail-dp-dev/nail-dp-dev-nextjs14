@@ -247,7 +247,7 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-      <div className={`sticky top-0 z-30 w-full bg-white`}>
+      <div className={`sticky top-0 z-[17] w-full bg-white`}>
         <div className="flex h-[54px] w-full items-center justify-between border-b-[1px] border-b-navBotSolidGray">
           <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
             <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
