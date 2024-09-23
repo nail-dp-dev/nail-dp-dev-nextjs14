@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import CommentWrap from './mid/CommentWrap';
 import PostCount from './mid/PostCount';
@@ -17,6 +19,8 @@ import {
   selectAlarmModalStatus,
   selectCommonModalStatus,
 } from '../../../../../../store/slices/modalSlice';
+import { deletePost } from '../../../../../../api/post/deletePost';
+import { useRouter } from 'next/navigation';
 
 // 디테일 게시물 페이지의 중간 영역(이미지, 본문, 댓글, 게시물 옵션)
 interface MidContainerProps {
@@ -77,6 +81,7 @@ export default function MidContainer({
   const { userData } = useLoggedInUserData();
   const isLoggedIn = useSelector(selectLoginStatus);
   const { alarmType } = useSelector(selectAlarmModalStatus);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -91,6 +96,19 @@ export default function MidContainer({
 
     fetchSharedCount();
   }, [postId, post.sharedCount]);
+
+  const handleDeletePost = async () => {
+    try {
+      const response = await deletePost(postId);
+      if (response) {
+        alert('게시물이 성공적으로 삭제되었습니다.');
+        router.push('/my-page');
+      }
+    } catch (error) {
+      console.error('게시물 삭제 실패:', error);
+      alert('게시물 삭제에 실패했습니다.');
+    }
+  };
 
   const adjustBoxSize = (deltaY: number) => {
     const newWidth = Math.max(
@@ -204,6 +222,7 @@ export default function MidContainer({
                   <div ref={boxRef} className=" absolute left-5 top-0 z-20">
                     <GeneralAction
                       type="post"
+                      onDeleteClick={() => handleDeletePost()}
                       postId={postId}
                       imageUrl={currentImageUrl}
                       setSharedCount={setSharedCount}
