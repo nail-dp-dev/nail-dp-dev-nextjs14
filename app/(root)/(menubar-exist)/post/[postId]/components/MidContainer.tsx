@@ -13,6 +13,10 @@ import useLoggedInUserData from '../../../../../../hooks/user/useLoggedInUserDat
 import PlusButton from '../../../../../../components/animations/PlusButton';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../../../../store/slices/loginSlice';
+import {
+  selectAlarmModalStatus,
+  selectCommonModalStatus,
+} from '../../../../../../store/slices/modalSlice';
 
 // 디테일 게시물 페이지의 중간 영역(이미지, 본문, 댓글, 게시물 옵션)
 interface MidContainerProps {
@@ -72,6 +76,7 @@ export default function MidContainer({
   );
   const { userData } = useLoggedInUserData();
   const isLoggedIn = useSelector(selectLoginStatus);
+  const { alarmType } = useSelector(selectAlarmModalStatus);
 
   useEffect(() => {
     const fetchSharedCount = async () => {
@@ -120,21 +125,27 @@ export default function MidContainer({
 
   useEffect(() => {
     const handleWheel = (event: WheelEvent) => {
-      adjustBoxSize(event.deltaY);
+      if (!alarmType) {
+        adjustBoxSize(event.deltaY);
+      }
     };
 
     const handleTouchStart = (event: TouchEvent) => {
-      startY.current = event.touches[0].clientY;
+      if (!alarmType) {
+        startY.current = event.touches[0].clientY;
+      }
     };
 
     const handleTouchMove = (event: TouchEvent) => {
-      const deltaY = startY.current - event.touches[0].clientY;
-      const newWidth = Math.max(
-        MIN_WIDTH,
-        Math.min(MAX_WIDTH, imageBoxWidth - deltaY * 0.7),
-      );
-      setImageBoxWidth(newWidth);
-      startY.current = event.touches[0].clientY;
+      if (!alarmType) {
+        const deltaY = startY.current - event.touches[0].clientY;
+        const newWidth = Math.max(
+          MIN_WIDTH,
+          Math.min(MAX_WIDTH, imageBoxWidth - deltaY * 0.7),
+        );
+        setImageBoxWidth(newWidth);
+        startY.current = event.touches[0].clientY;
+      }
     };
 
     window.addEventListener('wheel', handleWheel);
@@ -146,7 +157,7 @@ export default function MidContainer({
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [imageBoxWidth]);
+  }, [imageBoxWidth, alarmType]);
 
   return (
     <div
