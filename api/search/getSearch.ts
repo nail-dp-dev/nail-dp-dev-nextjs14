@@ -15,6 +15,7 @@ export async function getUserSearchResults(keyword: string) {
     }
 
     const data = await response.json();
+    console.log('Fetched data:', data);
     return data;
   } catch (error) {
     console.error('Error fetching search results:', error);
