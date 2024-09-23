@@ -105,23 +105,23 @@ function PostBox({
       className="group/button box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
-      {tempPost == true && (
-        <>
-          <div
-            onClick={handleTempClick}
-            className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
-          ></div>
-          <p className="z-10 text-center text-white">임시저장된 게시물</p>
-        </>
-      )}
       <button
         type="button"
-        className="absolute inset-0 z-0 overflow-hidden rounded-2xl border-[5px] 
-        border-transparent transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-10 flex items-center justify-center 
+        overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
           handlePostClick(e, postId);
         }}
       >
+        {tempPost == true && (
+          <>
+            <div
+              onClick={handleTempClick}
+              className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+            ></div>
+            <p className="z-10 text-center text-white">임시저장된 게시물</p>
+          </>
+        )}
         {isPhoto && (
           <Image
             src={photoUrl}
