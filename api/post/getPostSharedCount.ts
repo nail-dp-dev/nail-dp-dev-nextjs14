@@ -1,10 +1,14 @@
 export async function getPostSharedCount(postId: number): Promise<number> {
   try {
-    const url = new URL(
-      `${process.env.NEXT_PUBLIC_API_URL}/posts/${postId}/shared`,
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    const response = await fetch(url, {
+    if (!baseUrl) {
+      throw new Error('NEXT_PUBLIC_API_URL is not defined');
+    }
+
+    const url = new URL(`/posts/${postId}/shared`, baseUrl);
+
+    const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
