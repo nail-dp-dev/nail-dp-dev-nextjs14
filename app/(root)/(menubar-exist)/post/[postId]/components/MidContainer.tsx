@@ -246,6 +246,7 @@ export default function MidContainer({
             imageUrl={currentImageUrl}
             sharedCount={sharedCount}
             setSharedCount={setSharedCount}
+            imageBoxWidth={imageBoxWidth}
           />
           <PostTags
             post={post}
