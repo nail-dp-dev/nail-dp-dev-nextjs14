@@ -16,9 +16,9 @@ export default function PostShareButton({ onClick, imageUrl }: MenuProps) {
     >
       <ShareMenuList
         onClick={onClick}
-        imageUrl={imageUrl} 
-        type={'archive'} 
-        id={0}       
+        imageUrl={imageUrl}
+        type={'archive'}
+        id={0}
       />{' '}
     </div>
   );
