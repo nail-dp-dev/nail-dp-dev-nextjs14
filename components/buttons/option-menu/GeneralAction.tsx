@@ -227,7 +227,7 @@ export default function GeneralAction({
         })}
       {!showOnlyShareButton && (
         <>
-          <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
+          <hr className="mx-auto mt-[5px] w-[85%] border-darkGray " />
           <button
             className="group/item flex w-full items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
             onClick={(e) => handleDeleteClick(e, archiveId)}

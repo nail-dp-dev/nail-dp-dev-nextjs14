@@ -77,16 +77,16 @@ export default function ImageSlider({
       {/* 좌우 이동 버튼 */}
       {files.length > 1 && (
         <>
-          <div className="pointer-events-none absolute left-0 top-0 z-20 flex h-full w-full items-center justify-between">
+          <div className="pointer-events-none absolute left-0 top-0 z-[15] flex h-full w-full items-center justify-between">
             <button
               onClick={goToPrevious}
-              className="pointer-events-auto z-30 p-2 py-8 pr-8 text-white"
+              className="pointer-events-auto z-[16] p-2 py-8 pr-8 text-white"
             >
               <ArrowLeft />
             </button>
             <button
               onClick={goToNext}
-              className="pointer-events-auto z-30 p-2 py-8 pl-8 text-white"
+              className="pointer-events-auto z-[16] p-2 py-8 pl-8 text-white"
             >
               <ArrowRight />
             </button>
@@ -96,7 +96,7 @@ export default function ImageSlider({
 
       {/* 페이지 인디케이터 */}
       {files.length > 1 && (
-        <div className="pointer-events-none absolute bottom-0 left-0 z-20 flex w-full items-center justify-center p-3">
+        <div className="pointer-events-none absolute bottom-0 left-0 z-[15] flex w-full items-center justify-center p-3">
           {files.map((_, index) => (
             <div
               key={index}

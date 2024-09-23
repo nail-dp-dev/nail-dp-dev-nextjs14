@@ -114,7 +114,7 @@ export default function PostCount({
           />
           {post.commentCount}
         </div>
-        <div className="relative flex items-center" ref={menuRef}>
+        <div className=" flex items-center" ref={menuRef}>
           <PostShareIcon
             className={`mr-2 fill-darkPurple hover:fill-purple active:fill-darkPurple 
             ${isMenuOpen ? 'fill-purple' : ''} `}

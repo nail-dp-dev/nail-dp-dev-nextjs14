@@ -119,12 +119,6 @@ export default function MidContainer({
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        setIsScrolledDown(containerRef.current.scrollTop > 0);
-      }
-    };
-
     const handleWheel = (event: WheelEvent) => {
       adjustBoxSize(event.deltaY);
     };
@@ -143,17 +137,11 @@ export default function MidContainer({
       startY.current = event.touches[0].clientY;
     };
 
-    if (containerRef.current) {
-      containerRef.current.addEventListener('scroll', handleScroll);
-    }
     window.addEventListener('wheel', handleWheel);
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchmove', handleTouchMove);
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
-      }
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
@@ -163,11 +151,11 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex min-h-[calc(100vh-245px)] flex-col justify-between"
+      className="flex min-h-[calc(100vh-245px)] flex-col justify-between "
     >
       <div className="top mx-auto my-0 flex w-full flex-grow flex-col justify-center">
         <div
-          className={`BoxWrap sticky mb-[50px] mt-5 flex justify-center 
+          className={`BoxWrap mb-[50px] mt-5 flex justify-center 
               xs:xs:flex-col xs:items-center
               sm:sm:flex-col sm:items-center
               lg:flex-row lg:place-items-stretch

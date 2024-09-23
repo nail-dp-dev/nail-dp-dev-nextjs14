@@ -109,7 +109,7 @@ export default function ProfileArchive() {
             </p>
           </button>
         )}
-        <div className={`sticky top-0 z-30 w-full bg-white`}>
+        <div className={`sticky top-0 z-[17] w-full bg-white`}>
           <div className="flex h-[54px] w-full items-center justify-between border-b-[1px] border-b-navBotSolidGray">
             <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
               <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
@@ -170,7 +170,7 @@ export default function ProfileArchive() {
               ))
             ) : (
               <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
-                <p className="text-darkModeGray text-[35px]">
+                <p className="text-[35px] text-darkModeGray">
                   표시할 게시물이 없어요.
                 </p>
               </div>

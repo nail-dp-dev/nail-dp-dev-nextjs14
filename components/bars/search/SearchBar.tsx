@@ -311,9 +311,9 @@ export default function SearchBar() {
     : recommendedWords;
 
   return (
-    <div className="relative z-40 w-full">
+    <div className="relative z-[18] w-full">
       <form
-        className="relative z-30 flex items-center p-2"
+        className="relative z-[18] flex items-center p-2"
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleFormSubmit}
       >

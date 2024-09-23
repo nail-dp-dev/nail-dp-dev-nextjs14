@@ -21,7 +21,7 @@ export default function CommonModalLayout() {
   return (
     <div className={`commonModal ${!isCommonModalShow && 'hidden'} absolute w-full h-full
       z-50 flex items-center justify-center pointer-events-auto
-      bottom-0 right-0 bg-modalBackgroundColor`}>
+      bottom-0 right-0 `}>
       {
         whichCommonModal === 'login' &&
         <LoginModal />

@@ -38,7 +38,7 @@ export default function MyPagePage() {
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
   const numberOfBoxes = useSelector((state: RootState) =>
     selectNumberOfBoxes(state),
   );
@@ -47,7 +47,7 @@ export default function MyPagePage() {
     if (isLoggedIn === 'loggedOut') {
       return;
     }
-    router.push(`/post/edit/${isTempData[0].postId}`)
+    router.push(`/post/edit/${isTempData[0].postId}`);
   };
 
   const categoryClick = (e: any, category: string) => {
@@ -142,7 +142,7 @@ export default function MyPagePage() {
           </div>
         </div>
       )}
-      <div className={`sticky top-0 z-30 w-full bg-white`}>
+      <div className={`sticky top-0 z-[17] w-full bg-white`}>
         {/* 여기수정 */}
         {/* <CategoryBar elements={myPageCategoryElements} /> */}
         <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
@@ -213,13 +213,13 @@ export default function MyPagePage() {
                   />
                 ) : (
                   <div
-                  key={index}
-                    className="box cursor-pointer relative flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                    key={index}
+                    className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
                     style={{ width: postBoxWidths[layoutNum] }}
                     onClick={handleTempClick}
                   >
-                    <div className='absolute flex flex-col justify-center w-full h-full bg-lightGray'>
-                      <p className="text-[16px] z-10 text-center ">
+                    <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                      <p className="z-10 text-center text-[16px] ">
                         임시저장된 게시물
                       </p>
                     </div>

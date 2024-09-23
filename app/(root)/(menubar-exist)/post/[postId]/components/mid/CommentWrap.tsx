@@ -99,7 +99,7 @@ const CommentWrap = ({
 
   return (
     <>
-      <div className="flex items-center py-2 pl-4">
+      <div className="flex items-center py-2 pl-4 ">
         <div>
           <p className="mr-5 text-lg font-bold">댓글</p>
         </div>
