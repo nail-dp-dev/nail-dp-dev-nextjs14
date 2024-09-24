@@ -107,7 +107,7 @@ function PostBox({
     >
       <button
         type="button"
-        className="absolute inset-0 z-10 flex items-center justify-center 
+        className="absolute inset-0 z-[9] flex items-center justify-center 
         overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
           handlePostClick(e, postId);
@@ -117,9 +117,9 @@ function PostBox({
           <>
             <div
               onClick={handleTempClick}
-              className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+              className="absolute z-[9] h-full w-full cursor-pointer bg-darkPurple opacity-60"
             ></div>
-            <p className="z-10 text-center text-white">임시저장된 게시물</p>
+            <p className="z-[9] text-center text-white">임시저장된 게시물</p>
           </>
         )}
         {isPhoto && (
@@ -140,7 +140,7 @@ function PostBox({
       </button>
       <button
         onClick={handleHeartClick}
-        className="z-10 absolute right-4 top-4 group-hover/button:border-purple"
+        className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
       >
         <HeartButton
           width="21px"
@@ -165,7 +165,7 @@ function PostBox({
           width="4px"
           height="20px"
           showGeneralAction={showGeneralAction}
-          className="absolute left-2 top-2 z-10 p-2 group-hover/button:border-purple"
+          className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
           position="nothing"
         />
       )}
