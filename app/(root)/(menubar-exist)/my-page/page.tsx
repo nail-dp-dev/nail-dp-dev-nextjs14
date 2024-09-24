@@ -191,41 +191,33 @@ export default function MyPagePage() {
       <div className="MyPageContainer max-h-full ">
         <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
           <PostCreate />
-          {isTempData[0] !== null &&
-            isTempData.map((item, index) => {
-              if (item && item.postId) {
-                return item.photoUrl ? (
-                  <PostBox
-                    key={index}
-                    postId={item.postId}
-                    photoId={item.photoId}
-                    photoUrl={item.photoUrl}
-                    saved={false}
-                    createdDate={null}
-                    tempPost={true}
-                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                    setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={true}
-                    showOnlyShareButton={false}
-                  />
-                ) : (
-                  <div
-                    key={index}
-                    className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
-                    style={{ width: postBoxWidths[layoutNum] }}
-                    onClick={handleTempClick}
-                  >
-                    <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
-                      <p className="z-10 text-center text-[16px] ">
-                        임시저장된 게시물
-                      </p>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
+          {isTempData[0] !== undefined ? (
+            <PostBox
+              postId={isTempData[0].postId}
+              photoId={isTempData[0].photoId}
+              photoUrl={isTempData[0].photoUrl}
+              saved={false}
+              createdDate={null}
+              tempPost={true}
+              setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+              setSharedCount={setSharedCount}
+              boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+              isOptional={true}
+              showOnlyShareButton={false}
+            />
+          ) : (
+            <div
+              className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+              style={{ width: postBoxWidths[layoutNum] }}
+              onClick={handleTempClick}
+            >
+              <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                <p className="z-10 text-center text-[16px] ">
+                  임시저장된 게시물
+                </p>
+              </div>
+            </div>
+          )}
           {isMyPageData &&
             isMyPageData.map((item, index) => {
               if (item && item.postId) {
