@@ -219,7 +219,7 @@ export default function MidContainer({
                   showGeneralAction={showGeneralAction}
                 />
                 {showGeneralAction && (
-                  <div ref={boxRef} className=" absolute left-5 top-0 z-20">
+                  <div ref={boxRef} className=" absolute left-3 top-2 z-20">
                     <GeneralAction
                       type="post"
                       onDeleteClick={() => handleDeletePost()}

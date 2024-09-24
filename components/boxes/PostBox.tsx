@@ -140,7 +140,7 @@ function PostBox({
       </button>
       <button
         onClick={handleHeartClick}
-        className="z-9 absolute right-3 top-3 group-hover/button:border-purple"
+        className="z-10 absolute right-4 top-4 group-hover/button:border-purple"
       >
         <HeartButton
           width="21px"
@@ -149,7 +149,7 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      <div className="absolute bottom-1 right-1 z-10 group-hover/button:border-purple">
+      <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
         <PlusButton
           postId={postId}
           width="24px"
@@ -165,7 +165,7 @@ function PostBox({
           width="4px"
           height="20px"
           showGeneralAction={showGeneralAction}
-          className="absolute left-1 top-1 z-10 p-2 group-hover/button:border-purple"
+          className="absolute left-2 top-2 z-10 p-2 group-hover/button:border-purple"
           position="nothing"
         />
       )}

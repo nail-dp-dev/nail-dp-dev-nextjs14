@@ -179,7 +179,7 @@ export default function GeneralAction({
   return (
     <div
       className={`text-14px-normal-dP absolute z-40 bg-white 
-    ${type !== 'archive' ? 'ml-5' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
+    ${type !== 'archive' ? 'ml-7' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
     rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow`}
     >
       {actionElements
