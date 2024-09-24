@@ -180,6 +180,7 @@ function PostBox({
             onBoundaryChange={setCurrentBoundary}
             onDeleteClick={handleDelete}
             showOnlyShareButton={showOnlyShareButton}
+            tempPost={tempPost}
           />
         </div>
       )}
