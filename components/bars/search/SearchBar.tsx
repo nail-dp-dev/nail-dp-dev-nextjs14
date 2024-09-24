@@ -79,7 +79,8 @@ export default function SearchBar() {
     searchQuery: string,
     showError: boolean = false,
   ) => {
-    if (!searchQuery) {
+    // searchQuery가 없으면 API 호출 중단
+    if (!searchQuery.trim()) {
       setUserResults([]);
       setTagResults([]);
       setSearchError('');
@@ -90,29 +91,19 @@ export default function SearchBar() {
       const searchTerms = searchQuery.split(' ').filter(Boolean);
       const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase();
 
+      // '@'로 시작하는 경우 닉네임 검색 실행
       if (lastSearchTerm.startsWith('@')) {
-        // 닉네임 검색
-        const nicknameQuery = lastSearchTerm.slice(1); 
+        const nicknameQuery = lastSearchTerm.slice(1);
+        const userSearchResults = await getUserSearchResults(nicknameQuery);
 
-        const userSearchResults = await getUserSearchResults(nicknameQuery); 
-
+        // 검색 결과가 존재하는지 확인
         if (userSearchResults?.data && userSearchResults.data.length > 0) {
-          
           const filteredUsers = userSearchResults.data.filter((user: any) =>
+            // 닉네임 부분 포함 검색
             user.nickname.toLowerCase().includes(nicknameQuery),
           );
-
-          if (filteredUsers.length > 0) {
-            setUserResults(filteredUsers); 
-            setSearchError(''); 
-          } else {
-            setUserResults([]);
-            if (showError) {
-              setSearchError(
-                `'${nicknameQuery}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-              );
-            }
-          }
+          setUserResults(filteredUsers);
+          setSearchError('');
         } else {
           setUserResults([]);
           if (showError) {
@@ -122,16 +113,16 @@ export default function SearchBar() {
           }
         }
       } else {
-        // 태그 검색 로직
-        const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
-        if (existingTags.includes(lastSearchTerm)) {
-          return;
-        }
-
+        // 태그 검색 실행
         const newTagResults = await getTagSearchResults([lastSearchTerm]);
 
         if (newTagResults && newTagResults.length > 0) {
-          setTagResults(newTagResults);
+          // 태그 부분 포함 검색
+          const filteredTags = newTagResults.filter((tag: any) =>
+            tag.tagName.toLowerCase().includes(lastSearchTerm),
+          );
+
+          setTagResults(filteredTags);
           setSearchError('');
         } else {
           setTagResults([]);
@@ -156,18 +147,29 @@ export default function SearchBar() {
     setSearchTerm(newSearchTerm);
     setSearchError('');
 
-    if (newSearchTerm !== '@') {
-      const searchTerms = newSearchTerm.split(' ').filter(Boolean);
-      const lastSearchTerm = searchTerms[searchTerms.length - 1];
-      debouncedSearch(lastSearchTerm);
+    if (newSearchTerm.trim() === '') {
+      setTagResults([]); // 연관 검색어 초기화
+      return;
+    }
+
+    // 마지막 단어 추출
+    const searchTerms = newSearchTerm.trim().split(' ');
+    const lastSearchTerm = searchTerms[searchTerms.length - 1];
+
+    if (lastSearchTerm.trim() !== '') {
+      debouncedSearch(lastSearchTerm); // 마지막 단어로만 검색 실행
     }
   };
 
+  // Debounce로 API 호출 방지 설정
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      console.log('검색어 쿼리:', query);
-      performSearch(query, true);
-    }, 100),
+      // 공백일 경우 API 호출 방지
+      if (query.trim() !== '') {
+        console.log('검색어 쿼리:', query);
+        performSearch(query, true);
+      }
+    }, 300),
     [tagResults],
   );
 
