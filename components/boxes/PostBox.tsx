@@ -105,23 +105,23 @@ function PostBox({
       className="group/button box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
-      {tempPost == true && (
-        <>
-          <div
-            onClick={handleTempClick}
-            className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
-          ></div>
-          <p className="z-10 text-center text-white">임시저장된 게시물</p>
-        </>
-      )}
       <button
         type="button"
-        className="absolute inset-0 z-0 overflow-hidden rounded-2xl border-[5px] 
-        border-transparent transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-10 flex items-center justify-center 
+        overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
           handlePostClick(e, postId);
         }}
       >
+        {tempPost == true && (
+          <>
+            <div
+              onClick={handleTempClick}
+              className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+            ></div>
+            <p className="z-10 text-center text-white">임시저장된 게시물</p>
+          </>
+        )}
         {isPhoto && (
           <Image
             src={photoUrl}
@@ -140,7 +140,7 @@ function PostBox({
       </button>
       <button
         onClick={handleHeartClick}
-        className="z-9 absolute right-3 top-3 group-hover/button:border-purple"
+        className="z-10 absolute right-4 top-4 group-hover/button:border-purple"
       >
         <HeartButton
           width="21px"
@@ -149,7 +149,7 @@ function PostBox({
           active={isLoggedIn === 'loggedIn'}
         />
       </button>
-      <div className="absolute bottom-1 right-1 z-20 group-hover/button:border-purple">
+      <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
         <PlusButton
           postId={postId}
           width="24px"
@@ -165,7 +165,7 @@ function PostBox({
           width="4px"
           height="20px"
           showGeneralAction={showGeneralAction}
-          className="absolute left-1 top-1 z-10 p-2 group-hover/button:border-purple"
+          className="absolute left-2 top-2 z-10 p-2 group-hover/button:border-purple"
           position="nothing"
         />
       )}

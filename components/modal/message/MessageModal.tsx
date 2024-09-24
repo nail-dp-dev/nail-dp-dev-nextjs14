@@ -80,7 +80,7 @@ export default function MessageModal() {
   );
 
   return (
-    <div className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${isLoggedIn === 'loggedOut' && 'hidden'} messageModal absolute w-full h-full z-40 flex items-center justify-end pointer-events-none bottom-0 right-0`}>
+    <div className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${isLoggedIn === 'loggedOut' && 'hidden'} messageModal absolute w-full h-full z-[19] flex items-center justify-end pointer-events-none bottom-0 right-0`}>
       <div
         className='absolute'
         style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '100px'}` 

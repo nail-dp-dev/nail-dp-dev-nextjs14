@@ -247,7 +247,7 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-      <div className={`sticky top-0 z-30 w-full bg-white`}>
+      <div className={`sticky top-0 z-[17] w-full bg-white`}>
         <div className="flex h-[54px] w-full items-center justify-between border-b-[1px] border-b-navBotSolidGray">
           <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
             <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
@@ -347,7 +347,7 @@ export default function ProfilePage() {
                 item.boundary == 'FOLLOW' && !isFollowState ? (
                   <div
                     key={index}
-                    className={` relative flex ${showType === 'album' ? 'flex-col mb-[10px]':""} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
+                    className={` relative flex ${showType === 'album' ? 'mb-[10px] flex-col' : ''} ${showType === 'list' && 'h-[72px] items-center justify-center gap-[16px] pl-[25px] pr-[16px]'}`}
                     style={boxStyle}
                   >
                     <div
@@ -386,23 +386,23 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <ArchiveBox
-                      key={index}
-                      showType={showType}
-                      archiveId={item.archiveId}
-                      photoId={index}
-                      photoUrl={item.archiveImgUrl}
-                      saved={false}
-                      createdDate={undefined}
-                      archiveName={item.archiveName}
-                      postCount={item.postCount}
-                      initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                      category={isCategory}                  
-                      />
+                    key={index}
+                    showType={showType}
+                    archiveId={item.archiveId}
+                    photoId={index}
+                    photoUrl={item.archiveImgUrl}
+                    saved={false}
+                    createdDate={undefined}
+                    archiveName={item.archiveName}
+                    postCount={item.postCount}
+                    initialBoundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                    category={isCategory}
+                  />
                 ),
               )
             ) : (
               <div className="flex h-[300px] w-full items-center justify-center rounded-xl bg-lightGray">
-                <p className="text-darkModeGray text-[35px]">
+                <p className="text-[35px] text-darkModeGray">
                   표시할 아카이브가 없어요.
                 </p>
               </div>

@@ -35,7 +35,7 @@ export default function AlarmModal({ onConfirm, onCancel }: AlarmModalProps) {
     : '';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-modalBackgroundColor">
+    <div className="fixed inset-0 z-[99] flex items-center justify-center bg-modalBackgroundColor">
       <div className="rounded-lg bg-white opacity-85">
         <div className="px-[33px] py-11 text-center">
           {/* 삭제 관련 메시지 */}

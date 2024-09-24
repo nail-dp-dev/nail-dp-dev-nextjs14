@@ -191,7 +191,7 @@ export default function ArchiveBox({
           height="20px"
           showGeneralAction={showGeneralAction}
           position="top-left"
-          className="z-30 p-2 "
+          className="z-10 p-2 "
         />
       )}
       {showType === 'album' && category === 'archive' && showGeneralAction && (

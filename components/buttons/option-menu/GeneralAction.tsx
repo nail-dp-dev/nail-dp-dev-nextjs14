@@ -90,7 +90,6 @@ export default function GeneralAction({
     setShowDeleteModal(true);
 
     if (archiveId !== undefined) {
-      console.log('아카이브 삭제 모달이 열렸습니다.');
       dispatch(
         alarmModalData({
           type: 'two',
@@ -102,7 +101,6 @@ export default function GeneralAction({
         }),
       );
     } else if (postId !== undefined) {
-      console.log('포스트 삭제 모달이 열렸습니다.');
       dispatch(
         alarmModalData({
           type: 'two',
@@ -121,17 +119,13 @@ export default function GeneralAction({
   const handleDeleteConfirm = async () => {
     try {
       if (type === 'archive' && archiveId !== undefined) {
-        console.log('아카이브 삭제 확인 버튼 클릭됨');
         const response = await deleteArchiveCreate(archiveId);
         if (response) {
-          console.log('아카이브가 삭제되었습니다.');
           if (onDeleteClick) onDeleteClick(archiveId, 'archive');
         }
       } else if (type === 'post' && postId !== undefined) {
-        console.log('포스트 삭제 확인 버튼 클릭됨');
         const response = await deletePost(postId);
         if (response) {
-          console.log('게시물이 삭제되었습니다.');
           if (onDeleteClick) onDeleteClick(postId, 'post');
         }
       }
@@ -185,7 +179,7 @@ export default function GeneralAction({
   return (
     <div
       className={`text-14px-normal-dP absolute z-40 bg-white 
-    ${type !== 'archive' ? 'ml-5' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
+    ${type !== 'archive' ? 'ml-7' : 'ml-2'} mt-3 w-[120px] whitespace-nowrap 
     rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow`}
     >
       {actionElements
@@ -233,7 +227,7 @@ export default function GeneralAction({
         })}
       {!showOnlyShareButton && (
         <>
-          <hr className="mx-auto mt-[5px] w-[85%] border-darkGray" />
+          <hr className="mx-auto mt-[5px] w-[85%] border-darkGray " />
           <button
             className="group/item flex w-full items-center justify-center px-2 pt-[5px] hover:font-bold hover:text-red"
             onClick={(e) => handleDeleteClick(e, archiveId)}

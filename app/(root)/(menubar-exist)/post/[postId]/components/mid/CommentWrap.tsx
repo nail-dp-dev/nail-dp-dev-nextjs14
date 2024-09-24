@@ -99,7 +99,7 @@ const CommentWrap = ({
 
   return (
     <>
-      <div className="flex items-center py-2 pl-4">
+      <div className="flex items-center py-2 pl-4 ">
         <div>
           <p className="mr-5 text-lg font-bold">댓글</p>
         </div>
@@ -120,10 +120,18 @@ const CommentWrap = ({
       </div>
       <div
         className="comments-wrap max-h-[500px] w-full rounded-2.5xl
-      bg-purple bg-opacity-20  pt-[8px] pb-[8px]
+      bg-purple bg-opacity-20  pb-[8px] pt-[8px]
       transition-all duration-300"
       >
-        <div className="scroll-wrap  mr-3 max-h-[480px] overflow-y-scroll ">
+        <div
+          className="scroll-wrap mr-3 max-h-[480px] overflow-y-scroll"
+          onWheel={(e) => {
+            const scrollTop = e.currentTarget.scrollTop;
+            if (scrollTop > 0 || e.deltaY > 0) {
+              e.stopPropagation();
+            }
+          }}
+        >
           {sortedComments.length > 0 ? (
             sortedComments.map((item, index) => (
               <CommentItem

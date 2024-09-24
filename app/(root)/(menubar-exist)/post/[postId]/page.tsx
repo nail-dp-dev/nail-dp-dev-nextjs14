@@ -57,7 +57,7 @@ export default function PostDetailPage() {
   const saved = userDetail.post?.saved ?? false;
 
   return (
-    <div className="hide-scrollbar overflow-auto">
+    <div className="hide-scrollbar overflow-y-auto ">
       <TopContainer user={userDetail.post} postId={numericPostId} />
       <MidContainer
         post={userDetail.post}

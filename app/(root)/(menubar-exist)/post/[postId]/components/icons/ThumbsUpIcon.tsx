@@ -26,20 +26,20 @@ export default function ThumbsUpIcon({
       viewBox="0 0 18 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      animate={
-        isClicked
-          ? {
-              rotate: [0, -25, 0],
-              y: [0, -5, 0],
-            }
-          : {
-              opacity: [1, 0.5, 0.7, 0.5, 1],
-            }
-      }
-      transition={{
-        duration: 0.5,
-        ease: [0.42, 0, 0.58, 1],
-      }}
+      // animate={
+      //   isClicked
+      //     ? {
+      //         rotate: [0, -25, 0],
+      //         y: [0, -5, 0],
+      //       }
+      //     : {
+      //         opacity: [1, 0.5, 0.7, 0.5, 1],
+      //       }
+      // }
+      // transition={{
+      //   duration: 0.5,
+      //   ease: [0.42, 0, 0.58, 1],
+      // }}
       style={{ cursor: 'pointer' }}
     >
       <path

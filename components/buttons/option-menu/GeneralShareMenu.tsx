@@ -29,7 +29,7 @@ export default function GeneralShareMenu({
 
   return (
     <div
-      className={`text-14px-normal-dP absolute z-10 ${type === 'archive' ? 'ml-2' : 'ml-5'} mt-3 w-[120px] 
+      className={`text-14px-normal-dP absolute z-10 ${type === 'archive' ? 'ml-2' : 'ml-7'} mt-3 w-[120px] 
     whitespace-nowrap rounded-xl bg-white bg-opacity-90 pt-2 shadow-option-modal-shadow`}
     >
       {showBackButton && (

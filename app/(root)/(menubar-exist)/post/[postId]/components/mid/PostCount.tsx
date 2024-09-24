@@ -18,6 +18,7 @@ interface PostCountProps {
   imageUrl: string;
   sharedCount: number;
   setSharedCount: React.Dispatch<React.SetStateAction<number>>;
+  imageBoxWidth: number;
 }
 
 // 게시글 좋아요 숫자
@@ -29,6 +30,7 @@ export default function PostCount({
   imageUrl,
   sharedCount,
   setSharedCount,
+  imageBoxWidth,
 }: PostCountProps) {
   const [isHeartStatus, setIsHeartStatus] = useState(post.liked);
   const [heartCount, setHeartCount] = useState(post.likeCount);
@@ -92,7 +94,7 @@ export default function PostCount({
   return (
     <div className="flex justify-between py-4">
       <div className="flex gap-[44px] pr-[54px] text-[0.8125rem] font-bold text-darkPurple">
-        <div className="flex items-center ml-1">
+        <div className="ml-1 flex items-center">
           <button onClick={handleHeartClick}>
             {isHeartStatus ? (
               <PostHeartFillIcon className="mr-2 fill-red" />
@@ -102,16 +104,20 @@ export default function PostCount({
           </button>
           {heartCount}
         </div>
-        <div className="flex items-center">
+        <div
+          className={`flex items-center  ${imageBoxWidth < 500 ? 'text-purple' : 'text-darkPurple'}`}
+        >
           <PostChatIcon
-            className="mr-2 fill-darkPurple hover:fill-purple active:fill-darkPurple"
+            className={`mr-2 fill-darkPurple hover:fill-purple active:fill-darkPurple  
+            ${imageBoxWidth < 500 ? 'fill-purple' : 'fill-darkPurple'} `}
             onClick={toggleScroll}
           />
           {post.commentCount}
         </div>
         <div className="relative flex items-center" ref={menuRef}>
           <PostShareIcon
-            className={`mr-2 fill-darkPurple hover:fill-purple active:fill-darkPurple ${isMenuOpen ? 'fill-purple' : ''}`}
+            className={`mr-2 fill-darkPurple hover:fill-purple active:fill-darkPurple 
+            ${isMenuOpen ? 'fill-purple' : ''} `}
             onClick={handleShareClick}
           />
           {sharedCount}

@@ -9,7 +9,11 @@ interface PostTagsProps {
 }
 
 // 게시글 태그들
-export default function PostTags({ post, searchRecent, setSearchRecent }: PostTagsProps) {
+export default function PostTags({
+  post,
+  searchRecent,
+  setSearchRecent,
+}: PostTagsProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -51,7 +55,7 @@ export default function PostTags({ post, searchRecent, setSearchRecent }: PostTa
   // 해시태그 클릭 시 호출될 함수
   const handleTagClick = (tag: string) => {
     router.push(`/search/posts?keyword=${encodeURIComponent(tag)}`);
-    
+
     addSearchTermToRecent(tag);
   };
 
@@ -66,7 +70,7 @@ export default function PostTags({ post, searchRecent, setSearchRecent }: PostTa
 
   return (
     <div
-      className="relative 
+      className="
       overflow-x-hidden   xs:max-w-[300px]  sm:max-w-[400px] md:max-w-[500px] lg:max-w-[400px] 
       xl:max-w-[600px] 2xl:max-w-[800px]"
       onWheel={handleWheel}

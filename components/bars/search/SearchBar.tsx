@@ -88,22 +88,56 @@ export default function SearchBar() {
 
     try {
       const searchTerms = searchQuery.split(' ').filter(Boolean);
-      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase(); // 마지막 단어만 검색
+      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase();
 
-      // 이미 있는 태그 요청 X
-      const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
-      if (existingTags.includes(lastSearchTerm)) {
-        return;
-      }
+      if (lastSearchTerm.startsWith('@')) {
+        // 닉네임 검색
+        const nicknameQuery = lastSearchTerm.slice(1); 
 
-      const newTagResults = await getTagSearchResults([lastSearchTerm]);
+        const userSearchResults = await getUserSearchResults(nicknameQuery); 
 
-      if (newTagResults && newTagResults.length > 0) {
-        setTagResults(newTagResults);
-        setSearchError('');
+        if (userSearchResults?.data && userSearchResults.data.length > 0) {
+          
+          const filteredUsers = userSearchResults.data.filter((user: any) =>
+            user.nickname.toLowerCase().includes(nicknameQuery),
+          );
+
+          if (filteredUsers.length > 0) {
+            setUserResults(filteredUsers); 
+            setSearchError(''); 
+          } else {
+            setUserResults([]);
+            if (showError) {
+              setSearchError(
+                `'${nicknameQuery}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
+              );
+            }
+          }
+        } else {
+          setUserResults([]);
+          if (showError) {
+            setSearchError(
+              `'${nicknameQuery}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
+            );
+          }
+        }
       } else {
-        if (showError) {
-          setSearchError(`'${lastSearchTerm}' 태그를 찾을 수 없습니다.`);
+        // 태그 검색 로직
+        const existingTags = tagResults.map((tag) => tag.tagName.toLowerCase());
+        if (existingTags.includes(lastSearchTerm)) {
+          return;
+        }
+
+        const newTagResults = await getTagSearchResults([lastSearchTerm]);
+
+        if (newTagResults && newTagResults.length > 0) {
+          setTagResults(newTagResults);
+          setSearchError('');
+        } else {
+          setTagResults([]);
+          if (showError) {
+            setSearchError(`'${lastSearchTerm}' 태그를 찾을 수 없습니다.`);
+          }
         }
       }
     } catch (error) {
@@ -277,9 +311,9 @@ export default function SearchBar() {
     : recommendedWords;
 
   return (
-    <div className="relative z-40 w-full">
+    <div className="relative z-[18] w-full">
       <form
-        className="relative z-30 flex items-center p-2"
+        className="relative z-[18] flex items-center p-2"
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleFormSubmit}
       >
