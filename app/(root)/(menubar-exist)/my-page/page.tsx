@@ -34,6 +34,7 @@ export default function MyPagePage() {
   const [isCursorId, setIsCursorId] = useState(0);
   const [isLading, setLading] = useState(true);
   const [isNickname, setIsNickname] = useState('');
+  const [isCategory, setIsCategory] = useState('myPost');
   const [sharedCount, setSharedCount] = useState<number>(0);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
@@ -57,8 +58,6 @@ export default function MyPagePage() {
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
-      console.log(postData.data.postSummaryList.content);
-      
       setIsNickname(userData.data.nickname);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsCursorId(postData.data.cursorId);
@@ -86,19 +85,7 @@ export default function MyPagePage() {
     }
   };
 
-  const modalAlarm = () => {
-    const miniModal = localStorage.getItem("mini")
-    if (miniModal == "작성") {
-      console.log("작성");
-    }else if(miniModal == "수정"){
-      console.log("수정");
-    }else if(miniModal == "임시"){
-      console.log("임시");
-    }
-  }
-
   useEffect(() => {
-    modalAlarm();
     fetchPostData();
     fetchPostTempData();
   }, [userData]);
