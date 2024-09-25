@@ -144,36 +144,40 @@ function PostBox({
 
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
-      <button
-        onClick={handleHeartClick}
-        className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
-      >
-        <HeartButton
-          width="21px"
-          height="19px"
-          isClicked={isLiked}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </button>
-      <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
-        <PlusButton
-          postId={postId}
-          width="24px"
-          height="24px"
-          isClicked={saved}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </div>
-      {isOptional && (
-        <BoxCommonButton
-          type="toggle"
-          onClick={handleToggleClick}
-          width="4px"
-          height="20px"
-          showGeneralAction={showGeneralAction}
-          className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
-          position="nothing"
-        />
+      {!tempPost && (
+        <>
+          <button
+            onClick={handleHeartClick}
+            className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
+          >
+            <HeartButton
+              width="21px"
+              height="19px"
+              isClicked={isLiked}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </button>
+          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
+            <PlusButton
+              postId={postId}
+              width="24px"
+              height="24px"
+              isClicked={saved}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </div>
+          {isOptional && (
+            <BoxCommonButton
+              type="toggle"
+              onClick={handleToggleClick}
+              width="4px"
+              height="20px"
+              showGeneralAction={showGeneralAction}
+              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
+              position="nothing"
+            />
+          )}
+        </>
       )}
       {showGeneralAction && isOptional && (
         <div ref={boxRef} className="absolute left-1 top-1 z-40">
