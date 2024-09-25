@@ -110,7 +110,9 @@ function PostBox({
         className="absolute inset-0 z-[9] flex items-center justify-center 
         overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
-          handlePostClick(e, postId);
+          if (!tempPost) {
+            handlePostClick(e, postId);
+          }
         }}
       >
         {tempPost == true && (
@@ -119,9 +121,13 @@ function PostBox({
               onClick={handleTempClick}
               className="absolute z-[9] h-full w-full cursor-pointer bg-darkPurple opacity-60"
             ></div>
-            <p className="z-[9] text-center text-white">임시저장된 게시물</p>
+
+            <p className="pointer-events-none z-[9] text-center text-white ">
+              임시저장된 게시물
+            </p>
           </>
         )}
+
         {isPhoto && (
           <Image
             src={photoUrl}
