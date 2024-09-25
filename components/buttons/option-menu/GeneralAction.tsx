@@ -32,7 +32,6 @@ interface GeneralActionProps {
   initialBoundary: 'ALL' | 'FOLLOW' | 'NONE';
   onBoundaryChange: (newBoundary: 'ALL' | 'FOLLOW' | 'NONE') => void;
   showOnlyShareButton?: boolean;
-  tempPost?: boolean;
 }
 
 // (토글) 옵션 메뉴 동작
@@ -46,7 +45,6 @@ export default function GeneralAction({
   initialBoundary,
   onDeleteClick,
   showOnlyShareButton = false,
-  tempPost = false,
   onCopyClick = (e: React.MouseEvent, archiveId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -185,17 +183,14 @@ export default function GeneralAction({
     rounded-xl bg-opacity-90 py-[13px] shadow-option-modal-shadow`}
     >
       {actionElements
-        .filter((item) => {
-          if (showOnlyShareButton) {
-            return item.label.includes('공유') && !tempPost;
-          }
-          return !item.label.includes('공유') || !tempPost;
-        })
+        .filter((item) =>
+          showOnlyShareButton ? item.label.includes('공유') : true,
+        )
         .map((item, index) => {
           const IconComponent = Icons[item.icon as keyof typeof Icons];
           const handleClick = item.label.includes('설정')
             ? handleSettingClick
-            : item.label.includes('공유') && !tempPost
+            : item.label.includes('공유')
               ? handleShareClick
               : item.label.includes('복제') && archiveId !== undefined
                 ? (e: React.MouseEvent) => onCopyClick(e, archiveId)
