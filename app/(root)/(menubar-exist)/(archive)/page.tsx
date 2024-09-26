@@ -22,7 +22,7 @@ export default function ArchivePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
-  const [category, setCategory] = useState<string>('trending');
+  const [category, setCategory] = useState<string>('');
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cursorId, setCursorId] = useState<number>(0);
@@ -47,9 +47,10 @@ export default function ArchivePage() {
 
   const fetchMorePosts = async () => {
     const currentCursorId = cursorId;
+
     let data = await getAllPostsData({ category, size, cursorId: currentCursorId });
 
-    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
+    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0 && isLoggedIn === 'loggedIn' || 'loggedOut') {
       setIsLoading(true);
       setCursorId(data.data.cursorId);
       setPostsData((prev: PostArray[]) => [
@@ -120,7 +121,7 @@ export default function ArchivePage() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    refreshPosts();
+      refreshPosts();
   }, [category]);
 
   // 

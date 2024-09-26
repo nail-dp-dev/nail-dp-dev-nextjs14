@@ -33,10 +33,11 @@ export default function UserImage({
       <Image
         src={src}
         alt={alt}
-        sizes="(max-width: 480px) 100vw, (max-width: 768px) 80vw, (max-width: 1024px) 60vw, 40vw"
+        sizes="(max-width: 480px) 100vw, 40vw"
         style={{ objectFit: 'cover' }}
         fill
         quality={100}
+        priority
         className="rounded-full"
       />
     </div>
