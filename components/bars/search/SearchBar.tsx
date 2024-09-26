@@ -50,7 +50,7 @@ export default function SearchBar() {
   const { userData } = useLoggedInUserData();
 
   useEffect(() => {
-    const nickname = (() => {
+    const extractNicknameFromPath = (pathname: string, userData: any) => {
       if (pathname === '/my-page' && userData?.data?.nickname) {
         return `@${userData.data.nickname}`;
       }
@@ -61,7 +61,9 @@ export default function SearchBar() {
           : undefined;
       }
       return undefined;
-    })();
+    };
+
+    const nickname = extractNicknameFromPath(pathname, userData);
 
     if (nickname) {
       setSearchTerm(nickname);
@@ -96,70 +98,118 @@ export default function SearchBar() {
     }
   };
 
-  // 검색 실행 함수
   const performSearch = async (
     searchQuery: string,
     showError: boolean = false,
   ) => {
-    // searchQuery가 없으면 API 호출 중단
+    // searchQuery가 없으면 검색 중단
     if (!searchQuery.trim()) {
-      setUserResults([]);
-      setTagResults([]);
-      setSearchError('');
+      resetSearchResults();
       return;
     }
 
     try {
-      const searchTerms = searchQuery.split(' ').filter(Boolean);
-      const lastSearchTerm = searchTerms[searchTerms.length - 1].toLowerCase();
+      const searchTerms = extractSearchTerms(searchQuery);
 
-      // '@'로 시작하는 경우 닉네임 검색 실행
-      if (lastSearchTerm.startsWith('@')) {
-        const nicknameQuery = lastSearchTerm.slice(1);
-        const userSearchResults = await getUserSearchResults(nicknameQuery);
-
-        // 검색 결과가 존재하는지 확인
-        if (userSearchResults?.data && userSearchResults.data.length > 0) {
-          const filteredUsers = userSearchResults.data.filter((user: any) =>
-            // 닉네임 부분 포함 검색
-            user.nickname.toLowerCase().includes(nicknameQuery),
-          );
-          setUserResults(filteredUsers);
-          setSearchError('');
-        } else {
-          setUserResults([]);
-          if (showError) {
-            setSearchError(
-              `'${nicknameQuery}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
-            );
-          }
-        }
+      if (isUserSearch(searchTerms[0])) {
+        // 닉네임 검색 실행
+        await handleUserSearch(searchTerms[0].slice(1), showError);
       } else {
         // 태그 검색 실행
-        const newTagResults = await getTagSearchResults([lastSearchTerm]);
-
-        if (newTagResults && newTagResults.length > 0) {
-          // 태그 부분 포함 검색
-          const filteredTags = newTagResults.filter((tag: any) =>
-            tag.tagName.toLowerCase().includes(lastSearchTerm),
-          );
-
-          setTagResults(filteredTags);
-          setSearchError('');
-        } else {
-          setTagResults([]);
-          if (showError) {
-            setSearchError(`'${lastSearchTerm}' 태그를 찾을 수 없습니다.`);
-          }
-        }
+        await handleTagSearch(searchTerms, showError);
       }
     } catch (error) {
-      console.error('Error fetching search results:', error);
-      setUserResults([]);
-      setTagResults([]);
-      if (showError) {
-        setSearchError('검색 중 오류가 발생했습니다.');
+      handleSearchError(showError, error);
+    }
+  };
+
+  // 검색어 처리
+  const extractSearchTerms = (query: string) =>
+    query
+      .split(' ')
+      .filter(Boolean)
+      .map((term) => term.toLowerCase());
+
+  // 닉네임 검색 여부 확인
+  const isUserSearch = (term: string) => term.startsWith('@');
+
+  // 검색 결과 초기화
+  const resetSearchResults = () => {
+    setUserResults([]);
+    setTagResults([]);
+    setSearchError('');
+  };
+
+  // 닉네임 검색 처리
+  const handleUserSearch = async (
+    nicknameQuery: string,
+    showError: boolean,
+  ) => {
+    const userSearchResults = await getUserSearchResults(nicknameQuery);
+
+    if (userSearchResults?.data?.length > 0) {
+      const filteredUsers = userSearchResults.data.filter((user: any) =>
+        user.nickname.toLowerCase().includes(nicknameQuery),
+      );
+      setUserResults(filteredUsers);
+      setSearchError('');
+    } else {
+      handleNoResultsError(
+        showError,
+        `'${nicknameQuery}' 닉네임을 가진 사용자를 찾을 수 없습니다.`,
+      );
+    }
+  };
+
+  // 태그 검색 처리
+  const handleTagSearch = async (searchTerms: string[], showError: boolean) => {
+    const newTagResults = await getTagSearchResults(searchTerms);
+
+    if (newTagResults?.length > 0) {
+      const filteredTags = filterTags(newTagResults, searchTerms);
+      const notFoundTags = searchTerms.filter(
+        (term) =>
+          !newTagResults.some((tag: any) =>
+            tag.tagName.toLowerCase().includes(term),
+          ),
+      );
+
+      setTagResults(filteredTags);
+
+      if (notFoundTags.length > 0) {
+        setSearchError(`'${notFoundTags.join(', ')}' 태그를 찾을 수 없습니다.`);
+      } else {
+        setSearchError('');
       }
+    } else {
+      handleNoResultsError(
+        showError,
+        `'${searchTerms.join(', ')}' 태그를 찾을 수 없습니다.`,
+      );
+    }
+  };
+
+  // 태그 필터링
+  const filterTags = (tags: any[], searchTerms: string[]) =>
+    tags.filter((tag: any) =>
+      searchTerms.some((term) => tag.tagName.toLowerCase().includes(term)),
+    );
+
+  // 검색 오류 처리
+  const handleSearchError = (showError: boolean, error: any) => {
+    console.error('Error fetching search results:', error);
+    resetSearchResults();
+    if (showError) {
+      setSearchError('검색 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 검색 결과가 없을 때 처리
+  const handleNoResultsError = (showError: boolean, errorMessage: string) => {
+    setUserResults([]);
+    setTagResults([]);
+    if (showError) {
+      setSearchError(errorMessage);
     }
   };
 
@@ -173,14 +223,7 @@ export default function SearchBar() {
       setTagResults([]); // 연관 검색어 초기화
       return;
     }
-
-    // 마지막 단어 추출
-    const searchTerms = newSearchTerm.trim().split(' ');
-    const lastSearchTerm = searchTerms[searchTerms.length - 1];
-
-    if (lastSearchTerm.trim() !== '') {
-      debouncedSearch(lastSearchTerm); // 마지막 단어로만 검색 실행
-    }
+    debouncedSearch(newSearchTerm);
   };
 
   // Debounce로 API 호출 방지 설정
@@ -200,6 +243,7 @@ export default function SearchBar() {
       e.preventDefault();
 
       if (searchTerm.trim() === '' || searchTerm.startsWith('@')) {
+        addToRecentSearches(searchTerm);
         return;
       }
 
