@@ -31,7 +31,7 @@ export default function RecentButton({
           } button-tr flex items-center space-x-[2px] border-[1px] py-[5.5px] pl-4
           pr-2 hover:bg-darkGray`}
         >
-          <span className="text-sm font-bold">{tag}</span>
+          <span className="text-sm text-darkPurple font-bold">{tag}</span>
           <div
             className="button-tr flex items-center justify-center rounded-full
               p-1 hover:bg-textDarkPurple hover:bg-opacity-30 active:scale-90"
