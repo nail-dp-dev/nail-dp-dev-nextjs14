@@ -123,7 +123,7 @@ export default function SearchRecent({
           </button>
         </div>
       </div>
-      <div className="mt-2 min-h-[60px]">
+      <div className="mt-2 mb-5 ">
         {isSearchRecentEnabled ? (
           tags.length === 0 ? (
             <p className="flex justify-center pt-5 text-sm font-semibold text-darkPurple ">
