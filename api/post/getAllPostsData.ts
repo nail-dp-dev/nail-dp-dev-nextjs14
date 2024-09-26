@@ -4,6 +4,10 @@ export const getAllPostsData = async ({ category, size, cursorId }: PostsDataPro
 
   try {
 
+    if (category === '') {
+      
+    }
+
     let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
     
     if (size) {

@@ -102,7 +102,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="group/button box relative flex items-center justify-center transition-all duration-500"
+      className="group/button preload box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       <button

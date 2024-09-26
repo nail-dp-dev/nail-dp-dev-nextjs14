@@ -5,8 +5,17 @@ import StoreProvider from '../store/providers/StoreProvider';
 import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
 import KakaoScript from '../components/external/KakaoScript';
+import localFont from 'next/font/local'
+
 
 const inter = Noto_Sans_KR({ subsets: ['latin'], preload:false});
+
+const pretendard = localFont({
+  src: '../fonts/PretendardVariable.woff2',
+  display: 'swap',
+  variable: '--font-pretendard',
+})
+
 
 export const metadata: Metadata = {
   title: '네디플',
@@ -21,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <link rel="icon" href="/favicon.ico" sizes="any" />
-      <body className={inter.className} suppressHydrationWarning={true}>
+      <body className={`${pretendard.variable} font-pretendard`} suppressHydrationWarning={true}>
         <StoreProvider>          
           <LoggedInProvider>
             <ThemeProvider>
