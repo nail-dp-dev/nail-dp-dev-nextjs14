@@ -5,7 +5,7 @@ interface BoxLayoutState {
 }
 
 const initialBoxLayoutState: BoxLayoutState = {
-  numberOfBoxes: 5,
+  numberOfBoxes: 4,
 };
 
 const boxLayoutSlice = createSlice({
@@ -13,12 +13,12 @@ const boxLayoutSlice = createSlice({
   initialState: initialBoxLayoutState,
   reducers: {
     setNumberOfBoxes: (state, action: PayloadAction<number>) => {
-      if (action.payload >= 3 && action.payload <= 7) {
+      if (action.payload >= 3 && action.payload <= 4) {
         state.numberOfBoxes = action.payload;
       }
     },
     increaseBoxes: (state) => {
-      if (state.numberOfBoxes < 7) {
+      if (state.numberOfBoxes < 4) {
         state.numberOfBoxes += 1;
       }
     },

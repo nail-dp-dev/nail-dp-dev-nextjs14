@@ -86,9 +86,6 @@ export const tagElements = [
 export const postBoxWidths: { [key: number]: string } = {
   '3': '32.86%',
   '4': '24.46%',
-  '5': '19.44%',
-  '6': '16.08%',
-  '7': '13.68%',
 };
 
 export const profileMiniMenuElements = [
@@ -192,11 +189,8 @@ export const signUpConsentItems = [
 export const getPostsNumber: {
   [key: number]: { number: number };
 } = {
-  3: { number: 30 },
-  4: { number: 40 },
-  5: { number: 50 },
-  6: { number: 60 },
-  7: { number: 70 },
+  3: { number: 16 },
+  4: { number: 20 },
 };
 
 export const getArchivePath: {

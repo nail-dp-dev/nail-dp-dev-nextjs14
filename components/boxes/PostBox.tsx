@@ -102,7 +102,7 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="group/button box relative flex items-center justify-center transition-all duration-500"
+      className="group/button preload box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       <button
@@ -123,17 +123,21 @@ function PostBox({
           </>
         )}
         {isPhoto && (
-          <Image
-            src={photoUrl}
-            alt={createdDate}
-            id={photoId.toString()}
-            fill
-            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-            quality={100}
-            sizes="100vw, 50vw, 33vw"
-            blurDataURL="https://image-component.nextjs.gallery/placeholder"
-            placeholder="blur"
-          />
+          // <Image
+          //   src={photoUrl}
+          //   alt={createdDate.toString()}
+          //   id={photoId.toString()}
+          //   fill
+          //   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          //   sizes="120px"
+          //   quality={100}
+
+          //   // placeholder="blur"
+          // />
+          <picture>
+            <source srcSet={photoUrl} type="image/avif" />
+            <img src={photoUrl} alt="Description" width="360" height="240" />
+          </picture>
         )}
 
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
