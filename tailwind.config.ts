@@ -144,6 +144,7 @@ const config: Config = {
       '3xl': '2650px',
     },
     fontFamily: {
+      pretendard: ['var(--font-pretendard)'],
       PattuaOne: ['Pattua One'],
     },
   },

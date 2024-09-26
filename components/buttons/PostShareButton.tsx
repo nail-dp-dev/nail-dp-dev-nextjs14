@@ -1,13 +1,26 @@
-import React from 'react';
 import ShareMenuList from '../share/ShareMenuList';
 
 interface MenuProps {
   onClick: (message: string) => void;
   nickname: string;
   imageUrl: string;
+  type: 'post' | 'archive';
+  id: number;
+  tempPost?: boolean;
 }
+
 // 게시물 공유 버튼
-export default function PostShareButton({ onClick, imageUrl }: MenuProps) {
+export default function PostShareButton({
+  onClick,
+  imageUrl,
+  type,
+  id,
+  tempPost = false,
+}: MenuProps) {
+  if (tempPost) {
+    return null;
+  }
+
   return (
     <div
       className="menu-box text-14px-normal-dP absolute bottom-8 left-0
@@ -17,9 +30,9 @@ export default function PostShareButton({ onClick, imageUrl }: MenuProps) {
       <ShareMenuList
         onClick={onClick}
         imageUrl={imageUrl}
-        type={'archive'}
-        id={0}
-      />{' '}
+        type={type}
+        id={id}
+      />
     </div>
   );
 }
