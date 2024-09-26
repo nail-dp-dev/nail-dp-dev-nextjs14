@@ -60,7 +60,7 @@ const nextConfig = {
         hostname: 'img1.kakaocdn.net',
       },
     ],
-    // formats: ['image/avif', 'image/webp'],
+    formats: ['image/avif', 'image/webp'],
   },
 };
 
