@@ -62,6 +62,23 @@ export default function SearchWord({
     [onTagClick],
   );
 
+  const isMediaType = (url: string) => {
+    let isPhoto = false;
+    let isVideo = false;
+
+    if (url !== null && url !== 'default.jpg') {
+      isPhoto =
+        url.endsWith('.jpg') ||
+        url.endsWith('.jpeg') ||
+        url.endsWith('.png') ||
+        url.endsWith('.gif');
+
+      isVideo = url.endsWith('.mp4') || url.endsWith('.mov');
+    }
+
+    return { isPhoto, isVideo };
+  };
+
   return (
     <div>
       <p className="text-14px-normal-dP">
@@ -75,58 +92,56 @@ export default function SearchWord({
           md:max-h-[350px] md:grid-cols-5 
           lg:max-h-[400px] xl:max-h-[450px]"
       >
-        {displayWords.map((item, index) => (
-          <button
-            key={index}
-            className="relative flex h-[110px] 
-            w-full  items-center
-            justify-center rounded-2xl bg-purple p-3"
-            onClick={() => handleTagClick(item.tagName)}
-          >
-            {item.video ? (
-              <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
-                <video
-                  src={item.tagImageUrl}
-                  autoPlay
-                  loop
-                  muted
-                  style={{
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
-              </div>
-            ) : item.photo && item.tagImageUrl ? (
-              <div
-                className="absolute inset-0 rounded-2xl"
-                style={{
-                  backgroundImage: `url(${item.tagImageUrl})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
-                <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
-              </div>
-            ) : (
-              <div
-                className={`absolute inset-0 rounded-2xl ${
-                  item.video || item.photo
-                    ? 'bg-black bg-opacity-50'
-                    : 'bg-purple'
-                }`}
-              ></div>
-            )}
+        {displayWords.map((item, index) => {
+          const { isPhoto, isVideo } = isMediaType(item.tagImageUrl);
 
-            <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
-              {item.tagName}
-            </div>
-          </button>
-        ))}
+          return (
+            <button
+              key={index}
+              className="relative flex h-[110px] 
+              w-full items-center
+              justify-center rounded-2xl bg-purple p-3"
+              onClick={() => handleTagClick(item.tagName)}
+            >
+              {isVideo ? (
+                <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
+                  <video
+                    src={item.tagImageUrl}
+                    autoPlay
+                    loop
+                    muted
+                    style={{
+                      objectFit: 'cover',
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                    }}
+                  />
+                  <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
+                </div>
+              ) : isPhoto && item.tagImageUrl !== 'default.jpg' ? (
+                <div
+                  className="absolute inset-0 rounded-2xl"
+                  style={{
+                    backgroundImage: `url(${item.tagImageUrl})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-black bg-opacity-50"></div>
+                </div>
+              ) : (
+                <div className="absolute inset-0 rounded-2xl bg-darkPurple"></div>
+              )}
+
+              <div className="relative z-10 text-[0.94rem] font-extrabold text-white">
+                {item.tagName}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

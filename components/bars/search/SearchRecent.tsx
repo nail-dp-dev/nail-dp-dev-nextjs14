@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import RecentButton from '../../buttons/RecentButton';
+import { useGoToProfile } from '../../../hooks/useGoToProfile';
 
 type SearchRecentProps = {
   searchRecent: string[];
@@ -34,7 +35,7 @@ export default function SearchRecent({
   setIsDropdownOpen,
 }: SearchRecentProps) {
   const router = useRouter();
-
+  const { goToProfile } = useGoToProfile();
   // 로컬 스토리지에서 검색어와 설정 불러오기
   useEffect(() => {
     const storedTags = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -83,7 +84,7 @@ export default function SearchRecent({
     // @로 시작하는 경우 프로필 페이지로 이동
     if (tag.startsWith('@')) {
       const nickname = tag.slice(1);
-      router.push(`/profile/${nickname}`);
+      goToProfile(nickname);
     } else {
       // 그렇지 않으면 검색 페이지로 이동
       performSearch(tag, true);
