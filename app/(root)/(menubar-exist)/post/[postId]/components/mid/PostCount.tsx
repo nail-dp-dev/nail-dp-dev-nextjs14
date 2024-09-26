@@ -126,6 +126,8 @@ export default function PostCount({
               onClick={handleShareCount}
               nickname={nickname}
               imageUrl={imageUrl}
+              type="post"
+              id={postId}
             />
           )}
         </div>

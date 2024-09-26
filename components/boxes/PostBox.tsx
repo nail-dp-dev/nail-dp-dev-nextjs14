@@ -107,71 +107,78 @@ function PostBox({
     >
       <button
         type="button"
-        className="absolute inset-0 z-10 flex items-center justify-center 
+        className="absolute inset-0 z-[9] flex items-center justify-center 
         overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => {
-          handlePostClick(e, postId);
+          if (!tempPost) {
+            handlePostClick(e, postId);
+          }
         }}
       >
         {tempPost == true && (
           <>
             <div
               onClick={handleTempClick}
-              className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+              className="absolute z-[9] h-full w-full cursor-pointer bg-darkPurple opacity-60"
             ></div>
-            <p className="z-10 text-center text-white">임시저장된 게시물</p>
+
+            <p className="pointer-events-none z-[9] text-center text-white ">
+              임시저장된 게시물
+            </p>
           </>
         )}
-        {isPhoto && (
-          // <Image
-          //   src={photoUrl}
-          //   alt={createdDate.toString()}
-          //   id={photoId.toString()}
-          //   fill
-          //   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-          //   sizes="120px"
-          //   quality={100}
 
-          //   // placeholder="blur"
-          // />
-          <picture>
-            <source srcSet={photoUrl} type="image/avif" />
-            <img src={photoUrl} alt="Description" width="360" height="240" />
-          </picture>
+        {isPhoto && (
+          <Image
+            src={photoUrl}
+            alt={createdDate}
+            id={photoId.toString()}
+            fill
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            quality={100}
+            sizes="(max-width: 300px) 100vw, (max-width: 300px) 50vw, 33vw"
+            blurDataURL="https://image-component.nextjs.gallery/placeholder"
+            placeholder="blur"
+            loading="eager"
+          />
         )}
 
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
-      <button
-        onClick={handleHeartClick}
-        className="z-10 absolute right-4 top-4 group-hover/button:border-purple"
-      >
-        <HeartButton
-          width="21px"
-          height="19px"
-          isClicked={isLiked}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </button>
-      <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
-        <PlusButton
-          postId={postId}
-          width="24px"
-          height="24px"
-          isClicked={saved}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </div>
-      {isOptional && (
-        <BoxCommonButton
-          type="toggle"
-          onClick={handleToggleClick}
-          width="4px"
-          height="20px"
-          showGeneralAction={showGeneralAction}
-          className="absolute left-2 top-2 z-10 p-2 group-hover/button:border-purple"
-          position="nothing"
-        />
+      {!tempPost && (
+        <>
+          <button
+            onClick={handleHeartClick}
+            className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
+          >
+            <HeartButton
+              width="21px"
+              height="19px"
+              isClicked={isLiked}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </button>
+          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
+            <PlusButton
+              postId={postId}
+              width="24px"
+              height="24px"
+              isClicked={saved}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </div>
+          {isOptional && (
+            <BoxCommonButton
+              type="toggle"
+              onClick={handleToggleClick}
+              width="4px"
+              height="20px"
+              showGeneralAction={showGeneralAction}
+              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
+              position="nothing"
+            />
+          )}
+        </>
       )}
       {showGeneralAction && isOptional && (
         <div ref={boxRef} className="absolute left-1 top-1 z-40">
