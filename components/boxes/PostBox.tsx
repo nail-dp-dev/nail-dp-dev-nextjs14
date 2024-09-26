@@ -130,7 +130,7 @@ function PostBox({
             fill
             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
             quality={100}
-            sizes="(max-width: 300px) 100vw, (max-width: 400px) 50vw, 33vw"
+            sizes="100vw, 50vw, 33vw"
             blurDataURL="https://image-component.nextjs.gallery/placeholder"
             placeholder="blur"
           />
