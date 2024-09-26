@@ -133,7 +133,6 @@ function PostBox({
             sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
             blurDataURL="https://image-component.nextjs.gallery/placeholder"
             placeholder="blur"
-            loading="eager"
           />
         )}
 
