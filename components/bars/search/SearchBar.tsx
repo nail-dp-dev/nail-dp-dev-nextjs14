@@ -12,6 +12,7 @@ import {
   getUserSearchResults,
   getTagSearchResults,
 } from '../../../api/search/getSearch';
+import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
 
 function debounce(fn: Function, delay: number) {
   let timer: NodeJS.Timeout;
@@ -46,6 +47,27 @@ export default function SearchBar() {
   const [isSearchRecentEnabled, setIsSearchRecentEnabled] = useState(true);
   const [userResults, setUserResults] = useState<any[]>([]);
   const [tagResults, setTagResults] = useState<any[]>([]);
+  const { userData } = useLoggedInUserData();
+
+  useEffect(() => {
+    const nickname = (() => {
+      if (pathname === '/my-page' && userData?.data?.nickname) {
+        return `@${userData.data.nickname}`;
+      }
+      if (pathname.startsWith('/profile/')) {
+        const nicknameFromPath = pathname.split('/').pop();
+        return nicknameFromPath
+          ? `@${decodeURIComponent(nicknameFromPath)}`
+          : undefined;
+      }
+      return undefined;
+    })();
+
+    if (nickname) {
+      setSearchTerm(nickname);
+      debouncedSearch(nickname);
+    }
+  }, [pathname, userData]);
 
   const handleInputClick = (e: React.MouseEvent) => {
     e.stopPropagation();
