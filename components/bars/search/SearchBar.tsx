@@ -243,6 +243,7 @@ export default function SearchBar() {
       e.preventDefault();
 
       if (searchTerm.trim() === '' || searchTerm.startsWith('@')) {
+        addToRecentSearches(searchTerm);
         return;
       }
 
