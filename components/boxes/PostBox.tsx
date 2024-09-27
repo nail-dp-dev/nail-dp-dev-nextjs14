@@ -97,6 +97,7 @@ function PostBox({
         type="button"
         className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
+
       >
         {tempPost && (
           <>
@@ -108,6 +109,7 @@ function PostBox({
           </>
         )}
         
+
         {isPhoto && (
           <Image
             src={photoUrl}
@@ -122,12 +124,13 @@ function PostBox({
             decoding="async"
             placeholder="blur"
             blurDataURL="/assets/img/blur.avif" 
+
           />
         )}
 
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
-      
+
       {!tempPost && (
         <>
           <button
