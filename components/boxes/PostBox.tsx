@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
@@ -25,6 +25,7 @@ import {
 import { useVisibility } from '../../hooks/useVisibility';
 import BoxCommonButton from '../ui/BoxCommonButton';
 
+// eslint-disable-next-line @next/next/no-async-client-component
 function PostBox({
   postId,
   photoId,
@@ -37,49 +38,41 @@ function PostBox({
   setSharedCount,
   boundary: initialBoundary,
   isOptional,
-  onLikeToggle,
   showOnlyShareButton,
 }: PostBoxNewProps) {
   const router = useRouter();
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
-
+  
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const { isVisible, handleDelete } = useVisibility();
 
   const [isLiked, setIsLiked] = useState(like);
-  const [currentBoundary, setCurrentBoundary] = useState<
-    'ALL' | 'FOLLOW' | 'NONE'
-  >(initialBoundary);
-
+  const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
   const dispatch = useDispatch();
 
   const handleHeartClick = async () => {
-    if (isLoggedIn === 'loggedOut') {
-      return;
-    }
+    if (isLoggedIn === 'loggedOut') return;
 
     if (!isLiked && isLoggedIn === 'loggedIn') {
       let data = await postPostLike(postId);
-      data.code == 2001 && setIsLiked((prev) => !prev);
+      if (data.code === 2001) setIsLiked((prev) => !prev);
     } else if (isLiked && isLoggedIn === 'loggedIn') {
       let data = await deletePostLike(postId);
-      data.code == 2001 && setIsLiked((prev) => !prev);
+      if (data.code === 2001) setIsLiked((prev) => !prev);
     }
   };
 
   const handleTempClick = async () => {
-    if (isLoggedIn === 'loggedOut') {
-      return;
-    }
+    if (isLoggedIn === 'loggedOut') return;
     router.push(`/post/edit/${postId}`);
   };
 
   const handlePostClick = (e: any, postId: number) => {
     e.stopPropagation();
-
     if (isLoggedIn === 'loggedOut') {
       setIsSuggestLoginModalShow(true);
+      return;
     }
 
     if (isLoggedIn === 'loggedIn') {
@@ -89,12 +82,7 @@ function PostBox({
     }
   };
 
-  const isPhoto =
-    photoUrl.endsWith('.jpg') ||
-    photoUrl.endsWith('.jpeg') ||
-    photoUrl.endsWith('.png') ||
-    photoUrl.endsWith('.gif');
-
+  const isPhoto = photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif');
   const isVideo = photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov');
 
   if (!isVisible) return null;
@@ -107,72 +95,75 @@ function PostBox({
     >
       <button
         type="button"
-        className="absolute inset-0 z-10 flex items-center justify-center 
-        overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
-        onClick={(e) => {
-          handlePostClick(e, postId);
-        }}
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
+        onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
       >
-        {tempPost == true && (
+        {tempPost && (
           <>
             <div
               onClick={handleTempClick}
-              className="absolute z-10 h-full w-full cursor-pointer bg-darkPurple opacity-60"
+              className="absolute z-[9] h-full w-full cursor-pointer bg-darkPurple opacity-60"
             ></div>
-            <p className="z-10 text-center text-white">임시저장된 게시물</p>
+            <p className="pointer-events-none z-[9] text-center text-white">임시저장된 게시물</p>
           </>
         )}
+        
         {isPhoto && (
-          // <Image
-          //   src={photoUrl}
-          //   alt={createdDate.toString()}
-          //   id={photoId.toString()}
-          //   fill
-          //   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-          //   sizes="120px"
-          //   quality={100}
-
-          //   // placeholder="blur"
-          // />
-          <picture>
-            <source srcSet={photoUrl} type="image/avif" />
-            <img src={photoUrl} alt="Description" width="360" height="240" />
-          </picture>
+          <Image
+            src={photoUrl}
+            alt={createdDate}
+            id={photoId.toString()}
+            fill
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+            quality={75}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            fetchPriority="high" 
+            loading="lazy"
+            decoding="async"
+            placeholder="blur"
+            blurDataURL="/assets/img/blur.avif" 
+          />
         )}
 
         {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
       </button>
-      <button
-        onClick={handleHeartClick}
-        className="z-10 absolute right-4 top-4 group-hover/button:border-purple"
-      >
-        <HeartButton
-          width="21px"
-          height="19px"
-          isClicked={isLiked}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </button>
-      <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
-        <PlusButton
-          postId={postId}
-          width="24px"
-          height="24px"
-          isClicked={saved}
-          active={isLoggedIn === 'loggedIn'}
-        />
-      </div>
-      {isOptional && (
-        <BoxCommonButton
-          type="toggle"
-          onClick={handleToggleClick}
-          width="4px"
-          height="20px"
-          showGeneralAction={showGeneralAction}
-          className="absolute left-2 top-2 z-10 p-2 group-hover/button:border-purple"
-          position="nothing"
-        />
+      
+      {!tempPost && (
+        <>
+          <button
+            onClick={handleHeartClick}
+            className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
+          >
+            <HeartButton
+              width="21px"
+              height="19px"
+              isClicked={isLiked}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </button>
+          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
+            <PlusButton
+              postId={postId}
+              width="24px"
+              height="24px"
+              isClicked={saved}
+              active={isLoggedIn === 'loggedIn'}
+            />
+          </div>
+          {isOptional && (
+            <BoxCommonButton
+              type="toggle"
+              onClick={handleToggleClick}
+              width="4px"
+              height="20px"
+              showGeneralAction={showGeneralAction}
+              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
+              position="nothing"
+            />
+          )}
+        </>
       )}
+
       {showGeneralAction && isOptional && (
         <div ref={boxRef} className="absolute left-1 top-1 z-40">
           <GeneralAction
