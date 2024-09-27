@@ -123,7 +123,7 @@ function PostBox({
             loading="lazy"
             decoding="async"
             placeholder="blur"
-            blurDataURL="/assets/img/blur.png" 
+            blurDataURL="/assets/img/blur.avif" 
 
           />
         )}
