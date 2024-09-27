@@ -106,7 +106,7 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
-          sudo apt update && sudo apt-get install -y \
+         sudo apt update && sudo apt-get install -y \
           ca-certificates \
           curl \
           gnupg \
@@ -138,4 +138,4 @@ jobs:
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
 
           sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml down --rmi all
-          sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml up -d 
+          sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml up -d
