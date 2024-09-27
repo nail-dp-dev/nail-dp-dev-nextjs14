@@ -98,7 +98,7 @@ export default function SearchWord({
           return (
             <button
               key={index}
-              className="relative flex h-[110px] 
+              className="relative flex h-[100px] 
               w-full items-center
               justify-center rounded-2xl bg-purple p-3"
               onClick={() => handleTagClick(item.tagName)}
