@@ -102,7 +102,7 @@ export default function PostCount({
               <PostHeartIcon className="mr-2 fill-darkPurple hover:fill-red" />
             )}
           </button>
-          {heartCount}
+          <div className="w-1 text-right">{heartCount}</div>
         </div>
         <div
           className={`flex items-center  ${imageBoxWidth < 500 ? 'text-purple' : 'text-darkPurple'}`}
@@ -112,7 +112,7 @@ export default function PostCount({
             ${imageBoxWidth < 500 ? 'fill-purple' : 'fill-darkPurple'} `}
             onClick={toggleScroll}
           />
-          {post.commentCount}
+          <div className="w-1 text-right">{post.commentCount}</div>
         </div>
         <div className="relative flex items-center" ref={menuRef}>
           <PostShareIcon
@@ -120,7 +120,7 @@ export default function PostCount({
             ${isMenuOpen ? 'fill-purple' : ''} `}
             onClick={handleShareClick}
           />
-          {sharedCount}
+          <div className="w-1 text-right"> {sharedCount}</div>
           {isMenuOpen && (
             <PostShareButton
               onClick={handleShareCount}
