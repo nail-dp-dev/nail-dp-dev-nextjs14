@@ -67,7 +67,9 @@ jobs:
           apt-transport-https \
           software-properties-common
 
-          sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
+          if [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
+            sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
+          fi
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --no-tty --batch --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
           echo \
@@ -104,7 +106,7 @@ jobs:
         envs: APP, COMPOSE
         script_stop: true
         script: |
-          sudo apt update && sudo apt-get install -y \
+         sudo apt update && sudo apt-get install -y \
           ca-certificates \
           curl \
           gnupg \
@@ -112,7 +114,9 @@ jobs:
           apt-transport-https \
           software-properties-common
 
-          sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
+          if [ -f /usr/share/keyrings/docker-archive-keyring.gpg ]; then
+            sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
+          fi
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --no-tty --batch --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
           echo \
@@ -134,4 +138,4 @@ jobs:
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
 
           sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml down --rmi all
-          sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml up -d 
+          sudo docker-compose -f /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose/docker-compose.yml up -d
