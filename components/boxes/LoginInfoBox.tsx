@@ -17,12 +17,14 @@ import { useAppDispatch } from '../../store/store';
 import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg';
 import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg';
 import EditProfilePencilIcon from '../../public/assets/svg/edit-profile-pencil.svg';
+import BitsBalloonIcon from '../../public/assets/svg/bits-balloon.svg'
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
   const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
+  const [isBitsMiniModalShow, setIsBitsMiniModalShow] = useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } =
     useLoggedInUserData();
 
@@ -47,7 +49,16 @@ export default function LoginInfoBox() {
   const handleBitsChargeButton = (e: any) => {
     e.stopPropagation();
     console.log('충전...누름...')
+    if(isBitsMiniModalShow){
+      setIsBitsMiniModalShow(false)
+    }
   };
+
+  const handleBitsPopUpMiniModal = (e: any) => {
+    e.stopPropagation();
+    setIsBitsMiniModalShow((prev) => !prev);
+    
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -177,17 +188,31 @@ export default function LoginInfoBox() {
       {isLoggedIn === 'loggedIn' && (
         <div className="flex mt-[10px] md:mt-0 h-[38px] w-full items-center justify-center md:justify-between md:px-[8px]">
           <div className="flex items-center ">
-            <button
-              className='md:mr-[12px]'
-              onMouseEnter={() => setIsButtonHovered(true)}
-              onMouseLeave={() => setIsButtonHovered(false)}
-              onClick={(e) => {
-                handleBitsChargeButton(e);
-              }}
+            <div
+              className='md:mr-[12px] hidden md:block'
             >
-              <Bits className='' />
-              {isButtonHovered ? <div className='absolute w-[112px] h-[26px] bg-red translate-x-[30px] translate-y-[-25px]'>{userPointData}비츠</div> : null}
-            </button>
+              <Bits />
+            </div>
+            <div className='flex items-center'>
+              <button
+                className='md:mr-[12px] md:hidden'
+                onClick={(e) => handleBitsPopUpMiniModal(e)}
+              >
+                <Bits className='' />
+              </button>
+              {isBitsMiniModalShow && (
+                <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40'>
+                  <button
+                    className='absolute'
+                    onClick={(e) => handleBitsChargeButton(e)}
+                  >
+                    <span className='absolute z-50 translate-x-[-45px] text-[1rem]'>{userPointData}비츠</span>
+                    <BitsBalloonIcon 
+                    className='z-40 '/>
+                  </button>
+                </div>
+              )}
+            </div>
             <span className="text-[14px] font-[700] text-textDarkPurple hidden md:block">
               {userPointData} 비츠
             </span>
