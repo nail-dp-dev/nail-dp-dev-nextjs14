@@ -48,7 +48,7 @@ export default function ArchivePage() {
   const fetchMorePosts = async () => {
     const currentCursorId = cursorId;
 
-    let data = await getAllPostsData({ category, size, cursorId: currentCursorId });
+    let data = await getAllPostsData({ category, size, cursorId: currentCursorId, isFirstRendering });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0 && isLoggedIn === 'loggedIn' || 'loggedOut') {
       setIsLoading(true);
@@ -124,7 +124,6 @@ export default function ArchivePage() {
       refreshPosts();
   }, [category]);
 
-  // 
   useEffect(() => {
     if (likedButtonState) {
       return;
@@ -297,7 +296,7 @@ export default function ArchivePage() {
             {likedButtonState &&
               !isLikedPostsContentExist &&
               !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
-            <div ref={bottomRef} className="w-full h-[1px] translate-y-[-1300px]"></div>
+            <div ref={bottomRef} className="w-full h-[1px]"></div>
           </div>
       </div>
       {isSuggestLoginModalShow && <LoginSuggestModal />}

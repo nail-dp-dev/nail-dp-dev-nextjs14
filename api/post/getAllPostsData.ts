@@ -1,23 +1,24 @@
 import { PostsDataProps } from '../../constants/interface';
 
-export const getAllPostsData = async ({ category, size, cursorId }: PostsDataProps) => {
+export const getAllPostsData = async ({ category, size, cursorId, isFirstRendering }: PostsDataProps) => {
+
+  console.log(isFirstRendering)
 
   try {
 
-    if (category === '') {
-      
-    }
-
     let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
     
-    if (size) {
+    if (size && isFirstRendering) {
+      url += `&size=${30}`
+    } else if (size && !isFirstRendering) {
       url += `&size=${size}`
     }
 
-    console.log(size, 'size...')
     if (cursorId !== 0) {
       url += `&oldestPostId=${cursorId}`
     }
+
+    console.log(url)
 
     const response = await fetch(url, {
       method: "GET",

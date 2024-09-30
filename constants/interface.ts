@@ -147,6 +147,7 @@ export interface PostsDataProps {
   category: string;
   size: number;
   cursorId?: number;
+  isFirstRendering: boolean;
 }
 
 export interface PostsLikedDataProps {

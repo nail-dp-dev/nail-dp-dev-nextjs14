@@ -90,12 +90,12 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="group/button preload box relative flex items-center justify-center transition-all duration-500"
+      className="group/button preload box relative flex items-center justify-center transition-all duration-500 "
       style={{ width: postBoxWidths[layoutNum] }}
     >
       <button
         type="button"
-        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple shadow-sm shadow-gray"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
 
       >
@@ -135,7 +135,7 @@ function PostBox({
         <>
           <button
             onClick={handleHeartClick}
-            className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
+            className="absolute right-4 top-4 z-10 group-hover/button:border-purple hidden md:block"
           >
             <HeartButton
               width="21px"
@@ -144,7 +144,7 @@ function PostBox({
               active={isLoggedIn === 'loggedIn'}
             />
           </button>
-          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
+          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple hidden md:block">
             <PlusButton
               postId={postId}
               width="24px"
@@ -160,7 +160,7 @@ function PostBox({
               width="4px"
               height="20px"
               showGeneralAction={showGeneralAction}
-              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
+              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple hidden md:block"
               position="nothing"
             />
           )}

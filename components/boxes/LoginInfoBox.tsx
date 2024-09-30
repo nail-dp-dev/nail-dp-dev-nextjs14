@@ -46,6 +46,7 @@ export default function LoginInfoBox() {
 
   const handleBitsChargeButton = (e: any) => {
     e.stopPropagation();
+    console.log('충전...누름...')
   };
 
   useEffect(() => {
@@ -70,24 +71,37 @@ export default function LoginInfoBox() {
 
   return (
     <div
-      className={`loginInfoContainer flex w-full flex-col ${isLoggedIn === 'loggedIn' ? 'h-[85px]' : 'h-[60px]'} transition-all`}
+      className={`loginInfoContainer flex w-[30px] mb-[6px] md:mb-0 md:w-full flex-col ${isLoggedIn === 'loggedIn' ? 'md:h-[85px]' : 'md:h-[60px]'} transition-all `}
     >
-      <div className="loginedDiv relative mb-[2px] flex h-[45px] w-full items-center">
+      <div className="loginedDiv relative md:mb-[2px] flex md:h-[45px] w-full items-center">
         {isLoggedIn === 'loggedIn' && userData && (
           <>
             <button
               onClick={handleMiniModalToggle}
-              className="profileButton relative mr-[12px] h-[40px] w-[40px] overflow-hidden rounded-full"
+              className="profileButton relative w-[30px] h-[30px] md:mr-[12px] md:h-[40px] md:w-[40px] overflow-hidden rounded-full"
               disabled={isMiniModalShow}
             >
-              <UserImage
-                src={userProfileUrl}
-                alt={'profileIamge'}
-                width={40}
-                height={40}
-              />
-              <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.2)] opacity-0 transition-opacity duration-300 hover:opacity-100">
-                <EditProfilePencilIcon />
+              <div className='hidden md:block'>
+                <UserImage
+                  src={userProfileUrl}
+                  alt={'profileIamge'}
+                  width={40}
+                  height={40}
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.2)] opacity-0 transition-opacity duration-300 hover:opacity-100">
+                  <EditProfilePencilIcon />
+                </div>
+              </div>
+              <div className='md:hidden'>
+                <UserImage
+                  src={userProfileUrl}
+                  alt={'profileIamge'}
+                  width={30}
+                  height={30}
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.2)] opacity-0 transition-opacity duration-300 hover:opacity-100">
+                  <EditProfilePencilIcon />
+                </div>
               </div>
             </button>
             <ProfileMiniModal
@@ -99,12 +113,29 @@ export default function LoginInfoBox() {
         )}
         {isLoggedIn === 'pending' && !userData && <></>}
         {isLoggedIn === 'loggedOut' && (
-          <UserImage
-            src={'/assets/img/logoutProfileImage.png'}
-            alt={'profileIamge'}
-            width={40}
-            height={40}
-          />
+          <div>
+            <div className='hidden md:block transition-all'>
+              <UserImage
+                src={'/assets/img/logoutProfileImage.png'}
+                alt={'profileIamge'}
+                width={30}
+                height={30}
+              />
+            </div>
+            <button
+              className='md:hidden'
+              onClick={() => {
+                handleLogin();
+              }}
+            >
+              <UserImage
+                src={'/assets/img/logoutProfileImage-xs.png'}
+                alt={'profileIamge'}
+                width={30}
+                height={30}
+              />
+            </button>
+          </div>
         )}
         {isLoggedIn === 'loggedIn' && userData && (
           <UserInfo
@@ -130,7 +161,7 @@ export default function LoginInfoBox() {
             onClick={() => {
               handleLogin();
             }}
-            className="flex flex-1 flex-col items-start justify-between  pl-[10px] hover:text-purple"
+            className="flex-1 flex-col items-start justify-between  pl-[10px] hover:text-purple hidden md:flex"
           >
             <div className=" flex h-full items-center justify-between">
               <span className="text-[16px] font-[700] underline">
@@ -144,14 +175,25 @@ export default function LoginInfoBox() {
         )}
       </div>
       {isLoggedIn === 'loggedIn' && (
-        <div className="flex h-[38px] w-full items-center justify-between px-[8px]">
+        <div className="flex mt-[10px] md:mt-0 h-[38px] w-full items-center justify-center md:justify-between md:px-[8px]">
           <div className="flex items-center ">
-            <Bits className="mr-[12px]" />
-            <span className="text-[14px] font-[700] text-textDarkPurple">
+            <button
+              className='md:mr-[12px]'
+              onMouseEnter={() => setIsButtonHovered(true)}
+              onMouseLeave={() => setIsButtonHovered(false)}
+              onClick={(e) => {
+                handleBitsChargeButton(e);
+              }}
+            >
+              <Bits className='' />
+              {isButtonHovered ? <div className='absolute w-[112px] h-[26px] bg-red translate-x-[30px] translate-y-[-25px]'>{userPointData}비츠</div> : null}
+            </button>
+            <span className="text-[14px] font-[700] text-textDarkPurple hidden md:block">
               {userPointData} 비츠
             </span>
           </div>
           <button
+            className='hidden md:block'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
             onClick={(e) => {
