@@ -22,6 +22,7 @@ import MinusSVG from '../../../../public/assets/svg/minus.svg';
 import PlusSVG from '../../../../public/assets/svg/plus.svg';
 import { RootState } from '../../../../store/store';
 import { useRouter } from 'next/navigation';
+import Loading from '../../../loading';
 
 export default function MyPagePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -36,6 +37,7 @@ export default function MyPagePage() {
   const [isNickname, setIsNickname] = useState('');
   const [isCategory, setIsCategory] = useState('myPost');
   const [sharedCount, setSharedCount] = useState<number>(0);
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -62,6 +64,7 @@ export default function MyPagePage() {
       setIsLastPage(postData.data.postSummaryList.last);
       setIsCursorId(postData.data.cursorId);
       setIsMyPageData(postData.data.postSummaryList.content);
+      setIsPostsLoading(true);
     }
   };
 
@@ -74,7 +77,6 @@ export default function MyPagePage() {
     setLading(false);
     if (!isLastPage) {
       const postData = await getPostsData(isNickname, isCursorId, layoutNum);
-      console.log(postData);
       setIsCursorId(postData.data.cursorId);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsMyPageData((prevData) => [
@@ -115,7 +117,7 @@ export default function MyPagePage() {
     }
   }, [isNickname, isLading, isCursorId, layoutNum]);
 
-  return (
+  return isPostsLoading ? (
     <div
       id="scroll1"
       className={`relative h-full overflow-y-scroll scrollbar-hide`}
@@ -244,5 +246,7 @@ export default function MyPagePage() {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 }
