@@ -2,8 +2,6 @@ import { PostsDataProps } from '../../constants/interface';
 
 export const getAllPostsData = async ({ category, size, cursorId, isFirstRendering }: PostsDataProps) => {
 
-  console.log(isFirstRendering)
-
   try {
 
     let url = `${process.env.NEXT_PUBLIC_API_URL}/home?choice=${category}`
@@ -17,8 +15,6 @@ export const getAllPostsData = async ({ category, size, cursorId, isFirstRenderi
     if (cursorId !== 0) {
       url += `&oldestPostId=${cursorId}`
     }
-
-    console.log(url)
 
     const response = await fetch(url, {
       method: "GET",

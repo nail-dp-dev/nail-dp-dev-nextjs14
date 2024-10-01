@@ -180,13 +180,14 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex min-h-[calc(100vh-245px)] flex-col justify-between "
+      className="flex min-h-[calc(100vh-245px)] flex-col  bg-naverGreen "
     >
-      <div className="top mx-auto my-0 flex w-full flex-grow flex-col justify-center">
+      <div className="top my-0 flex w-full flex-grow flex-col justify-center">
         <div
           className={`BoxWrap mb-[50px] mt-5 flex justify-center 
-              xs:xs:flex-col xs:items-center
-              sm:sm:flex-col sm:items-center
+            bg-red
+              sm:flex-col sm:items-center
+              sm:flex-col sm:items-center
               lg:flex-row lg:place-items-stretch
         `}
         >
@@ -255,7 +256,7 @@ export default function MidContainer({
             {post.postContent}
           </div>
         </div>
-        <div className="postInfo mt-auto flex flex-row items-center justify-between">
+        <div className="postInfo mt-auto flex flex-row items-center justify-between bg-kakaoYellow">
           <PostCount
             post={post}
             postId={postId}
@@ -274,7 +275,7 @@ export default function MidContainer({
         </div>
       </div>
       <div
-        className={`bot overflow-hidden transition-all duration-200 ease-in-out ${
+        className={`bot overflow-hidden transition-all duration-200 ease-in-out  ${
           imageBoxWidth >= 500
             ? 'max-h-0 opacity-0'
             : 'max-h-[1000px] opacity-100'

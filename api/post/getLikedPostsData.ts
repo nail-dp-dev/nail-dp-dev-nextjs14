@@ -1,10 +1,24 @@
 import { PostsLikedDataProps } from '../../constants/interface';
 
-export const getLikedPosts = async ({ category, size, cursorLikedId }: PostsLikedDataProps) => {
+export const getLikedPosts = async ({ category, size, cursorLikedId, isLikedPostsFirstRendering }: PostsLikedDataProps) => {
 
   try {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts/like`, {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/posts/like?choice=${category}`
+
+
+    if (size && isLikedPostsFirstRendering) {
+      url += `&size=${30}`
+    } else if (size && !isLikedPostsFirstRendering) {
+      url += `&size=${size}`
+    }
+
+    if (cursorLikedId !== 0) {
+      url += `&oldestPostId=${cursorLikedId}`
+    }
+
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

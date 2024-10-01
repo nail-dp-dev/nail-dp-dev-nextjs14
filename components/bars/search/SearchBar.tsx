@@ -231,7 +231,6 @@ export default function SearchBar() {
     debounce((query: string) => {
       // 공백일 경우 API 호출 방지
       if (query.trim() !== '') {
-        console.log('검색어 쿼리:', query);
         performSearch(query, true);
       }
     }, 300),

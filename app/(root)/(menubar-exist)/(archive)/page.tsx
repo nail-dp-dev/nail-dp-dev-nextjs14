@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import CategoryBar from '../../../../components/bars/CategoryBar';
 import { archiveCategoryElements, getPostsNumber } from '../../../../constants';
 import Loading from '../../../loading';
@@ -42,6 +42,7 @@ export default function ArchivePage() {
 
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const likedBottomRef = useRef<HTMLDivElement>(null);
   const likedPostsBottomRef = useRef<HTMLDivElement>(null);
   const likedButtonState = useSelector(selectButtonState);
 
@@ -75,11 +76,17 @@ export default function ArchivePage() {
   };
 
   const fetchMorePostsByLikedButton = async () => {
-    let data = await getLikedPosts({ category, size, cursorLikedId });
+
+    const currentCursorId = cursorLikedId;
+    console.log(currentCursorId)
+
+    let data = await getLikedPosts({ category, size, cursorLikedId:currentCursorId, isLikedPostsFirstRendering});
+
+    console.log(data)
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
-      setCursorLikedId(data.data.oldestPostId);
+      setCursorLikedId(data.data.cursorId);
       setLikedPostsData((prev: PostArray[]) => [
         ...prev,
         ...data.data.postSummaryList.content,
@@ -112,7 +119,6 @@ export default function ArchivePage() {
   };
 
   useEffect(() => {
-    console.log('isLoggedIn useEffect...')
     if (isLoggedIn === 'loggedIn') {
       setCategory('for-you');
     } else if (isLoggedIn === 'loggedOut') {
@@ -123,6 +129,12 @@ export default function ArchivePage() {
   useEffect(() => {
       refreshPosts();
   }, [category]);
+
+  useEffect(() => {
+  if (boxRef.current) {
+    boxRef.current.scrollTop = 0;
+  }
+}, [category, likedButtonState]);
 
   useEffect(() => {
     if (likedButtonState) {
@@ -140,7 +152,8 @@ export default function ArchivePage() {
           entries[0].isIntersecting &&
           !isLast &&
           !isLoading &&
-          isContentExist
+          isContentExist &&
+          !likedButtonState 
         ) {
           fetchMorePosts();
         }
@@ -171,14 +184,15 @@ export default function ArchivePage() {
       fetchMorePostsByLikedButton();
     }
 
-    const likedButtonCurrentRef = likedPostsBottomRef.current;
+    const likedButtonCurrentRef = likedBottomRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         if (
           entries[0].isIntersecting &&
           !isLikedPostsLast &&
           !isLikedPostsLoading &&
-          isLikedPostsContentExist
+          isLikedPostsContentExist &&
+          likedButtonState
         ) {
           fetchMorePostsByLikedButton();
         }
@@ -207,7 +221,7 @@ export default function ArchivePage() {
   ]);
 
   useEffect(() => {
-    if (!likedButtonState && !isFirstRendering) {
+    if (!likedButtonState ) {
       setCursorId(0);
       setMessage('');
       setIsContentExist(false);
@@ -217,7 +231,7 @@ export default function ArchivePage() {
       setIsLast(false);
     }
 
-    if (likedButtonState && !isLikedPostsFirstRendering) {
+    if (likedButtonState ) {
       setCursorLikedId(0);
       setLikedPostsMessage('');
       setIsLikedPostsContentExist(false);
@@ -295,8 +309,15 @@ export default function ArchivePage() {
               isLikedPostsLoading && <Loading />}
             {likedButtonState &&
               !isLikedPostsContentExist &&
-              !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
+            !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
+          {
+            !likedButtonState &&
             <div ref={bottomRef} className="w-full h-[1px]"></div>
+          }
+          {
+            likedButtonState &&
+            <div ref={likedBottomRef} className="w-full h-[1px]"></div>
+          }
           </div>
       </div>
       {isSuggestLoginModalShow && <LoginSuggestModal />}

@@ -154,6 +154,7 @@ export interface PostsLikedDataProps {
   category: string;
   size: number;
   cursorLikedId?: number;
+  isLikedPostsFirstRendering: boolean;
 }
 
 export interface ArchiveDataProps {

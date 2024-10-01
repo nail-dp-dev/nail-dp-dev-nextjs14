@@ -1,9 +1,15 @@
+'use client'
+
 import Link from 'next/link';
 import { FooterElements } from '../../constants';
+import { usePathname } from 'next/navigation'
 
-export default function FooterBox (){
+export default function FooterBox() {
+
+  const path = usePathname()
+  
   return (
-    <div className='w-full xs:h-[30px] sm:h-[30px] translate-y-[-10px] flex flex-wrap items-center justify-center xs:gap-[5px] sm:gap-[10px]'>
+    <div className={`${path === '/sign-up' && 'hidden'} w-full xs:h-[30px] sm:h-[30px] translate-y-[-10px] flex flex-wrap items-center justify-center xs:gap-[5px] sm:gap-[10px] `}>
       {
         FooterElements.map((ele, index) => (
           <div key={index}>

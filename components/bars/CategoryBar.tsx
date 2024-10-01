@@ -19,7 +19,6 @@ export default function CategoryBar({elements, category, setCategory}: CategoryB
   const categoryClick = (e:any, category:string) => {
     e.stopPropagation()
     setCategory(category)
-    console.log(category)
   }
 
   useEffect(() => {

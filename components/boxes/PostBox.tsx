@@ -95,7 +95,7 @@ function PostBox({
     >
       <button
         type="button"
-        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple shadow-sm shadow-gray"
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple shadow-md shadow-gray"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
 
       >

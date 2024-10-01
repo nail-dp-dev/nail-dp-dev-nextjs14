@@ -48,7 +48,6 @@ export default function LoginInfoBox() {
 
   const handleBitsChargeButton = (e: any) => {
     e.stopPropagation();
-    console.log('충전...누름...')
     if(isBitsMiniModalShow){
       setIsBitsMiniModalShow(false)
     }
@@ -201,7 +200,7 @@ export default function LoginInfoBox() {
                 <Bits className='' />
               </button>
               {isBitsMiniModalShow && (
-                <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40'>
+                <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40 md:hidden'>
                   <button
                     className='absolute'
                     onClick={(e) => handleBitsChargeButton(e)}
