@@ -135,9 +135,9 @@ const config: Config = {
       archiveCountInfo: 'rgba(117, 105, 130, 1)',
     },
     screens: {
-      xs: { max: '640px' },
-      sm: '640px',
-      md: '768px',
+      xs: { max: '450px' },
+      sm: '451px',
+      md: '769px',
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',

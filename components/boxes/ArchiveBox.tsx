@@ -59,6 +59,8 @@ export default function ArchiveBox({
     setCurrentBoundary(newBoundary);
   };
 
+  console.log(photoUrl)
+
   // if (!isVisible) return null;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -87,14 +89,17 @@ export default function ArchiveBox({
             {isPhoto && photoUrl !== null && (
               <Image
                 src={photoUrl}
-                alt={photoId.toString() + createdDate}
+                alt={archiveId.toString() + createdDate }
                 id={archiveId.toString()}
                 fill
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                quality={100}
-                sizes="100vw, 50vw, 33vw"
-                blurDataURL="https://image-component.nextjs.gallery/placeholder"
+                quality={75}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                fetchPriority="high" 
+                loading="lazy"
+                decoding="async"
                 placeholder="blur"
+                blurDataURL="/assets/img/blur.avif" 
               />
             )}
             {
@@ -131,16 +136,19 @@ export default function ArchiveBox({
             <div className='flex items-center gap-[10px]'>
               <div className='w-[20px] h-[20px] rounded-full overflow-hidden relative'>
                 <Image   
-                  width={50}
-                  height={50}
                   src={profileUrl}
                   alt={'profileImage'}
                   id={profileUrl.toString()}
+                  fill
                   style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                  quality={100}
-                  sizes="100vw, 50vw, 33vw "
-                  blurDataURL="https://image-component.nextjs.gallery/placeholder"
-                  placeholder="blur"/>
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  fetchPriority="high" 
+                  loading="lazy"
+                  decoding="async"
+                  placeholder="blur"
+                  blurDataURL="/assets/img/blur.avif" 
+                />
               </div>
               <span className='font-[700] text-[0.875rem]'>{nickname} 님의 아카이브</span>
             </div>
@@ -150,7 +158,7 @@ export default function ArchiveBox({
         {
           category === 'archive' &&
           <div className="flex h-full w-full flex-col items-start justify-center px-[10px]">
-            <p className="text-[1rem] font-[700] text-textBlack">{archiveName}</p>
+            <p className="text-[1rem] font-[700] text-textBlack overflow-hidden whitespace-nowrap overflow-ellipsis xs:max-w-[8ch] sm:max-w-[11ch]">{archiveName}</p>
             <p className="text-text text-[0.875rem] font-[400]">
               {postCount} designs{' '}
             </p>
@@ -191,7 +199,7 @@ export default function ArchiveBox({
           height="20px"
           showGeneralAction={showGeneralAction}
           position="top-left"
-          className="z-10 p-2 "
+          className="z-10 p-2"
         />
       )}
       {showType === 'album' && category === 'archive' && showGeneralAction && (
