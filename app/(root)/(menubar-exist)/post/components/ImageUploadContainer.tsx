@@ -20,12 +20,14 @@ type ImageData = {
 };
 
 export interface editData {
+  tempSave:boolean
   editImages?: ImageData[];
   onImageChange: React.Dispatch<React.SetStateAction<File[]>>;
   onDeleteImageChange?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function ImageUploadContainer({
+  tempSave,
   editImages,
   onImageChange,
   onDeleteImageChange,
@@ -153,7 +155,7 @@ export default function ImageUploadContainer({
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[1.5rem] font-bold">
-          {editImages ? '게시글 수정' : '새 게시글 작성'}
+          {editImages ? tempSave ? '임시저장된 게시물 수정' : '게시글 수정' : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
           <CloseIcon />
