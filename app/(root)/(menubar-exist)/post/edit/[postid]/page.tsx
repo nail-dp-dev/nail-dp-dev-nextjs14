@@ -7,8 +7,7 @@ import HashTagContainer from '../../components/HashTagContainer';
 import PrivacySettingContainer from '../../components/PrivacySettingContainer';
 import { useParams, useRouter } from 'next/navigation';
 import { getPostEditData } from '../../../../../../api/post/getPostEditData';
-import { postEdit } from '../../../../../../api/post/postEdit'; 
-import MyPageModal from '../../../../../../components/modal/common/postAlarmModal/postAlarmModal';
+import { postEdit } from '../../../../../../api/post/postEdit';
 
 type ImageData = {
   fileName: string;
@@ -59,27 +58,15 @@ export default function PostEdit() {
     setIsUserHashTags(hashtags);
   };
 
-  useEffect(() => {
-    if (isModal) {
-      const handleOutsideClick = () => {
-        setIsModal(false);
-      };
+  const editButton =
+    (isUserHashTags.length > 0 && isUrlImages.length > 0)
+    // isUrlImages.length > 0;
 
-      const timer = setTimeout(() => {
-        setIsModal(false);
-      }, 2000);
-
-      document.addEventListener('click', handleOutsideClick);
-
-      return () => {
-        clearTimeout(timer);
-        document.removeEventListener('click', handleOutsideClick);
-      };
-    }
-  }, [isModal]);
-
-  const editButton = isUserHashTags.length > 0 && isImages.length > 0 || isUrlImages.length > 0;
+  console.log("a",editButton);
+  console.log("ba",isUrlImages.length > 0);
+  console.log("b",isUserHashTags.length > 0);
   
+
   // 업로드 관련
   const handleSubmit = async (event: FormEvent, temp: boolean) => {
     event.preventDefault();
@@ -97,8 +84,8 @@ export default function PostEdit() {
     const success = await postEdit(postData);
     if (success) {
       router.push('/my-page?modal=수정');
-    }else{
-      setIsModal(true)
+    } else {
+      setIsModal(true);
     }
   };
 
@@ -106,23 +93,45 @@ export default function PostEdit() {
     <div className="CreatePostContainer overflow-y-scroll">
       <div className="flex flex-col items-center">
         <div className="sticky top-0 z-20 flex h-[73px] w-full items-center justify-end bg-white">
-          <button
-            type="submit"
-            form="postEditForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
-            disabled={!editButton}
-          >
-            완료
-          </button>
+          {isTemp && (
+            <div>
+              <button
+                type="submit"
+                form="postEditForm"
+                className={`mr-[12px] h-[40px] w-[124px] rounded-full button-color  hover:button-hover`}
+                disabled={false}
+              >
+                임시저장
+              </button>
+              <button
+                type="submit"
+                form="postEditForm"
+                className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+                disabled={!editButton}
+              >
+                업로드
+              </button>
+            </div>
+          )}
+          {!isTemp && (
+            <button
+              type="submit"
+              form="postEditForm"
+              className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!editButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+              disabled={!editButton}
+            >
+              완료
+            </button>
+          )}
         </div>
-        {isModal && <MyPageModal isText={'수정'}/>}
         <form
-          className="w-[55%] min-w-[512px]"
+          className="w-[55%] min-w-[512px] md:min-w-[410px]"
           id="postEditForm"
           onSubmit={(e) => handleSubmit(e, isTemp)}
         >
           {/* 이미지 */}
           <ImageUploadContainer
+            tempSave={isTemp}
             editImages={isUrlImages}
             onImageChange={handleImageChange}
             onDeleteImageChange={handleDeleteImageChange}

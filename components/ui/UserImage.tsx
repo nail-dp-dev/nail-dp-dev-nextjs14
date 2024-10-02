@@ -39,6 +39,7 @@ export default function UserImage({
         quality={100}
         priority
         className="rounded-full"
+        priority
       />
     </div>
   );

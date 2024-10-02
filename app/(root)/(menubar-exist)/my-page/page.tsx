@@ -20,8 +20,11 @@ import HeartButton from '../../../../components/animations/HeartButton';
 import { myPageCategoryElements, postBoxWidths } from '../../../../constants';
 import MinusSVG from '../../../../public/assets/svg/minus.svg';
 import PlusSVG from '../../../../public/assets/svg/plus.svg';
+import ExclamationMark from '../../../../public/assets/svg/exclamation-mark.svg';
+import SpeechBubble from '../../../../public/assets/svg/speech-bubble.svg';
 import { RootState } from '../../../../store/store';
 import { useRouter } from 'next/navigation';
+import Loading from '../../../loading';
 
 export default function MyPagePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -36,6 +39,9 @@ export default function MyPagePage() {
   const [isNickname, setIsNickname] = useState('');
   const [isCategory, setIsCategory] = useState('myPost');
   const [sharedCount, setSharedCount] = useState<number>(0);
+  const [isPostsLoading, setIsPostsLoading] = useState(false);
+  const [isExclamationMark, setIsExclamationMark] = useState(false);
+  const [isHeartMark, setIsHeartMark] = useState(false);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -55,6 +61,36 @@ export default function MyPagePage() {
     setIsCategory(category);
   };
 
+  const explanationClick = (str: string) => {
+    if (str == 'heart') {
+      setIsHeartMark(true);
+      setTimeout(() => {
+        setIsHeartMark(false);
+      }, 2000);
+    }else{
+      setIsExclamationMark(true);
+      setTimeout(() => {
+        setIsExclamationMark(false);
+      }, 2000);
+    }
+  };
+
+  const explanationEnter = (str: string) => {
+    if (str == 'heart') {
+      setIsHeartMark(true);
+    }else{
+      setIsExclamationMark(true);
+    }
+  };
+
+  const explanationLeave = (str: string) => {
+    if (str == 'heart') {
+      setIsHeartMark(false);
+    }else{
+      setIsExclamationMark(false);
+    }
+  };
+
   const fetchPostData = async () => {
     if (userData) {
       const postData = await getPostsData(userData.data.nickname);
@@ -62,19 +98,21 @@ export default function MyPagePage() {
       setIsLastPage(postData.data.postSummaryList.last);
       setIsCursorId(postData.data.cursorId);
       setIsMyPageData(postData.data.postSummaryList.content);
+      setIsPostsLoading(true);
     }
   };
 
   const fetchPostTempData = async () => {
     const tempData = await getPostsTempData();
-    setIsTempData([tempData.data]);
+    if (tempData.data !== null) {
+      setIsTempData([tempData.data]);
+    }
   };
 
   const fetchPostScrollData = async () => {
     setLading(false);
     if (!isLastPage) {
       const postData = await getPostsData(isNickname, isCursorId, layoutNum);
-      console.log(postData);
       setIsCursorId(postData.data.cursorId);
       setIsLastPage(postData.data.postSummaryList.last);
       setIsMyPageData((prevData) => [
@@ -97,6 +135,7 @@ export default function MyPagePage() {
         const scrollTop = element1.scrollTop;
         const scrollHeight = element1.scrollHeight;
         const clientHeight = element1.clientHeight;
+        console.log(scrollHeight);
 
         if (
           scrollTop + clientHeight >= scrollHeight * 0.8 &&
@@ -115,7 +154,7 @@ export default function MyPagePage() {
     }
   }, [isNickname, isLading, isCursorId, layoutNum]);
 
-  return (
+  return isPostsLoading ? (
     <div
       id="scroll1"
       className={`relative h-full overflow-y-scroll scrollbar-hide`}
@@ -143,8 +182,6 @@ export default function MyPagePage() {
         </div>
       )}
       <div className={`sticky top-0 z-[17] w-full bg-white`}>
-        {/* 여기수정 */}
-        {/* <CategoryBar elements={myPageCategoryElements} /> */}
         <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
           <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
             <div className="flex h-[53px] gap-[32px]">
@@ -162,28 +199,59 @@ export default function MyPagePage() {
                 );
               })}
             </div>
-            <div className="flex items-center gap-[32px]">
+            <div className="flex items-center">
+              {isExclamationMark && (
+                <p className="pr-[5px] text-darkPurple">
+                  비공개 처리된 게시물은 표시되지 않습니다.
+                </p>
+              )}
+              <button
+                className="pr-[32px]"
+                onClick={(e) => explanationClick('exclamation-mark')}
+                onMouseEnter={(e) => explanationEnter('exclamation-mark')}
+                onMouseLeave={(e) => explanationLeave('exclamation-mark')}
+              >
+                <ExclamationMark
+                  fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
+                />
+              </button>
               <button
                 onClick={() => dispatch(increaseBoxes())}
                 disabled={numberOfBoxes >= 7}
-                className="h-[24px]"
+                className="h-[24px] pr-[32px]"
               >
                 <MinusSVG />
               </button>
               <button
                 onClick={() => dispatch(decreaseBoxes())}
                 disabled={numberOfBoxes <= 3}
-                className="h-[24px]"
+                className="h-[24px] pr-[32px]"
               >
                 <PlusSVG />
               </button>
               {isLoggedIn === 'loggedIn' && (
-                <HeartButton
-                  width="29"
-                  height="24"
-                  isClicked={false}
-                  isGetAllLiked={true}
-                />
+                <div
+                  onClick={(e) => explanationClick('heart')}
+                  onMouseEnter={(e) => explanationEnter('heart')}
+                  onMouseLeave={(e) => explanationLeave('heart')}
+                >
+                  <HeartButton
+                    width="29"
+                    height="24"
+                    isClicked={false}
+                    isGetAllLiked={true}
+                  />
+                </div>
+              )}
+              {isHeartMark && (
+                <div className="absolute bottom-14 right-1">
+                  <div className="relative">
+                    <SpeechBubble />
+                    <p className="absolute bottom-[10px] px-[12px] text-[11px] text-darkPurple">
+                      내 게시물에서 좋아하는 게시물을 보여줍니다.
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -193,41 +261,34 @@ export default function MyPagePage() {
       <div className="MyPageContainer max-h-full ">
         <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
           <PostCreate />
-          {isTempData[0] !== null &&
-            isTempData.map((item, index) => {
-              if (item && item.postId) {
-                return item.photoUrl ? (
-                  <PostBox
-                    key={index}
-                    postId={item.postId}
-                    photoId={item.photoId}
-                    photoUrl={item.photoUrl}
-                    saved={false}
-                    createdDate={null}
-                    tempPost={true}
-                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                    setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={true}
-                    showOnlyShareButton={false}
-                  />
-                ) : (
-                  <div
-                    key={index}
-                    className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
-                    style={{ width: postBoxWidths[layoutNum] }}
-                    onClick={handleTempClick}
-                  >
-                    <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
-                      <p className="z-10 text-center text-[16px] ">
-                        임시저장된 게시물
-                      </p>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
+          {isTempData.length > 0 &&
+            (isTempData[0] !== undefined ? (
+              <PostBox
+                postId={isTempData[0].postId}
+                photoId={isTempData[0].photoId}
+                photoUrl={isTempData[0].photoUrl}
+                saved={false}
+                createdDate={'temp'}
+                tempPost={true}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                isOptional={true}
+                showOnlyShareButton={false}
+              />
+            ) : (
+              <div
+                className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                style={{ width: postBoxWidths[layoutNum] }}
+                onClick={handleTempClick}
+              >
+                <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                  <p className="z-10 text-center text-[16px] ">
+                    임시저장된 게시물
+                  </p>
+                </div>
+              </div>
+            ))}
           {isMyPageData &&
             isMyPageData.map((item, index) => {
               if (item && item.postId) {
@@ -254,5 +315,7 @@ export default function MyPagePage() {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 }

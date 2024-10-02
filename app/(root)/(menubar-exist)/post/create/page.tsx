@@ -8,7 +8,6 @@ import PrivacySettingContainer from '../components/PrivacySettingContainer';
 import { postCreate } from '../../../../../api/post/postCreate';
 import { tempPostCreate } from '../../../../../api/post/postTempCreate';
 import { useRouter } from 'next/navigation';
-import MyPageModal from '../../../../../components/modal/common/postAlarmModal/postAlarmModal';
 
 export default function PostCreate() {
   const [isContent, setIsContent] = useState('');
@@ -72,6 +71,8 @@ export default function PostCreate() {
     if (temp) {
       const success = await tempPostCreate(postData);
       if (success) {
+        localStorage.setItem("mini","임시")
+        localStorage.setItem("state","true")
         router.push('/my-page');
       } else {
         setIsModal(true);
@@ -79,7 +80,9 @@ export default function PostCreate() {
     } else {
       const success = await postCreate(postData);
       if (success) {
-        router.push('/my-page?modal=작성');
+        localStorage.setItem("mini","작성")
+        localStorage.setItem("state","true")
+        router.push('/my-page');
       } else {
         setIsModal(true);
       }
@@ -109,14 +112,13 @@ export default function PostCreate() {
             업로드
           </button>
         </div>
-        {isModal && <MyPageModal isText={'업로드'} />}
         <form
-          className="w-[55%] min-w-[512px]"
+          className="w-[55%] min-w-[512px] md:min-w-[410px]"
           id="postCreateForm"
           onSubmit={(e) => handleSubmit(e, isTemp)}
         >
           {/* 이미지 */}
-          <ImageUploadContainer onImageChange={handleImageChange} />
+          <ImageUploadContainer onImageChange={handleImageChange} tempSave={isTemp} />
           {/* 내용 */}
           <ContentContainer onContentChange={handleContentChange} />
           {/* 해시태그 */}
