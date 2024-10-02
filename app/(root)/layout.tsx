@@ -10,7 +10,7 @@ export default function HomeLayout({
 }>) {
   return (
     <main
-      className="w-screen h-screen flex flex-col items-center justify-center
+      className="w-screen min-w-[344px] h-screen flex flex-col items-center justify-center
       bg-white dark:bg-themeDark text-textBlack dark:text-white relative overflow-hidden"
     >
       <CommonModalLayout/>

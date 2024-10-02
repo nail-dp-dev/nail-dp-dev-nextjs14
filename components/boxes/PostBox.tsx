@@ -1,11 +1,10 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
 import Video from '../ui/Video';
-import Toggle from '../buttons/Toggle';
 import GeneralAction from '../buttons/option-menu/GeneralAction';
 import { PostBoxNewProps } from '../../constants/interface';
 import { postBoxWidths } from '../../constants';
@@ -16,16 +15,10 @@ import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
-import {
-  setCommonModal,
-  setArchivePost,
-  setStarState,
-  setPlusState,
-} from '../../store/slices/modalSlice';
+import { setStarState, setPlusState } from '../../store/slices/modalSlice';
 import { useVisibility } from '../../hooks/useVisibility';
 import BoxCommonButton from '../ui/BoxCommonButton';
 
-// eslint-disable-next-line @next/next/no-async-client-component
 function PostBox({
   postId,
   photoId,

@@ -15,12 +15,14 @@ import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 
 export default function ArchivePage() {
+
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
 
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
+  
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
   const [category, setCategory] = useState<string>('');
   const [isLast, setIsLast] = useState<boolean>(false);
@@ -29,6 +31,7 @@ export default function ArchivePage() {
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [postsData, setPostsData] = useState<PostArray[]>([]);
+
   const [isLikedPostsFirstRendering, setIsLikedPostsFirstRendering] =
     useState<boolean>(true);
   const [isLikedPostsLast, setIsLikedPostsLast] = useState<boolean>(false);
@@ -38,12 +41,12 @@ export default function ArchivePage() {
     useState<boolean>(false);
   const [likedPostsMessage, setLikedPostsMessage] = useState<string>('');
   const [likedPostsData, setLikedPostsData] = useState<PostArray[]>([]);
+
   const [sharedCount, setSharedCount] = useState<number>(0);
 
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const likedBottomRef = useRef<HTMLDivElement>(null);
-  const likedPostsBottomRef = useRef<HTMLDivElement>(null);
   const likedButtonState = useSelector(selectButtonState);
 
   const fetchMorePosts = async () => {
@@ -78,11 +81,8 @@ export default function ArchivePage() {
   const fetchMorePostsByLikedButton = async () => {
 
     const currentCursorId = cursorLikedId;
-    console.log(currentCursorId)
 
     let data = await getLikedPosts({ category, size, cursorLikedId:currentCursorId, isLikedPostsFirstRendering});
-
-    console.log(data)
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
@@ -131,10 +131,10 @@ export default function ArchivePage() {
   }, [category]);
 
   useEffect(() => {
-  if (boxRef.current) {
-    boxRef.current.scrollTop = 0;
-  }
-}, [category, likedButtonState]);
+    if (boxRef.current) {
+      boxRef.current.scrollTop = 0;
+    }
+  }, [category, likedButtonState]);
 
   useEffect(() => {
     if (likedButtonState) {
@@ -173,7 +173,7 @@ export default function ArchivePage() {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, isLast, cursorId]);
+  }, [isLoading, isLast, cursorId, likedButtonState]);
 
   useEffect(() => {
     if (!likedButtonState) {
@@ -216,8 +216,7 @@ export default function ArchivePage() {
     isLikedPostsLoading,
     cursorLikedId,
     isLikedPostsLast,
-    fetchMorePostsByLikedButton,
-    isLikedPostsContentExist,
+    likedButtonState,
   ]);
 
   useEffect(() => {
@@ -311,12 +310,18 @@ export default function ArchivePage() {
               !isLikedPostsContentExist &&
             !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
           {
-            !likedButtonState &&
+            !likedButtonState && !isLast &&
             <div ref={bottomRef} className="w-full h-[1px]"></div>
           }
           {
-            likedButtonState &&
+            likedButtonState && !isLikedPostsLast &&
             <div ref={likedBottomRef} className="w-full h-[1px]"></div>
+          }
+          {
+            isLast  && !likedButtonState &&
+            <div className='w-full h-[50px] flex items-center justify-center'> 
+              <span className='font-[300] text-gray'> 마지막 게시글입니다. </span>
+            </div>
           }
           </div>
       </div>

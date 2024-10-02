@@ -256,7 +256,7 @@ export default function MidContainer({
             {post.postContent}
           </div>
         </div>
-        <div className="postInfo mt-auto flex flex-row items-center justify-between bg-kakaoYellow">
+        <div className="postInfo mt-auto flex flex-row items-center justify-between ">
           <PostCount
             post={post}
             postId={postId}

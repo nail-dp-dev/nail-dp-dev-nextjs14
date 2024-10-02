@@ -2,6 +2,7 @@
 
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 import { myArchiveElements } from '../../../../constants/index';
 import ListIcon from '../../../../public/assets/svg/my-archive-list.svg'
@@ -10,11 +11,16 @@ import LoginSuggestModal from '../../../../components/modal/mini/LoginSuggestMod
 import ArchiveBox from '../../../../components/boxes/ArchiveBox';
 import { getAllArchivesData } from '../../../../api/archive/getArchivesData';
 import { ArchiveArray } from '../../../../types/dataType';
+import { setBoxesForScreenWidth } from '../../../../store/slices/boxLayoutSlice';
+
 
 export default function MyArchivePage() {
 
   const isLoggedIn = useSelector(selectLoginStatus);
   const [category, setCategory] = useState<string>('archive')
+
+  const dispatch = useDispatch();
+
   const [archivesData, setArchivesData] = useState<ArchiveArray[]>([]);
   const [showType, setShowType] = useState('album')
   const [loading, setLoading] = useState(false)
@@ -27,6 +33,7 @@ export default function MyArchivePage() {
   const [isContentExist, setIsContentExist] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sharedCount, setSharedCount] = useState<number>(0);
+
   const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -107,7 +114,19 @@ export default function MyArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isLast, cursorId]);
 
+    useEffect(() => {
+    dispatch(setBoxesForScreenWidth());
 
+    const handleResize = () => {
+      dispatch(setBoxesForScreenWidth());
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [dispatch]);
 
   const clickCategory = (e: any, name: string) => {
     e.stopPropagation()
@@ -126,7 +145,7 @@ export default function MyArchivePage() {
     <div className="MyArchiveContainer w-full h-dvh flex flex-col px-[5px] overflow-hidden ">
       <div className='w-full h-[66px] bg-white flex items-start justify-start'>
         <div className='flex items-center justify-between w-full h-[54px] border-b-navBotSolidGray border-b-[1px]'>
-          <nav className='flex items-center justify-between gap-[32px] h-[54px]'>
+          <nav className='flex items-center justify-center xs:gap-[8px] sm:gap-[18px] md:gap-[32px] h-[54px]'>
               {
                 myArchiveElements.map((item, index) => (
                   <button
@@ -134,7 +153,7 @@ export default function MyArchivePage() {
                     onClick={(e) => { clickCategory(e, item.name) }}
                     className={`${category === item.name ? 'border-mainPurple' : 'border-navMenuBotSolidGray'} h-[54px] border-b-[3px]   hover:border-mainPurple`}
                   >
-                    <span className='text-[0.875rem] text-textBlack font-[700]'>{item.desc}</span>
+                    <span className='xs:text-[0.785rem] sm:text-[0.875rem] text-textBlack xs:font-[600] sm:font-[700]'>{item.desc}</span>
                   </button>
                 ))
             }

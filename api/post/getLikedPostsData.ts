@@ -8,7 +8,7 @@ export const getLikedPosts = async ({ category, size, cursorLikedId, isLikedPost
 
 
     if (size && isLikedPostsFirstRendering) {
-      url += `&size=${30}`
+      url += `&size=${36}`
     } else if (size && !isLikedPostsFirstRendering) {
       url += `&size=${size}`
     }
