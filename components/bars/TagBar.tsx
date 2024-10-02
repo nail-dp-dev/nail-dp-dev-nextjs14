@@ -79,7 +79,7 @@ export default function TagBar({
           </button>
           <button
             onClick={() => dispatch(increaseBoxes())}
-            disabled={numberOfBoxes >= 7}
+            disabled={numberOfBoxes >= 4}
             className="h-[24px]"
           >
             <PlusSVG />

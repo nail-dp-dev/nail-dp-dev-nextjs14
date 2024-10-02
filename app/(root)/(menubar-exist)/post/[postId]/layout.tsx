@@ -7,7 +7,7 @@ export default function ArchiveLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="contentSection h-screen flex-1 flex-col p-[20px]">
+    <section className="contentSection flex-1 flex-col p-[20px] bg-kakaoYellow">
       <div className="contentContainer relative flex h-full w-full flex-1 ">
         <div className="contentWrapper relative flex h-full w-full flex-col">
           <NotLoginNotice>

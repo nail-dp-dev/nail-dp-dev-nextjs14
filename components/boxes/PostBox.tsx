@@ -15,16 +15,10 @@ import { postPostLike } from '../../api/post/postPostLike';
 import { deletePostLike } from '../../api/post/deletePostLike';
 import { selectLoginStatus } from '../../store/slices/loginSlice';
 import { useRouter } from 'next/navigation';
-import {
-  setCommonModal,
-  setArchivePost,
-  setStarState,
-  setPlusState,
-} from '../../store/slices/modalSlice';
+import { setStarState, setPlusState } from '../../store/slices/modalSlice';
 import { useVisibility } from '../../hooks/useVisibility';
 import BoxCommonButton from '../ui/BoxCommonButton';
 
-// eslint-disable-next-line @next/next/no-async-client-component
 function PostBox({
   postId,
   photoId,
@@ -89,12 +83,12 @@ function PostBox({
   return (
     <div
       ref={boxRef}
-      className="group/button preload box relative flex items-center justify-center transition-all duration-500"
+      className="group/button preload box relative flex items-center justify-center transition-all duration-500 "
       style={{ width: postBoxWidths[layoutNum] }}
     >
       <button
         type="button"
-        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple shadow-md shadow-gray"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
 
       >
@@ -134,7 +128,7 @@ function PostBox({
         <>
           <button
             onClick={handleHeartClick}
-            className="absolute right-4 top-4 z-10 group-hover/button:border-purple"
+            className="absolute right-4 top-4 z-10 group-hover/button:border-purple hidden md:block"
           >
             <HeartButton
               width="21px"
@@ -143,7 +137,7 @@ function PostBox({
               active={isLoggedIn === 'loggedIn'}
             />
           </button>
-          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple">
+          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple hidden md:block">
             <PlusButton
               postId={postId}
               width="24px"
@@ -159,7 +153,7 @@ function PostBox({
               width="4px"
               height="20px"
               showGeneralAction={showGeneralAction}
-              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple"
+              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple hidden md:block"
               position="nothing"
             />
           )}

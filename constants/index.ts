@@ -264,3 +264,13 @@ export const ProfileElements = [
   { name: '게시물', desc: 'post' },
   { name: '아카이브', desc: 'archive' },
 ];
+
+export const FooterElements = [
+{ name: '회사소개', uri: 'company-introduce' }, 
+{ name: '제휴제안', uri: 'suggestion' }, 
+{ name: '이용약관', uri: 'terms-of-service' }, 
+{ name: '개인정보 처리방침', uri: 'privacy-policy' }, 
+{ name: '네디플 정책', uri: 'ndp-policy' }, 
+{ name: '고객센터ⓒ', uri: 'customer-support' }, 
+{ name: 'NDP Corp.', uri: 'ndp-corp' }
+]

@@ -231,7 +231,6 @@ export default function SearchBar() {
     debounce((query: string) => {
       // 공백일 경우 API 호출 방지
       if (query.trim() !== '') {
-        console.log('검색어 쿼리:', query);
         performSearch(query, true);
       }
     }, 300),
@@ -381,7 +380,7 @@ export default function SearchBar() {
   return (
     <div className="relative z-[18] w-full">
       <form
-        className="relative z-[18] flex items-center p-2"
+        className="relative z-[18] flex items-center py-2"
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleFormSubmit}
       >
