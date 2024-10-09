@@ -182,7 +182,7 @@ const handleInitInfo = (e: React.MouseEvent<HTMLButtonElement>) => {
               <div className='flex flex-col items-center justify-center gap-[12px]'>
                 <div className='w-[150px] h-[150px] relative rounded-[12px]'>
                   <Image
-                    src={preview}
+                    src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${preview}`}
                     alt="Preview"
                     fill
                     sizes="300px"

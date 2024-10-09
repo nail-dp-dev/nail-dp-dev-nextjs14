@@ -103,6 +103,11 @@ const config: Config = {
       // Gray 7 
       darkModeGray: `#7D7D7D`,
 
+      // Gray 8
+      managementMenuBackGray:'#F7F7F8',
+      // Gray 9
+      managementMenuTextGray:'#B8B8C1',
+
       // Purple 1
       purple: '#B98CE0',
       mainPurple: '#B98CE0',
@@ -110,6 +115,9 @@ const config: Config = {
 
       // Purple 2
       darkPurple: '#756982',
+
+      // Purple 3
+      toggleBackPurple: '#E7D4FF',
 
       // Red
       red: '#FF007A',

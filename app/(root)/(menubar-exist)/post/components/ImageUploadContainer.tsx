@@ -20,7 +20,7 @@ type ImageData = {
 };
 
 export interface editData {
-  tempSave:boolean
+  tempSave: boolean;
   editImages?: ImageData[];
   onImageChange: React.Dispatch<React.SetStateAction<File[]>>;
   onDeleteImageChange?: React.Dispatch<React.SetStateAction<string[]>>;
@@ -155,7 +155,11 @@ export default function ImageUploadContainer({
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[1.5rem] font-bold">
-          {editImages ? tempSave ? '임시저장된 게시물 수정' : '게시글 수정' : '새 게시글 작성'}
+          {editImages
+            ? tempSave
+              ? '임시저장된 게시물 수정'
+              : '게시글 수정'
+            : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
           <CloseIcon />
@@ -205,11 +209,23 @@ export default function ImageUploadContainer({
                   //   <source src={item} type="video/mp4" />
                   // </video>
                   // <div className="h-full w-full object-cover">
-                  <Video src={item} width="100%" height="100%" />
+                  <Video
+                    src={
+                      item.startsWith('http://') || item.startsWith('https://') || item.startsWith("data")
+                        ? item
+                        : `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item}`
+                    }
+                    width="100%"
+                    height="100%"
+                  />
                 ) : (
                   // </div>
                   <Image
-                    src={item}
+                    src={
+                      item.startsWith('http://') || item.startsWith('https://')  || item.startsWith("data")
+                        ? item
+                        : `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item}`
+                    }
                     alt="postImage"
                     fill
                     style={{
