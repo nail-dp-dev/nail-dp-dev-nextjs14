@@ -88,7 +88,7 @@ export default function ArchiveBox({
           <div className={`inset-0 z-0 h-full w-full relative`}>
             {isPhoto && photoUrl !== null && (
               <Image
-                src={photoUrl}
+                src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`}
                 alt={archiveId.toString() + createdDate }
                 id={archiveId.toString()}
                 fill
@@ -126,7 +126,7 @@ export default function ArchiveBox({
               </div>
             )}
             {isVideo && photoUrl !== null && (
-              <Video src={photoUrl} width={'100%'} height={'100%'} />
+              <Video src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`} width={'100%'} height={'100%'} />
             )}
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function ArchiveBox({
             <div className='flex items-center gap-[10px]'>
               <div className='w-[20px] h-[20px] rounded-full overflow-hidden relative'>
                 <Image   
-                  src={profileUrl}
+                  src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${profileUrl}`}
                   alt={'profileImage'}
                   id={profileUrl.toString()}
                   fill
@@ -173,7 +173,7 @@ export default function ArchiveBox({
               <Image   
                 width={50}
                 height={50}
-                src={profileUrl}
+                src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${profileUrl}`}
                 alt={'profileImage'}
                 id={profileUrl.toString()}
                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}

@@ -330,7 +330,7 @@ export default function PlusButton({
                       className={`absolute left-0 top-0 z-10 h-full w-full rounded-[8px] hover:border-[2px] hover:border-purple hover:bg-purple/20`}
                     ></div>
                     <Video
-                      src={item.archiveImgUrl}
+                      src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                       width={'100'}
                       height={'100'}
                     />
@@ -345,7 +345,7 @@ export default function PlusButton({
                       className={`absolute left-0 top-0 z-10 h-full w-full rounded-[8px] hover:border-[2px] hover:border-purple hover:bg-purple/20`}
                     ></div>
                     <Image
-                      src={item.archiveImgUrl}
+                      src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                       alt="postImage"
                       fill
                       style={{

@@ -138,7 +138,7 @@ export default function ProfileMiniModal({ isMiniModalShow, setIsMiniModalShow, 
                   className='w-[30px] h-[30px]'
                   onClick={(e)=>handleChangeProfileImage(e,item)}
                 >
-                  <Image src={item} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' className='rounded-full '></Image>  
+                  <Image src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item}`} width={30} height={30} alt={'profileImage'} style={{objectFit: 'cover', width: '100%', height: '100%', maxWidth: '30px', maxHeight: '30px'}} quality={100} sizes='100vw' className='rounded-full '></Image>  
                 </button>
               )
             )}

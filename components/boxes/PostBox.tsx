@@ -80,6 +80,9 @@ function PostBox({
 
   if (!isVisible) return null;
 
+  console.log(`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`);
+  
+
   return (
     <div
       ref={boxRef}
@@ -105,7 +108,7 @@ function PostBox({
 
         {isPhoto && (
           <Image
-            src={photoUrl}
+            src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`}
             alt={createdDate}
             id={photoId.toString()}
             fill
@@ -121,7 +124,7 @@ function PostBox({
           />
         )}
 
-        {isVideo && <Video src={photoUrl} width="100%" height="100%" />}
+        {isVideo && <Video src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`} width="100%" height="100%" />}
       </button>
 
       {!tempPost && (
