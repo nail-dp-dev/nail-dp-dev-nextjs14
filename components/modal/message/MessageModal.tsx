@@ -8,6 +8,7 @@ import ChattingBox from '../../boxes/ChattingBox';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slices/loginSlice';
+import MessageRoom from './MessageRoom';
 
 export default function MessageModal() {
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -130,7 +131,7 @@ export default function MessageModal() {
             rotateZ,
           }}
         >
-          {!isChatModalShow ? (
+          {/* {!isChatModalShow ? (
             <ChatIcon
               className={`buttonIcon ${
                 isChatModalShow ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -144,7 +145,8 @@ export default function MessageModal() {
               setIsChatModalMax={setIsChatModalMax}
               handleCloseChatModal={handleCloseChatModal}
             />
-          )}
+          )} */}
+          <MessageRoom chatRoomId='9283e8c1-2a30-45e1-9da3-e4e395e87d89'/>
         </animated.div>
       </div>
     </div>
