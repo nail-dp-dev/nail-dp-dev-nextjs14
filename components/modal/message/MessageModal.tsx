@@ -10,47 +10,44 @@ import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slices/loginSlice';
 
 export default function MessageModal() {
-
   const isLoggedIn = useSelector(selectLoginStatus);
+  const path = usePathname();
 
-  const path = usePathname()
-
-  const [dragStartXY, setDragStartXY] = useState({
-    x: 0,
-    y: 0
-  })
-
-  const [dragEndXY, setDragEndXY] = useState({
-    x: 0,
-    y: 0
-  })
-
+  const [dragEndXY, setDragEndXY] = useState({ x: window.innerWidth - 100, y: window.innerHeight - 100 });
   const [isChatModalShow, setIsChatModalShow] = useState<boolean>(false);
+  const [isChatModalMax, setIsChatModalMax] = useState<boolean>(false);
+  const [wasDragged, setWasDragged] = useState(false);
+  const domTarget = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const iconWidth = isChatModalShow ? 360 : 80;
+    const iconHeight = isChatModalShow ? 600 : 75;
+
+    const clampedX = Math.min(Math.max(dragEndXY.x, 0), window.innerWidth - iconWidth);
+    const clampedY = Math.min(Math.max(dragEndXY.y, 0), window.innerHeight - iconHeight);
+
+    api.start({
+      x: clampedX,
+      y: clampedY,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isChatModalShow, dragEndXY]);
 
   const handleClickMessageIcon = (e: any) => {
     e.stopPropagation();
-    if (dragStartXY.x === dragEndXY.x && dragStartXY.y === dragEndXY.y) {
+    if (!wasDragged) {
       setIsChatModalShow(true);
     }
   };
 
   const handleCloseChatModal = (e: any) => {
     e.stopPropagation();
-    setIsChatModalShow(false);
+    if (isChatModalMax) {
+      setIsChatModalMax(false)
+    } else {
+      setIsChatModalShow(false);
+    }
   };
-
-  useEffect(() => {
-    const preventDefault = (e: Event) => e.preventDefault();
-    document.addEventListener('gesturestart', preventDefault);
-    document.addEventListener('gesturechange', preventDefault);
-
-    return () => {
-      document.removeEventListener('gesturestart', preventDefault);
-      document.removeEventListener('gesturechange', preventDefault);
-    };
-  }, []);
-
-  const domTarget = useRef(null);
 
   const [{ x, y, rotateX, rotateY, rotateZ }, api] = useSpring(
     () => ({
@@ -59,36 +56,72 @@ export default function MessageModal() {
       rotateZ: 0,
       scale: 1,
       zoom: 0,
-      x: 0,
-      y: 0,
-      config: { mass: 5, tension: 350, friction: 40 },
+      x: dragEndXY.x,
+      y: dragEndXY.y,
+      config: { mass: 1, tension: 250, friction: 40 },
     })
   );
 
   useGesture(
     {
-      onDragStart: ({offset: [x, y]}) => setDragStartXY({ x, y }),
-      onDrag: ({ active, offset: [x, y] }) => {
-        api.start({ x, y, rotateX: 0, rotateY: 0, scale: active ? 1.4 : 1 });
+      onDrag: ({ movement: [mx, my], active }) => {
+        if (mx !== 0 || my !== 0) {
+          setWasDragged(true);
+        }
+
+        const newX = dragEndXY.x + mx;
+        const newY = dragEndXY.y + my;
+
+        const iconWidth = isChatModalShow ? 360 : 80;
+        const iconHeight = isChatModalShow ? 600 : 75;
+
+        const clampedX = Math.min(Math.max(newX, 0), window.innerWidth - iconWidth);
+        const clampedY = Math.min(Math.max(newY, 0), window.innerHeight - iconHeight);
+
+        api.start({
+          x: clampedX,
+          y: clampedY,
+          rotateX: 0,
+          rotateY: 0,
+          scale: active ? 1.4 : 1,
+        });
       },
-      onDragEnd: ({offset: [x, y]}) => setDragEndXY({ x, y }),
-      onPinch: ({ offset: [d, a] }) => api({ zoom: d / 200, rotateZ: a }),
-      onHover: ({ hovering }) =>
-        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 })
+      onDragEnd: ({ movement: [mx, my] }) => {
+        const newX = dragEndXY.x + mx;
+        const newY = dragEndXY.y + my;
+
+        const iconWidth = isChatModalShow ? 360 : 80;
+        const iconHeight = isChatModalShow ? 600 : 75;
+
+        const clampedX = Math.min(Math.max(newX, 0), window.innerWidth - iconWidth);
+        const clampedY = Math.min(Math.max(newY, 0), window.innerHeight - iconHeight);
+
+        setDragEndXY({
+          x: clampedX,
+          y: clampedY,
+        });
+
+        if (mx === 0 && my === 0) {
+          setWasDragged(false);
+        }
+      },
+      onHover: ({ hovering }) => {
+        !hovering && api.start({ rotateX: 0, rotateY: 0, scale: 1 });
+      },
     },
     { domTarget, eventOptions: { passive: true } }
   );
 
   return (
-    <div className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${isLoggedIn === 'loggedOut' && 'hidden'} messageModal absolute w-full h-full z-[19] flex items-center justify-end pointer-events-none bottom-0 right-0`}>
-      <div
-        className='absolute'
-        style={{ bottom: `${isChatModalShow ? '620px' : '100px'}`, right: `${isChatModalShow ? '380px' : '100px'}` 
-        }}
-      >
+    <div
+      className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${
+        isLoggedIn === 'loggedOut' && 'hidden'
+      } messageModal absolute w-screen h-screen z-[19] flex items-center justify-end pointer-events-none bottom-0 right-0`}
+    >
+      <div className={`absolute w-full h-full`}>
         <animated.div
           ref={domTarget}
-          className='chatIcon2 pointer-events-auto'
+          className={`chatIcon2 pointer-events-auto`}
           style={{
             x,
             y,
@@ -97,14 +130,24 @@ export default function MessageModal() {
             rotateZ,
           }}
         >
-          <animated.div>
-            {
-              !isChatModalShow && <ChatIcon className={`buttonIcon ${isChatModalShow ? 'opacity-0 pointer-events-none':'opacity-100'} absolute transition-opacity duration-500`} onClick={e => handleClickMessageIcon(e)} /> ||
-              isChatModalShow && <ChattingBox isChatModalShow={isChatModalShow} handleCloseChatModal={handleCloseChatModal} />
-            }
-          </animated.div>
+          {!isChatModalShow ? (
+            <ChatIcon
+              className={`buttonIcon ${
+                isChatModalShow ? 'opacity-0 pointer-events-none' : 'opacity-100'
+              } absolute transition-opacity duration-500`}
+              onClick={(e) => handleClickMessageIcon(e)}
+            />
+          ) : (
+            <ChattingBox
+              isChatModalShow={isChatModalShow}
+              isChatModalMax={isChatModalMax}
+              setIsChatModalMax={setIsChatModalMax}
+              handleCloseChatModal={handleCloseChatModal}
+            />
+          )}
         </animated.div>
       </div>
     </div>
   );
 }
+

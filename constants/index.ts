@@ -274,3 +274,9 @@ export const FooterElements = [
 { name: '고객센터ⓒ', uri: 'customer-support' }, 
 { name: 'NDP Corp.', uri: 'ndp-corp' }
 ]
+
+export const ChatCategoryElements = [
+  {name: '전체', data: 'all'},
+  {name: '친구', data: 'friend'},
+  {name: '네일숍', data: 'shop'},
+]
