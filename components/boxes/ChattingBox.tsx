@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { ChatCategoryElements } from '../../constants'
 import { getAllChatList } from '../../api/chat/getAllChatList'
+import ChatComponent from '../modal/message/MessageRoom'
 
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
@@ -21,6 +22,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
   const clickChatRoom = (e: any, chatRoomId:string) => {
     e.stopPropagation()
+    e.preventDefault()
     setIsChatRoomOpen(true)
     setActivateChatRoomId(chatRoomId)
   }
@@ -51,7 +53,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
   return (
     <div 
-      className={`chattingComponent ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal flex flex-col items-center justify-start transition-opacity rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden`} 
+      className={`chattingComponent ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal flex flex-col items-center justify-start transition-all rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden`} 
       style={{
         width: isChatModalMax ? chatModalMaxWidth : '360px',
         height: isChatModalMax ? chatModalMaxHeight : '600px'
@@ -78,7 +80,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
             </button>
       </div>
       </div>
-      <nav className='navBar w-full h-[50px] flex items-center justify-center gap-[10px]'>
+      <nav className={`navBar ${isChatRoomOpen &&'hidden'} w-full h-[50px] flex items-center justify-center gap-[10px]`}>
         {
           ChatCategoryElements.map((item, index) => (
             <button
@@ -96,10 +98,10 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
           {chatList.map((chat, index) => (
             <li 
               key={index} 
-              className={`${isChatRoomOpen && 'w-full'} ${isChatRoomOpen && activateChatRoomId === chat && 'bg-lightPurple'} bg-red w-[325px] h-[62px] z-20 rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
+              className={`${isChatRoomOpen && 'w-full'} ${isChatRoomOpen && activateChatRoomId === chat && 'bg-lightPurple'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
             >
               <button
-                className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat && ''} bg-naverGreen p-[10px]`}
+                className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat && ''} p-[10px]`}
                 onClick={(e) => { clickChatRoom(e, chat) }}
               >
                 <div className={`chatRoomImage ${activateChatRoomId === chat && isChatRoomOpen ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat && isChatRoomOpen ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
@@ -112,13 +114,15 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     className='rounded-full' 
                   />  
                 </div>
-                <div className='flex-1 h-[50px] flex justify-between z-40'>
+                <div className='flex-1 h-[50px] flex justify-between'>
                   <div></div>
                   <div></div>
                 </div>
               </button>
               {isChatRoomOpen && activateChatRoomId === chat && (
-                <div className='absolute bg-lightPurple  w-[88%] h-full absolute top-0 right-0 z-30'>
+                <div className='chatRoomDiv absolute bg-lightPurple  w-[88%] h-full top-0 right-0 z-30'
+                  style={{ pointerEvents: 'auto' }} 
+                >
                   <ChatComponent chatRoomId={chat} />
                 </div>
               )}

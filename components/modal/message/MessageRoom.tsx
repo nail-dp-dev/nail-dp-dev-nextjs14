@@ -66,7 +66,8 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div>
+    <div className='w-full h-full z-40 p-[20px]'>
+      <div className='h-[40px]'></div>
       <h1>Chat Room: {chatRoomId}</h1>
 
       {/* Display received messages */}
