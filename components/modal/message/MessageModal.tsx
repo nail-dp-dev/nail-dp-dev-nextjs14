@@ -8,7 +8,6 @@ import ChattingBox from '../../boxes/ChattingBox';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slices/loginSlice';
-import MessageRoom from './MessageRoom';
 
 export default function MessageModal() {
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -19,10 +18,12 @@ export default function MessageModal() {
   const [isChatModalMax, setIsChatModalMax] = useState<boolean>(false);
   const [wasDragged, setWasDragged] = useState(false);
   const domTarget = useRef<HTMLDivElement>(null);
+  const chatModalMaxWidth = window.innerWidth - 375
+  const chatModalMaxHeight = window.innerHeight - 120
 
   useEffect(() => {
-    const iconWidth = isChatModalShow ? 360 : 80;
-    const iconHeight = isChatModalShow ? 600 : 75;
+    const iconWidth = isChatModalShow && isChatModalMax ? chatModalMaxWidth : isChatModalShow && !isChatModalMax ? 360 : 80;
+    const iconHeight = isChatModalShow && isChatModalMax ? chatModalMaxHeight : isChatModalShow && !isChatModalMax ? 600 : 75;
 
     const clampedX = Math.min(Math.max(dragEndXY.x, 0), window.innerWidth - iconWidth);
     const clampedY = Math.min(Math.max(dragEndXY.y, 0), window.innerHeight - iconHeight);
@@ -32,7 +33,7 @@ export default function MessageModal() {
       y: clampedY,
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isChatModalShow, dragEndXY]);
+  }, [isChatModalShow, isChatModalMax, dragEndXY]);
 
   const handleClickMessageIcon = (e: any) => {
     e.stopPropagation();
@@ -73,8 +74,8 @@ export default function MessageModal() {
         const newX = dragEndXY.x + mx;
         const newY = dragEndXY.y + my;
 
-        const iconWidth = isChatModalShow ? 360 : 80;
-        const iconHeight = isChatModalShow ? 600 : 75;
+        const iconWidth = isChatModalShow && isChatModalMax ? chatModalMaxWidth : isChatModalShow && !isChatModalMax ? 360 : 80;
+        const iconHeight = isChatModalShow && isChatModalMax ? chatModalMaxHeight : isChatModalShow && !isChatModalMax ? 600 : 75;
 
         const clampedX = Math.min(Math.max(newX, 0), window.innerWidth - iconWidth);
         const clampedY = Math.min(Math.max(newY, 0), window.innerHeight - iconHeight);
@@ -91,8 +92,8 @@ export default function MessageModal() {
         const newX = dragEndXY.x + mx;
         const newY = dragEndXY.y + my;
 
-        const iconWidth = isChatModalShow ? 360 : 80;
-        const iconHeight = isChatModalShow ? 600 : 75;
+        const iconWidth = isChatModalShow && isChatModalMax ? chatModalMaxWidth : isChatModalShow && !isChatModalMax ? 360 : 80;
+        const iconHeight = isChatModalShow && isChatModalMax ? chatModalMaxHeight : isChatModalShow && !isChatModalMax ? 600 : 75;
 
         const clampedX = Math.min(Math.max(newX, 0), window.innerWidth - iconWidth);
         const clampedY = Math.min(Math.max(newY, 0), window.innerHeight - iconHeight);
@@ -131,7 +132,7 @@ export default function MessageModal() {
             rotateZ,
           }}
         >
-          {/* {!isChatModalShow ? (
+          {!isChatModalShow ? (
             <ChatIcon
               className={`buttonIcon ${
                 isChatModalShow ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -145,8 +146,8 @@ export default function MessageModal() {
               setIsChatModalMax={setIsChatModalMax}
               handleCloseChatModal={handleCloseChatModal}
             />
-          )} */}
-          <MessageRoom chatRoomId='9283e8c1-2a30-45e1-9da3-e4e395e87d89'/>
+          )}
+          {/* <MessageRoom chatRoomId='9283e8c1-2a30-45e1-9da3-e4e395e87d89'/> */}
         </animated.div>
       </div>
     </div>

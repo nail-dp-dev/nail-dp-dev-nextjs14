@@ -108,6 +108,9 @@ const config: Config = {
       // Gray 9
       managementMenuTextGray:'#B8B8C1',
 
+      // Purple 0
+      lightPurple: '#F1E8F9',
+
       // Purple 1
       purple: '#B98CE0',
       mainPurple: '#B98CE0',
