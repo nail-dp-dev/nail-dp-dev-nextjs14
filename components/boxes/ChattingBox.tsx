@@ -95,7 +95,9 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
       </nav>
       <div className='chatRowBox w-full flex-1 flex flex-col items-center justify-start overflow-hidden overflow-y-scroll '>
         <ul className='w-full h-full relative'>
-          {chatList.map((chat, index) => (
+          {
+            chatList.length !== 0 && 
+            chatList.map((chat, index) => (
             <li 
               key={index} 
               className={`${isChatRoomOpen && 'w-full'} ${isChatRoomOpen && activateChatRoomId === chat && 'bg-lightPurple'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
