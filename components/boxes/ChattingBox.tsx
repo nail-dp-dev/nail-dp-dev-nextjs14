@@ -13,6 +13,7 @@ import ChatComponent from '../modal/message/MessageRoom'
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
 
+  const [isChatListNull, setIsChatListNull] = useState<boolean>(false);
   const [isChatRoomOpen, setIsChatRoomOpen] = useState<boolean>(false)
   const [category, setCategory] = useState('all')
   const [chatList, setChatList] = useState([])
@@ -42,6 +43,9 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
       try {
         const result = await getAllChatList();
         setChatList(result.data.roomId)
+        if (result.data.roomId.length === 0) {
+          setIsChatListNull(true)
+        }
       } catch (error) {
         console.error('Failed to fetch shared count:', error);
       }
@@ -96,7 +100,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
       <div className='chatRowBox w-full flex-1 flex flex-col items-center justify-start overflow-hidden overflow-y-scroll '>
         <ul className='w-full h-full relative'>
           {
-            chatList.length !== 0 && 
+            !isChatListNull && 
             chatList.map((chat, index) => (
             <li 
               key={index} 
