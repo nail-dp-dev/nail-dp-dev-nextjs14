@@ -364,7 +364,7 @@ export default function ProfilePage() {
                       >
                         <div className={`inset-0 z-0 h-full w-full`}>
                           <Image
-                            src={PrivateArchive}
+                            src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${PrivateArchive}`}
                             alt={''}
                             id={item.archiveId.toString()}
                             fill

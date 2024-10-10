@@ -465,13 +465,13 @@ export default function MyArchiveModal() {
                                 item.archiveImgUrl.endsWith('.mov') ||
                                 item.archiveImgUrl.endsWith('.mp4') ? (
                                   <Video
-                                    src={item.archiveImgUrl}
+                                    src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                                     width={'100%'}
                                     height={'100%'}
                                   />
                                 ) : (
                                   <Image
-                                    src={item.archiveImgUrl}
+                                    src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                                     alt={''}
                                     fill
                                     style={{
@@ -570,13 +570,13 @@ export default function MyArchiveModal() {
                               item.archiveImgUrl.endsWith('.mov') ||
                               item.archiveImgUrl.endsWith('.mp4') ? (
                                 <Video
-                                  src={item.archiveImgUrl}
+                                  src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                                   width={'100%'}
                                   height={'100%'}
                                 />
                               ) : (
                                 <Image
-                                  src={item.archiveImgUrl}
+                                  src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
                                   alt={''}
                                   fill
                                   style={{
