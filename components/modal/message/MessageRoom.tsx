@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getChat } from '../../../api/chat/getChat';
+import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
 
 interface ChatMessage {
   mention: string;
@@ -18,7 +19,10 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const clientRef = useRef<Client | null>(null);
+  const { userData } = useLoggedInUserData();
+  const userNickName = userData?.data.nickname
 
+  
   useEffect(() => {
     const socket = new SockJS('http://localhost:8080/ws-stomp');
     const stompClient = new Client({
@@ -63,7 +67,7 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
     if (clientRef.current && inputMessage.trim()) {
       const messageDto = {
         content: [inputMessage],
-                sender: 'User1',
+                sender: userNickName,
                 mention: [],
                 messageType: 'TEXT'
       };
@@ -77,8 +81,6 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
       setInputMessage('');
     }
   };
-
-  console.log(messages)
 
   return (
     <div className='w-full h-full z-40 p-[20px]'>
