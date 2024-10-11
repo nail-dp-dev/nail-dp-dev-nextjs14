@@ -9,14 +9,17 @@ import { useEffect, useState } from 'react'
 import { ChatCategoryElements } from '../../constants'
 import { getAllChatList } from '../../api/chat/getAllChatList'
 import ChatComponent from '../modal/message/MessageRoom'
-
+interface Chat {
+  roomName: string;
+  roomId: string;
+}
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
 
   const [isChatListNull, setIsChatListNull] = useState<boolean>(false);
   const [isChatRoomOpen, setIsChatRoomOpen] = useState<boolean>(false)
   const [category, setCategory] = useState('all')
-  const [chatList, setChatList] = useState([])
+  const [chatList, setChatList] = useState<Chat[]>([])
   const [activateChatRoomId, setActivateChatRoomId] = useState('')
   const chatModalMaxWidth = window.innerWidth - 375
   const chatModalMaxHeight = window.innerHeight - 120
@@ -42,8 +45,8 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     const fetchChatList = async () => {
       try {
         const result = await getAllChatList();
-        setChatList(result.data.roomId)
-        if (result.data.roomId.length === 0) {
+        setChatList(result.data.contents)
+        if (result.data.contents.length === 0) {
           setIsChatListNull(true)
         }
       } catch (error) {
@@ -104,13 +107,13 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
             chatList.map((chat, index) => (
             <li 
               key={index} 
-              className={`${isChatRoomOpen && 'w-full'} ${isChatRoomOpen && activateChatRoomId === chat && 'bg-lightPurple'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
+              className={`${isChatRoomOpen && 'w-full'} ${isChatRoomOpen && activateChatRoomId === chat.roomId && 'bg-lightPurple'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
             >
               <button
-                className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat && ''} p-[10px]`}
-                onClick={(e) => { clickChatRoom(e, chat) }}
+                className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
+                onClick={(e) => { clickChatRoom(e, chat.roomId) }} // Pass the roomId here
               >
-                <div className={`chatRoomImage ${activateChatRoomId === chat && isChatRoomOpen ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat && isChatRoomOpen ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
+                <div className={`chatRoomImage ${activateChatRoomId === chat.roomId && isChatRoomOpen ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpen ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                   <Image 
                     src={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'} 
                     width={40} height={40} alt={'chatRoomImage'} 
@@ -125,15 +128,16 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                   <div></div>
                 </div>
               </button>
-              {isChatRoomOpen && activateChatRoomId === chat && (
-                <div className='chatRoomDiv absolute bg-lightPurple  w-[88%] h-full top-0 right-0 z-30'
+              {isChatRoomOpen && activateChatRoomId === chat.roomId && (
+                <div className='chatRoomDiv absolute bg-lightPurple w-[88%] h-full top-0 right-0 z-30'
                   style={{ pointerEvents: 'auto' }} 
                 >
-                  <ChatComponent chatRoomId={chat} />
+                  <ChatComponent chatRoomId={chat.roomId} /> {/* Pass roomId to ChatComponent */}
                 </div>
               )}
             </li>
           ))}
+
         </ul>
 
       </div>

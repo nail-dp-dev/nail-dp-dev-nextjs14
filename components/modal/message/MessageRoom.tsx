@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { getChat } from '../../../api/chat/getChat';
 
 interface ChatMessage {
+  mention: string;
+  content: [string];
+  messageType: any;
   sender: string;
-  content: string;
 }
 
 interface ChatProps {
@@ -24,6 +27,16 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
         console.log(str);
       },
     });
+    const getBeforeChat = async (chatRoomId:string) => {
+      const result = await getChat(chatRoomId)
+
+      if (result) {
+        setMessages(result.data.contents)
+      }
+    }
+
+    getBeforeChat(chatRoomId)
+
 
     stompClient.onConnect = () => {
       console.log('Connected to WebSocket server');
@@ -64,6 +77,8 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
       setInputMessage('');
     }
   };
+
+  console.log(messages)
 
   return (
     <div className='w-full h-full z-40 p-[20px]'>
