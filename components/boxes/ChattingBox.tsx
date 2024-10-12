@@ -12,6 +12,9 @@ import ChatComponent from '../modal/message/MessageRoom'
 import { RootState } from '../../store/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActivateChatRoomId, setChatRoomOpen } from '../../store/slices/messageSlice'
+import ShopIcon from '../../public/assets/svg/shop-icon.svg'
+
+
 interface Chat {
   roomName: string;
   roomId: string;
@@ -111,6 +114,8 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 <button
                   key={index}
                   className={`w-[100px] h-[30px] flex items-center justify-center ${category === item.data && 'bg-purple text-white'} hover:bg-purple hover:text-white bg-buttonLightGray text-darkPurple font-[700] rounded-[20px]`}
+                  //네일숍 런칭 하기 전까지는 disabled 하는걸로.
+                  disabled={item.data === 'shop'}
                   onClick={(e)=>{clickCategory(e,item.data)}}
                 >
                   <span>{item.name}</span>
@@ -130,7 +135,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 chatList.map((chat, index) => (
                 <li 
                   key={index} 
-                  className={`${isChatRoomOpened && !isChatModalMax && 'w-full'} ${isChatRoomOpened && activateChatRoomId  === chat.roomId && !isChatModalMax && 'hidden'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden`}
+                  className={`${isChatRoomOpened && !isChatModalMax && 'w-full'} ${isChatRoomOpened && activateChatRoomId  === chat.roomId && !isChatModalMax && 'hidden'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden ${activateChatRoomId === chat.roomId && 'bg-lightPurple'} `}
                 >
                   <button
                     className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
@@ -146,13 +151,27 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                         className='rounded-full' 
                       />  
                     </div>
-                    <div className='flex-1 h-[50px] flex justify-between'>
-                      <div></div>
-                      <div></div>
+                    <div className='flex-1 h-[50px] flex justify-between py-[5px]'>
+                      <div className='flex-1 w-[200px] h-full flex flex-col items-start justify-center gap-[5px]'>
+                        <div className='flex items-center gap-[5px]'>
+                          <span className='font-[700] text-[14px] text-textDarkPurple'>체인지 잇</span>
+                          <ShopIcon/>
+                        </div>
+                        <div>
+                          <span className='font-[400] text-[11px] text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
+                            네~ 그러면 다음주 화요일 오후 3시에 뵙겠습니다.
+                          </span>                        
+                        </div>
+                      </div>
+                      <div className='min-w-[40px] h-full flex flex-col items-end justify-between '>
+                        <span className='font-[400] text-[8px] text-dateGray'>5월 10일</span>
+                        <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>12</div>
+                      </div>
                     </div>
                   </button>
                 </li>
               ))}
+              <li className='w-full h-[5px]'></li>
             </ul>
           </div>
 

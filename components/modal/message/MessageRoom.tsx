@@ -234,7 +234,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="메시지를 입력하시오."
+            placeholder="메시지를 입력하세요."
             className='w-full h-full p-2 resize-none outline-none'
             style={{ border: 'none', height: '100%', boxSizing: 'border-box' }}
             maxLength={1000}
