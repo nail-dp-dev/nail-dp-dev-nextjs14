@@ -33,6 +33,7 @@ import { followUser, unFollowUser } from '../../../../../api/user/followUser';
 import { getUserData } from '../../../../../api/user/getUserData';
 import Image from 'next/image';
 import { postCreateChatRoom } from '../../../../../api/chat/postCreateChatRoom';
+import { setActivateChatRoomId, setChatModalShow, setChatRoomOpen } from '../../../../../store/slices/messageSlice';
 
 export default function ProfilePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -90,7 +91,6 @@ export default function ProfilePage() {
   const categoryClick = (e: any, category: string) => {
     e.stopPropagation();
     setIsCategory(category);
-    console.log(category);
   };
 
   const clickShowType = (e: any, type: string) => {
@@ -103,7 +103,10 @@ export default function ProfilePage() {
     console.log(decodedNickname,'message 누름')
     const result = await postCreateChatRoom([decodedNickname])
     if(result && result.code === 2001){
-      console.log(result)
+      console.log(result.data)
+      dispatch(setChatModalShow(true));
+      dispatch(setChatRoomOpen(true));
+      dispatch(setActivateChatRoomId(result.data));
     }
   };
 
