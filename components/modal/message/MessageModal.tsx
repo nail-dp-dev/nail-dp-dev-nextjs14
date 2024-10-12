@@ -142,6 +142,7 @@ export default function MessageModal() {
           ) : (
             <ChattingBox
               isChatModalShow={isChatModalShow}
+              setIsChatModalShow={setIsChatModalShow}
               isChatModalMax={isChatModalMax}
               setIsChatModalMax={setIsChatModalMax}
               handleCloseChatModal={handleCloseChatModal}

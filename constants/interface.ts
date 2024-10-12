@@ -89,10 +89,17 @@ export interface MenuElementsProps {
 
 export interface ChattingBoxProps {
   isChatModalShow: boolean;
+  setIsChatModalShow:React.Dispatch<React.SetStateAction<boolean>>;
   isChatModalMax: boolean;
   setIsChatModalMax: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseChatModal: (e: any) => void;
 }
+
+export interface ChatComponentProps{
+  chatRoomId : string
+  clickCloseChatRoom: (e: any) => void;
+}
+
 export interface ProfileProps {
   success: boolean;
   code: number;

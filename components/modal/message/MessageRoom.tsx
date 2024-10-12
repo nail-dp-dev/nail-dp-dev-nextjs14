@@ -3,6 +3,8 @@ import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getChat } from '../../../api/chat/getChat';
 import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
+import { ChatComponentProps } from '../../../constants/interface';
+import CloseButtonIcon from ''
 
 interface ChatMessage {
   mention: string;
@@ -11,14 +13,11 @@ interface ChatMessage {
   sender: string;
 }
 
-interface ChatProps {
-  chatRoomId: string;
-}
-
-const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
+const ChatComponent = ({ chatRoomId, clickCloseChatRoom } : ChatComponentProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const clientRef = useRef<Client | null>(null);
+
   const { userData } = useLoggedInUserData();
   const userNickName = userData?.data.nickname
 
@@ -72,7 +71,6 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
                 messageType: 'TEXT'
       };
 
-      // Send the message to the server
       clientRef.current.publish({
         destination: `/pub/chat/${chatRoomId}/message`,
         body: JSON.stringify(messageDto),
@@ -83,11 +81,19 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
   };
 
   return (
-    <div className='w-full h-full z-40 p-[20px]'>
-      <div className='h-[40px]'></div>
-      <h1>Chat Room: {chatRoomId}</h1>
+    <div className='w-full h-full z-40 py-[10px] px-[10px]'>
+      <div className='h-[40px] flex items-center justify-between'>
+        <div className='bg-red flex-1 h-[50px]'>
+            
+        </div>
+        <button
+          onClick={clickCloseChatRoom}
+        >
+          닫기
+        </button>
+      </div>
 
-      {/* Display received messages */}
+
       <div>
         {messages.map((message, index) => (
           <div key={index}>
@@ -96,12 +102,11 @@ const ChatComponent: React.FC<ChatProps> = ({ chatRoomId }) => {
         ))}
       </div>
 
-      {/* Input field and send button */}
       <input
         type="text"
         value={inputMessage}
         onChange={(e) => setInputMessage(e.target.value)}
-        placeholder="Type a message..."
+        placeholder="메시지를 입력하시오."
       />
       <button onClick={sendMessage}>Send Message</button>
     </div>
