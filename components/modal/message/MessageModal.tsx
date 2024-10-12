@@ -149,7 +149,6 @@ export default function MessageModal() {
               handleCloseChatModal={handleCloseChatModal}
             />
           )}
-          {/* <MessageRoom chatRoomId='9283e8c1-2a30-45e1-9da3-e4e395e87d89'/> */}
         </animated.div>
       </div>
     </div>

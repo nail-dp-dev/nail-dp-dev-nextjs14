@@ -121,8 +121,8 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault(); // 기본 Enter 동작 방지
-    sendMessage(); // 메시지 전송
+    e.preventDefault(); 
+    sendMessage(); 
   }
 };
 
@@ -181,14 +181,14 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
             className={`flex px-2 ${message.sender === userNickName ? 'justify-end' : 'justify-start'}`}
           >
             {message.sender === userNickName ? (
-              <div className='inline-block min-w-[10%] max-w-[60%] bg-mainPurple rounded-2xl break-words'>
-                <p className='py-1 px-2 font-[500] text-[0.625rem] text-white break-words'>
+              <div className='inline-block max-w-[60%] bg-mainPurple rounded-2xl break-words'>
+                <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'}  text-white break-words`}>
                   {message.content}
                 </p>
               </div>
             ) : (
               <div className='inline-block max-w-[60%] bg-white rounded-2xl break-words'>
-                <p className='py-1 px-2 font-[500] text-[0.625rem] text-mainPurple break-words'>
+                <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} text-black break-words`}>
                   {message.content}
                 </p>
               </div>

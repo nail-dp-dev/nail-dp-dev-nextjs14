@@ -74,7 +74,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
   return (
     <div 
-      className={`chattingComponent relative ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal flex flex-col items-center justify-center transition-all rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden shadow-sm shadow-black`} 
+      className={`chattingComponent relative ${isChatModalShow ? 'opacity-100' : 'opacity-0 pointer-events-none'} absolute chatModal flex flex-col items-center justify-center transition-all rounded-[20px] border-[2px] border-purple bg-white duration-500 overflow-hidden`} 
       style={{
         width: isChatModalMax ? chatModalMaxWidth : '360px',
         height: isChatModalMax ? chatModalMaxHeight : '600px'
