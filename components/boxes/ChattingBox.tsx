@@ -18,6 +18,12 @@ import ShopIcon from '../../public/assets/svg/shop-icon.svg'
 interface Chat {
   roomName: string;
   roomId: string;
+  unreadCount: number;
+  profileUrls: [string];
+  lastMessage: string;
+  participantCnt: number;
+  modifiedAt: any;
+  isBusiness: boolean;
 }
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
@@ -143,7 +149,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                   >
                     <div className={`chatRoomImage ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                       <Image 
-                        src={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'} 
+                        src={chat.profileUrls[0]} 
                         width={40} height={40} alt={'chatRoomImage'} 
                         style={{objectFit: 'cover', width: '100%', height: '100%'}} 
                         quality={100} 
@@ -154,18 +160,24 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     <div className='flex-1 h-[50px] flex justify-between py-[5px]'>
                       <div className='flex-1 w-[200px] h-full flex flex-col items-start justify-center gap-[5px]'>
                         <div className='flex items-center gap-[5px]'>
-                          <span className='font-[700] text-[14px] text-textDarkPurple'>체인지 잇</span>
-                          <ShopIcon/>
+                          <span className='font-[700] text-[14px] text-textDarkPurple'>{chat.roomName}</span>
+                          {
+                            chat.isBusiness &&
+                            <ShopIcon/>
+                          }
                         </div>
                         <div>
-                          <span className='font-[400] text-[11px] text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
-                            네~ 그러면 다음주 화요일 오후 3시에 뵙겠습니다.
+                          <span className='font-[400] text-[11px] text-left text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
+                            {chat.lastMessage}
                           </span>                        
                         </div>
                       </div>
                       <div className='min-w-[40px] h-full flex flex-col items-end justify-between '>
-                        <span className='font-[400] text-[8px] text-dateGray'>5월 10일</span>
-                        <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>12</div>
+                        <span className='font-[400] text-[8px] text-dateGray'>{'10월 15일'}</span>
+                        {
+                          chat.unreadCount !== 0 &&
+                          <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>{chat.unreadCount}</div>
+                        }
                       </div>
                     </div>
                   </button>
@@ -183,7 +195,16 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
             }} 
           >
             {
+              isChatRoomOpened &&
               <ChatComponent clickCloseChatRoom={clickCloseChatRoom} isChatModalMax={isChatModalMax} />
+            }
+            {
+              !isChatRoomOpened && isChatModalMax &&
+              <div className='w-full h-full bg-lightPurple flex flex-col items-center pt-[52px]'>
+                <div className='w-[200px] h-[35px] flex items-center justify-center rounded-[1000px] bg-white border-[1px] border-mainPurple'>
+                  <span className='font-[700] text-[1rem] text-textDarkPurple'>대화할 방을 선택하세요.</span>
+                </div>
+              </div>
             }
           </div>
         </div>

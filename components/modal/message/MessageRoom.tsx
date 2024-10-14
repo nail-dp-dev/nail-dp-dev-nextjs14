@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getChat } from '../../../api/chat/getChat';
@@ -26,6 +26,7 @@ interface ChatMessage {
 const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
@@ -69,10 +70,18 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
       },
     });
 
+    
     const getBeforeChat = async (chatRoomId: string) => {
-      const result = await getChat(chatRoomId);
-      if (result) {
-        setMessages(result.data.contents);
+      try {
+        setIsLoading(true)
+        const result = await getChat(chatRoomId);
+        if (result) {
+          setMessages(result.data.contents);
+        }
+      } catch (error) {
+        console.error("Error fetching chat messages:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -129,15 +138,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
   return (
     <div className='w-full h-full z-40 flex flex-col items-center justify-between border-l-[1px] border-t-[1px] border-mainPurple'>
 
-      {
-        !isChatRoomOpened &&
-        <div className='w-full h-full bg-lightPurple flex flex-col items-center pt-[52px]'>
-          <div className='w-[200px] h-[35px] flex items-center justify-center rounded-[1000px] bg-white border-[1px] border-mainPurple'>
-            <span className='font-[700] text-[1rem] text-textDarkPurple'>대화할 방을 선택하세요.</span>
-          </div>
-        </div>
-      }
-
       <div className={`${!isChatRoomOpened && 'hidden'} w-full z-40 flex items-center justify-between`}>
         <div className={`bg-lightPurple flex items-center px-[10px] rounded-l-[24px] z-20 flex-1 ${isChatModalMax ? 'h-[100px]' : 'h-[60px]'} top-0 ${!isChatModalMax && ' translate-y-[-1px] translate-x-[-50px] border-l-[1px]  border-t-[1px] border-mainPurple'}`}>
           {
@@ -173,29 +173,35 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax } : ChatComponentPro
           <CloseButtonIcon />
         </button>
       </div>
-
+      
       <div className={`${!isChatRoomOpened && 'hidden'} w-full h-full py-[10px] z-40 flex flex-col gap-[13px] overflow-hidden overflow-y-scroll bg-lightPurple`}>
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex px-2 ${message.sender === userNickName ? 'justify-end' : 'justify-start'}`}
-          >
-            {message.sender === userNickName ? (
-              <div className='inline-block max-w-[60%] bg-mainPurple rounded-2xl break-words'>
-                <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'}  text-white break-words`}>
-                  {message.content}
+          <div key={index} className={`w-full min-h-[22px] flex px-2`}>
+            {
+              message.sender === userNickName &&
+              <div 
+                className={`inline-block max-w-[60%] rounded-2xl break-words ml-auto bg-mainPurple`}
+              >
+                <p
+                  className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} ${message.sender === userNickName ? 'text-white ' : 'text-black '}  break-words`}>
+                  {message.content[0]}
                 </p>
               </div>
-            ) : (
-              <div className='inline-block max-w-[60%] bg-white rounded-2xl break-words'>
-                <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} text-black break-words`}>
-                  {message.content}
+            }
+            {
+              message.sender !== userNickName &&
+              <div 
+                className={`inline-block max-w-[60%] rounded-2xl break-words mr-auto bg-white`}
+              >
+                <p 
+                  className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} ${message.sender === userNickName ? 'text-white ' : 'text-black '}  break-words`}>
+                  {message.content[0]}
                 </p>
               </div>
-            )}
+            }
           </div>
-        ))}
-        {/* This div will help us scroll to the bottom */}
+          ))
+        }
         <div ref={messagesEndRef} />
       </div>
 
