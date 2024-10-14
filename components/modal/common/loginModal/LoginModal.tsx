@@ -88,13 +88,13 @@ export default function LoginModal() {
             </div>
             <div className='w-full h-[40px] flex items-start justify-center animate-easeInOnly '>
               <UsedLoginPlatformXL
-                className={`${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'hidden xl:translate-x-[165px] xl:block' ||  getLoginedBefore === 'kakao' && 'hidden xl:translate-x-[-165px] xl:block'}`}
+                className={`${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'hidden xl:translate-x-[165px] xl:block' ||  getLoginedBefore === 'kakao' && 'hidden xl:translate-x-[-165px] xl:block' || getLoginedBefore === 'google' && 'hidden xl:block'}`}
               />
               <UsedLoginPlatformMD
-                className={`translate-y-[-5px] ${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'hidden md:translate-x-[110px] md:block xl:hidden' ||  getLoginedBefore === 'kakao' && 'hidden md:translate-x-[-110px] md:block xl:hidden'}`}
+                className={`translate-y-[-5px] ${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'hidden md:translate-x-[110px] md:block xl:hidden' ||  getLoginedBefore === 'kakao' && 'hidden md:translate-x-[-110px] md:block xl:hidden' ||  getLoginedBefore === 'google' && 'hidden md:block xl:hidden'}`}
               />
               <UsedLoginPlatformXS
-                className={`translate-y-[-10px] ${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'translate-x-[73px] md:hidden' ||  getLoginedBefore === 'kakao' && ' translate-x-[-73px] md:hidden'}`}
+                className={`translate-y-[-10px] ${getLoginedBefore === null && 'hidden'} ${getLoginedBefore === 'naver' && 'translate-x-[73px] md:hidden' ||  getLoginedBefore === 'kakao' && ' translate-x-[-73px] md:hidden' ||  getLoginedBefore === 'google' && ' md:hidden'}`}
               />
             </div>
           </div>

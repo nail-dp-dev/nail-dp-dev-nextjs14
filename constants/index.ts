@@ -275,6 +275,12 @@ export const FooterElements = [
 { name: 'NDP Corp.', uri: 'ndp-corp' }
 ]
 
+export const ChatCategoryElements = [
+  {name: '전체', data: 'all'},
+  {name: '친구', data: 'friend'},
+  {name: '네일숍', data: 'shop'},
+]
+
 export const ManagementMenu = [
   { name: '구독/결제', desc: '', type:'menu' },
   { name: '구독 관리', desc: '구독상태 조회・변경・취소', type:'element' },
