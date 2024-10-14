@@ -4,6 +4,7 @@ import loginReducer from './slices/loginSlice';
 import boxLayoutReducer from './slices/boxLayoutSlice';
 import commonModalReducer from './slices/modalSlice';
 import getLikedPostsReducer from './slices/getLikedPostsSlice'
+import messageReducer from './slices/messageSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = () => {
@@ -14,6 +15,7 @@ export const store = () => {
       boxLayout: boxLayoutReducer,
       commonModal: commonModalReducer,
       likedPosts: getLikedPostsReducer,
+      message: messageReducer,
     },
   });
 };
