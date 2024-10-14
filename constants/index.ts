@@ -302,3 +302,12 @@ export const ManagementMenu = [
   { name: '권한 관리', desc: '관리자 권한 등록・변경 처리', type:'element' },
   { name: '보고 및 분석', desc: '모니터링・로그 보고 및 분석', type:'element' },
 ]
+
+export const SettingElements = [
+  { name: '구독/결제 관리', desc: '' },
+  { name: '내 계정', desc: '' },
+  { name: '알림 설정', desc: '' },
+  { name: '채팅 설정', desc: '' },
+  { name: '테마 설정', desc: '' },
+  { name: '언어 설정', desc: ''},
+]
