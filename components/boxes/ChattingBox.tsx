@@ -5,7 +5,7 @@ import SearchIcon from '../../public/assets/svg/small-search.svg'
 import ChatMaxIcon from '../../public/assets/svg/close_chat_max.svg'
 import CloseChatIcon from '../../public/assets/svg/close_chat.svg'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChatCategoryElements } from '../../constants'
 import { getAllChatList } from '../../api/chat/getAllChatList'
 import ChatComponent from '../modal/message/MessageRoom'
@@ -13,6 +13,8 @@ import { RootState } from '../../store/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActivateChatRoomId, setChatRoomOpen } from '../../store/slices/messageSlice'
 import ShopIcon from '../../public/assets/svg/shop-icon.svg'
+import SockJS from 'sockjs-client'
+import { Client, Message } from '@stomp/stompjs'
 
 
 interface Chat {
@@ -31,16 +33,21 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const [isChatListNull, setIsChatListNull] = useState<boolean>(false);
   const [category, setCategory] = useState('all')
   const [chatList, setChatList] = useState<Chat[]>([])
+  const [isChatArrived, setIsChatArrived] = useState<boolean>(false);
+  const [chatRoomClicked, setChatRoomClicked] = useState<boolean>(false);
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
   const activateChatRoomId = useSelector((state: RootState) => state.message.activateChatRoomId);
   const chatModalMaxWidth = window.innerWidth - 375
   const chatModalMaxHeight = window.innerHeight - 120
   const dispatch = useDispatch();
+  const clientRef = useRef<Client | null>(null);
 
+  console.log(activateChatRoomId,'cliked?')
 
   const clickChatRoom = (e: any, chatRoomId:string) => {
     e.stopPropagation()
     e.preventDefault()
+    setChatRoomClicked(prev=>!prev)
     dispatch(setChatRoomOpen(true));
     dispatch(setActivateChatRoomId(chatRoomId));
   }
@@ -76,7 +83,42 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
     fetchChatList()
 
-  },[category])
+  }, [category, isChatArrived, activateChatRoomId])
+  
+    useEffect(() => {
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+      console.log('끊음...');
+    }
+
+    const socket = new SockJS('http://localhost:8080/ws-stomp');
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => {
+        console.log(str);
+      },
+    });
+
+
+    stompClient.onConnect = () => {
+      console.log('Connected to WebSocket server');
+
+      stompClient.subscribe(`/sub/chat/list/updates/주재훈입니다`, (list: Message) => {
+        const getlist: any = JSON.parse(list.body);
+        setIsChatArrived(prev=>!prev);
+        console.log(getlist,'wefqwefqwfqwfqwefqwefqwef')
+      });
+    };
+
+    stompClient.activate();
+    clientRef.current = stompClient;
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.deactivate();
+      }
+    };
+  }, []);
 
   return (
     <div 
@@ -147,7 +189,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
                     onClick={(e) => { clickChatRoom(e, chat.roomId) }}
                   >
-                    <div className={`chatRoomImage ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
+                    <div className={`chatRoomImage bg-white rounded-full ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                       <Image 
                         src={chat.profileUrls[0]} 
                         width={40} height={40} alt={'chatRoomImage'} 

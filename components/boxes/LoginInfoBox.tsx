@@ -37,6 +37,11 @@ export default function LoginInfoBox() {
     getLogOut(dispatch);
   };
 
+  const handleAlarm = (e: any) => {
+    e.stopPropagation()
+    console.log('alarm')
+  }
+
   const handleMiniModalToggle = (e: any) => {
     e.stopPropagation();
     setIsMiniModalShow((prev) => !prev);
@@ -156,13 +161,11 @@ export default function LoginInfoBox() {
             followerCount={userData.data.followerCount}
           >
             <button
-              onClick={() => {
-                handleLogout();
+              onClick={(e) => {
+                handleAlarm(e);
               }}
             >
-              <span className=" text-[12px] font-[700] text-textDarkPurple underline hover:text-purple">
-                로그아웃
-              </span>
+
             </button>
           </UserInfo>
         )}
