@@ -18,6 +18,8 @@ import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg';
 import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg';
 import EditProfilePencilIcon from '../../public/assets/svg/edit-profile-pencil.svg';
 import BitsBalloonIcon from '../../public/assets/svg/bits-balloon.svg'
+import AlarmIcon from '../../public/assets/svg/alarm-icon.svg'
+import AlarmMissIcon from '../../public/assets/svg/alarm-miss-icon.svg'
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -39,6 +41,7 @@ export default function LoginInfoBox() {
 
   const handleAlarm = (e: any) => {
     e.stopPropagation()
+    dispatch(setCommonModal('alarm-notice'));
     console.log('alarm')
   }
 
@@ -165,7 +168,13 @@ export default function LoginInfoBox() {
                 handleAlarm(e);
               }}
             >
-
+              {
+                true
+                ?
+                <AlarmIcon/>
+                :
+                <AlarmMissIcon />
+              }
             </button>
           </UserInfo>
         )}

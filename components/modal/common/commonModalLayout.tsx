@@ -6,6 +6,7 @@ import { selectCommonModalStatus, commonModalClose } from '../../../store/slices
 import ProfileImageCreateModal from './profileImageCreateModal/ProfileImageCreateModal';
 import AlarmModal from './AlarmModal';
 import MyArchiveModal from './myArchiveModal/MyArchiveModal';
+import AlarmNoticeModal from './alarmNoticeModal/AlarmNoticeModal';
 
 
 export default function CommonModalLayout() {
@@ -37,6 +38,10 @@ export default function CommonModalLayout() {
       {
         whichCommonModal === 'archive' && 
         <MyArchiveModal/>
+      }
+      {
+        whichCommonModal === 'alarm-notice' && 
+        <AlarmNoticeModal/>
       }
     </div>
   );
