@@ -68,10 +68,9 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
 
   const clickPhotoButton = (e: any) => {
     e.stopPropagation();
-    console.log('Photo 버튼 클릭...');
 
     if (fileInputRef.current) {
-      fileInputRef.current.click(); // Open file picker
+      fileInputRef.current.click();
     } else {
       console.log('File input ref not found');
     }
@@ -80,8 +79,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files;
-      console.log(selectedFile,'!!#!#!#!#')
-      // setFile(selectedFile); // Update the file state
       console.log('Selected file:', selectedFile);
 
       if (isChatRoomOpened) {
