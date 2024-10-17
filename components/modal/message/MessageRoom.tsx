@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useRef } from 'react';
+import Link from 'next/link'
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getChat } from '../../../api/chat/getChat';
@@ -18,13 +19,15 @@ import MessageIconIcon from '../../../public/assets/svg/message-icon-icon.svg';
 import MessagePhotoIcon from '../../../public/assets/svg/message-photo-icon.svg';
 import MessageFolderIcon from '../../../public/assets/svg/message-folder-icon.svg';
 import { postImageChat } from '../../../api/chat/postImageChat';
+import { UUID } from 'crypto';
 
 interface ChatMessage {
-  mention: [string];
-  content: [string];
-  messageType: any;
+  content: string;
   sender: string;
-  unreadUserCount: number;
+  mention: [string];
+  messageType: any;
+  chatRoomId: UUID;
+  media: [string];
 }
 
 interface ChatUserInfo {
@@ -36,28 +39,21 @@ interface ChatUserInfo {
 
 const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [file, setFile] = useState<File | null>(null);
   const [firstUnreadMessageId, setFirstUnreadMessageId] = useState<any>(null);
   const [chatUserInfo, setChatUserInfo] = useState<ChatUserInfo[]>();
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  
+  console.log(messages)
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for file input
+  const fileInputRef = useRef<HTMLInputElement | null>(null); 
 
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
   const activateChatRoomId = useSelector((state: RootState) => state.message.activateChatRoomId);
 
   const { userData } = useLoggedInUserData();
   const userNickName = userData?.data.nickname;
-
-  // Handle file change when user selects a file
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]); // Store the selected file
-    }
-  };
 
   const scrollToBottomAuto = () => {
     if (messagesEndRef.current) {
@@ -74,16 +70,32 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     e.stopPropagation();
     console.log('Photo 버튼 클릭...');
 
-    if (!fileInputRef.current) {
-      console.log('File input ref not found');
-      return;
-    }
-
-    if (file && activateChatRoomId) {
-      fileInputRef.current.click();
-      postImageChat(file, activateChatRoomId); 
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // Open file picker
     } else {
-      console.log('No file selected or chat room not active');
+      console.log('File input ref not found');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files;
+      console.log(selectedFile,'!!#!#!#!#')
+      // setFile(selectedFile); // Update the file state
+      console.log('Selected file:', selectedFile);
+
+      if (isChatRoomOpened) {
+        // Upload the selected file after it's chosen
+        postImageChat(selectedFile, activateChatRoomId)
+          .then((response) => {
+            console.log('Image sent successfully:', response);
+          })
+          .catch((error) => {
+            console.error('Error sending image:', error);
+          });
+      } else {
+        console.log('No active chat room ID');
+      }
     }
   };
 
@@ -117,6 +129,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
       try {
         const result = await getChat(chatRoomId);
         if (result) {
+          console.log(result,'@!@!@')
           setMessages(result.data.contents);
           setFirstUnreadMessageId(result.data.firstUnreadMessageId);
           setChatUserInfo(result.data.chatUserInfo);
@@ -129,6 +142,8 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     };
 
     getBeforeChat(activateChatRoomId);
+
+    console.log(messages,'wfwefwefwfwefwfwfeawf')
 
     stompClient.onConnect = () => {
       console.log('Connected to WebSocket server');
@@ -156,10 +171,12 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   const sendMessage = () => {
     if (clientRef.current && inputMessage.trim()) {
       const messageDto = {
-        content: [inputMessage],
+        content: inputMessage,
         sender: userNickName,
         mention: [],
         messageType: 'TEXT',
+        chatRoomId : activateChatRoomId,
+        media : []
       };
 
       clientRef.current.publish({
@@ -171,17 +188,19 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     }
   };
 
+  console.log(messages)
+
   return (
     <div className='w-full h-full z-40 flex flex-col items-center justify-between border-l-[1px] border-t-[1px] border-mainPurple'>
 
-      {/* Hidden File Input */}
       <input
         type="file"
         accept="image/*"
+        multiple
         onChange={handleFileChange}
         style={{ display: 'none' }}
         id="imageInput"
-        ref={fileInputRef} // Use ref here
+        ref={fileInputRef} 
       />
       
       <div className={`${!isChatRoomOpened && 'hidden'} w-full z-40 flex items-center justify-between`}>
@@ -229,20 +248,116 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
       
       <div className={`${!isChatRoomOpened && 'hidden'} w-full flex-1 py-[10px] z-40 flex flex-col gap-[13px] overflow-hidden overflow-y-scroll bg-lightPurple`}>
         {messages.map((message, index) => (
-          <div key={index} className={`w-full  flex px-2`}>
-            {message.sender === userNickName ? (
+          <div key={index} className={`w-full flex px-2`}>
+
+
+            {
+              // 내가 보낸것 TEXT 일때,
+              message.sender === userNickName && message.messageType === 'TEXT' &&
               <div className={`inline-block max-w-[60%] rounded-2xl break-words ml-auto bg-mainPurple`}>
                 <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} text-white break-words`}>
-                  {message.content[0]}
+                  {message.content}
                 </p>
               </div>
-            ) : (
+            
+            }
+      
+            {
+              // 남이 보낸것 TEXT 일때,
+              message.sender !== userNickName && message.messageType === 'TEXT' &&
               <div className={`inline-block max-w-[60%] rounded-2xl break-words mr-auto bg-white`}>
                 <p className={`py-1 px-2 font-[500] ${isChatModalMax ? 'text-[1rem]' : 'text-[0.625rem]'} text-black break-words`}>
-                  {message.content[0]}
+                  {message.content}
                 </p>
               </div>
-            )}
+            }
+
+            {
+              // 내가보낸 사진일 때,
+              message.sender === userNickName && message.messageType === 'IMAGE' && message.media.length === 1 &&
+              <div className={`inline-block max-w-[60%] w-[120px] h-[120px] rounded-2xl break-words ml-auto overflow-hidden`}>
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[0]}`}
+                  alt='ISentImage'
+                    width={50} height={50}
+                    style={{objectFit: 'cover', width: '100%', height: '100%'}} 
+                    quality={100} 
+                    sizes='100vw' 
+                />
+              </div>
+            }
+
+            {
+              // 남이보낸 사진일 때,
+              message.sender !== userNickName && message.messageType === 'IMAGE' && message.media.length === 1 &&
+              <div className={`inline-block max-w-[60%] w-[120px] h-[120px]  rounded-2xl break-words mr-auto overflow-hidden`}>
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[0]}`}
+                  alt='ISentImage'
+                    width={50} height={50}
+                    style={{objectFit: 'cover', width: '100%', height: '100%'}} 
+                    quality={100} 
+                    sizes='100vw' 
+                />
+              </div>
+            }
+
+            {
+              // 내가보낸 여러장의 사진일 때,
+              message.sender === userNickName && message.messageType === 'IMAGE' && message.media.length > 1 &&
+
+              <div className={`min-w-[180px] min-h-[40px] bg-white grid ${message.media.length % 2 === 0 ? 'grid-cols-2' : 'grid-cols-3'} place-content-around p-[2px] rounded-xl ml-auto`}>
+                {
+                  message.media.map((photo, index) => (
+                    <div
+                      key={index}
+                      className={`inline-block ${message.media.length % 2 === 0 ? 'w-[90px] h-[90px]' : 'w-[60px] h-[60px]'}  p-[2px] rounded-xl break-words overflow-hidden`}
+                    >
+                      <Link href={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[index]}`} target="_blank" rel="noopener noreferrer">
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[index]}`}
+                          alt='ISentImage'
+                            width={60} height={60}
+                            style={{objectFit: 'cover', width: '100%', height: '100%'}} 
+                            quality={100} 
+                            sizes='100vw' 
+                        />
+                      </Link>
+                    </div>
+                  ))
+                }
+              </div>                
+                
+            }
+
+            {
+              // 남이보낸 여러장의 사진일 때,
+              message.sender !== userNickName && message.messageType === 'IMAGE' && message.media.length > 1 &&
+
+              <div className={`min-w-[180px] min-h-[40px] bg-white grid ${message.media.length % 2 === 0 ? 'grid-cols-2' : 'grid-cols-3'} place-content-around p-[2px] rounded-xl mr-auto`}>
+                {
+                  message.media.map((photo, index) => (
+                    <div
+                      key={index}
+                      className={`inline-block ${message.media.length % 2 === 0 ? 'w-[90px] h-[90px]' : 'w-[60px] h-[60px]'}  p-[2px] rounded-xl break-words overflow-hidden`}
+                    >
+                      <Link href={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[index]}`} target="_blank" rel="noopener noreferrer">
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[index]}`}
+                          alt='ISentImage'
+                            width={60} height={60}
+                            style={{objectFit: 'cover', width: '100%', height: '100%'}} 
+                            quality={100} 
+                            sizes='100vw' 
+                        />
+                      </Link>
+
+                    </div>
+                  ))
+                }
+              </div>                
+                
+            }
           </div>
         ))}
         <div ref={messagesEndRef} />
