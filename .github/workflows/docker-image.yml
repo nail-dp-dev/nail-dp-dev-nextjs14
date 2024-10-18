@@ -30,6 +30,7 @@ jobs:
           NEXT_PUBLIC_NAVER_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
           NEXT_PUBLIC_FORBIDDENWORDS: ${{ secrets.NEXT_PUBLIC_FORBIDDENWORDS }}
           NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
+          NEXT_PUBLIC_CLOUDFRONT_URL: ${{ secrets.NEXT_PUBLIC_CLOUDFRONT_URL }}
           DOCKER_TAG: ${{ secrets.DOCKER_TAG }}
     
     - name: Login to DockerHub
