@@ -75,14 +75,11 @@ function PostBox({
     }
   };
 
-  const isPhoto = photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif');
-  const isVideo = photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov');
+  const isPhoto = photoUrl && (photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif'))
+  const isVideo = photoUrl && (photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov'))
 
   if (!isVisible) return null;
-
-  console.log(`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`);
   
-
   return (
     <div
       ref={boxRef}
