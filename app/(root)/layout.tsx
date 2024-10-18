@@ -18,7 +18,8 @@ export default function HomeLayout({
       <div className='w-full h-full flex items-center justify-center dark:bg-themeDark text-textBlack dark:text-white relative overflow-hidden'>
         {children}
       </div>
-      <div className='relative w-full md:hidden'>
+      {/* md:hidden */}
+      <div className='relative w-full h-[50px]'>
         <FooterBox />
       </div>
 
