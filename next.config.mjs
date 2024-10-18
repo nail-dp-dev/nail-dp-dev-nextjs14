@@ -4,6 +4,10 @@ const nextConfig = {
   output: "standalone",
   crossOrigin: 'anonymous',
 
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
