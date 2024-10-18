@@ -27,10 +27,15 @@ const boxLayoutSlice = createSlice({
         state.numberOfBoxes -= 1;
       }
     },
+    setBoxesForScreenWidth: (state) => {
+      if (window.innerWidth <= 450) {
+        state.numberOfBoxes = 3;
+      }
+    },
   },
 });
 
-export const { setNumberOfBoxes, increaseBoxes, decreaseBoxes } = boxLayoutSlice.actions;
+export const { setNumberOfBoxes, increaseBoxes, decreaseBoxes, setBoxesForScreenWidth } = boxLayoutSlice.actions;
 
 export const selectNumberOfBoxes = (state: { boxLayout: BoxLayoutState }) => state.boxLayout.numberOfBoxes;
 

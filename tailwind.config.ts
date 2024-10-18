@@ -103,6 +103,17 @@ const config: Config = {
       // Gray 7 
       darkModeGray: `#7D7D7D`,
 
+      // Gray 8
+      managementMenuBackGray:'#F7F7F8',
+      // Gray 9
+      managementMenuTextGray: '#B8B8C1',
+      
+      // Gray 10
+      dateGray: '#5F5F5F',
+
+      // Purple 0
+      lightPurple: '#F1E8F9',
+
       // Purple 1
       purple: '#B98CE0',
       mainPurple: '#B98CE0',
@@ -110,6 +121,9 @@ const config: Config = {
 
       // Purple 2
       darkPurple: '#756982',
+
+      // Purple 3
+      toggleBackPurple: '#E7D4FF',
 
       // Red
       red: '#FF007A',
@@ -135,9 +149,9 @@ const config: Config = {
       archiveCountInfo: 'rgba(117, 105, 130, 1)',
     },
     screens: {
-      xs: { max: '640px' },
-      sm: '640px',
-      md: '768px',
+      xs: { max: '450px' },
+      sm: '451px',
+      md: '769px',
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',

@@ -17,6 +17,10 @@ export default function UserImage({
   height,
   onClick,
 }: UserImageProps) {
+  const imageUrl =
+    src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')
+      ? src
+      : `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${src}`;
   return (
     <div
       style={{
@@ -31,7 +35,7 @@ export default function UserImage({
       onClick={onClick}
     >
       <Image
-        src={src}
+        src={imageUrl}
         alt={alt}
         sizes="(max-width: 480px) 100vw, 40vw"
         style={{ objectFit: 'cover' }}

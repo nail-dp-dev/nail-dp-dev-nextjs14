@@ -106,7 +106,7 @@ export default function SearchWord({
               {isVideo ? (
                 <div className="absolute inset-0 h-full w-full overflow-hidden rounded-2xl">
                   <video
-                    src={item.tagImageUrl}
+                    src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.tagImageUrl}`}
                     autoPlay
                     loop
                     muted

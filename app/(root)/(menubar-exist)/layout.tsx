@@ -8,7 +8,7 @@ function MenuBarExistLayout({
 }>) {
   return (
     <>
-      <section className="menuSection h-screen py-[20px] pl-[20px]">
+      <section className="menuSection h-full py-[20px] pl-[20px] xs:hidden ">
         <MenuBar />
       </section>
       {children}

@@ -7,7 +7,11 @@ import CloseImageIcon from '../../../../../public/assets/svg/close-post-image.sv
 import Link from 'next/link';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
-import { alarmModalData, setCommonModal } from '../../../../../store/slices/modalSlice';
+import {
+  alarmModalData,
+  setCommonModal,
+} from '../../../../../store/slices/modalSlice';
+import Video from '../../../../../components/ui/Video';
 
 type ImageData = {
   fileName: string;
@@ -16,12 +20,14 @@ type ImageData = {
 };
 
 export interface editData {
+  tempSave: boolean;
   editImages?: ImageData[];
   onImageChange: React.Dispatch<React.SetStateAction<File[]>>;
   onDeleteImageChange?: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function ImageUploadContainer({
+  tempSave,
   editImages,
   onImageChange,
   onDeleteImageChange,
@@ -32,9 +38,6 @@ export default function ImageUploadContainer({
   const [isOriginImages, setIsOriginImages] = useState<File[]>([]);
   const [isFileMemory, setIsFileMemory] = useState<number[]>([]);
   const [isMaxFileMemory, setIsMaxFileMemory] = useState<number>(0);
-  const [isOverFileMemory, setIsOverFileMemory] = useState<number>(0);
-  const [isOverFileType, setIsOverFileType] = useState<string>('');
-  const [isModal, setIsModal] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
 
@@ -73,7 +76,7 @@ export default function ImageUploadContainer({
         type: 'one',
         button: '',
         user: '',
-        actionType: 'archive'
+        actionType: 'comment',
       }),
     );
     dispatch(setCommonModal('alarm'));
@@ -152,7 +155,11 @@ export default function ImageUploadContainer({
     <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
         <p className="flex-1 text-center text-[1.5rem] font-bold">
-          {editImages ? '게시글 수정' : '새 게시글 작성'}
+          {editImages
+            ? tempSave
+              ? '임시저장된 게시물 수정'
+              : '게시글 수정'
+            : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
           <CloseIcon />
@@ -179,7 +186,7 @@ export default function ImageUploadContainer({
               사진 추가하기
             </button>
             <p className="mb-[13px] mt-[24px] text-[1rem]">
-              (최대 10장 50M까자입니다.)
+              (최대 10장 50MB까자입니다.)
             </p>
           </div>
         )}
@@ -193,17 +200,32 @@ export default function ImageUploadContainer({
                 {item.startsWith('data:video') ||
                 item.endsWith('.mov') ||
                 item.endsWith('.mp4') ? (
-                  <video
-                    key={item}
-                    autoPlay
-                    muted
-                    className="h-full w-full object-cover"
-                  >
-                    <source src={item} type="video/mp4" />
-                  </video>
+                  // <video
+                  //   key={item}
+                  //   autoPlay
+                  //   muted
+                  //   className="h-full w-full object-cover"
+                  // >
+                  //   <source src={item} type="video/mp4" />
+                  // </video>
+                  // <div className="h-full w-full object-cover">
+                  <Video
+                    src={
+                      item.startsWith('http://') || item.startsWith('https://') || item.startsWith("data")
+                        ? item
+                        : `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item}`
+                    }
+                    width="100%"
+                    height="100%"
+                  />
                 ) : (
+                  // </div>
                   <Image
-                    src={item}
+                    src={
+                      item.startsWith('http://') || item.startsWith('https://')  || item.startsWith("data")
+                        ? item
+                        : `${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item}`
+                    }
                     alt="postImage"
                     fill
                     style={{
@@ -259,11 +281,6 @@ export default function ImageUploadContainer({
           </p>
         </div>
       </div>
-      {isModal && (
-        <div
-          className={`pointer-events-auto absolute bottom-0 right-0 z-50 flex h-full w-full items-center justify-center bg-modalBackgroundColor`}
-        ></div>
-      )}
     </div>
   );
 }

@@ -89,8 +89,16 @@ export interface MenuElementsProps {
 
 export interface ChattingBoxProps {
   isChatModalShow: boolean;
+  isChatModalMax: boolean;
+  setIsChatModalMax: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseChatModal: (e: any) => void;
 }
+
+export interface ChatComponentProps{
+  clickCloseChatRoom: (e: any) => void;
+  isChatModalMax: boolean;
+}
+
 export interface ProfileProps {
   success: boolean;
   code: number;
@@ -138,21 +146,23 @@ export interface PostCreateModalProps {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface MyPageModalProps {
-  isText: string;
-  // setIsModal: React.Dispatch<React.SetStateAction<boolean>>
+export interface PostMiniModalProps {
+  isText: string,
+  state:boolean
 }
 
 export interface PostsDataProps {
   category: string;
   size: number;
   cursorId?: number;
+  isFirstRendering: boolean;
 }
 
 export interface PostsLikedDataProps {
   category: string;
   size: number;
   cursorLikedId?: number;
+  isLikedPostsFirstRendering: boolean;
 }
 
 export interface ArchiveDataProps {

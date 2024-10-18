@@ -27,7 +27,7 @@ export default function UserInfo({
   isMenuBar,
 }: UserInfoProps) {
   return (
-    <div className="flex flex-1 flex-col items-start">
+    <div className="flex-1 flex-col items-start hidden md:flex">
       <div className="flex w-full items-center justify-between">
         <p
           className={`${nicknameStyle} ${hoverStyle} ${isMenuBar && 'font-[500]'}`}
