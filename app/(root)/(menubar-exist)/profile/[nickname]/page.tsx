@@ -32,6 +32,8 @@ import { RootState } from '../../../../../store/store';
 import { followUser, unFollowUser } from '../../../../../api/user/followUser';
 import { getUserData } from '../../../../../api/user/getUserData';
 import Image from 'next/image';
+import { postCreateChatRoom } from '../../../../../api/chat/postCreateChatRoom';
+import { setActivateChatRoomId, setChatModalShow, setChatRoomOpen } from '../../../../../store/slices/messageSlice';
 
 export default function ProfilePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -89,7 +91,6 @@ export default function ProfilePage() {
   const categoryClick = (e: any, category: string) => {
     e.stopPropagation();
     setIsCategory(category);
-    console.log(category);
   };
 
   const clickShowType = (e: any, type: string) => {
@@ -97,8 +98,16 @@ export default function ProfilePage() {
     setShowType(type);
   };
 
-  const message = () => {
-    alert('준비중입니다.');
+  const message = async (e:any, decodedNickname:any) => {
+    e.stopPropagation();
+    console.log(decodedNickname,'message 누름')
+    const result = await postCreateChatRoom([decodedNickname])
+    if(result && result.code === 2001){
+      console.log(result.data)
+      dispatch(setChatModalShow(true));
+      dispatch(setChatRoomOpen(true));
+      dispatch(setActivateChatRoomId(result.data));
+    }
   };
 
   const follow = async () => {
@@ -239,7 +248,7 @@ export default function ProfilePage() {
               {isFollowState ? '팔로잉' : '팔로우'}
             </button>
             <button
-              onClick={(e) => message()}
+              onClick={(e) => message(e, decodedNickname)}
               className="mr-[12px] h-[32px] w-[84px] rounded-full border-2 border-black bg-black text-white hover:bg-white hover:text-black"
             >
               메세지

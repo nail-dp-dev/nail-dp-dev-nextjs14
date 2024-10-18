@@ -187,7 +187,6 @@ export default function MidContainer({
           className={`BoxWrap mb-[50px] mt-5 flex justify-center 
             bg-red
               sm:flex-col sm:items-center
-              sm:flex-col sm:items-center
               lg:flex-row lg:place-items-stretch
         `}
         >
