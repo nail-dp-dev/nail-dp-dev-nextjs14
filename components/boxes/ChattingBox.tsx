@@ -17,8 +17,34 @@ import SockJS from 'sockjs-client'
 import { Client, Message } from '@stomp/stompjs'
 import useLoggedInUserData from '../../hooks/user/useLoggedInUserData'
 
+interface Response {
+  content: Content;
+  empty: boolean;
+  first: boolean; 
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  pageable: Pageable
+  size: number;
+  sort: Sort 
+}
 
-interface Chat {
+interface Pageable{
+  pageNumber: number;
+  pageSize: number;
+  paged: boolean;
+  sort: Sort;
+  offset: number;
+  unpaged: boolean;
+} 
+
+interface Sort {
+  empty: boolean;
+  unsorted: boolean;
+  sorted: boolean;
+}
+
+interface Content {
   roomName: string;
   roomId: string;
   unreadCount: number;
@@ -27,13 +53,15 @@ interface Chat {
   participantCnt: number;
   modifiedAt: any;
   isBusiness: boolean;
+  isPinning: boolean;
 }
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
 
-  const [isChatListNull, setIsChatListNull] = useState<boolean>(false);
   const [category, setCategory] = useState('all')
-  const [chatList, setChatList] = useState<Chat[]>([])
+  const [responseData, setResponseData] = useState<Response>()
+  const [chatList, setChatList] = useState<Content[]>()
+  const [cursorId, setCursorId] = useState<string>('')
   const [isChatArrived, setIsChatArrived] = useState<boolean>(false);
   const [chatRoomClicked, setChatRoomClicked] = useState<boolean>(false);
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
@@ -69,14 +97,15 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     dispatch(setActivateChatRoomId(''));
   }
 
+
+  // 채팅 리스트 기본 데이터 fetch 하는 useEffect
   useEffect(() => {
     const fetchChatList = async () => {
       try {
-        const result = await getAllChatList();
-        setChatList(result.data.contents)
-        if (result.data.contents.length === 0) {
-          setIsChatListNull(true)
-        }
+        const result = await getAllChatList(category);
+        setResponseData(result.data.contents)
+        setChatList(result.data.contents.content)
+        setCursorId(result.data.cursorId)
       } catch (error) {
         console.error('Failed to fetch shared count:', error);
       }
@@ -85,7 +114,20 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     fetchChatList()
 
   }, [category, isChatArrived, activateChatRoomId])
+
+  // 채팅 리스트 업데이트 하는 function
+  useEffect(()=>{
+    const updateChatList = async () => {
+      try {
+        
+
+      } catch (error) {
+
+      }
+    }
+  },[isChatArrived])
   
+  // stompjs 연결 및 웹소켓 연결
     useEffect(() => {
     if (clientRef.current) {
       clientRef.current.deactivate();
@@ -107,7 +149,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
         stompClient.subscribe(`/sub/chat/list/updates/${userNickName.toString()}`, (list: Message) => {
           const getlist: any = JSON.parse(list.body);
           setIsChatArrived(prev=>!prev);
-          console.log(getlist)
+          console.log(getlist, '겟리스트입니다...!')
         });
       }
     };
@@ -120,7 +162,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
         clientRef.current.deactivate();
       }
     };
-  }, []);
+  }, [userNickName]);
 
   return (
     <div 
@@ -181,7 +223,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 <li className='w-full h-[62px]'></li>
               }
               {
-                !isChatListNull && 
+                chatList && 
                 chatList.map((chat, index) => (
                 <li 
                   key={index} 

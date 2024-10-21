@@ -2,23 +2,22 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link'
+import Image from 'next/image';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getChat } from '../../../api/chat/getChat';
+import { postImageChat } from '../../../api/chat/postImageChat';
 import useLoggedInUserData from '../../../hooks/user/useLoggedInUserData';
 import { ChatComponentProps } from '../../../constants/interface';
 import CloseButtonIcon from '../../../public/assets/svg/close.svg';
-import Image from 'next/image';
 import ShopIcon from '../../../public/assets/svg/shop-icon.svg';
 import UserActiveIcon from '../../../public/assets/svg/user-active-icon.svg';
 import MessageRound from '../../../public/assets/svg/message-round.svg';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-
 import MessageIconIcon from '../../../public/assets/svg/message-icon-icon.svg';
 import MessagePhotoIcon from '../../../public/assets/svg/message-photo-icon.svg';
 import MessageFolderIcon from '../../../public/assets/svg/message-folder-icon.svg';
-import { postImageChat } from '../../../api/chat/postImageChat';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 import { UUID } from 'crypto';
 
 interface ChatMessage {
