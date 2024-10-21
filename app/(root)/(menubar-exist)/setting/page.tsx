@@ -160,6 +160,8 @@ export default function SettingPage() {
     },
   ];
 
+  const paymentDesc = PaymentElements.find(element => element.name === isPaymentMenuState)?.desc;
+
   const CategoryBarClick = (e: any, name: string, menu: string) => {
     e.stopPropagation();
     if (isCategoryBar !== name) {
@@ -217,7 +219,12 @@ export default function SettingPage() {
 
   const PaymentMenuClick = (name:string) => {
     setIsPaymentMenuState(name)
+    setIsPaymentMenu(false);
   }
+
+  const PaymentMenuSetting = () => {
+    setIsPaymentMenu(!isPaymentMenu);
+  };
 
   return (
     <div className="SettingContainer h-full w-full overflow-hidden">
@@ -464,10 +471,10 @@ export default function SettingPage() {
               결제 내역
             </p>
             <div className="absolute right-[20px] top-0 min-h-[32px] w-[142px] rounded-lg border-2 border-purple bg-white opacity-90 overflow-hidden">
-              <div className="flex h-[32px] items-center justify-between rounded-t-lg bg-white px-[12px] text-[14px] font-[700] text-darkPurple hover:text-purple">
+              <button onClick={PaymentMenuSetting} className="flex h-[32px] w-full items-center justify-between rounded-t-lg bg-white px-[12px] text-[14px] font-[700] text-darkPurple hover:text-purple">
                 <p>{isPaymentMenuState}</p>
                 <Arrow fill="#F1E8F9" />
-              </div>
+              </button>
               {isPaymentMenu && PaymentElements.map((item, index) => {
 
                 return (
@@ -511,8 +518,9 @@ export default function SettingPage() {
 
                 const formTime = convertTo12HourFormat(date[1]);
                 const formDate = formatDate(date[0]);
+                
                 return (
-                  <div
+                  item.type === paymentDesc && <div
                     key={index}
                     className="flex min-h-[60px] w-full items-center justify-between border-b-2 border-lightPurple text-[18px]"
                   >

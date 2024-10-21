@@ -346,5 +346,5 @@ export const ScreenThemeElements = [
 export const PaymentElements = [
   { name: '버츠 사용 내역', desc: '비츠' },
   { name: '카드 사용 내역', desc: '카드' },
-  { name: '계좌 사용 내역드', desc: '계좌' },
+  { name: '계좌 사용 내역', desc: '계좌' },
 ]
