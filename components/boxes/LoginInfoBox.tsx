@@ -171,9 +171,9 @@ export default function LoginInfoBox() {
               {
                 true
                 ?
-                <AlarmIcon className='fill-[#b98ce0] hover:fill-[#FFAC31]'/>
+                <AlarmIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
                 :
-                <AlarmMissIcon className='fill-[#b98ce0] hover:fill-[#FFAC31]'/>
+                <AlarmMissIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
               }
             </button>
           </UserInfo>

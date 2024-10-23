@@ -55,9 +55,9 @@ export default function TagBar({
   }, [activeTags, searchTerm]);
 
   return (
-    <div className="tagBar  flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
-      <div className="tagDiv  flex h-[53px] w-full items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
-        <div className="flex gap-[5px] overflow-hidden ">
+    <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
+      <div className="tagDiv flex w-full h-[53px] bg-purple items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
+        <div className="flex-1 h-[30px] flex gap-[5px] overflow-hidden overflow-x-scroll bg-red">
           {visibleTags.map((tag, index) => (
             <button
               key={index}
@@ -69,7 +69,7 @@ export default function TagBar({
           ))}
         </div>
 
-        <div className="flex flex-shrink-0 items-center gap-[32px]">
+        <div className="flex flex-shrink-0 items-center gap-[32px] bg-kakaoYellow">
           <button
             onClick={() => dispatch(decreaseBoxes())}
             disabled={numberOfBoxes <= 3}

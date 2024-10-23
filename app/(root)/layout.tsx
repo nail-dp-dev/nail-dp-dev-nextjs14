@@ -19,7 +19,7 @@ export default function HomeLayout({
         {children}
       </div>
       {/* md:hidden */}
-      <div className='relative w-full h-[50px]'>
+      <div className='relative w-full h-[30px]'>
         <FooterBox />
       </div>
 

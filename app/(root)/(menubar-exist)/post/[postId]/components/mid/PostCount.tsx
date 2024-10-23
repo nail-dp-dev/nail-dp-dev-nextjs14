@@ -92,8 +92,8 @@ export default function PostCount({
   }, [isMenuOpen, handleClickOutside]);
 
   return (
-    <div className="flex justify-between py-4">
-      <div className="flex gap-[44px] pr-[54px] text-[0.8125rem] font-bold text-darkPurple">
+    <div className="flex py-4 sm:w-[120px] md:w-[200px]">
+      <div className="w-full flex items-center justify-center bg-red gap-[20px]  text-[0.8125rem] font-bold text-darkPurple">
         <div className="ml-1 flex items-center">
           <button onClick={handleHeartClick}>
             {isHeartStatus ? (

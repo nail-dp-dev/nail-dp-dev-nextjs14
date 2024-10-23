@@ -67,8 +67,8 @@ export default function TopContainer({ user, postId }: userProps) {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between bg-white p-2">
-      <div className="wrap-left flex flex-wrap items-center gap-4">
+    <div className="w-full flex flex-wrap items-center justify-between p-2 bg-naverGreen">
+      <div className="wrap-left flex flex-wrap items-center gap-4 bg-naverGreen">
         <div
           className="cursor-pointer"
           onClick={() => goToProfile(user.nickname)}
