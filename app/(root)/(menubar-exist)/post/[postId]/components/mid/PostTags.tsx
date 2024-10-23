@@ -71,7 +71,7 @@ export default function PostTags({
   return (
     <div
       className="
-      overflow-x-auto flex-1 h-full flex items-center w-[100px] bg-naverGreen hide-scrollbar"
+      overflow-x-auto flex-1 h-full flex items-center w-[100px] hide-scrollbar"
       onWheel={handleWheel}
       ref={scrollContainerRef}
       onMouseDown={handleMouseDown}

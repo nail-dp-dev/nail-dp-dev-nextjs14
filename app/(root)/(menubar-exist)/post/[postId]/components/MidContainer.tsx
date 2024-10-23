@@ -181,11 +181,11 @@ export default function MidContainer({
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex flex-col   "
+      className="flex-1 flex flex-col"
     >
-      <div className="top my-0 flex w-full flex-grow flex-col justify-center bg-red">
+      <div className="top my-0 flex w-full flex-grow flex-col justify-center">
         <div
-          className={`BoxWrap mb-[50px] mt-5 flex justify-center 
+          className={`BoxWrap mb-[50px] mt-5 flex justify-center
               xs:flex-col xs:items-center
               sm:flex-col sm:items-center
               lg:flex-row lg:place-items-stretch
@@ -193,10 +193,11 @@ export default function MidContainer({
         >
           <div
             className={`ImageBox relative aspect-square rounded-2xl transition-all
-            duration-300 min-w-[340px]
-            ${      imageBoxWidth >= 500
-                ? 'xs:min-w-[340px] sm:min-w-[370px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
-                : 'xs:min-w-[280px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[280px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'}
+            duration-300  
+              ${  imageBoxWidth >= 500
+                ? 'xs:min-w-[340px] sm:min-w-[390px] md:min-w-[400px] lg:min-w-[400px] xl:min-w-[500px] 2xl:min-w-[550px] 3xl:min-w-[850px]'
+                : 'xs:min-w-[320px] sm:min-w-[230px] md:min-w-[320px] lg:min-w-[280px] xl:min-w-[300px] 2xl:min-w-[300px] 3xl:min-w-[500px]'
+              }
             `}
           >
             <ImageSlider
@@ -245,18 +246,18 @@ export default function MidContainer({
           </div>
           <div
             className={`ContentBox rounded-2xl bg-lightGray px-3 pt-[10px] text-sm font-light
-            text-black transition-all duration-300 xs:mt-4 sm:mt-4 lg:ml-[15px] lg:mt-0 
+            text-black transition-all duration-300 xs:mt-4 sm:mt-4 lg:ml-[15px] lg:mt-0
             ${
               imageBoxWidth >= 500
-                ? 'xs:min-h-[160px] xs:min-w-[320px] sm:min-h-[160px] sm:min-w-[300px] sm:max-w-[390px] lg:bg-textDarkPurple md:min-h-[160px] lg:min-w-[280px] xl:min-w-[360px] 2xl:min-w-[360px] 3xl:min-w-[460px]'
-                : 'xs:min-h-[140px] xs:min-w-[280px] sm:min-h-[140px] sm:min-w-[180px] sm:max-w-[230px] md:min-h-[140px] md:min-w-[320px] lg:min-w-[365px] xl:min-w-[565px] 2xl:min-w-[565px] 3xl:min-w-[800px]'
+                ? 'xs:min-h-[160px] xs:min-w-[320px] xs:max-w-[340px] sm:min-h-[160px] sm:min-w-[280px] sm:max-w-[390px] md:min-h-[160px] lg:min-w-[280px] xl:min-w-[360px] 2xl:min-w-[360px] 3xl:min-w-[460px]'
+                : 'xs:min-h-[140px] xs:min-w-[280px] xs:max-w-[320px] sm:min-h-[140px] sm:min-w-[180px] sm:max-w-[230px] md:min-h-[140px] md:min-w-[320px] lg:min-w-[365px] xl:min-w-[565px] 2xl:min-w-[565px] 3xl:min-w-[800px]'
             }
             ${post.postContent ? 'block' : 'hidden'}`}
           >
             {post.postContent}
           </div>
         </div>
-        <div className="bg-kakaoYellow w-full gap-[20px] postInfo mt-auto flex flex-row items-center justify-between">
+        <div className="w-full gap-[20px] postInfo mt-auto flex flex-row items-center justify-between">
           <PostCount
             post={post}
             postId={postId}
