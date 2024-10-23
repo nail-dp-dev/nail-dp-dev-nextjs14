@@ -55,21 +55,28 @@ export default function TagBar({
   }, [activeTags, searchTerm]);
 
   return (
-    <div className="tagBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
-      <div className="tagDiv flex w-full h-[53px] bg-purple items-center justify-between overflow-hidden border-b-[1px] border-navBotSolidGray">
-        <div className="flex-1 h-[30px] flex gap-[5px] overflow-hidden overflow-x-scroll bg-red">
-          {visibleTags.map((tag, index) => (
-            <button
-              key={index}
-              onClick={() => onTagClick(tag.name)}
-              className={`hashtag-layout  hashtag-hover-active button-tr button-tr-tf flex-shrink-0 items-center justify-center border-none bg-hashTagGray transition-all`}
-            >
-              <p className="text-[14px] font-[700]">{tag.name}</p>
-            </button>
-          ))}
+    <div className="tagBar  flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
+      <div className="tagDiv  flex h-[53px] w-full items-center justify-between gap-[10px] border-b-[1px] border-navBotSolidGray">
+        <div
+          className="
+          overflow-x-auto flex-1 h-full flex items-center w-[100px] hide-scrollbar"
+        >
+          <div className="group flex flex-nowrap gap-[6px] mr-auto">
+            {visibleTags.map((tag, index) => (
+              <div className="flex-shrink-0 whitespace-nowrap" key={index}>
+                <button
+                  className="hashtag-layout hashtag-hover-active button-tr button-tr-tf
+                  bg-hashTagGray hover:text-white active:text-white"
+                  onClick={() => onTagClick(tag.name)}
+                >
+                  {tag.name}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex flex-shrink-0 items-center gap-[32px] bg-kakaoYellow">
+        <div className="flex items-center gap-[32px] w-[140px] h-full">
           <button
             onClick={() => dispatch(decreaseBoxes())}
             disabled={numberOfBoxes <= 3}

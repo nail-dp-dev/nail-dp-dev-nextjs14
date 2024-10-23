@@ -50,6 +50,7 @@ export default function SearchResultsPage() {
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
 
+  const boxRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // 새로운 검색 결과 가져오기
@@ -199,34 +200,35 @@ export default function SearchResultsPage() {
       ) : message ? (
         <SearchNotice message={message} />
       ) : (
-        <div className="relative h-full overflow-y-scroll">
-          <div className="SearchResultsPageContainer max-h-full">
-            <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
-              {postsData.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  isPhoto={item.isPhoto}
-                  isVideo={item.isVideo}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  setSharedCount={setSharedCount}
-                  onLikeToggle={() => handleLikeToggle(item.postId)}
-                  isOptional={true}
-                  showOnlyShareButton={true}
-                />
-              ))}
-              <div ref={bottomRef} className="h-[1px] w-full"></div>
-            </div>
+        <div className="ForYouContainer max-h-full overflow-hidden relative">
+          <div
+            ref={boxRef}
+            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
+          >
+            {postsData.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                isPhoto={item.isPhoto}
+                isVideo={item.isVideo}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                onLikeToggle={() => handleLikeToggle(item.postId)}
+                isOptional={true}
+                showOnlyShareButton={true}
+              />
+            ))}
+            <div ref={bottomRef} className="h-[1px] w-full"></div>
           </div>
-        </div>
+        </div>  
       )}
-      {isSuggestLoginModalShow && <LoginSuggestModal />}
+    {isSuggestLoginModalShow && <LoginSuggestModal />}
     </>
   );
 }

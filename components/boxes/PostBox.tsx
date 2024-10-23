@@ -88,7 +88,7 @@ function PostBox({
     >
       <button
         type="button"
-        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple shadow-md shadow-gray"
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
 
       >
@@ -116,8 +116,7 @@ function PostBox({
             loading="lazy"
             decoding="async"
             placeholder="blur"
-            blurDataURL="/assets/img/blur.avif" 
-
+            blurDataURL="/assets/img/blur.avif"
           />
         )}
 
