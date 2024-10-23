@@ -31,7 +31,6 @@ export const postCreate = async (postData: {
       credentials: 'include',
       body: multipartFormData,
     });
-    console.log(multipartFormData);
     
     const data = await response.json();
     if (data.code === 2001) {

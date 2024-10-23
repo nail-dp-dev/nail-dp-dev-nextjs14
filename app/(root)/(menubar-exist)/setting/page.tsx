@@ -52,6 +52,7 @@ export default function SettingPage() {
   // 버튼을 클릭할 때 상태를 반전시키는 함수
   const handleToggle = () => {
     setIsOn((prevState) => !prevState);
+    localStorage.setItem('bets', `${isOn}`);
   };
 
   const a = [
