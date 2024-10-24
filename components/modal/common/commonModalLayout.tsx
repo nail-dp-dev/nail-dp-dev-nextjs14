@@ -6,6 +6,9 @@ import { selectCommonModalStatus, commonModalClose } from '../../../store/slices
 import ProfileImageCreateModal from './profileImageCreateModal/ProfileImageCreateModal';
 import AlarmModal from './AlarmModal';
 import MyArchiveModal from './myArchiveModal/MyArchiveModal';
+import RoadNameAddressModal from './settingModal/RoadNameAddress';
+import SettingPhoneModal from './settingModal/SettingPhone';
+import SettingEmailModal from './settingModal/SettingEmail';
 
 
 export default function CommonModalLayout() {
@@ -37,6 +40,18 @@ export default function CommonModalLayout() {
       {
         whichCommonModal === 'archive' && 
         <MyArchiveModal/>
+      }
+      {
+        whichCommonModal === 'road-address' && 
+        <RoadNameAddressModal/>
+      }
+            {
+        whichCommonModal === 'setting-email' && 
+        <SettingEmailModal/>
+      }
+            {
+        whichCommonModal === 'setting-phone' && 
+        <SettingPhoneModal/>
       }
     </div>
   );

@@ -190,14 +190,14 @@ export default function LoginInfoBox() {
             <div
               className='md:mr-[12px] hidden md:block'
             >
-              <Bits />
+              <Bits width={24} height={24}/>
             </div>
             <div className='flex items-center'>
               <button
                 className='md:mr-[12px] md:hidden'
                 onClick={(e) => handleBitsPopUpMiniModal(e)}
               >
-                <Bits className='' />
+                <Bits width={24} height={24} className='' />
               </button>
               {isBitsMiniModalShow && (
                 <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40 md:hidden'>
