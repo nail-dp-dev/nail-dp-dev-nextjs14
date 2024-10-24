@@ -223,6 +223,15 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 <li className='w-full h-[62px]'></li>
               }
               {
+                chatList &&
+                chatList.length === 0 &&
+                <div className='p-[10px] w-full h-full '>
+                  <div className='bg-darkGray w-full h-full flex items-center justify-center rounded-[20px] overflow-hidden'>
+                    채팅이 없습니다.
+                  </div>
+                </div>
+              }
+              {
                 chatList && 
                 chatList.map((chat, index) => (
                 <li 

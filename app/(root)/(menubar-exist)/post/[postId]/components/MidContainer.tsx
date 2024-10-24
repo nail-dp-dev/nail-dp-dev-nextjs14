@@ -83,6 +83,21 @@ export default function MidContainer({
   const { alarmType } = useSelector(selectAlarmModalStatus);
   const router = useRouter();
 
+  const createLinkifiedContent = (content: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g; // Supports http, https, and www
+    return content.split(urlRegex).map((part, index) => {
+      if (urlRegex.test(part)) {
+        const url = part.startsWith('www.') ? `http://${part}` : part; // Add http:// to www links
+        return (
+          <a key={index} href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-mainPurple hover:underline transition-all duration-200">
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   useEffect(() => {
     const fetchSharedCount = async () => {
       try {
@@ -254,7 +269,7 @@ export default function MidContainer({
             }
             ${post.postContent ? 'block' : 'hidden'}`}
           >
-            {post.postContent}
+            {createLinkifiedContent(post.postContent)}
           </div>
         </div>
         <div className="w-full gap-[20px] postInfo mt-auto flex flex-row items-center justify-between">

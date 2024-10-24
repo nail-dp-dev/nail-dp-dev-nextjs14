@@ -228,8 +228,11 @@ export default function LoginInfoBox() {
               {userPointData} 비츠
             </span>
           </div>
-          <button
-            className='hidden md:block'
+          
+          {
+            // 비츠 충전 기능 구현될 시 주석 제거
+          /* <button
+            className='hidden md:block hidden'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
             onClick={(e) => {
@@ -237,7 +240,8 @@ export default function LoginInfoBox() {
             }}
           >
             {isButtonHovered ? <BitsChargeHoverIcon /> : <BitsChargeIcon />}
-          </button>
+          </button> */
+          }
         </div>
       )}
     </div>

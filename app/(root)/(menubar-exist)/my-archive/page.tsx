@@ -12,6 +12,7 @@ import ArchiveBox from '../../../../components/boxes/ArchiveBox';
 import { getAllArchivesData } from '../../../../api/archive/getArchivesData';
 import { ArchiveArray } from '../../../../types/dataType';
 import { setBoxesForScreenWidth } from '../../../../store/slices/boxLayoutSlice';
+import MyArchiveTopBar from './components/TopBar';
 
 
 export default function MyArchivePage() {
@@ -81,7 +82,7 @@ export default function MyArchivePage() {
 
   // 
   useEffect(() => {
-    if (isFirstRendering) {
+    if (isFirstRendering && isLoggedIn === 'loggedIn') {
       fetchMorePosts();
     }
 
@@ -142,8 +143,8 @@ export default function MyArchivePage() {
   
   return (
     isLoggedIn === 'loggedIn' ?
-    <div className="MyArchiveContainer w-full h-dvh flex flex-col px-[5px] overflow-hidden ">
-      <div className='w-full h-[66px] bg-white flex items-start justify-start'>
+    <div className="MyArchiveContainer w-full flex-1 flex flex-col  px-[5px] overflow-hidden">
+      <div className='w-full h-[106px] flex items-start justify-start'>
         <div className='flex items-center justify-between w-full h-[54px] border-b-navBotSolidGray border-b-[1px]'>
           <nav className='flex items-center justify-center xs:gap-[8px] sm:gap-[18px] md:gap-[32px] h-[54px]'>
               {

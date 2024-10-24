@@ -14,7 +14,7 @@ export default function NotLoginNotice({ children }: NotLoginNoticeProps) {
   const isLoggedIn = useSelector(selectLoginStatus);
   const { userData } = useLoggedInUserData();
 
-  if (isLoggedIn !== 'loggedIn' || !userData) {
+  if (isLoggedIn === 'loggedOut' && !userData) {
     return (
       <div className="flex h-screen flex-col items-center justify-center">
         <h2 className="text-xl font-bold">로그인이 필요한 페이지입니다</h2>
