@@ -29,8 +29,9 @@ export default function SettingPage() {
   const [isCategoryBar, setIsCategoryBar] = useState('subscribe');
   const [isMenu, setIsMenu] = useState('결제수단 비츠');
   const [isOn, setIsOn] = useState(false);
-  const [isPaymentMenu, setIsPaymentMenu] = useState(false)
-  const [isPaymentMenuState, setIsPaymentMenuState] = useState("버츠 사용 내역")
+  const [isPaymentMenu, setIsPaymentMenu] = useState(false);
+  const [isPaymentMenuState, setIsPaymentMenuState] =
+    useState('버츠 사용 내역');
 
   const [isPhone, setIsPhone] = useState(false);
   const [isPhoneState, setIsPhoneState] = useState('010-1234-5678');
@@ -161,7 +162,9 @@ export default function SettingPage() {
     },
   ];
 
-  const paymentDesc = PaymentElements.find(element => element.name === isPaymentMenuState)?.desc;
+  const paymentDesc = PaymentElements.find(
+    (element) => element.name === isPaymentMenuState,
+  )?.desc;
 
   const CategoryBarClick = (e: any, name: string, menu: string) => {
     e.stopPropagation();
@@ -218,10 +221,10 @@ export default function SettingPage() {
     setIsScreenTheme(false);
   };
 
-  const PaymentMenuClick = (name:string) => {
-    setIsPaymentMenuState(name)
+  const PaymentMenuClick = (name: string) => {
+    setIsPaymentMenuState(name);
     setIsPaymentMenu(false);
-  }
+  };
 
   const PaymentMenuSetting = () => {
     setIsPaymentMenu(!isPaymentMenu);
@@ -253,7 +256,7 @@ export default function SettingPage() {
               );
             })}
           </div>
-          <div className="relative h-[40px] w-[25%] rounded-full shadow-md">
+          <div className="relative h-[40px] w-[25%] rounded-full shadow-md sm:hidden md:hidden lg:hidden">
             <input
               className="h-full w-full rounded-full pl-12"
               type="text"
@@ -467,28 +470,33 @@ export default function SettingPage() {
       )}
       {isCategoryBar === 'subscribe' && isMenu === '결제 내역 보기' && (
         <div className="relative flex h-full w-full flex-col">
-          <div className="h-[32px] mb-[10px] flex items-center justify-between">
+          <div className="mb-[10px] flex h-[32px] items-center justify-between">
             <p className="ml-[11px] text-[14px] font-[500] text-darkPurple">
               결제 내역
             </p>
-            <div className="absolute right-[20px] top-0 min-h-[32px] w-[142px] rounded-lg border-2 border-purple bg-white opacity-90 overflow-hidden">
-              <button onClick={PaymentMenuSetting} className="flex h-[32px] w-full items-center justify-between rounded-t-lg bg-white px-[12px] text-[14px] font-[700] text-darkPurple hover:text-purple">
+            <div className="absolute right-[20px] top-0 min-h-[32px] w-[142px] overflow-hidden rounded-lg border-2 border-purple bg-white opacity-90">
+              <button
+                onClick={PaymentMenuSetting}
+                className="flex h-[32px] w-full items-center justify-between rounded-t-lg bg-white px-[12px] text-[14px] font-[700] text-darkPurple hover:text-purple"
+              >
                 <p>{isPaymentMenuState}</p>
                 <Arrow fill="#F1E8F9" />
               </button>
-              {isPaymentMenu && PaymentElements.map((item, index) => {
-
-                return (
-                  isPaymentMenuState !== item.name && <button
-                    key={index}
-                    onClick={e => PaymentMenuClick(item.name)}
-                    className={`flex h-[32px] w-full border-t-2 border-lightPurple  bg-white px-[12px] py-[4px] text-[14px] font-[700] text-darkPurple hover:text-purple`}
-                    style={{ top: `${index * 32}px` }}
-                  >
-                    <p className="pr-[10px]">{item.name}</p>
-                  </button>
-                );
-              })}
+              {isPaymentMenu &&
+                PaymentElements.map((item, index) => {
+                  return (
+                    isPaymentMenuState !== item.name && (
+                      <button
+                        key={index}
+                        onClick={(e) => PaymentMenuClick(item.name)}
+                        className={`flex h-[32px] w-full border-t-2 border-lightPurple  bg-white px-[12px] py-[4px] text-[14px] font-[700] text-darkPurple hover:text-purple`}
+                        style={{ top: `${index * 32}px` }}
+                      >
+                        <p className="pr-[10px]">{item.name}</p>
+                      </button>
+                    )
+                  );
+                })}
             </div>
           </div>
           <div className="flex-1">
@@ -519,22 +527,26 @@ export default function SettingPage() {
 
                 const formTime = convertTo12HourFormat(date[1]);
                 const formDate = formatDate(date[0]);
-                
+
                 return (
-                  item.type === paymentDesc && <div
-                    key={index}
-                    className="flex min-h-[60px] w-full items-center justify-between border-b-2 border-lightPurple text-[18px]"
-                  >
-                    <div className="flex w-[20%] min-w-[150px] pl-[17px]">
-                      <Bits className="h-[24px] w-[24px]" />
-                      <p className="pl-[10px]">{item.payment}</p>
+                  item.type === paymentDesc && (
+                    <div
+                      key={index}
+                      className="flex min-h-[60px] w-full items-center justify-between border-b-2 border-lightPurple text-[18px]"
+                    >
+                      <div className="flex w-[20%] min-w-[150px] pl-[17px]">
+                        <Bits className="h-[24px] w-[24px]" />
+                        <p className="pl-[10px]">{item.payment}</p>
+                      </div>
+                      <p className="flex-1 text-textDarkPurple">
+                        {item.context}
+                      </p>
+                      <div className="w-[100px]">
+                        <p className="text-textDarkPurple">{formTime}</p>
+                        <p>{formDate}</p>
+                      </div>
                     </div>
-                    <p className="flex-1 text-textDarkPurple">{item.context}</p>
-                    <div className="w-[100px]">
-                      <p className="text-textDarkPurple">{formTime}</p>
-                      <p>{formDate}</p>
-                    </div>
-                  </div>
+                  )
                 );
               })}
             </div>

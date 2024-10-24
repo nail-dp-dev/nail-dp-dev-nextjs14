@@ -1,12 +1,13 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalClose, selectCommonModalStatus } from '../../../../store/slices/modalSlice';
 import CloseIcon from '../../../../public/assets/svg/close.svg'
 import RingIcon from '../../../../public/assets/svg/ring-icon.svg'
 import BusinessIcon from '../../../../public/assets/svg/shop-icon.svg'
+import { getAlarm } from '../../../../api/alarm/getAlarm';
 
 export default function AlarmModal() {
 
@@ -22,6 +23,16 @@ export default function AlarmModal() {
     e.stopPropagation()
     console.log('clickAlarm')
   }
+
+  const fetchAlarmData = async () => {
+    const alarmData = await getAlarm();
+    console.log(alarmData);
+    console.log("a");
+  };
+  
+  useEffect(() => {
+    fetchAlarmData()
+  }, []);
   
   const dataArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
 
