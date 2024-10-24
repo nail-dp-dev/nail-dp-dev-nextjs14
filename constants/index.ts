@@ -361,3 +361,43 @@ export const ManagementMenu = [
   { name: '권한 관리', desc: '관리자 권한 등록・변경 처리', type:'element' },
   { name: '보고 및 분석', desc: '모니터링・로그 보고 및 분석', type:'element' },
 ]
+
+export const SettingElements = [
+  { name: '구독/결제 관리', desc: 'subscribe',menu:'결제수단 비츠' },
+  { name: '내 계정', desc: 'myAccount',menu:'내 계정 관리' },
+  { name: '알림 설정', desc: 'alarm',menu:'알림 상세 설정' },
+  { name: '채팅 설정', desc: 'chat' ,menu:'채팅방 보기 설정'},
+  { name: '테마 설정', desc: 'theme' ,menu:'화면 테마'},
+  { name: '언어 설정', desc: 'language',menu:'현재 설정'},
+]
+
+export const AlarmSettingElements = [
+  { name: '게시글 저장 알림', desc: '누군가 내 게시글을 저장하면 알림을 표시합니다.' },
+  { name: '게시글 하트 알림', desc: '내 게시글에 하트가 눌리면 알림을 표시합니다.' },
+  { name: '게시글 언급 알림', desc: '누군가 게시글에 나를 언급하면 알림을 표시합니다.' },
+  { name: '게시글 댓글 알림', desc: '내 게시글에 댓글이 달리면 알림을 표시합니다.' },
+  { name: '댓글 하트 알림', desc: '내 댓글에 하트가 눌리면 알림을 표시합니다.'},
+  { name: '댓글 언급 알림', desc: '나를 언급한 댓글이 생기면 알림을 표시합니다.'},
+  { name: '팔로워 알림', desc: '누군가가 나를 팔로우하면 알림을 표시합니다.' },
+  { name: '팔로잉 알림', desc: '내가 팔로잉한 사람이 게시글을 올리면 알림을 표시합니다.' },
+  { name: '예약 알림', desc: '네일숍 예약시 알림을 표시합니다.' },
+  { name: '배송 알림', desc: '제품의 배송현황에 따라 알림을 표시합니다.' },
+  { name: '이벤트 알림', desc: '이벤트가 생기면 알림을 표시합니다.'},
+]
+
+export const ChatViewElements = [
+  { name: '최신순 (기본정렬)', desc: '최신순' },
+  { name: '즐겨찾기순', desc: '고정한 채팅방 순서' },
+  { name: '안읽은순', desc: '메세지가 작성된 시간 순서' },
+]
+
+export const ScreenThemeElements = [
+  { name: '라이트 모드', desc: 'light' },
+  { name: '다크 모드', desc: 'dark' },
+]
+
+export const PaymentElements = [
+  { name: '버츠 사용 내역', desc: '비츠' },
+  { name: '카드 사용 내역', desc: '카드' },
+  { name: '계좌 사용 내역', desc: '계좌' },
+]

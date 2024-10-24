@@ -8,6 +8,9 @@ import AlarmModal from './AlarmModal';
 import MyArchiveModal from './myArchiveModal/MyArchiveModal';
 import AlarmNoticeModal from './alarmNoticeModal/AlarmNoticeModal';
 import { useEffect, useRef } from 'react';
+import RoadNameAddressModal from './settingModal/RoadNameAddress';
+import SettingPhoneModal from './settingModal/SettingPhone';
+import SettingEmailModal from './settingModal/SettingEmail';
 
 
 export default function CommonModalLayout() {
@@ -63,8 +66,20 @@ export default function CommonModalLayout() {
         <MyArchiveModal/>
       }
       {
-        whichCommonModal === 'alarm-notice' && 
-        <AlarmNoticeModal/>
+        whichCommonModal === 'alarm-notice' &&
+        <AlarmNoticeModal />
+      }
+      {
+        whichCommonModal === 'road-address' && 
+        <RoadNameAddressModal/>
+      }
+      {
+        whichCommonModal === 'setting-email' && 
+        <SettingEmailModal/>
+      }
+      {
+        whichCommonModal === 'setting-phone' && 
+        <SettingPhoneModal/>
       }
     </div>
   );
