@@ -1,7 +1,7 @@
-import MenuBar from '../../components/bars/MenuBar';
 import FooterBox from '../../components/boxes/FooterBox';
 import CommonModalLayout from '../../components/modal/common/commonModalLayout';
 import MessageModal from '../../components/modal/message/MessageModal';
+import RowMenuBar from '../../components/bars/RowMenuBar';
 
 export default function HomeLayout({
   children,
@@ -18,10 +18,12 @@ export default function HomeLayout({
       <div className='w-full h-full flex items-center justify-center dark:bg-themeDark text-textBlack dark:text-white relative overflow-hidden'>
         {children}
       </div>
+      <RowMenuBar/>
+
       {/* md:hidden */}
-      <div className='relative w-full h-[50px]'>
+      {/* <div className='relative w-full h-[30px]'>
         <FooterBox />
-      </div>
+      </div> */}
 
   </main>
   );

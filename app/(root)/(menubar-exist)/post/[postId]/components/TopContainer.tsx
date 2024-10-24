@@ -67,7 +67,7 @@ export default function TopContainer({ user, postId }: userProps) {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between bg-white p-2">
+    <div className="w-full flex flex-wrap items-center justify-between p-2">
       <div className="wrap-left flex flex-wrap items-center gap-4">
         <div
           className="cursor-pointer"

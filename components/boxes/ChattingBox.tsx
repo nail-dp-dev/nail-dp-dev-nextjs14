@@ -5,7 +5,7 @@ import SearchIcon from '../../public/assets/svg/small-search.svg'
 import ChatMaxIcon from '../../public/assets/svg/close_chat_max.svg'
 import CloseChatIcon from '../../public/assets/svg/close_chat.svg'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChatCategoryElements } from '../../constants'
 import { getAllChatList } from '../../api/chat/getAllChatList'
 import ChatComponent from '../modal/message/MessageRoom'
@@ -13,28 +13,70 @@ import { RootState } from '../../store/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActivateChatRoomId, setChatRoomOpen } from '../../store/slices/messageSlice'
 import ShopIcon from '../../public/assets/svg/shop-icon.svg'
+import SockJS from 'sockjs-client'
+import { Client, Message } from '@stomp/stompjs'
+import useLoggedInUserData from '../../hooks/user/useLoggedInUserData'
 
+interface Response {
+  content: Content;
+  empty: boolean;
+  first: boolean; 
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  pageable: Pageable
+  size: number;
+  sort: Sort 
+}
 
-interface Chat {
+interface Pageable{
+  pageNumber: number;
+  pageSize: number;
+  paged: boolean;
+  sort: Sort;
+  offset: number;
+  unpaged: boolean;
+} 
+
+interface Sort {
+  empty: boolean;
+  unsorted: boolean;
+  sorted: boolean;
+}
+
+interface Content {
   roomName: string;
   roomId: string;
+  unreadCount: number;
+  profileUrls: [string];
+  lastMessage: string;
+  participantCnt: number;
+  modifiedAt: any;
+  isBusiness: boolean;
+  isPinning: boolean;
 }
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
 
-  const [isChatListNull, setIsChatListNull] = useState<boolean>(false);
   const [category, setCategory] = useState('all')
-  const [chatList, setChatList] = useState<Chat[]>([])
+  const [responseData, setResponseData] = useState<Response>()
+  const [chatList, setChatList] = useState<Content[]>()
+  const [cursorId, setCursorId] = useState<string>('')
+  const [isChatArrived, setIsChatArrived] = useState<boolean>(false);
+  const [chatRoomClicked, setChatRoomClicked] = useState<boolean>(false);
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
   const activateChatRoomId = useSelector((state: RootState) => state.message.activateChatRoomId);
   const chatModalMaxWidth = window.innerWidth - 375
   const chatModalMaxHeight = window.innerHeight - 120
   const dispatch = useDispatch();
-
+  const { userData } = useLoggedInUserData();
+  const userNickName = userData?.data.nickname;
+  const clientRef = useRef<Client | null>(null);
 
   const clickChatRoom = (e: any, chatRoomId:string) => {
     e.stopPropagation()
     e.preventDefault()
+    setChatRoomClicked(prev=>!prev)
     dispatch(setChatRoomOpen(true));
     dispatch(setActivateChatRoomId(chatRoomId));
   }
@@ -55,14 +97,15 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     dispatch(setActivateChatRoomId(''));
   }
 
+
+  // 채팅 리스트 기본 데이터 fetch 하는 useEffect
   useEffect(() => {
     const fetchChatList = async () => {
       try {
-        const result = await getAllChatList();
-        setChatList(result.data.contents)
-        if (result.data.contents.length === 0) {
-          setIsChatListNull(true)
-        }
+        const result = await getAllChatList(category);
+        setResponseData(result.data.contents)
+        setChatList(result.data.contents.content)
+        setCursorId(result.data.cursorId)
       } catch (error) {
         console.error('Failed to fetch shared count:', error);
       }
@@ -70,7 +113,56 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
     fetchChatList()
 
-  },[category])
+  }, [category, isChatArrived, activateChatRoomId])
+
+  // 채팅 리스트 업데이트 하는 function
+  useEffect(()=>{
+    const updateChatList = async () => {
+      try {
+        
+
+      } catch (error) {
+
+      }
+    }
+  },[isChatArrived])
+  
+  // stompjs 연결 및 웹소켓 연결
+    useEffect(() => {
+    if (clientRef.current) {
+      clientRef.current.deactivate();
+    }
+
+    const socket = new SockJS('http://localhost:8080/ws-stomp');
+    const stompClient = new Client({
+      webSocketFactory: () => socket,
+      debug: (str) => {
+        console.log(str);
+      },
+    });
+
+
+    stompClient.onConnect = () => {
+      console.log('Connected to WebSocket server');
+
+      if(userNickName) {
+        stompClient.subscribe(`/sub/chat/list/updates/${userNickName.toString()}`, (list: Message) => {
+          const getlist: any = JSON.parse(list.body);
+          setIsChatArrived(prev=>!prev);
+          console.log(getlist, '겟리스트입니다...!')
+        });
+      }
+    };
+
+    stompClient.activate();
+    clientRef.current = stompClient;
+
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.deactivate();
+      }
+    };
+  }, [userNickName]);
 
   return (
     <div 
@@ -131,7 +223,16 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 <li className='w-full h-[62px]'></li>
               }
               {
-                !isChatListNull && 
+                chatList &&
+                chatList.length === 0 &&
+                <div className='p-[10px] w-full h-full '>
+                  <div className='bg-darkGray w-full h-full flex items-center justify-center rounded-[20px] overflow-hidden'>
+                    채팅이 없습니다.
+                  </div>
+                </div>
+              }
+              {
+                chatList && 
                 chatList.map((chat, index) => (
                 <li 
                   key={index} 
@@ -141,9 +242,9 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
                     onClick={(e) => { clickChatRoom(e, chat.roomId) }}
                   >
-                    <div className={`chatRoomImage ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
+                    <div className={`chatRoomImage bg-white rounded-full ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                       <Image 
-                        src={'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'} 
+                        src={chat.profileUrls[0]} 
                         width={40} height={40} alt={'chatRoomImage'} 
                         style={{objectFit: 'cover', width: '100%', height: '100%'}} 
                         quality={100} 
@@ -154,18 +255,24 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     <div className='flex-1 h-[50px] flex justify-between py-[5px]'>
                       <div className='flex-1 w-[200px] h-full flex flex-col items-start justify-center gap-[5px]'>
                         <div className='flex items-center gap-[5px]'>
-                          <span className='font-[700] text-[14px] text-textDarkPurple'>체인지 잇</span>
-                          <ShopIcon/>
+                          <span className='font-[700] text-[14px] text-textDarkPurple'>{chat.roomName}</span>
+                          {
+                            chat.isBusiness &&
+                            <ShopIcon/>
+                          }
                         </div>
                         <div>
-                          <span className='font-[400] text-[11px] text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
-                            네~ 그러면 다음주 화요일 오후 3시에 뵙겠습니다.
+                          <span className='font-[400] text-[11px] text-left text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
+                            {chat.lastMessage}
                           </span>                        
                         </div>
                       </div>
                       <div className='min-w-[40px] h-full flex flex-col items-end justify-between '>
-                        <span className='font-[400] text-[8px] text-dateGray'>5월 10일</span>
-                        <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>12</div>
+                        <span className='font-[400] text-[8px] text-dateGray'>{'10월 15일'}</span>
+                        {
+                          chat.unreadCount !== 0 &&
+                          <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>{chat.unreadCount}</div>
+                        }
                       </div>
                     </div>
                   </button>
@@ -183,7 +290,16 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
             }} 
           >
             {
+              isChatRoomOpened &&
               <ChatComponent clickCloseChatRoom={clickCloseChatRoom} isChatModalMax={isChatModalMax} />
+            }
+            {
+              !isChatRoomOpened && isChatModalMax &&
+              <div className='w-full h-full bg-lightPurple flex flex-col items-center pt-[52px]'>
+                <div className='w-[200px] h-[35px] flex items-center justify-center rounded-[1000px] bg-white border-[1px] border-mainPurple'>
+                  <span className='font-[700] text-[1rem] text-textDarkPurple'>대화할 방을 선택하세요.</span>
+                </div>
+              </div>
             }
           </div>
         </div>

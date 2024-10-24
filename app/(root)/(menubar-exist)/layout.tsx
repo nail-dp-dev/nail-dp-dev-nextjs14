@@ -1,5 +1,6 @@
 import React from 'react';
-import MenuBar from '../../../components/bars/MenuBar';
+import ColumnMenuBar from '../../../components/bars/ColumnMenuBar';
+import RowMenuBar from '../../../components/bars/RowMenuBar';
 
 function MenuBarExistLayout({
   children,
@@ -8,8 +9,8 @@ function MenuBarExistLayout({
 }>) {
   return (
     <>
-      <section className="menuSection h-full py-[20px] pl-[20px] xs:hidden ">
-        <MenuBar />
+      <section className="smallMenuSection h-full py-[20px] pl-[20px] xs:hidden">
+        <ColumnMenuBar />
       </section>
       {children}
     </>

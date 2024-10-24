@@ -1,3 +1,4 @@
+import RowMenuBar from '../../../../../components/bars/RowMenuBar';
 import SearchBar from '../../../../../components/bars/search/SearchBar';
 import NotLoginNotice from '../../../../../components/notice/NotLoginNotice';
 
@@ -7,12 +8,12 @@ export default function ArchiveLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="contentSection h-screen flex-1 flex-col p-[20px] ">
-      <div className="contentContainer relative flex h-full w-full flex-1">
-        <div className="contentsDiv relative flex h-full w-full flex-col">
+    <section className="contentSection h-full flex-1 flex-col p-[20px]">
+      <div className="contentContainer relative flex h-full w-full flex-1 flex-col">
+        <NotLoginNotice>
           <SearchBar />
-          <NotLoginNotice>{children}</NotLoginNotice>
-        </div>
+          {children}
+        </NotLoginNotice>
       </div>
     </section>
   );

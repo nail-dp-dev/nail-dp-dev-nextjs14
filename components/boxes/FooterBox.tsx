@@ -9,9 +9,9 @@ export default function FooterBox() {
 
   return (
     <div
-      className={`${path === '/sign-up' && 'hidden'} flex w-full translate-y-[-10px] flex-wrap items-center justify-center xs:h-[30px] xs:gap-[5px] sm:h-[30px] sm:gap-[10px] `}
+      className={`${path === '/sign-up' && 'hidden'} flex flex-wrap items-center justify-center w-full translate-y-[-10px] xs:h-[30px] xs:gap-[5px] sm:h-[30px] sm:gap-[10px] `}
     >
-      <div className='flex'>
+      <div className='h-full flex items-center justify-center'>
         {FooterElements.map((ele, index) => (
           <div key={index}>
             <Link href={ele.uri}>
@@ -20,17 +20,17 @@ export default function FooterBox() {
               </span>
             </Link>
             {index < FooterElements.length - 1 && (
-              <span className="text-gray text-[6px] font-[400] hover:text-darkPurple xs:ml-[5px] xs:text-[10px] sm:ml-[10px] sm:text-[12px]">
+              <span className="text-gray text-[6px] font-[400] hover:text-darkPurple xs:mx-[5px] xs:text-[10px] sm:mx-[10px] sm:text-[12px]">
                 |
               </span>
             )}
           </div>
         ))}
+        <p className="text-gray text-[6px] font-[400] xs:text-[10px] sm:text-[12px] ">
+          네디플 / 대표 이소미 / 울산광역시 북구 당수골 6길 22 (2층 네디플) /
+          사업자등록번호 311-23-01965 / 대표 번호 052-293-5876
+        </p>
       </div>
-      <p className="text-gray text-[6px] font-[400] xs:text-[10px] sm:text-[12px]">
-        네디플 / 대표 이소미 / 울산광역시 북구 당수골 6길 22 (2층 네디플) /
-        사업자등록번호 311-23-01965 / 대표 번호 052-293-5876
-      </p>
     </div>
   );
 }

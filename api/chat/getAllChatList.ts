@@ -1,8 +1,8 @@
-export const getAllChatList = async () => {
+export const getAllChatList = async (category: string) => {
   
   try {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/list`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/list?category=${category}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

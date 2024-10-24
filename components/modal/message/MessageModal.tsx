@@ -120,7 +120,7 @@ export default function MessageModal() {
     <div
       className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${
         isLoggedIn === 'loggedOut' && 'hidden'
-      } messageModal absolute w-screen h-screen z-[19] flex items-center justify-end pointer-events-none bottom-0 right-0`}
+      } messageModal absolute w-screen h-screen z-50 flex items-center justify-end pointer-events-none bottom-0 right-0`}
     >
       <div className={`absolute w-full h-full`}>
         <animated.div
