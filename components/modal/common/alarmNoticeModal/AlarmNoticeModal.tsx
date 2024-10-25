@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import { commonModalClose, selectCommonModalStatus } from '../../../../store/slices/modalSlice';
@@ -8,10 +8,24 @@ import CloseIcon from '../../../../public/assets/svg/close.svg'
 import RingIcon from '../../../../public/assets/svg/ring-icon.svg'
 import BusinessIcon from '../../../../public/assets/svg/shop-icon.svg'
 import { getAlarm } from '../../../../api/alarm/getAlarm';
+import { getAlarmSee } from '../../../../api/alarm/getAlarmSee';
+
+interface alarmData {
+  createdDate: string,
+  isRead: boolean,
+  link: string,
+  notificationContent: string,
+  notificationId: number
+  notificationType: string,
+  senderNickname: string,
+  senderProfileUrl:string
+}
 
 export default function AlarmModal() {
 
   const { isCommonModalShow, whichCommonModal } = useSelector(selectCommonModalStatus);
+  const [ isAlarmData, setIsAlarmData ] = useState<alarmData[]>([]);
+
   const dispatch = useDispatch();
 
   const handleModalClose = (e:any) => {
@@ -26,13 +40,21 @@ export default function AlarmModal() {
 
   const fetchAlarmData = async () => {
     const alarmData = await getAlarm();
-    console.log(alarmData);
-    console.log("a");
+    setIsAlarmData(alarmData.data.content)  
   };
+
+  const fetchAlarmDataSee = async () => {
+    const fetchAlarmDataSee = await getAlarmSee();
+    console.log(fetchAlarmDataSee);
+  }
   
   useEffect(() => {
     fetchAlarmData()
+    fetchAlarmDataSee()
   }, []);
+
+  console.log(isAlarmData);
+  
   
   const dataArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
 
@@ -55,7 +77,7 @@ export default function AlarmModal() {
           <span className='font-[700] text-[11px] text-textDarkPurple'>읽지 않음</span>
         </div>
         {
-            dataArray.map((item, index) => (
+            isAlarmData.map((item, index) => (
             
             
               <div key={index} className={`w-full min-h-[62px]  ${index === 5 ? 'mb-[10px]' : 'mb-[5px]' }`}>
@@ -65,7 +87,7 @@ export default function AlarmModal() {
                   <div className='w-[290px] h-[42px] flex items-center gap-[10px]  '>
                     <div className='w-[40px] h-[40px] rounded-full overflow-hidden '>
                       <Image
-                        src={'/assets/img/profile/basic/basic_1.png'} 
+                        src={item.senderProfileUrl} 
                         width={40} height={40} alt={'userProfileImage'} 
                         style={{objectFit: 'cover', width: '100%', height: '100%'}} 
                         quality={100} 
@@ -75,12 +97,12 @@ export default function AlarmModal() {
                     </div>
                     <div className='flex-1 h-[40px] flex flex-col items-start justify-center '>
                       <div className='flex items-center gap-[6px]'>
-                        <span className='font-[700] text-[14px] text-textDarkPurple'>chainge</span>
+                        <span className='font-[700] text-[14px] text-textDarkPurple'>{item.senderNickname}</span>
                         <BusinessIcon/>
-                        <span className='font-[400] text-[8px] text-dateGray'>방금전</span>
+                        <span className='font-[400] text-[8px] text-dateGray'>{item.createdDate}</span>
                       </div>
                       <div>
-                        <span className='font-[400] text-[11px] text-textDarkPurple'>chainge님이 회원님의 게시물을 좋아합니다.</span>
+                        <span className='font-[400] text-[11px] text-textDarkPurple'>{`${item.senderNickname}님이 회원님의 게시물을 좋아합니다.`}</span>
                       </div>
                     </div>
                   </div>

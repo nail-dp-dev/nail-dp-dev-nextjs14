@@ -13,6 +13,7 @@ import { PostArray } from '../../../../types/dataType';
 import { getLikedPosts } from '../../../../api/post/getLikedPostsData';
 import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
+import { getAlarmSee } from '../../../../api/alarm/getAlarmSee';
 
 export default function ArchivePage() {
 
@@ -118,6 +119,16 @@ export default function ArchivePage() {
     setIsLoading(true);
     setIsLast(false);
   };
+
+  const fetchAlarmDataSee = async () => {
+    const fetchAlarmDataSee = await getAlarmSee();
+    console.log(fetchAlarmDataSee);
+  }
+
+  useEffect(() => {
+    fetchAlarmDataSee()
+  }, []);
+
 
   useEffect(() => {
     // foryou 개발 완료시 주석 해제할 것.
