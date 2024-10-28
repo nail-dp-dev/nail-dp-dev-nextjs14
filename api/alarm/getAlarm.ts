@@ -2,7 +2,7 @@ export const getAlarm = async () => {
     
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications`,
       {
         method: 'Get',
         headers: {
@@ -11,8 +11,6 @@ export const getAlarm = async () => {
         credentials: 'include',
       },
     );
-    console.log(response);
-    
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
