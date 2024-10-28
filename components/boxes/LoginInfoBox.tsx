@@ -17,16 +17,17 @@ import { useAppDispatch } from '../../store/store';
 import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg';
 import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg';
 import EditProfilePencilIcon from '../../public/assets/svg/edit-profile-pencil.svg';
-import BitsBalloonIcon from '../../public/assets/svg/bits-balloon.svg'
-import AlarmIcon from '../../public/assets/svg/alarm-icon.svg'
-import AlarmMissIcon from '../../public/assets/svg/alarm-miss-icon.svg'
+import BitsBalloonIcon from '../../public/assets/svg/bits-balloon.svg';
+import AlarmIcon from '../../public/assets/svg/alarm-icon.svg';
+import AlarmMissIcon from '../../public/assets/svg/alarm-miss-icon.svg';
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useSelector(selectLoginStatus);
   const [isMiniModalShow, setIsMiniModalShow] = useState<boolean>(false);
   const [isButtonHovered, setIsButtonHovered] = useState<boolean>(false);
-  const [isBitsMiniModalShow, setIsBitsMiniModalShow] = useState<boolean>(false);
+  const [isBitsMiniModalShow, setIsBitsMiniModalShow] =
+    useState<boolean>(false);
   const { userData, userPointData, userProfileUrl, setUserProfileUrl } =
     useLoggedInUserData();
 
@@ -40,10 +41,10 @@ export default function LoginInfoBox() {
   };
 
   const handleAlarm = (e: any) => {
-    e.stopPropagation()
+    e.stopPropagation();
     dispatch(setCommonModal('alarm-notice'));
-    console.log('alarm')
-  }
+    console.log('alarm');
+  };
 
   const handleMiniModalToggle = (e: any) => {
     e.stopPropagation();
@@ -56,16 +57,15 @@ export default function LoginInfoBox() {
 
   const handleBitsChargeButton = (e: any) => {
     e.stopPropagation();
-    if(isBitsMiniModalShow){
-      setIsBitsMiniModalShow(false)
+    if (isBitsMiniModalShow) {
+      setIsBitsMiniModalShow(false);
     }
   };
 
   const handleBitsPopUpMiniModal = (e: any) => {
     e.stopPropagation();
     setIsBitsMiniModalShow((prev) => !prev);
-    
-  }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -89,17 +89,17 @@ export default function LoginInfoBox() {
 
   return (
     <div
-      className={`loginInfoContainer flex w-[30px] mb-[6px] md:mb-0 md:w-full flex-col ${isLoggedIn === 'loggedIn' ? 'md:h-[85px]' : 'md:h-[60px]'} transition-all `}
+      className={`loginInfoContainer mb-[6px] flex w-[30px] flex-col md:mb-0 md:w-full ${isLoggedIn === 'loggedIn' ? 'md:h-[85px]' : 'md:h-[60px]'} transition-all `}
     >
-      <div className="loginedDiv relative md:mb-[2px] flex md:h-[45px] w-full items-center">
+      <div className="loginedDiv relative flex w-full items-center md:mb-[2px] md:h-[45px]">
         {isLoggedIn === 'loggedIn' && userData && (
           <>
             <button
               onClick={handleMiniModalToggle}
-              className="profileButton relative w-[30px] h-[30px] md:mr-[12px] md:h-[40px] md:w-[40px] overflow-hidden rounded-full"
+              className="profileButton relative h-[30px] w-[30px] overflow-hidden rounded-full md:mr-[12px] md:h-[40px] md:w-[40px]"
               disabled={isMiniModalShow}
             >
-              <div className='hidden md:block'>
+              <div className="hidden md:block">
                 <UserImage
                   src={userProfileUrl}
                   alt={'profileIamge'}
@@ -110,7 +110,7 @@ export default function LoginInfoBox() {
                   <EditProfilePencilIcon />
                 </div>
               </div>
-              <div className='md:hidden'>
+              <div className="md:hidden">
                 <UserImage
                   src={userProfileUrl}
                   alt={'profileIamge'}
@@ -132,7 +132,7 @@ export default function LoginInfoBox() {
         {isLoggedIn === 'pending' && !userData && <></>}
         {isLoggedIn === 'loggedOut' && (
           <div>
-            <div className='hidden md:block transition-all'>
+            <div className="hidden transition-all md:block">
               <UserImage
                 src={'/assets/img/logoutProfileImage.png'}
                 alt={'profileIamge'}
@@ -141,7 +141,7 @@ export default function LoginInfoBox() {
               />
             </div>
             <button
-              className='md:hidden'
+              className="md:hidden"
               onClick={() => {
                 handleLogin();
               }}
@@ -156,34 +156,34 @@ export default function LoginInfoBox() {
           </div>
         )}
         {isLoggedIn === 'loggedIn' && userData && (
-          <UserInfo
-            isMenuBar={true}
-            nickname={userData.data.nickname}
-            postsCount={userData.data.postsCount}
-            saveCount={userData.data.saveCount}
-            followerCount={userData.data.followerCount}
-          >
-            <button
-              onClick={(e) => {
-                handleAlarm(e);
-              }}
+          <div className=' hidden md:flex'>
+            <UserInfo
+              isMenuBar={true}
+              nickname={userData.data.nickname}
+              postsCount={userData.data.postsCount}
+              saveCount={userData.data.saveCount}
+              followerCount={userData.data.followerCount}
             >
-              {
-                true
-                ?
-                <AlarmIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
-                :
-                <AlarmMissIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
-              }
-            </button>
-          </UserInfo>
+              <button
+                onClick={(e) => {
+                  handleAlarm(e);
+                }}
+              >
+                {true ? (
+                  <AlarmIcon className="absolute right-0 translate-y-[-20px] fill-[#b98ce0] hover:fill-[#FFAC31]" />
+                ) : (
+                  <AlarmMissIcon className="absolute right-0 translate-y-[-20px] fill-[#b98ce0] hover:fill-[#FFAC31]" />
+                )}
+              </button>
+            </UserInfo>
+          </div>
         )}
         {isLoggedIn === 'loggedOut' && (
           <button
             onClick={() => {
               handleLogin();
             }}
-            className="flex-1 flex-col items-start justify-between  pl-[10px] hover:text-purple hidden md:flex"
+            className="hidden flex-1 flex-col items-start  justify-between pl-[10px] hover:text-purple md:flex"
           >
             <div className=" flex h-full items-center justify-between">
               <span className="text-[16px] font-[700] underline">
@@ -197,41 +197,40 @@ export default function LoginInfoBox() {
         )}
       </div>
       {isLoggedIn === 'loggedIn' && (
-        <div className="flex mt-[10px] md:mt-0 h-[38px] w-full items-center justify-center md:justify-between md:px-[8px]">
+        <div className="mt-[10px] flex h-[38px] w-full items-center justify-center md:mt-0 md:justify-between md:px-[8px]">
           <div className="flex items-center ">
-            <div
-              className='md:mr-[12px] hidden md:block'
-            >
-              <Bits width={24} height={24}/>
+            <div className="hidden md:mr-[12px] md:block">
+              <Bits width={24} height={24} />
             </div>
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <button
-                className='md:mr-[12px] md:hidden'
+                className="md:mr-[12px] md:hidden"
                 onClick={(e) => handleBitsPopUpMiniModal(e)}
               >
-                <Bits width={24} height={24} className='' />
+                <Bits width={24} height={24} className="" />
               </button>
               {isBitsMiniModalShow && (
-                <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40 md:hidden'>
+                <div className="relative z-40 translate-x-[5px] translate-y-[-12.5px] md:hidden">
                   <button
-                    className='absolute'
+                    className="absolute"
                     onClick={(e) => handleBitsChargeButton(e)}
                   >
-                    <span className='absolute z-50 translate-x-[-45px] text-[1rem]'>{userPointData}비츠</span>
-                    <BitsBalloonIcon 
-                    className='z-40 '/>
+                    <span className="absolute z-50 translate-x-[-45px] text-[1rem]">
+                      {userPointData}비츠
+                    </span>
+                    <BitsBalloonIcon className="z-40 " />
                   </button>
                 </div>
               )}
             </div>
-            <span className="text-[14px] font-[700] text-textDarkPurple hidden md:block">
+            <span className="hidden text-[14px] font-[700] text-textDarkPurple md:block">
               {userPointData} 비츠
             </span>
           </div>
-          
+
           {
             // 비츠 충전 기능 구현될 시 주석 제거
-          /* <button
+            /* <button
             className='hidden md:block hidden'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}

@@ -67,7 +67,7 @@ export default function MyPagePage() {
       setTimeout(() => {
         setIsHeartMark(false);
       }, 2000);
-    }else{
+    } else {
       setIsExclamationMark(true);
       setTimeout(() => {
         setIsExclamationMark(false);
@@ -78,7 +78,7 @@ export default function MyPagePage() {
   const explanationEnter = (str: string) => {
     if (str == 'heart') {
       setIsHeartMark(true);
-    }else{
+    } else {
       setIsExclamationMark(true);
     }
   };
@@ -86,7 +86,7 @@ export default function MyPagePage() {
   const explanationLeave = (str: string) => {
     if (str == 'heart') {
       setIsHeartMark(false);
-    }else{
+    } else {
       setIsExclamationMark(false);
     }
   };
@@ -101,6 +101,15 @@ export default function MyPagePage() {
       setIsPostsLoading(true);
     }
   };
+
+  const formatCount = (count:number) => {
+    if (count >= 10_000) {
+      return (count / 10_000).toFixed(1).replace(/\.0$/, '') + 'm';
+    } else if (count >= 1_000) {
+      return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return count.toString();
+  }
 
   const fetchPostTempData = async () => {
     const tempData = await getPostsTempData();
@@ -154,6 +163,9 @@ export default function MyPagePage() {
     }
   }, [isNickname, isLading, isCursorId, layoutNum]);
 
+  console.log(userData?.data.followingCount);
+  
+
   return isPostsLoading ? (
     <div
       id="scroll1"
@@ -164,16 +176,16 @@ export default function MyPagePage() {
           <UserImage
             src={userData.data.profileUrl}
             alt="프로필이미지"
-            width={128}
-            height={128}
+            width={80}
+            height={80}
           />
-          <div className="ml-[16px] flex-1">
+          <div className="ml-[16px] flex-1 ">
             <UserInfo
               nickname={userData.data.nickname}
-              postsCount={userData.data.postsCount}
-              saveCount={userData.data.saveCount}
-              followerCount={userData.data.followerCount}
-              followCount={userData.data.followingCount}
+              postsCount={formatCount(userData.data.postsCount)}
+              saveCount={formatCount(userData.data.saveCount)}
+              followerCount={formatCount(userData.data.followerCount)}
+              followCount={formatCount(userData.data.followingCount ?? 0)}
               hoverStyle=""
               nicknameStyle="text-[22px] font-bold"
               statsStyle="text-sm font-normal"
@@ -184,7 +196,7 @@ export default function MyPagePage() {
       <div className={`sticky top-0 z-[17] w-full bg-white`}>
         <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
           <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
-            <div className="flex h-[53px] gap-[32px]">
+            <div className="flex h-[53px]  gap-[20px] xs:gap-[20px] md:gap-[32px]">
               {myPageCategoryElements.map((item, index) => {
                 return (
                   <button
@@ -199,33 +211,37 @@ export default function MyPagePage() {
                 );
               })}
             </div>
-            <div className="flex items-center">
-              {isExclamationMark && (
-                <p className="pr-[5px] text-darkPurple">
-                  비공개 처리된 게시물은 표시되지 않습니다.
-                </p>
-              )}
-              <button
-                className="pr-[32px]"
-                onClick={(e) => explanationClick('exclamation-mark')}
-                onMouseEnter={(e) => explanationEnter('exclamation-mark')}
-                onMouseLeave={(e) => explanationLeave('exclamation-mark')}
-              >
-                <ExclamationMark width={24} hanging={24}
-                  fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
-                />
-              </button>
+            <div className="flex items-center gap-[20px] xs:gap-[20px] md:gap-[32px]">
+              <div className="flex">
+                {isExclamationMark && (
+                  <p className="pr-[5px] text-darkPurple xs:hidden">
+                    비공개 처리된 게시물은 표시되지 않습니다.
+                  </p>
+                )}
+                <button
+                  className="hidden xs:hidden lg:flex"
+                  onClick={(e) => explanationClick('exclamation-mark')}
+                  onMouseEnter={(e) => explanationEnter('exclamation-mark')}
+                  onMouseLeave={(e) => explanationLeave('exclamation-mark')}
+                >
+                  <ExclamationMark
+                    width={24}
+                    hanging={24}
+                    fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
+                  />
+                </button>
+              </div>
               <button
                 onClick={() => dispatch(increaseBoxes())}
                 disabled={numberOfBoxes >= 7}
-                className="h-[24px] pr-[32px]"
+                className="h-[24px] xs:hidden"
               >
                 <MinusSVG />
               </button>
               <button
                 onClick={() => dispatch(decreaseBoxes())}
                 disabled={numberOfBoxes <= 3}
-                className="h-[24px] pr-[32px]"
+                className="h-[24px] xs:hidden"
               >
                 <PlusSVG />
               </button>
@@ -244,7 +260,7 @@ export default function MyPagePage() {
                 </div>
               )}
               {isHeartMark && (
-                <div className="absolute bottom-14 right-1">
+                <div className="absolute bottom-14 right-1 hidden xs:hidden lg:flex">
                   <div className="relative">
                     <SpeechBubble />
                     <p className="absolute bottom-[10px] px-[12px] text-[11px] text-darkPurple">
