@@ -18,6 +18,8 @@ import BitsChargeIcon from '../../public/assets/svg/bits-charge.svg';
 import BitsChargeHoverIcon from '../../public/assets/svg/bits-charge-hover.svg';
 import EditProfilePencilIcon from '../../public/assets/svg/edit-profile-pencil.svg';
 import BitsBalloonIcon from '../../public/assets/svg/bits-balloon.svg'
+import AlarmIcon from '../../public/assets/svg/alarm-icon.svg'
+import AlarmMissIcon from '../../public/assets/svg/alarm-miss-icon.svg'
 
 export default function LoginInfoBox() {
   const dispatch = useAppDispatch();
@@ -36,6 +38,12 @@ export default function LoginInfoBox() {
   const handleLogout = () => {
     getLogOut(dispatch);
   };
+
+  const handleAlarm = (e: any) => {
+    e.stopPropagation()
+    dispatch(setCommonModal('alarm-notice'));
+    console.log('alarm')
+  }
 
   const handleMiniModalToggle = (e: any) => {
     e.stopPropagation();
@@ -156,13 +164,17 @@ export default function LoginInfoBox() {
             followerCount={userData.data.followerCount}
           >
             <button
-              onClick={() => {
-                handleLogout();
+              onClick={(e) => {
+                handleAlarm(e);
               }}
             >
-              <span className=" text-[12px] font-[700] text-textDarkPurple underline hover:text-purple">
-                로그아웃
-              </span>
+              {
+                true
+                ?
+                <AlarmIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
+                :
+                <AlarmMissIcon className='fill-[#b98ce0] hover:fill-[#FFAC31] absolute right-0 translate-y-[-20px]'/>
+              }
             </button>
           </UserInfo>
         )}
@@ -190,14 +202,14 @@ export default function LoginInfoBox() {
             <div
               className='md:mr-[12px] hidden md:block'
             >
-              <Bits />
+              <Bits width={24} height={24}/>
             </div>
             <div className='flex items-center'>
               <button
                 className='md:mr-[12px] md:hidden'
                 onClick={(e) => handleBitsPopUpMiniModal(e)}
               >
-                <Bits className='' />
+                <Bits width={24} height={24} className='' />
               </button>
               {isBitsMiniModalShow && (
                 <div className='relative translate-x-[5px] translate-y-[-12.5px] z-40 md:hidden'>
@@ -216,8 +228,11 @@ export default function LoginInfoBox() {
               {userPointData} 비츠
             </span>
           </div>
-          <button
-            className='hidden md:block'
+          
+          {
+            // 비츠 충전 기능 구현될 시 주석 제거
+          /* <button
+            className='hidden md:block hidden'
             onMouseEnter={() => setIsButtonHovered(true)}
             onMouseLeave={() => setIsButtonHovered(false)}
             onClick={(e) => {
@@ -225,7 +240,8 @@ export default function LoginInfoBox() {
             }}
           >
             {isButtonHovered ? <BitsChargeHoverIcon /> : <BitsChargeIcon />}
-          </button>
+          </button> */
+          }
         </div>
       )}
     </div>

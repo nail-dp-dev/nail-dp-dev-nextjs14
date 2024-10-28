@@ -21,8 +21,8 @@ export default function MenuButton({ icon , url, name, desc, isLast, where }: Me
   const isLoggedIn = useSelector(selectLoginStatus);
 
   return (
-    <div className={`w-[30px] md:w-full ${!isLast && 'mb-[8px]'} group ${isLoggedIn !== 'loggedIn' && (name === '마이 페이지' || name === '환경설정' || name === '내 아카이브') && 'hidden'} transition-all`}>
-      <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} w-[30px] h-[30px] md:w-full md:h-[40px] flex items-center justify-between py-[12px] md:px-[8px] rounded-2xl ${where === 'top' ? 'group-hover:bg-purple group-hover:text-white' : 'group-hover:text-purple'} transition-all`}>
+    <div className={` ${where === 'row' ? 'w-[50px] h-[50px]' : 'w-[30px] h-[30px]'} md:w-full ${!isLast && where !== 'row' && 'mb-[8px]'} group ${isLoggedIn !== 'loggedIn' && where !== 'row' && (name === '마이 페이지' || name === '환경설정' || name === '내 아카이브') && 'hidden'} transition-all`}>
+      <Link href={url[0]} className={`${url.includes(path)? 'bg-menuLightGray' : ''} ${where === 'row' ? 'w-[50px] h-[50px] rounded-full justify-center' : 'w-[30px] h-[30px] justify-between '}  md:w-full md:h-[40px] flex items-center py-[12px] md:px-[8px] rounded-2xl ${where === 'top' ? 'group-hover:bg-purple group-hover:text-white' : 'group-hover:text-purple'} transition-all`}>
         <div className='flex items-center'>
           <div className='flex items-center justify-center w-[30px] h-[30px] md:w-[36px] md:h-[24px]'>
             {

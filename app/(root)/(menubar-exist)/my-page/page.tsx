@@ -211,7 +211,7 @@ export default function MyPagePage() {
                 onMouseEnter={(e) => explanationEnter('exclamation-mark')}
                 onMouseLeave={(e) => explanationLeave('exclamation-mark')}
               >
-                <ExclamationMark
+                <ExclamationMark width={24} hanging={24}
                   fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
                 />
               </button>

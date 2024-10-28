@@ -1,8 +1,8 @@
-export const getAllChatList = async (category: string) => {
+export const getChatRecommend = async () => {
   
   try {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/list?category=${category}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/recommend`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

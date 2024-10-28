@@ -24,7 +24,8 @@ export default function ArchivePage() {
     useState<boolean>(false);
   
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
-  const [category, setCategory] = useState<string>('');
+  // foryou 개발 완료 시 '' 빈문자열로 바꿀 것.
+  const [category, setCategory] = useState<string>('trending');
   const [isLast, setIsLast] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cursorId, setCursorId] = useState<number>(0);
@@ -119,11 +120,13 @@ export default function ArchivePage() {
   };
 
   useEffect(() => {
-    if (isLoggedIn === 'loggedIn') {
-      setCategory('for-you');
-    } else if (isLoggedIn === 'loggedOut') {
-      setCategory('trending');
-    }
+    // foryou 개발 완료시 주석 해제할 것.
+    
+    // if (isLoggedIn === 'loggedIn') {
+    //   setCategory('for-you');
+    // } else if (isLoggedIn === 'loggedOut') {
+    //   setCategory('trending');
+    // }
   }, [isLoggedIn]);
 
   useEffect(() => {

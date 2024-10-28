@@ -1,23 +1,22 @@
 import SearchBar from '../../../../components/bars/search/SearchBar';
 import NotLoginNotice from '../../../../components/notice/NotLoginNotice';
 
+
 export default function ArchiveLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <section className="contentSection h-screen flex-1 flex-col p-[20px]">
-        <div className="contentContainer flex h-full w-full flex-1 ">
-          <div className="contentWrapper flex h-full w-full flex-col">
-            <NotLoginNotice>
-              <SearchBar />
-              {children}
-            </NotLoginNotice>
-          </div>
+    <section className="myPageContentSection flex-1 h-full flex-col p-[20px] ">
+      <div className="myPageContentContainer flex w-full h-full flex-1 relative">
+        <div className="myPageContentsDiv relative w-full h-full flex flex-col">  
+          <NotLoginNotice>
+            <SearchBar />
+            {children}
+          </NotLoginNotice>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

@@ -384,9 +384,9 @@ export default function SearchBar() {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleFormSubmit}
       >
-        <div className="search-input relative w-full">
+        <div className={`search-input relative w-full ${isDropdownOpen ? 'px-2' : ''}`}>
           <input
-            className={`w-full rounded-full px-4 py-3 pl-12 placeholder:text-sm placeholder:font-normal placeholder:text-darkPurple 
+            className={`w-full ${isDropdownOpen ? 'rounded-[10px] pl-10' : 'rounded-full pl-12'} py-3  placeholder:text-sm placeholder:font-normal placeholder:text-darkPurple 
             focus:outline-none ${
               isDropdownOpen
                 ? searchTerm.startsWith('@')

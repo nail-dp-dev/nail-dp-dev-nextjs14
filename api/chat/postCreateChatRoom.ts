@@ -1,7 +1,5 @@
 export const postCreateChatRoom = async (nickname: any) => {
   
-  console.log(nickname, 'fwefwefwefqwef')
-
   try {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
@@ -10,7 +8,7 @@ export const postCreateChatRoom = async (nickname: any) => {
         "Content-Type": "application/json",
       },
       credentials: 'include',
-      body: JSON.stringify({ nickname }),
+      body: JSON.stringify({ nickname: ['나는민지', '테스트주재훈', 'naildp']}),
     })
 
     if (!response.ok) {

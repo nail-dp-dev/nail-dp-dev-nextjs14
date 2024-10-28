@@ -104,7 +104,7 @@ export default function SearchRecent({
       <div className="topContainer flex items-center justify-between">
         {isSearchRecentEnabled && (
           <div className="flex items-center">
-            <p className="text-14px-normal-dP">
+            <p className="text-14px-normal-dP xs:text-[12px] sm: text-[13px]">
               최근 검색 (최대 30개까지 보관)
             </p>
           </div>
@@ -112,11 +112,17 @@ export default function SearchRecent({
         <div className="text-14px-normal-dP ml-auto flex items-center">
           {isSearchRecentEnabled && (
             <>
-              <button onClick={handleClearRecent}>전체삭제</button>
-              <p className="mx-2 select-none">|</p>
+              <button 
+                onClick={handleClearRecent}
+                className='xs:text-[12px] sm: text-[13px]'  
+              >전체삭제</button>
+              <p className="mx-2 select-none xs:text-[12px] sm: text-[13px]">|</p>
             </>
           )}
-          <button onClick={toggleSearchRecent}>
+          <button 
+            className='xs:text-[12px] sm: text-[13px]'
+            onClick={toggleSearchRecent}
+          >
             {isSearchRecentEnabled
               ? '검색 기록 저장 끄기'
               : '검색 기록 저장 켜기'}

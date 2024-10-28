@@ -71,8 +71,7 @@ export default function PostTags({
   return (
     <div
       className="
-      overflow-x-hidden   xs:max-w-[300px]  sm:max-w-[400px] md:max-w-[500px] lg:max-w-[400px] 
-      xl:max-w-[600px] 2xl:max-w-[800px]"
+      overflow-x-auto flex-1 h-full flex items-center w-[100px] hide-scrollbar"
       onWheel={handleWheel}
       ref={scrollContainerRef}
       onMouseDown={handleMouseDown}
@@ -80,7 +79,7 @@ export default function PostTags({
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      <div className="group flex flex-nowrap gap-[6px]">
+      <div className="group flex flex-nowrap gap-[6px] ml-auto">
         {post.tags.map((tag, index) => (
           <div className="flex-shrink-0 whitespace-nowrap" key={index}>
             <button
