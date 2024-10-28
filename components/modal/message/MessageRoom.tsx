@@ -19,6 +19,7 @@ import MessageFolderIcon from '../../../public/assets/svg/message-folder-icon.sv
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { UUID } from 'crypto';
+import { postFileChat } from '../../../api/chat/postFileChat';
 
 interface ChatMessage {
   content: string;
@@ -43,9 +44,9 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
-  console.log(messages)
   const clientRef = useRef<Client | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null); 
   const fileInputRef = useRef<HTMLInputElement | null>(null); 
 
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
@@ -65,17 +66,18 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     console.log('icon 버튼 클릭...');
   };
 
-  const clickPhotoButton = (e: any) => {
+  const clickImageButton = (e: any) => {
     e.stopPropagation();
 
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
+    console.log('image 버튼 클릭')
+    if (imageInputRef.current) {
+      imageInputRef.current.click();
     } else {
-      console.log('File input ref not found');
+      console.log('Photo input ref not found');
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files;
       console.log('Selected file:', selectedFile);
@@ -95,10 +97,35 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     }
   };
 
-  const clickFolderButton = (e: any) => {
+  const clickFileButton = (e: any) => {
     e.stopPropagation();
-    console.log('Folder 버튼 클릭...');
+
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    } else {
+      console.log('File input ref not found');
+    }
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files;
+      console.log('Selected file:', selectedFile);
+
+      if (isChatRoomOpened) {
+        // Upload the selected file after it's chosen
+        postFileChat(selectedFile, activateChatRoomId)
+          .then((response) => {
+            console.log('Image sent successfully:', response);
+          })
+          .catch((error) => {
+            console.error('Error sending image:', error);
+          });
+      } else {
+        console.log('No active chat room ID');
+      }
+    }
+  };  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -110,7 +137,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   useEffect(() => {
     if (clientRef.current) {
       clientRef.current.deactivate();
-      console.log('끊음...');
     }
 
     const socket = new SockJS('http://localhost:8080/ws-stomp');
@@ -125,7 +151,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
       try {
         const result = await getChat(chatRoomId);
         if (result) {
-          console.log(result,'@!@!@')
           setMessages(result.data.contents);
           setFirstUnreadMessageId(result.data.firstUnreadMessageId);
           setChatUserInfo(result.data.chatUserInfo);
@@ -139,10 +164,8 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
 
     getBeforeChat(activateChatRoomId);
 
-    console.log(messages,'wfwefwefwfwefwfwfeawf')
-
     stompClient.onConnect = () => {
-      console.log('Connected to WebSocket server');
+      console.log('Connected to WebSocket server chatchatchat');
 
       stompClient.subscribe(`/sub/chat/${activateChatRoomId}`, (message: Message) => {
         const receivedMessage: ChatMessage = JSON.parse(message.body);
@@ -163,7 +186,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   useEffect(() => {
     scrollToBottomAuto();
   }, [messages]);
-
+  
   const sendMessage = () => {
     if (clientRef.current && inputMessage.trim()) {
       const messageDto = {
@@ -171,8 +194,8 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
         sender: userNickName,
         mention: [],
         messageType: 'TEXT',
-        chatRoomId : activateChatRoomId,
-        media : []
+        chatRoomId: activateChatRoomId,
+        media: []
       };
 
       clientRef.current.publish({
@@ -184,8 +207,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     }
   };
 
-  console.log(messages)
-
   return (
     <div className='w-full h-full z-40 flex flex-col items-center justify-between border-l-[1px] border-t-[1px] border-mainPurple'>
 
@@ -193,9 +214,18 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
         type="file"
         accept="image/*"
         multiple
-        onChange={handleFileChange}
+        onChange={handleImageChange}
         style={{ display: 'none' }}
         id="imageInput"
+        ref={imageInputRef} 
+      />
+
+      <input
+        type="file"
+        accept="*"
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+        id="fileInput"
         ref={fileInputRef} 
       />
       
@@ -304,7 +334,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
 
               <div className={`min-w-[180px] min-h-[40px] bg-white grid ${message.media.length % 2 === 0 ? 'grid-cols-2' : 'grid-cols-3'} place-content-around p-[2px] rounded-xl ml-auto`}>
                 {
-                  message.media.map((photo, index) => (
+                  message.media.map((_, index) => (
                     <div
                       key={index}
                       className={`inline-block ${message.media.length % 2 === 0 ? 'w-[90px] h-[90px]' : 'w-[60px] h-[60px]'}  p-[2px] rounded-xl break-words overflow-hidden`}
@@ -332,7 +362,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
 
               <div className={`min-w-[180px] min-h-[40px] bg-white grid ${message.media.length % 2 === 0 ? 'grid-cols-2' : 'grid-cols-3'} place-content-around p-[2px] rounded-xl mr-auto`}>
                 {
-                  message.media.map((photo, index) => (
+                  message.media.map((_, index) => (
                     <div
                       key={index}
                       className={`inline-block ${message.media.length % 2 === 0 ? 'w-[90px] h-[90px]' : 'w-[60px] h-[60px]'}  p-[2px] rounded-xl break-words overflow-hidden`}
@@ -354,6 +384,37 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
               </div>                
                 
             }
+
+
+            {
+              // 내가 보낸 파일일 때
+              message.sender === userNickName && message.messageType === 'FILE' && message.media.length === 1 && (
+                <div className={`inline-block max-w-[80%]  break-words ml-auto overflow-hidden`}>
+                  <a className='hover:text-mainPurple' href={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[0]}`}>
+                    <p className='font-[700] group-hover:font-[900]'>파일 다운로드</p> 
+                    <p className='text-[12px]'>
+                      {`${message.media[0].slice(0, 8)}...${message.media[0].substring(message.media[0].lastIndexOf('.'))}`}
+                    </p>
+                  </a>
+                </div>
+              )
+            }
+
+            
+            {
+              // 남이 보낸 파일일 때
+              message.sender !== userNickName && message.messageType === 'FILE' && message.media.length === 1 && (
+                <div className={`inline-block max-w-[80%] group  break-words mr-auto overflow-hidden`}>
+                  <a className='hover:text-mainPurple' href={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${message.media[0]}`}>
+                    <p className='font-[700] group-hover:font-[900]'>파일 다운로드</p> 
+                    <p className='text-[12px]'>
+                      {`${message.media[0].slice(0, 8)}...${message.media[0].substring(message.media[0].lastIndexOf('.'))}`}
+                    </p>
+                  </a>
+                </div>
+              )
+            }
+
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -365,10 +426,10 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
             <button onClick={clickIconButton}>
               <MessageIconIcon />
             </button>
-            <button onClick={clickPhotoButton}>
+            <button onClick={clickImageButton}>
               <MessagePhotoIcon />
             </button>
-            <button onClick={clickFolderButton}>
+            <button onClick={clickFileButton}>
               <MessageFolderIcon />
             </button>
           </div>

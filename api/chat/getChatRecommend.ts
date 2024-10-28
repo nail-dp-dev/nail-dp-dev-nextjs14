@@ -1,14 +1,13 @@
-export const postCreateChatRoom = async (nickname: any) => {
+export const getChatRecommend = async () => {
   
   try {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
-      method: "POST",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/recommend`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: 'include',
-      body: JSON.stringify({ nickname: ['나는민지', '테스트주재훈', 'naildp']}),
     })
 
     if (!response.ok) {
