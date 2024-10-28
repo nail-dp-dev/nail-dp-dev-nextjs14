@@ -330,7 +330,7 @@ export const FooterElements = [
 
 export const ChatCategoryElements = [
   {name: '전체', data: 'all'},
-  {name: '친구', data: 'friend'},
+  {name: '친구', data: 'personal'},
   {name: '네일숍', data: 'shop'},
 ]
 
