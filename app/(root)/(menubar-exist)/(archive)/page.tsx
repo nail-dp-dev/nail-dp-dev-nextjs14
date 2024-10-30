@@ -256,7 +256,6 @@ export default function ArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
-
   const itemsToRender = postsData
     ? postsData.length <= layoutNum
       ? postsData

@@ -33,7 +33,11 @@ import { followUser, unFollowUser } from '../../../../../api/user/followUser';
 import { getUserData } from '../../../../../api/user/getUserData';
 import Image from 'next/image';
 import { postCreateChatRoom } from '../../../../../api/chat/postCreateChatRoom';
-import { setActivateChatRoomId, setChatModalShow, setChatRoomOpen } from '../../../../../store/slices/messageSlice';
+import {
+  setActivateChatRoomId,
+  setChatModalShow,
+  setChatRoomOpen,
+} from '../../../../../store/slices/messageSlice';
 
 export default function ProfilePage() {
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
@@ -98,12 +102,12 @@ export default function ProfilePage() {
     setShowType(type);
   };
 
-  const message = async (e:any, decodedNickname:any) => {
+  const message = async (e: any, decodedNickname: any) => {
     e.stopPropagation();
-    console.log(decodedNickname,'message 누름')
-    const result = await postCreateChatRoom([decodedNickname])
-    if(result && result.code === 2001){
-      console.log(result.data)
+    console.log(decodedNickname, 'message 누름');
+    const result = await postCreateChatRoom([decodedNickname]);
+    if (result && result.code === 2001) {
+      console.log(result.data);
       dispatch(setChatModalShow(true));
       dispatch(setChatRoomOpen(true));
       dispatch(setActivateChatRoomId(result.data));
@@ -136,6 +140,15 @@ export default function ProfilePage() {
 
   const boxStyle = {
     width: showType === 'album' ? postBoxWidths[layoutNum] : '49.65%',
+  };
+
+  const formatCount = (count: number) => {
+    if (count >= 10_000) {
+      return (count / 10_000).toFixed(1).replace(/\.0$/, '') + 'm';
+    } else if (count >= 1_000) {
+      return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return count.toString();
   };
 
   const postScrollData = async () => {
@@ -225,22 +238,38 @@ export default function ProfilePage() {
           <UserImage
             src={isProfile.profileUrl}
             alt="프로필이미지"
-            width={128}
-            height={128}
+            width={80}
+            height={80}
           />
           <div className="ml-[16px] flex-1">
-            <UserInfo
-              nickname={isProfile.nickname}
-              postsCount={isProfile.postsCount}
-              saveCount={isProfile.saveCount}
-              followerCount={isProfile.followerCount}
-              followCount={isFollowCount}
-              hoverStyle=""
-              nicknameStyle="text-[22px] font-bold"
-              statsStyle="text-sm font-normal"
-            />
+            <div>
+              <UserInfo
+                nickname={isProfile.nickname}
+                postsCount={formatCount(isProfile.postsCount)}
+                saveCount={formatCount(isProfile.saveCount)}
+                followerCount={formatCount(isProfile.followerCount)}
+                followCount={formatCount(isFollowCount)}
+                hoverStyle=""
+                nicknameStyle="text-[14px] md:text-[22px] font-bold"
+                statsStyle="font-normal text-[11px] md:text-[14px]"
+              />
+            </div>
+            <div className="block pt-[10px] lg:hidden">
+              <button
+                onClick={(e) => follow()}
+                className={`mr-[12px] h-[30px] w-[70px] md:h-[32px] md:w-[84px] rounded-full border-2 ${isFollowState ? 'border-darkPurple bg-white text-darkPurple hover:bg-darkPurple hover:text-white' : 'border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
+              >
+                {isFollowState ? '팔로잉' : '팔로우'}
+              </button>
+              <button
+                onClick={(e) => message(e, decodedNickname)}
+                className="mr-[12px] h-[30px] w-[70px] md:h-[32px] md:w-[84px] rounded-full border-2 border-black bg-black text-white hover:bg-white hover:text-black"
+              >
+                메세지
+              </button>
+            </div>
           </div>
-          <div>
+          <div className='hidden lg:block'>
             <button
               onClick={(e) => follow()}
               className={`mr-[12px] h-[32px] w-[84px] rounded-full border-2 ${isFollowState ? 'border-darkPurple bg-white text-darkPurple hover:bg-darkPurple hover:text-white' : 'border-purple bg-purple text-white hover:bg-white hover:text-purple'}`}
@@ -276,18 +305,18 @@ export default function ProfilePage() {
                 })}
               </div>
               {isCategory === 'post' && (
-                <div className="flex items-center gap-[32px]">
+                <div className="flex items-center gap-[20px] xs:gap-[20px] md:gap-[32px]">
                   <button
                     onClick={() => dispatch(increaseBoxes())}
                     disabled={numberOfBoxes >= 7}
-                    className="h-[24px]"
+                    className="h-[24px] xs:hidden"
                   >
                     <MinusSVG />
                   </button>
                   <button
                     onClick={() => dispatch(decreaseBoxes())}
                     disabled={numberOfBoxes <= 3}
-                    className="h-[24px]"
+                    className="h-[24px] xs:hidden"
                   >
                     <PlusSVG />
                   </button>

@@ -152,9 +152,9 @@ export default function ImageUploadContainer({
   };
 
   return (
-    <div className="flex h-[36vh] min-h-[250px] flex-col px-[16px] py-[12px]">
+    <div className="flex h-[36vh] min-h-[200px] lg:min-h-[250px] flex-col px-[16px] py-[12px]">
       <div className="mb-[24px] flex items-center">
-        <p className="flex-1 text-center text-[1.5rem] font-bold">
+        <p className="flex-1 text-center text-[20px] md:text-[1.5rem] font-bold">
           {editImages
             ? tempSave
               ? '임시저장된 게시물 수정'
@@ -162,7 +162,7 @@ export default function ImageUploadContainer({
             : '새 게시글 작성'}
         </p>
         <Link href={`/my-page`}>
-          <CloseIcon />
+          <CloseIcon className='w-[20px] md:w-[24px] h-[20px] md:h-[24px]'/>
         </Link>
       </div>
       <div className="relative h-full w-full rounded-lg border-2 border-dashed border-postInputGray text-center">
@@ -175,17 +175,17 @@ export default function ImageUploadContainer({
         />
         {isImages.length < 1 && (
           <div className="flex h-full w-full flex-col items-center justify-center">
-            <div className="text-[1.1rem]">
+            <div className="text-[14px] lg:text-[1.1rem]">
               <span>네일아트 디자인을 업로드해 보세요.</span>
               <span className="text-red">*</span>
             </div>
             <button
-              className="mt-[24px] h-[40px] w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
+              className="mt-[24px] h-[30px] lg:h-[40px] w-[110px] lg:w-[124px] rounded-full border-2 border-purple bg-purple text-white hover:bg-white hover:text-purple"
               onClick={imageUploadClick}
             >
               사진 추가하기
             </button>
-            <p className="mb-[13px] mt-[24px] text-[1rem]">
+            <p className="mb-[13px] mt-[24px] text-[12px] lg:text-[1rem]">
               (최대 10장 50MB까자입니다.)
             </p>
           </div>
@@ -200,15 +200,6 @@ export default function ImageUploadContainer({
                 {item.startsWith('data:video') ||
                 item.endsWith('.mov') ||
                 item.endsWith('.mp4') ? (
-                  // <video
-                  //   key={item}
-                  //   autoPlay
-                  //   muted
-                  //   className="h-full w-full object-cover"
-                  // >
-                  //   <source src={item} type="video/mp4" />
-                  // </video>
-                  // <div className="h-full w-full object-cover">
                   <Video
                     src={
                       item.startsWith('http://') || item.startsWith('https://') || item.startsWith("data")
@@ -219,7 +210,6 @@ export default function ImageUploadContainer({
                     height="100%"
                   />
                 ) : (
-                  // </div>
                   <Image
                     src={
                       item.startsWith('http://') || item.startsWith('https://')  || item.startsWith("data")

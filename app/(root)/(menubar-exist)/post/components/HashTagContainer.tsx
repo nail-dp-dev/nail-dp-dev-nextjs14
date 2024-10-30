@@ -105,13 +105,13 @@ export default function HashTagContainer({
   return (
     <>
       <div className="flex flex-col px-[16px] py-[12px]">
-        <div className="pb-[8px] text-[1rem]">
+        <div className="pb-[8px] text-[14px] md:text-[1rem]">
           <span className="font-bold">해시태그</span>
           <span className="text-red">*</span>
         </div>
-        <div className="flex h-[56px] w-full items-center rounded-lg border border-postInputGray text-center focus-within:border-purple">
+        <div className="flex h-[52px] md:h-[56px] w-full items-center rounded-lg border border-postInputGray text-center focus-within:border-purple">
           <input
-            className="flex-1 rounded-lg p-[15px] text-[1rem] focus:outline-none"
+            className="flex-1 rounded-lg p-[15px] text-[14px] md:text-[1rem] focus:outline-none"
             type="text"
             placeholder="게시물에 해당하는 해시태그 아래에서 선택 후 추가로 입력해 주세요."
             value={isTagValue}

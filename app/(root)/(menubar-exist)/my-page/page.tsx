@@ -102,14 +102,14 @@ export default function MyPagePage() {
     }
   };
 
-  const formatCount = (count:number) => {
+  const formatCount = (count: number) => {
     if (count >= 10_000) {
       return (count / 10_000).toFixed(1).replace(/\.0$/, '') + 'm';
     } else if (count >= 1_000) {
       return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
     }
     return count.toString();
-  }
+  };
 
   const fetchPostTempData = async () => {
     const tempData = await getPostsTempData();
@@ -164,7 +164,6 @@ export default function MyPagePage() {
   }, [isNickname, isLading, isCursorId, layoutNum]);
 
   console.log(userData?.data.followingCount);
-  
 
   return isPostsLoading ? (
     <div
@@ -179,6 +178,7 @@ export default function MyPagePage() {
             width={80}
             height={80}
           />
+
           <div className="ml-[16px] flex-1 ">
             <UserInfo
               nickname={userData.data.nickname}
@@ -187,8 +187,8 @@ export default function MyPagePage() {
               followerCount={formatCount(userData.data.followerCount)}
               followCount={formatCount(userData.data.followingCount ?? 0)}
               hoverStyle=""
-              nicknameStyle="text-[22px] font-bold"
-              statsStyle="text-sm font-normal"
+              nicknameStyle="text-[14px] md:text-[22px] font-bold"
+              statsStyle="font-normal text-[11px] md:text-[14px]"
             />
           </div>
         </div>
