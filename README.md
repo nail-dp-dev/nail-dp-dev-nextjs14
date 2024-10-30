@@ -18,7 +18,6 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 
 
 
-
 ## 1. Team Member
 
 - CEO : Chief Executive Officer <br/>
