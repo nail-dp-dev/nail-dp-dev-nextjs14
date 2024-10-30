@@ -5,7 +5,6 @@ import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
 import KakaoScript from '../components/external/KakaoScript';
 
-
 export const metadata: Metadata = {
   title: '네디플',
   description: '네일아트 디자인 플랫폼',

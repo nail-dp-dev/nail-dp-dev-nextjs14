@@ -13,6 +13,7 @@ import { PostArray } from '../../../../types/dataType';
 import { getLikedPosts } from '../../../../api/post/getLikedPostsData';
 import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
+import Head from 'next/head';
 
 export default function ArchivePage() {
 
@@ -254,6 +255,21 @@ export default function ArchivePage() {
 
   return (
     <>
+      {/* <Head>
+        <title>
+          iPhone 12 XS Max For Sale in Colorado - Big Discounts | Apple
+        </title>
+        <meta name="description" content="Checkout our cool page" key="desc" />
+        <meta property="og:title" content="Social Title for Cool Page" />
+        <meta
+          property="og:description"
+          content="And a social description for our cool page"
+        />
+        <meta
+          property="og:image"
+          content="https://example.com/images/cool-page.jpg"
+        />
+      </Head> */}
       <CategoryBar
         elements={archiveCategoryElements}
         category={category}
