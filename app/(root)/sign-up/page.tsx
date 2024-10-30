@@ -6,6 +6,7 @@ import Agreement from './components/procedures/Agreement';
 import PhoneNumberValidation from './components/procedures/PhoneNumberValidation';
 import NickNameValidation from './components/procedures/NickNameValidation';
 import Loading from '../../loading';
+import PassValidation from './components/procedures/PassValidation';
 
 export default function AgreementPage() {
 
@@ -20,6 +21,7 @@ export default function AgreementPage() {
         {
           procedure === 'agreement' && <Agreement setProcedure={setProcedure} setFinalAgreement={setFinalAgreement} /> ||
           procedure === 'phone' && <PhoneNumberValidation setProcedure={setProcedure} setFinalPhoneNumber={setFinalPhoneNumber} /> ||
+          procedure === 'pass' && <PassValidation setProcedure={setProcedure} setFinalPhoneNumber={setFinalPhoneNumber} /> ||
           procedure === 'nickname' && <NickNameValidation finalAgreement={finalAgreement} finalPhoneNumber={finalPhoneNumber} />
         }
       </Suspense>

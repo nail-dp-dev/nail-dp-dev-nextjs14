@@ -21,7 +21,9 @@ import { Client, Message } from '@stomp/stompjs'
 import useLoggedInUserData from '../../hooks/user/useLoggedInUserData'
 import CloseIcon from '../../public/assets/svg/close-small-icon.svg'
 import PlusIcon from '../../public/assets/svg/chat-user-plus-icon.svg'
+import PlusedIcon from '../../public/assets/svg/chat-plused-icon.svg'
 import { getUserSearchResults } from '../../api/search/getSearch'
+import { getChatRecent } from '../../api/chat/getChatRecent'
 
 interface Response {
   content: Content;
@@ -89,6 +91,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const [searchButtonActivate, setSearchButtonActivate] = useState<boolean>(false);
   const [serachInputActivate, setSearchInputActivate] = useState<boolean>(false);
   const [chatAddedUser, setChatAddedUser] = useState<ChatAddedUser[]>([]);
+  const [chatRecentUser, setChatRecentUser] = useState<ChatRoomDTO[]>();
   const [chatRecommendUser, setChatRecommendUser] = useState<ChatRoomDTO[]>();
   const [chatRoomSearchedData, setChatRoomSearchedData] = useState<ChatRoomDTO[]>([])
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -103,14 +106,65 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const { userData } = useLoggedInUserData();
   const userNickName = userData?.data.nickname;
   const clientRef = useRef<Client | null>(null);
+  
+  const longPressThreshold = 500;
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null); // 타이머를 저장할 ref
+  let [isLongPressTriggered, setIsLongPressTriggered] = useState<boolean>(false);
 
-  const clickChatRoom = (e: any, chatRoomId: string) => {
-    e.stopPropagation()
-    e.preventDefault()
-    setChatRoomClicked(prev => !prev)
+  const handleMouseDown = (e: any, chatRoomId: string) => {
+    
+    pressTimerRef.current = setTimeout(() => {
+      setIsLongPressTriggered(true);
+    }, longPressThreshold);
+
+  };
+
+  const handleMouseUp = (e: any, chatRoomId: string) => {
+    e.preventDefault();
+
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null; // 타이머 초기화
+    }
+
+    if (isLongPressTriggered) {
+      onLongPress(e,chatRoomId)
+    } else if(!isLongPressTriggered && e.button !== 2) {
+      onClick(e,chatRoomId)
+    }
+
+    setIsLongPressTriggered(false)
+  };
+
+  const handleContextMenu = (e: React.MouseEvent, chatRoomId: string) => {
+    e.preventDefault();
+
+    if (e.button === 2) {
+
+      if (pressTimerRef.current) {
+        clearTimeout(pressTimerRef.current);
+        pressTimerRef.current = null;
+      }
+      onLongPress(e, chatRoomId); 
+    }
+  };
+
+  const onClick = (e: React.MouseEvent, chatRoomId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setChatRoomClicked(prev => !prev);
     dispatch(setChatRoomOpen(true));
     dispatch(setActivateChatRoomId(chatRoomId));
-  }
+  };
+
+  const onLongPress = (e: React.MouseEvent, chatRoomId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(`Long pressed on chat room ${chatRoomId}`);
+  };
+
   
   const clickCategory = (e: any, data: string) => {
     e.stopPropagation()
@@ -309,16 +363,27 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   // 채팅방 만들기 컴포넌트 여는 버튼 눌렀을 때 실행하는 초기화 useEffect
   useEffect(() => {
 
-    const fetchUserList = async () => {
+    const fetchRecentUserList = async () => {
+      try {
+        const result = await getChatRecent();
+        console.log(result)
+        setChatRecentUser(result.data)
+      } catch (error) {
+        console.error('Failed to fetch recent chat user:', error);
+      }
+    }
+
+    const fetchRecommendUserList = async () => {
       try {
         const result = await getChatRecommend();
         setChatRecommendUser(result.data)
       } catch (error) {
-        console.error('Failed to fetch shared count:', error);
+        console.error('Failed to fetch recommend chat user:', error);
       }
     }
 
-    fetchUserList()
+    fetchRecentUserList()
+    fetchRecommendUserList()
   
   }, [])
   
@@ -357,7 +422,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                   type="text"
                   id='searchBar'
                   className='searchBar w-[80%] border-none outline-none bg-transparent text-[11px]'
-                  placeholder='채팅방, 참여자 통합검색'
+                  placeholder='채팅방 검색, 참여자는 @로 시작하여 검색'
                   value={searchTerm}
                   onChange={handleChange}
                 />
@@ -377,7 +442,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
             {
               !isChatModalMax &&
               <button
-                className=''
+                className=' xs:hidden sm:hidden lg:block'
                 onClick={(e) => clickChatMaxIcon(e)}>
                 <ChatMaxIcon />
               </button>
@@ -435,7 +500,11 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                       >
                         <button
                           className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
-                          onClick={(e) => { clickChatRoom(e, chat.roomId) }}
+                          onMouseDown={(e) => handleMouseDown(e, chat.roomId)}
+                          onMouseUp={(e) => handleMouseUp(e, chat.roomId)}
+                          onContextMenu={(e) => handleContextMenu(e, chat.roomId)}
+                          onTouchStart={(e) => handleMouseDown(e, chat.roomId)}
+                          onTouchEnd={(e) => handleMouseUp(e, chat.roomId)}
                         >
                           <div className={`chatRoomImage bg-white rounded-full ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                             <Image
@@ -544,8 +613,8 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     </div>
                     <div className='w-full flex-1 flex flex-col overflow-y-auto gap-[10px]'>
                       {
-                        chatRecommendUser &&
-                        chatRecommendUser.map((user, index) => (
+                        chatRecentUser &&
+                        chatRecentUser.map((user, index) => (
 
                           <div key={index} className='userBoxDiv w-full h-[50px] flex-shrink-0 flex items-center justify-between hover:bg-lightPurple rounded-[20px] pl-[5px] pr-[15px]'>
                             <div className='w-[220px] h-full flex items-center justify-between'>
@@ -569,9 +638,32 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                                 </div>
                               </div>
                             </div>
-                            <button className='w-[24px] h-[24px] rounded-full'>
-                              <PlusIcon />
-                            </button>
+                            {
+                              chatAddedUser.length === 0 ? 
+                              <button
+                                onClick={(e) => {
+                                  clickAddChatUserButton(e, user.profileUrl, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                                <PlusIcon /> 
+                              </button>
+                              : chatAddedUser.find((addedUser) => addedUser.nickname === user.nickname) ?
+                              <button
+                                onClick={(e) => {
+                                  clickDeleteChatUserButton(e, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                              <PlusedIcon />
+                              </button>
+                              :
+                              <button
+                                onClick={(e) => {
+                                  clickAddChatUserButton(e, user.profileUrl, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                                <PlusIcon />
+                              </button>
+                            }
                           </div>
 
                         ))
@@ -614,7 +706,12 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                                   clickAddChatUserButton(e, user.profileUrl, user.nickname)
                                 }}
                                 className='w-[24px] h-[24px] rounded-full'>
-                                <PlusIcon />
+                                {
+                                  chatAddedUser.length === 0 ? <PlusIcon /> : chatAddedUser.find((addedUser) => addedUser.nickname === user.nickname) ?
+                                  <PlusedIcon />
+                                  :
+                                  <PlusIcon />
+                                }
                               </button>
                             </div>
 
@@ -652,13 +749,32 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                         </div>
                       </div>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        clickAddChatUserButton(e, user.profileUrl, user.nickname)
-                      }}
-                      className='w-[24px] h-[24px] rounded-full'>
-                      <PlusIcon />
-                    </button>
+                            {
+                              chatAddedUser.length === 0 ? 
+                              <button
+                                onClick={(e) => {
+                                  clickAddChatUserButton(e, user.profileUrl, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                                <PlusIcon /> 
+                              </button>
+                              : chatAddedUser.find((addedUser) => addedUser.nickname === user.nickname) ?
+                              <button
+                                onClick={(e) => {
+                                  clickDeleteChatUserButton(e, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                              <PlusedIcon />
+                              </button>
+                              :
+                              <button
+                                onClick={(e) => {
+                                  clickAddChatUserButton(e, user.profileUrl, user.nickname)
+                                }}
+                                className='w-[24px] h-[24px] rounded-full'>
+                                <PlusIcon />
+                              </button>
+                            }
                   </div>
 
                 ))
