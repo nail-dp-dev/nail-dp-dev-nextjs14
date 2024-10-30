@@ -21,7 +21,7 @@ export default function HomeLayout({
       <RowMenuBar/>
 
       {/* md:hidden */}
-      <div className='relative w-full h-[30px]'>
+      <div className='relative w-full h-[30px] xs:hidden sm:hidden md:block'>
         <FooterBox />
       </div>
 
