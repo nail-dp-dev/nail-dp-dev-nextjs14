@@ -5,8 +5,7 @@ export default function PhoneNumberValidation({ setProcedure, setFinalPhoneNumbe
   
   const handleVerifyBtn = (e:any, setProcedure:any) => {
     e.stopPropagation()
-    setFinalPhoneNumber('010-1234-5678')
-    setProcedure('nickname')
+    setProcedure('pass')
   }
 
   return (
