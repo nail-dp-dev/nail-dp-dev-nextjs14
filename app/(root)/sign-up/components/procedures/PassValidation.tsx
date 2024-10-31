@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SignUpPhoneNumberProps } from '../../../../../constants/interface';
+import { postIamPortToken } from '../../../../../api/auth/validation/postIamPortToken';
+import { getIamPortCertificate } from '../../../../../api/auth/validation/getIamPortCertificate';
 
 declare global {
   interface Window {
@@ -23,10 +25,15 @@ declare global {
   }
 }
 
+
 const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNumberProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    const isPhoneNumberExist = () => {
+
+    }
+
     const jQueryScript = document.createElement('script');
     jQueryScript.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
     document.body.appendChild(jQueryScript);
@@ -38,23 +45,33 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
       if (IMP) {
         IMP.init(process.env.NEXT_PUBLIC_IMP_INIT || '');
 
-        // 본인 인증 요청
-        setIsModalOpen(true); // 모달 열기
+        setIsModalOpen(true);
 
         IMP.certification({
           channelKey: process.env.NEXT_PUBLIC_IMP_CHANNEL_KEY || '',
           merchant_uid: 'merchant_test1' + Date(),
           company: process.env.NEXT_PUBLIC_IMP_COMPANY || '',
-          popup: false, // 팝업 대신 모달을 사용하므로 false로 설정
-        }, (rsp) => {
-          setIsModalOpen(false); // 모달 닫기
+          popup: false,
+        }, async (rsp) => {
+          setIsModalOpen(false);
           console.log(rsp);
           if (rsp.success) {
             console.log(rsp.imp_uid);
             console.log(rsp.merchant_uid);
+                      
+                      
+            try {
+              // const getToken = await postIamPortToken(); 
+              // console.log(getToken, 'ㄸㄹㅉㄸㄹㅉㄸㄹ')
+              // const { access_token } = getToken.response; 
+              const certificationsInfo = await getIamPortCertificate(rsp.imp_uid, '3603401e9443f15208aedac53ff2e95ed5a4f36b')
 
-            setFinalPhoneNumber('101003010130');
-            setProcedure('nickname');
+              console.log(certificationsInfo, '인증정보...!')
+
+            } catch (error) {
+              console.error("Error fetching token:", error);
+            }
+
           } else {
             const msg = `인증에 실패하였습니다. 에러내용: ${rsp.error_msg}`;
             alert(msg);

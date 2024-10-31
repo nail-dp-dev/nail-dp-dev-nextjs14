@@ -12,6 +12,7 @@ function ArchivePageLayout({
         <div className="archiveContentsDiv relative w-full h-full flex flex-col">
           <SearchBar />
           {children}
+          <FooterBox />
         </div>
       </div>
     </section>

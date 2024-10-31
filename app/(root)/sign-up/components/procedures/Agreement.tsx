@@ -6,6 +6,10 @@ import CheckIcon from '../../../../../public/assets/svg/check.svg'
 import InfoIcon from '../../../../../public/assets/svg/procedure_info.svg'
 import { SignUpAgreementProps } from '../../../../../constants/interface';
 import Loading from '../../../../loading';
+import PrivacyPolicyComponent from '../../../../../components/desc/privacy-policy';
+import TermsOfServiceComponent from '../../../../../components/desc/terms-of-service';
+import ElectronicFinancialTransactionsComponent from '../../../../../components/desc/electronic-financial-transactions';
+import PrivacyCollectionAgreementComponent from '../../../../../components/desc/privacy-collection-agreement';
 
 export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreementProps) {
   const [allChecked, setAllChecked] = useState(false);
@@ -59,7 +63,6 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
     }
   }
   
-
   return (
     <Suspense fallback={<Loading/>}>
     <div className='relative w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
@@ -114,12 +117,12 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
         <div
           className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'
           ref={infoBox}
-        >
-        <div className='w-full h-dvh p-[20px]'>
-            {
-              signUpConsentItems[whichInfo].desc
-            }
-        </div>
+          >
+          { whichInfo === 0 && <TermsOfServiceComponent isSmall={true} />}
+          { whichInfo === 1 && <PrivacyPolicyComponent isSmall={true} />}
+          { whichInfo === 2 && <ElectronicFinancialTransactionsComponent isSmall={true} />}
+          { whichInfo === 3 && <PrivacyCollectionAgreementComponent isSmall={true} />}
+        
         <button 
             className='InfoCloseBtn w-[400px] h-[60px] button-color button-layout button-tr'
             onClick={(e) => handleItemInfoClose(e, infoBox)}
