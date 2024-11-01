@@ -24,6 +24,7 @@ import PlusIcon from '../../public/assets/svg/chat-user-plus-icon.svg'
 import PlusedIcon from '../../public/assets/svg/chat-plused-icon.svg'
 import { getUserSearchResults } from '../../api/search/getSearch'
 import { getChatRecent } from '../../api/chat/getChatRecent'
+import { getChatSearchRoom } from '../../api/chat/getChatSeachRoom'
 
 interface Response {
   content: Content;
@@ -69,13 +70,25 @@ export interface ChatAddedUser {
   nickname: string;
 }
 
-interface ChatRoomDTO {
+interface ChatRoomUserDTO {
   nickname: string;
   profileUrl: string;
   postCount: number;
   savedPostCount: number;
   followerCount: number;
   following: boolean;
+}
+
+interface ChatRoomDTO {
+  roomName: string;
+  roomId: string;
+  unreadCount: number;
+  profileUrls: [string];
+  lastMessage: string;
+  participantCnt: number;
+  modifiedAt: any;
+  isBusiness: boolean;
+  isPinning: boolean;
 }
 
 export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
@@ -91,9 +104,11 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const [searchButtonActivate, setSearchButtonActivate] = useState<boolean>(false);
   const [serachInputActivate, setSearchInputActivate] = useState<boolean>(false);
   const [chatAddedUser, setChatAddedUser] = useState<ChatAddedUser[]>([]);
-  const [chatRecentUser, setChatRecentUser] = useState<ChatRoomDTO[]>();
-  const [chatRecommendUser, setChatRecommendUser] = useState<ChatRoomDTO[]>();
-  const [chatRoomSearchedData, setChatRoomSearchedData] = useState<ChatRoomDTO[]>([])
+  const [chatRecentUser, setChatRecentUser] = useState<ChatRoomUserDTO[]>();
+  const [chatRecommendUser, setChatRecommendUser] = useState<ChatRoomUserDTO[]>();
+  const [whichSearched, setWhichSearched] = useState<string>('');
+  const [chatRoomUserSearchedData, setChatRoomUserSearchedData] = useState<ChatRoomUserDTO[]>([]);
+  const [chatRoomSearchedData, setChatRoomSearchedData] = useState<ChatRoomDTO[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const isChatRoomOpened = useSelector((state: RootState) => state.message.isChatRoomOpened);
@@ -269,23 +284,30 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     setSearchTerm(value);
 
     if (value.startsWith('@')) {
+      setWhichSearched('user')
       searchUser(value.slice(1));
     } else {
+      if(value !== ''){
+        setWhichSearched('chat')
+      }else {
+        setWhichSearched('user')
+      }
       searchChatRoom(value);
     }
   };
 
   const searchChatRoom = async (term: string) => {
-    const result = await getUserSearchResults(term)
+    const result = await getChatSearchRoom(term)
     if (result && result.code === 2000) {
-      setChatRoomSearchedData(result.data)
+      console.log(result)
+      setChatRoomSearchedData(result.data.contents.content)
     }
   };
 
   const searchUser = async (term: string) => {
     const result = await getUserSearchResults(term)
     if (result && result.code === 2000) {
-      setChatRoomSearchedData(result.data)
+      setChatRoomUserSearchedData(result.data)
     }
   };
 
@@ -314,16 +336,6 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
   }, [category, isChatArrived, activateChatRoomId])
 
-  // 채팅 리스트 업데이트 하는 function
-  useEffect(() => {
-    const updateChatList = async () => {
-      try {
-      
-      } catch (error) {
-
-      }
-    }
-  }, [isChatArrived])
   
     // stompjs 연결 및 웹소켓 연결
   useEffect(() => {
@@ -575,37 +587,40 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
         {
           // search box click 했을 때 나오는 창
-          searchBoxOpen &&
+          searchBoxOpen && 
           <div className='contentBox w-full flex-1 flex gap-[10px] flex-col items-center justify-start overflow-hidden p-[10px]'>
-            <div className='addUserBoxDiv w-full h-[75px] flex flex-col items-start justify-center bg-lightPurple rounded-[12px]'>
-              <span className='text-[11px] font-[700] text-textDarkPurple mx-[10px] my-[5px]'>대화상대 선택</span>
-              <div className='w-full flex-1 overflow-x-auto overflow-hidden px-[10px] rounded-[12px] hide-scrollbar mr-[10px]'>
-                <div className='h-full flex items-center justify-start space-x-[5px]'>
-                  {
-                    chatAddedUser.map((user, index) => (
-                      <div key={index} className='relative w-[34px] h-[34px] min-w-[34px] flex-shrink-0 rounded-full bg-darkGray'>
-                        <Image
-                          src={user.profileUrl.toString()}
-                          alt='profileImage'
-                          width={34} height={34}
-                          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                          quality={100}
-                          sizes='100vw'
-                          className='rounded-full'
-                        />
-                        <button
-                          onClick={(e) => { clickDeleteChatUserButton(e, user.nickname) }}
-                          className='absolute top-0 right-0 translate-x-[2px] translate-y-[-2px]'>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                    ))
-                  }
+            {
+              whichSearched !== 'chat' &&
+              <div className='addUserBoxDiv w-full h-[75px] flex flex-col items-start justify-center bg-lightPurple rounded-[12px]'>
+                <span className='text-[11px] font-[700] text-textDarkPurple mx-[10px] my-[5px]'>대화상대 선택</span>
+                <div className='w-full flex-1 overflow-x-auto overflow-hidden px-[10px] rounded-[12px] hide-scrollbar mr-[10px]'>
+                  <div className='h-full flex items-center justify-start space-x-[5px]'>
+                    {
+                      chatAddedUser.map((user, index) => (
+                        <div key={index} className='relative w-[34px] h-[34px] min-w-[34px] flex-shrink-0 rounded-full bg-darkGray'>
+                          <Image
+                            src={user.profileUrl.toString()}
+                            alt='profileImage'
+                            width={34} height={34}
+                            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                            quality={100}
+                            sizes='100vw'
+                            className='rounded-full'
+                          />
+                          <button
+                            onClick={(e) => { clickDeleteChatUserButton(e, user.nickname) }}
+                            className='absolute top-0 right-0 translate-x-[2px] translate-y-[-2px]'>
+                            <CloseIcon />
+                          </button>
+                        </div>
+                      ))
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
+            }
 
-            <div className='w-full flex-1 '>
+            <div className='w-full flex-1'>
               {
                 !serachInputActivate &&
                 <div className='w-full h-full flex flex-col'>
@@ -725,50 +740,35 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 </div>
               }
               {
-                
-                serachInputActivate &&
-                chatRoomSearchedData.map((user, index) => (
+                whichSearched === 'user' && serachInputActivate &&
+                <div className={`w-full ${isChatModalMax ? 'h-[850px]' : 'h-[400px]'}  flex flex-col overflow-y-auto overflow-y-scroll gap-[10px]`}>
+                    {
+                      chatRoomUserSearchedData.map((user, index) => (
 
-                  <div key={index} className='userBoxDiv w-full h-[50px] flex-shrink-0 flex items-center justify-between hover:bg-lightPurple rounded-[20px] pl-[5px] pr-[15px]'>
-                    <div className='w-[220px] h-full flex items-center justify-between'>
-                      <div className='profileImageDiv w-[40px] h-[40px] rounde-full overflow-hidden'>
-                        <Image
-                          src={user.profileUrl}
-                          alt='profileImage'
-                          width={40} height={40}
-                          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                          quality={100}
-                          sizes='100vw'
-                          className='rounded-full'
-                        />
-                      </div>
-                      <div className='profileInfoDiv w-[170px] h-full flex flex-col items-start justify-center '>
-                        <p className='text-[14px] font-[500]'>{user.nickname}</p>
-                        <div className='flex items-center gap-[4px] text-[11px] font-[400] text-textDarkPurple'>
-                          <span>게시물 {user.postCount}</span>
-                          <span>저장됨 {user.savedPostCount}</span>
-                          <span>팔로워 {user.followerCount}</span>
-                        </div>
-                      </div>
-                    </div>
-                            {
-                              chatAddedUser.length === 0 ? 
-                              <button
-                                onClick={(e) => {
-                                  clickAddChatUserButton(e, user.profileUrl, user.nickname)
-                                }}
-                                className='w-[24px] h-[24px] rounded-full'>
-                                <PlusIcon /> 
-                              </button>
-                              : chatAddedUser.find((addedUser) => addedUser.nickname === user.nickname) ?
-                              <button
-                                onClick={(e) => {
-                                  clickDeleteChatUserButton(e, user.nickname)
-                                }}
-                                className='w-[24px] h-[24px] rounded-full'>
-                              <PlusedIcon />
-                              </button>
-                              :
+                        <div key={index} className='userBoxDiv w-full h-[50px] flex-shrink-0 flex items-center justify-between hover:bg-lightPurple rounded-[20px] pl-[5px] pr-[15px]'>
+                          <div className='w-[220px] h-full flex items-center justify-between'>
+                            <div className='profileImageDiv w-[40px] h-[40px] rounde-full overflow-hidden'>
+                              <Image
+                                src={user.profileUrl}
+                                alt='profileImage'
+                                width={40} height={40}
+                                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                                quality={100}
+                                sizes='100vw'
+                                className='rounded-full'
+                              />
+                            </div>
+                            <div className='profileInfoDiv w-[170px] h-full flex flex-col items-start justify-center '>
+                              <p className='text-[14px] font-[500]'>{user.nickname}</p>
+                              <div className='flex items-center gap-[4px] text-[11px] font-[400] text-textDarkPurple'>
+                                <span>게시물 {user.postCount}</span>
+                                <span>저장됨 {user.savedPostCount}</span>
+                                <span>팔로워 {user.followerCount}</span>
+                              </div>
+                            </div>
+                          </div>
+                          {
+                            chatAddedUser.length === 0 ?
                               <button
                                 onClick={(e) => {
                                   clickAddChatUserButton(e, user.profileUrl, user.nickname)
@@ -776,12 +776,86 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                                 className='w-[24px] h-[24px] rounded-full'>
                                 <PlusIcon />
                               </button>
-                            }
-                  </div>
+                              : chatAddedUser.find((addedUser) => addedUser.nickname === user.nickname) ?
+                                <button
+                                  onClick={(e) => {
+                                    clickDeleteChatUserButton(e, user.nickname)
+                                  }}
+                                  className='w-[24px] h-[24px] rounded-full'>
+                                  <PlusedIcon />
+                                </button>
+                                :
+                                <button
+                                  onClick={(e) => {
+                                    clickAddChatUserButton(e, user.profileUrl, user.nickname)
+                                  }}
+                                  className='w-[24px] h-[24px] rounded-full'>
+                                  <PlusIcon />
+                                </button>
+                          }
+                        </div>
+                      ))
+                    }
+                </div>
+              }
+              {
+                whichSearched === 'chat' && serachInputActivate &&
+                <div className={`w-full ${isChatModalMax ? 'h-[1010px]' : 'h-[530px]'}  flex flex-col overflow-y-auto overflow-y-scroll gap-[10px]`}>
+                {
+                  chatRoomSearchedData.map((chat, index) => (
 
+                  <div key={index} className='userBoxDiv w-full h-[50px] flex-shrink-0 flex items-center justify-between hover:bg-lightPurple rounded-[20px] pl-[5px] pr-[15px]'>
+                    <button
+                      className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
+                      onMouseDown={(e) => handleMouseDown(e, chat.roomId)}
+                      onMouseUp={(e) => handleMouseUp(e, chat.roomId)}
+                      onContextMenu={(e) => handleContextMenu(e, chat.roomId)}
+                      onTouchStart={(e) => handleMouseDown(e, chat.roomId)}
+                      onTouchEnd={(e) => handleMouseUp(e, chat.roomId)}
+                    >
+                      <div className={`chatRoomImage bg-white rounded-full ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
+                        <Image
+                          src={chat.profileUrls[0]}
+                          width={40} height={40} alt={'chatRoomImage'}
+                          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                          quality={100}
+                          sizes='100vw'
+                          className='rounded-full'
+                        />
+                      </div>
+                      <div className='flex-1 h-[50px] flex justify-between py-[5px]'>
+                        <div className='flex-1 w-[200px] h-full flex flex-col items-start justify-center gap-[5px]'>
+                          <div className='flex items-center gap-[5px]'>
+                            <span className='font-[700] text-[14px] text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis' style={{ maxWidth: '170px' }}>
+                              {chat.roomName}
+                            </span>                            {
+                              chat.isBusiness &&
+                              <ShopIcon />
+                            }
+                          </div>
+                          <div>
+                            <span className='font-[400] text-[11px] text-left text-textDarkPurple overflow-hidden whitespace-nowrap text-ellipsis block w-[200px]'>
+                              {chat.lastMessage}
+                            </span>
+                          </div>
+                        </div>
+                        <div className='min-w-[40px] h-full flex flex-col items-end justify-between '>
+                          <span className='font-[400] text-[8px] text-dateGray'>{getRelativeTime(chat.modifiedAt)}</span>
+                          {
+                            chat.unreadCount !== 0 &&
+                            <div className='bg-red flex items-center justify-center rounded-full text-white font-[500] text-[11px] min-w-[17px] h-[17px] p-1'>{chat.unreadCount}</div>
+                          }
+                        </div>
+                      </div>
+                    </button>
+                  </div>  
                 ))
+                }
+                </div>
               }
             </div>
+            {
+              whichSearched === 'user' &&
             <button
               className={`w-full h-[38px] flex items-center justify-center gap-[7px] rounded-[200px] ${searchButtonActivate && 'hover:bg-lightPurple'} group ${!searchButtonActivate ? 'bg-darkGray' : 'bg-mainPurple'}`}
               onClick={(e) => { clickCreateNewChatRoom(e, chatAddedUser) }}
@@ -790,6 +864,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
               <ChatPlusIcon className={` ${searchButtonActivate && 'fill-[#B98CE0]'}`} />
               <span className={`text-[14px] font-[700] ${searchButtonActivate && 'group-hover:text-mainPurple'} text-white`}>채팅방 만들기</span>
             </button>
+            }
           </div>
         }
       </div>

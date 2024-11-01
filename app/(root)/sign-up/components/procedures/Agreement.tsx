@@ -10,6 +10,8 @@ import PrivacyPolicyComponent from '../../../../../components/desc/privacy-polic
 import TermsOfServiceComponent from '../../../../../components/desc/terms-of-service';
 import ElectronicFinancialTransactionsComponent from '../../../../../components/desc/electronic-financial-transactions';
 import PrivacyCollectionAgreementComponent from '../../../../../components/desc/privacy-collection-agreement';
+import PersonalInformationCollectionAgreementRequiredComponent from '../../../../../components/desc/personal-information-collection-agreement-required';
+import PersonalInformationCollectionAgreementOptionalComponent from '../../../../../components/desc/personal-information-collection-agreement-optional';
 
 export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreementProps) {
   const [allChecked, setAllChecked] = useState(false);
@@ -119,9 +121,9 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
           ref={infoBox}
           >
           { whichInfo === 0 && <TermsOfServiceComponent isSmall={true} />}
-          { whichInfo === 1 && <PrivacyPolicyComponent isSmall={true} />}
+          { whichInfo === 1 && <PersonalInformationCollectionAgreementRequiredComponent isSmall={true} />}
           { whichInfo === 2 && <ElectronicFinancialTransactionsComponent isSmall={true} />}
-          { whichInfo === 3 && <PrivacyCollectionAgreementComponent isSmall={true} />}
+          { whichInfo === 3 && <PersonalInformationCollectionAgreementOptionalComponent isSmall={true} />}
         
         <button 
             className='InfoCloseBtn w-full md:w-[400px] xs:mb-[30px] sm:mb-[30px] md:mb-0 h-[60px] button-color button-layout button-tr'
