@@ -1,4 +1,5 @@
 import DetailArchiveTopBar from './components/TopBar';
+import FooterBox from '../../../../../components/boxes/FooterBox';
 
 export default function DetailArchiveLayout({
   children,
@@ -11,6 +12,7 @@ export default function DetailArchiveLayout({
         <div className="detailArchivecontentsDiv relative flex h-full w-full flex-col">
           <DetailArchiveTopBar />
           {children}
+          <FooterBox />
         </div>
       </div>
     </section>

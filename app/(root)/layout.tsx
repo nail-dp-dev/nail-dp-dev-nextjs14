@@ -19,7 +19,6 @@ export default function HomeLayout({
         {children}
       </div>
       <RowMenuBar/>
-      <FooterBox />
   </main>
   );
 }

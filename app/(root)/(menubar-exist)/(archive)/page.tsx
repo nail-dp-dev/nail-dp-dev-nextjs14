@@ -275,7 +275,7 @@ export default function ArchivePage() {
         category={category}
         setCategory={setCategory}
       />
-      <div className="ForYouContainer max-h-full overflow-hidden relative">
+      <div className="ForYouContainer h-dvh overflow-hidden relative">
           <div
             ref={boxRef}
             className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
