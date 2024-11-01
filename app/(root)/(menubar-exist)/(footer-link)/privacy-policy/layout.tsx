@@ -1,5 +1,5 @@
-import SearchBar from '../../../../components/bars/search/SearchBar';
-import NotLoginNotice from '../../../../components/notice/NotLoginNotice';
+import SearchBar from '../../../../../components/bars/search/SearchBar';
+import NotLoginNotice from '../../../../../components/notice/NotLoginNotice';
 
 
 export default function PrivacyPolicyLayout({

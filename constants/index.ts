@@ -324,10 +324,7 @@ export const FooterElements = [
 { name: '이용약관', uri: 'terms-of-service' }, 
 { name: '개인정보 처리방침', uri: 'privacy-policy' }, 
 { name: '전자금융거래 이용약관', uri: 'electronic-financial-transactions' }, 
-{ name: '네디플 개인 정보 수집 동의서', uri: 'privacy-collection-agreement' }, 
-{ name: '네디플 정책', uri: 'ndp-policy' }, 
-{ name: '고객센터ⓒ', uri: 'customer-support' }, 
-{ name: 'NDP Corp.', uri: 'ndp-corp' }
+{ name: '고객센터', uri: 'customer-support' }, 
 ]
 
 export const ChatCategoryElements = [

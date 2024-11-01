@@ -1,4 +1,4 @@
-import ElectronicFinancialTransactionsComponent from '../../../../components/desc/electronic-financial-transactions';
+import ElectronicFinancialTransactionsComponent from '../../../../../components/desc/electronic-financial-transactions';
 
 export default function ElectronicFinancialTransactionsPage() {
 

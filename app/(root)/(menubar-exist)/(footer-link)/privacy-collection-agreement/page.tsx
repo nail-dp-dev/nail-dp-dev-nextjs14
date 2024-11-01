@@ -1,4 +1,4 @@
-import PrivacyCollectionAgreementComponent from '../../../../components/desc/privacy-collection-agreement'
+import PrivacyCollectionAgreementComponent from '../../../../../components/desc/privacy-collection-agreement'
 
 export default function PrivacyCollectionAgreementPage() {
 

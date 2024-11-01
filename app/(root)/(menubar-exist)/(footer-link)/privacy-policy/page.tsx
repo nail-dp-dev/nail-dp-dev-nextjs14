@@ -1,4 +1,4 @@
-import PrivacyPolicyComponent from '../../../../components/desc/privacy-policy';
+import PrivacyPolicyComponent from '../../../../../components/desc/privacy-policy';
 
 export default function PrivacyPolicyPage() {
 

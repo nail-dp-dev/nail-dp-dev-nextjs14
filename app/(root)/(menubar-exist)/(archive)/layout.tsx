@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from '../../../../components/bars/search/SearchBar';
+import FooterBox from '../../../../components/boxes/FooterBox';
 
 function ArchivePageLayout({
   children,

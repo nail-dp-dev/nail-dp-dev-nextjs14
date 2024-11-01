@@ -64,6 +64,7 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
               // const getToken = await postIamPortToken(); 
               // console.log(getToken, 'ㄸㄹㅉㄸㄹㅉㄸㄹ')
               // const { access_token } = getToken.response; 
+              setProcedure('nickname')
               const certificationsInfo = await getIamPortCertificate(rsp.imp_uid, '3603401e9443f15208aedac53ff2e95ed5a4f36b')
 
               console.log(certificationsInfo, '인증정보...!')

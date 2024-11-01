@@ -1,4 +1,4 @@
-import TermsOfServiceComponent from '../../../../components/desc/terms-of-service'
+import TermsOfServiceComponent from '../../../../../components/desc/terms-of-service'
 
 export default function TermsOfServicePage() {
 
