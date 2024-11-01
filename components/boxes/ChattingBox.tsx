@@ -113,6 +113,8 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
   const handleMouseDown = (e: any, chatRoomId: string) => {
     
+    e.preventDefault(); 
+
     pressTimerRef.current = setTimeout(() => {
       setIsLongPressTriggered(true);
     }, longPressThreshold);
