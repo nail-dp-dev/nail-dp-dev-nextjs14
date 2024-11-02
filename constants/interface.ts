@@ -92,6 +92,11 @@ export interface ChattingBoxProps {
   isChatModalMax: boolean;
   setIsChatModalMax: React.Dispatch<React.SetStateAction<boolean>>;
   handleCloseChatModal: (e: any) => void;
+  setSettingPosition: any;
+  setIsChatSettingOpen:React.Dispatch<React.SetStateAction<boolean>>; 
+  chatSettingRef: any;
+  setClickedSettingChatRoomId: any;
+  isChatComponentShouldRefresh: boolean;
 }
 
 export interface ChatComponentProps{

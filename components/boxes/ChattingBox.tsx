@@ -91,7 +91,7 @@ interface ChatRoomDTO {
   isPinning: boolean;
 }
 
-export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal }: ChattingBoxProps) {
+export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChatModalMax, handleCloseChatModal, setSettingPosition, setIsChatSettingOpen, chatSettingRef, setClickedSettingChatRoomId, isChatComponentShouldRefresh }: ChattingBoxProps) {
 
   const [category, setCategory] = useState('all')
   const [responseData, setResponseData] = useState<Response>()
@@ -106,7 +106,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const [chatAddedUser, setChatAddedUser] = useState<ChatAddedUser[]>([]);
   const [chatRecentUser, setChatRecentUser] = useState<ChatRoomUserDTO[]>();
   const [chatRecommendUser, setChatRecommendUser] = useState<ChatRoomUserDTO[]>();
-  const [whichSearched, setWhichSearched] = useState<string>('');
+  const [whichSearched, setWhichSearched] = useState<string>('user');
   const [chatRoomUserSearchedData, setChatRoomUserSearchedData] = useState<ChatRoomUserDTO[]>([]);
   const [chatRoomSearchedData, setChatRoomSearchedData] = useState<ChatRoomDTO[]>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -123,7 +123,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const clientRef = useRef<Client | null>(null);
   
   const longPressThreshold = 500;
-  const pressTimerRef = useRef<NodeJS.Timeout | null>(null); // 타이머를 저장할 ref
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
   let [isLongPressTriggered, setIsLongPressTriggered] = useState<boolean>(false);
 
   const handleMouseDown = (e: any, chatRoomId: string) => {
@@ -141,7 +141,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
 
     if (pressTimerRef.current) {
       clearTimeout(pressTimerRef.current);
-      pressTimerRef.current = null; // 타이머 초기화
+      pressTimerRef.current = null;
     }
 
     if (isLongPressTriggered) {
@@ -162,6 +162,9 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
         clearTimeout(pressTimerRef.current);
         pressTimerRef.current = null;
       }
+      const x = e.clientX;
+      const y = e.clientY;
+      setSettingPosition({ x, y });
       onLongPress(e, chatRoomId); 
     }
   };
@@ -175,11 +178,22 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     dispatch(setActivateChatRoomId(chatRoomId));
   };
 
+  const searchOnChatClick = (e: React.MouseEvent, chatRoomId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setSearchBoxOpen(false)
+    setChatRoomClicked(prev => !prev);
+    dispatch(setChatRoomOpen(true));
+    dispatch(setActivateChatRoomId(chatRoomId));
+  }
+
   const onLongPress = (e: React.MouseEvent, chatRoomId: string) => {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(`Long pressed on chat room ${chatRoomId}`);
+    setIsChatSettingOpen(true)
+    setClickedSettingChatRoomId(chatRoomId)
   };
 
   
@@ -299,7 +313,6 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   const searchChatRoom = async (term: string) => {
     const result = await getChatSearchRoom(term)
     if (result && result.code === 2000) {
-      console.log(result)
       setChatRoomSearchedData(result.data.contents.content)
     }
   };
@@ -314,27 +327,33 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000); // Update every 60000 ms (1 minute)
+    }, 60000);
 
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    return () => clearInterval(interval); 
   }, []);
 
-  // 채팅 리스트 기본 데이터 fetch 하는 useEffect
-  useEffect(() => {
-    const fetchChatList = async () => {
-      try {
-        const result = await getAllChatList(category);
-        setResponseData(result.data.contents)
-        setChatList(result.data.contents.content)
-        setCursorId(result.data.cursorId)
-      } catch (error) {
-        console.error('Failed to fetch shared count:', error);
-      }
+useEffect(() => {  
+  const fetchChatList = async () => {
+    try {
+      const result = await getAllChatList(category);
+
+      setResponseData(result.data.contents); 
+      setChatList(result.data.contents.content);
+      setCursorId(result.data.cursorId);
+
+      setResponseData(prevData => {
+        return prevData;
+      });
+    } catch (error) {
+      console.error('Failed to fetch shared count:', error);
     }
+  };
 
-    fetchChatList()
+  fetchChatList();
 
-  }, [category, isChatArrived, activateChatRoomId])
+  // 의존성 배열의 값이 변경될 때마다 실행되도록 설정
+}, [category, isChatArrived, activateChatRoomId, isChatComponentShouldRefresh]);
+
 
   
     // stompjs 연결 및 웹소켓 연결
@@ -347,19 +366,16 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str) => {
-        console.log(str);
       },
     });
 
 
     stompClient.onConnect = () => {
-      console.log('Connected to WebSocket server');
 
       if (userNickName) {
         stompClient.subscribe(`/sub/chat/list/updates/${userNickName.toString()}`, (list: Message) => {
           const getlist: any = JSON.parse(list.body);
           setIsChatArrived(prev => !prev);
-          console.log(getlist, '겟리스트입니다...!')
         });
       }
     };
@@ -380,7 +396,6 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
     const fetchRecentUserList = async () => {
       try {
         const result = await getChatRecent();
-        console.log(result)
         setChatRecentUser(result.data)
       } catch (error) {
         console.error('Failed to fetch recent chat user:', error);
@@ -408,6 +423,19 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
       setSearchButtonActivate(true)
     }
   },[chatAddedUser])
+
+  // 설정창 이외의 부분을 클릭했을 때
+  useEffect(() => {
+    function handleClickOutside(event:any) {
+      if (chatSettingRef.current && !chatSettingRef.current.contains(event.target)) {
+        setIsChatSettingOpen(false);
+        setClickedSettingChatRoomId('');
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [chatSettingRef]);
 
     return (
       <div
@@ -469,10 +497,12 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
           </div>
         </div>
 
+
         {
           // search box click 안했을 때 나오는 창
           !searchBoxOpen &&
           <div className='contentBox w-full flex-1 flex items-center justify-start overflow-hidden'>
+
             <div className={`leftContentBox w-[360px] h-full flex flex-col ${!isChatModalMax && 'w-full'}`}>
               <nav className={`categoryBar ${!isChatModalMax && isChatRoomOpened && 'hidden'} w-full h-[50px] flex items-center justify-center gap-[10px]`}>
                 {
@@ -510,8 +540,9 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                     chatList.map((chat, index) => (
                       <li
                         key={index}
-                        className={`${isChatRoomOpened && !isChatModalMax && 'w-full'} ${isChatRoomOpened && activateChatRoomId === chat.roomId && !isChatModalMax && 'hidden'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all overflow-hidden ${activateChatRoomId === chat.roomId && 'bg-lightPurple'} `}
+                        className={`${isChatRoomOpened && !isChatModalMax && 'w-full'} relative ${isChatRoomOpened && activateChatRoomId === chat.roomId && !isChatModalMax && 'hidden'} w-[325px] h-[62px] rounded-[20px] mx-auto mb-[10px] hover:bg-chatChooseButton transition-all  ${activateChatRoomId === chat.roomId && 'bg-lightPurple'} `}
                       >
+
                         <button
                           className={`w-full h-full flex items-center justify-between ${activateChatRoomId === chat.roomId && ''} p-[10px]`}
                           onMouseDown={(e) => handleMouseDown(e, chat.roomId)}
@@ -740,6 +771,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 </div>
               }
               {
+                // 사용자 검색했을 때 (@로 검색했을 때)
                 whichSearched === 'user' && serachInputActivate &&
                 <div className={`w-full ${isChatModalMax ? 'h-[850px]' : 'h-[400px]'}  flex flex-col overflow-y-auto overflow-y-scroll gap-[10px]`}>
                     {
@@ -799,6 +831,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                 </div>
               }
               {
+                // 대화방 검색했을 때
                 whichSearched === 'chat' && serachInputActivate &&
                 <div className={`w-full ${isChatModalMax ? 'h-[1010px]' : 'h-[530px]'}  flex flex-col overflow-y-auto overflow-y-scroll gap-[10px]`}>
                 {
@@ -812,6 +845,7 @@ export default function ChattingBox({ isChatModalShow, isChatModalMax, setIsChat
                       onContextMenu={(e) => handleContextMenu(e, chat.roomId)}
                       onTouchStart={(e) => handleMouseDown(e, chat.roomId)}
                       onTouchEnd={(e) => handleMouseUp(e, chat.roomId)}
+                      onClick={(e)=>searchOnChatClick(e, chat.roomId)}
                     >
                       <div className={`chatRoomImage bg-white rounded-full ${activateChatRoomId === chat.roomId && isChatRoomOpened ? 'w-[40px] h-[40px] z-40' : activateChatRoomId !== chat.roomId && isChatRoomOpened && !isChatModalMax ? 'w-[30px] h-[30px]' : 'w-[40px] h-[40px]'} mr-[10px]`}>
                         <Image

@@ -9,7 +9,9 @@ import { usePathname } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../store/slices/loginSlice';
 import { RootState } from '../../../store/store';
-import { setChatModalShow } from '../../../store/slices/messageSlice';
+import { setActivateChatRoomId, setChatModalShow, setChatRoomOpen } from '../../../store/slices/messageSlice';
+import { patchPinningChatRoom } from '../../../api/chat/patchPinningChatRoom';
+import { patchLeaveChatRoom } from '../../../api/chat/patchLeaveChatRoom';
 
 export default function MessageModal() {
   const isLoggedIn = useSelector(selectLoginStatus);
@@ -22,6 +24,13 @@ export default function MessageModal() {
   const domTarget = useRef<HTMLDivElement>(null);
   const chatModalMaxWidth = window.innerWidth - 375
   const chatModalMaxHeight = window.innerHeight - 120
+
+  const chatSettingRef = useRef(null);
+  const [settingPosition, setSettingPosition] = useState({ x: 0, y: 0 });
+  const [isChatSettingOpen, setIsChatSettingOpen] = useState<boolean>(false);
+  const [clickedSettingChatRoomId, setClickedSettingChatRoomId] = useState<string>('');
+
+  const [isChatComponentShouldRefresh, setIsChatComponentShouldRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     const iconWidth = isChatModalVisible && isChatModalMax ? chatModalMaxWidth : isChatModalVisible && !isChatModalMax ? 360 : 80;
@@ -116,12 +125,126 @@ export default function MessageModal() {
     { domTarget, eventOptions: { passive: true } }
   );
 
+  const clickTopFix = async (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const result = await patchPinningChatRoom(clickedSettingChatRoomId)
+    if (result.code === 2001) {
+      setIsChatSettingOpen(false)
+      setIsChatComponentShouldRefresh(prev=>!prev)
+    }
+  }
+  
+  const clickOpenChatRoom = (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    dispatch(setChatRoomOpen(true));
+    dispatch(setActivateChatRoomId(clickedSettingChatRoomId));
+    setIsChatSettingOpen(false)
+  }
+  
+  const clickChatRoomTurnOffAlarm = (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log(clickedSettingChatRoomId,`알림 끄기 ${clickedSettingChatRoomId}`)
+    setIsChatSettingOpen(false)
+  }
+  
+  const clickSetChatProfileSetting = (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log(clickedSettingChatRoomId,`채팅방 프로필 설정 ${clickedSettingChatRoomId}`)
+    setIsChatSettingOpen(false)
+  }
+  
+  const clickInviteToChatRoom = (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log(clickedSettingChatRoomId,`채팅방으로 초대하기 ${clickedSettingChatRoomId}`)
+    setIsChatSettingOpen(false)
+  }
+  
+  const clickChatRoomComplaint = (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log(clickedSettingChatRoomId,`채팅방으로 신고하기 ${clickedSettingChatRoomId}`)
+    setIsChatSettingOpen(false)
+  }
+  
+  const clickChatRoomExit = async (e:any, clickedSettingChatRoomId:string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const result = await patchLeaveChatRoom(clickedSettingChatRoomId)
+    if (result.code === 2001) {
+      setIsChatSettingOpen(false)
+      setIsChatComponentShouldRefresh(prev=>!prev)
+    } 
+    }
+
   return (
     <div
       className={`${path === '/sign-up' && 'hidden'} ${isLoggedIn === 'pending' && 'hidden'} ${
         isLoggedIn === 'loggedOut' && 'hidden'
       } messageModal absolute w-screen h-screen z-50 flex items-center justify-end pointer-events-none bottom-0 right-0`}
     >
+      {isChatSettingOpen &&  (
+        <div
+          ref={chatSettingRef}
+          style={{
+            position: 'absolute',
+            left: settingPosition.x,
+            top: settingPosition.y,
+          }}
+          className='settingBoxDiv z-50 pointer-events-auto w-[105px] h-[156px] flex flex-col items-center justify-between bg-white border-mainPurple border-[1px] shadow-sm shadow-black overflow-hidden'
+        >
+          <div className='w-full h-[58px] flex flex-col items-center justify-center'>
+            <button 
+              onClick={(e)=>{clickTopFix(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+            >채팅방 상단고정</button>
+            <button
+              onClick={(e)=>{clickOpenChatRoom(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+              >채팅방 열기</button>
+            <button
+              onClick={(e)=>{clickChatRoomTurnOffAlarm(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+              >채팅방 알림끄기</button>
+          </div>
+          <div className='border-b-[1px] w-full h-[6px] border-lightPurple'></div>
+          <div className='w-full h-[6px]'></div>
+          <div className='w-full h-[38px] flex flex-col items-center justify-center'>
+            <button 
+              onClick={(e)=>{clickSetChatProfileSetting(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+              >채팅방 프로필 설정</button>
+            <button 
+              onClick={(e)=>{clickInviteToChatRoom(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+              >채팅방에 초대하기</button>
+          </div>
+          <div className='border-b-[1px] w-full h-[6px] border-lightPurple'></div>
+          <div className=' w-full h-[6px] '></div>
+          <div className='w-full h-[38px] flex flex-col items-center justify-center'>
+            <button 
+              onClick={(e)=>{clickChatRoomComplaint(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+              >채팅방 신고하기</button>
+            <button 
+              onClick={(e)=>{clickChatRoomExit(e, clickedSettingChatRoomId)}}
+              className='w-full h-[18px] text-textDarkPurple text-start pl-[10px] text-[11px] font-[400] hover:bg-lightPurple'
+            >채팅방 나가기</button>
+          </div>
+
+        </div>
+      )}
       <div className={`absolute w-full h-full`}>
         <animated.div
           ref={domTarget}
@@ -147,6 +270,11 @@ export default function MessageModal() {
               isChatModalMax={isChatModalMax}
               setIsChatModalMax={setIsChatModalMax}
               handleCloseChatModal={handleCloseChatModal}
+              setSettingPosition={setSettingPosition}
+              setIsChatSettingOpen={setIsChatSettingOpen}
+              chatSettingRef={chatSettingRef}
+              setClickedSettingChatRoomId={setClickedSettingChatRoomId}
+              isChatComponentShouldRefresh={isChatComponentShouldRefresh}
             />
           )}
         </animated.div>
