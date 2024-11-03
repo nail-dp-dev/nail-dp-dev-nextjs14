@@ -89,20 +89,20 @@ export const rowMenuElements = [
     desc: '수제 네일팁 및 제품 구매',
     isLast: true,
   },
-  {
-    icon: 'MyPageIcon',
-    name: '마이 페이지',
-    url: ['/my-page', '/my-page/reservation', '/my-page/buy'],
-    desc: '',
-    isLast: false,
-  },
-  {
-    icon: 'SettingIcon',
-    name: '환경설정',
-    url: ['/setting'],
-    desc: '',
-    isLast: true,
-  },  
+  // {
+  //   icon: 'MyPageIcon',
+  //   name: '마이 페이지',
+  //   url: ['/my-page', '/my-page/reservation', '/my-page/buy'],
+  //   desc: '',
+  //   isLast: false,
+  // },
+  // {
+  //   icon: 'SettingIcon',
+  //   name: '환경설정',
+  //   url: ['/setting'],
+  //   desc: '',
+  //   isLast: true,
+  // },  
 ]
 
 export const archiveCategoryElements = [
