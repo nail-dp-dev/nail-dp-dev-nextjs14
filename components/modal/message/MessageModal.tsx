@@ -18,7 +18,7 @@ export default function MessageModal() {
   const isChatModalVisible = useSelector((state: RootState) => state.message.isChatModalShow);
   const dispatch = useDispatch()
   const path = usePathname();
-  const [dragEndXY, setDragEndXY] = useState({ x: window.innerWidth - 100, y: window.innerHeight - 100 });
+  const [dragEndXY, setDragEndXY] = useState({ x: window.innerWidth - 100, y: window.innerHeight - 145 });
   const [isChatModalMax, setIsChatModalMax] = useState<boolean>(false);
   const [wasDragged, setWasDragged] = useState(false);
   const domTarget = useRef<HTMLDivElement>(null);
