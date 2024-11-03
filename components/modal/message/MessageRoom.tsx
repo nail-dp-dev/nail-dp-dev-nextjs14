@@ -63,13 +63,12 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
 
   const clickIconButton = (e: any) => {
     e.stopPropagation();
-    console.log('icon 버튼 클릭...');
+    // icon 버튼 클릭
   };
 
   const clickImageButton = (e: any) => {
     e.stopPropagation();
 
-    console.log('image 버튼 클릭')
     if (imageInputRef.current) {
       imageInputRef.current.click();
     } else {
@@ -80,13 +79,10 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files;
-      console.log('Selected file:', selectedFile);
 
       if (isChatRoomOpened) {
-        // Upload the selected file after it's chosen
         postImageChat(selectedFile, activateChatRoomId)
           .then((response) => {
-            console.log('Image sent successfully:', response);
           })
           .catch((error) => {
             console.error('Error sending image:', error);
@@ -110,13 +106,10 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files;
-      console.log('Selected file:', selectedFile);
 
       if (isChatRoomOpened) {
-        // Upload the selected file after it's chosen
         postFileChat(selectedFile, activateChatRoomId)
           .then((response) => {
-            console.log('Image sent successfully:', response);
           })
           .catch((error) => {
             console.error('Error sending image:', error);
@@ -143,7 +136,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     const stompClient = new Client({
       webSocketFactory: () => socket,
       debug: (str) => {
-        console.log(str);
       },
     });
 
@@ -165,7 +157,6 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     getBeforeChat(activateChatRoomId);
 
     stompClient.onConnect = () => {
-      console.log('Connected to WebSocket server chatchatchat');
 
       stompClient.subscribe(`/sub/chat/${activateChatRoomId}`, (message: Message) => {
         const receivedMessage: ChatMessage = JSON.parse(message.body);

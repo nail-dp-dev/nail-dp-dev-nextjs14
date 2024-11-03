@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from '../../../../components/bars/search/SearchBar';
+import FooterBox from '../../../../components/boxes/FooterBox';
 
 function ArchivePageLayout({
   children,
@@ -12,6 +13,7 @@ function ArchivePageLayout({
         <div className="archiveContentsDiv relative w-full h-full flex flex-col">
           <SearchBar />
           {children}
+          <FooterBox />
         </div>
       </div>
     </section>

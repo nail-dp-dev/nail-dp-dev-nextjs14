@@ -6,6 +6,12 @@ import CheckIcon from '../../../../../public/assets/svg/check.svg'
 import InfoIcon from '../../../../../public/assets/svg/procedure_info.svg'
 import { SignUpAgreementProps } from '../../../../../constants/interface';
 import Loading from '../../../../loading';
+import PrivacyPolicyComponent from '../../../../../components/desc/privacy-policy';
+import TermsOfServiceComponent from '../../../../../components/desc/terms-of-service';
+import ElectronicFinancialTransactionsComponent from '../../../../../components/desc/electronic-financial-transactions';
+import PrivacyCollectionAgreementComponent from '../../../../../components/desc/privacy-collection-agreement';
+import PersonalInformationCollectionAgreementRequiredComponent from '../../../../../components/desc/personal-information-collection-agreement-required';
+import PersonalInformationCollectionAgreementOptionalComponent from '../../../../../components/desc/personal-information-collection-agreement-optional';
 
 export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreementProps) {
   const [allChecked, setAllChecked] = useState(false);
@@ -59,12 +65,11 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
     }
   }
   
-
   return (
     <Suspense fallback={<Loading/>}>
-    <div className='relative w-[440px] h-[450px] p-[20px] flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
+    <div className='relative w-[350px] h-[400px] md:w-[440px] md:h-[450px] p-[20px] mt-[20px] md:mt-0 flex flex-col items-center justify-start bg-white rounded-[20px] shadow-signup-modal-shadow overflow-hidden'>
       <div
-        className='allCheckBox w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple transition-colors'
+        className='allCheckBox w-full md:w-[400px] h-[60px] flex items-center justify-start gap-[9px] p-[14px] mb-[45px] border-buttonDarkGray border-[2px] cursor-pointer rounded-[12px] group hover:border-purple transition-colors'
         onClick={handleAllCheck}
       >
         <button
@@ -76,11 +81,11 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
           전체 동의하기
         </span>
       </div>
-      <div className='checkBox w-[400px] h-[144px] flex flex-col items-start justify-between'>
+      <div className='checkBox w-[280px] h-[130px]  md:w-[400px] md:h-[144px] flex flex-col items-start justify-between'>
         {signUpConsentItems.map((list, index) => (
           <div
             key={index}
-            className='element w-[90%] mx-auto flex items-center justify-between cursor-pointer'
+            className='element w-full md:w-[90%] mx-auto flex items-center justify-between cursor-pointer'
             onClick={(e) => handleItemCheck(e, index)}
           >
             <div className='flex items-center'>
@@ -102,26 +107,26 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
       </div>
       <span className='descText text-[0.6875rem] text-textDarkPurple font-[500] mb-[78px]'>개인정보 수집 이용에 동의 하시면 더 편리한 이용이 가능합니다.</span>
       <button 
-        className={`submitBtn w-[400px] h-[60px] button-layout  ${isSubmitEnabled ? 'button-color button-tr button-tr-tf' : ' bg-buttonDarkGray'}`}
+        className={`submitBtn w-full md:w-[400px] h-[60px] button-layout  ${isSubmitEnabled ? 'button-color button-tr button-tr-tf' : ' bg-buttonDarkGray'}`}
         onClick={(e)=>handleSubmit(e, checkedItems)}
         disabled={!isSubmitEnabled}
         >
         <span className='text-[1.125rem]'>다음</span>
       </button>
       <div
-        className={`absolute z-30 w-[400px] h-[410px] flex flex-col ${isInfoShow ? '' : 'translate-y-[-450px]'} transition-transform`}
+        className={`absolute z-30 w-[340px] h-[400px] md:w-[400px] md:h-[410px] flex flex-col ${isInfoShow ? '' : 'translate-y-[-450px]'} transition-transform`}
       >
         <div
           className='w-full h-dvh bg-white overflow-hidden overflow-y-scroll'
           ref={infoBox}
-        >
-        <div className='w-full h-dvh p-[20px]'>
-            {
-              signUpConsentItems[whichInfo].desc
-            }
-        </div>
+          >
+          { whichInfo === 0 && <TermsOfServiceComponent isSmall={true} />}
+          { whichInfo === 1 && <PersonalInformationCollectionAgreementRequiredComponent isSmall={true} />}
+          { whichInfo === 2 && <ElectronicFinancialTransactionsComponent isSmall={true} />}
+          { whichInfo === 3 && <PersonalInformationCollectionAgreementOptionalComponent isSmall={true} />}
+        
         <button 
-            className='InfoCloseBtn w-[400px] h-[60px] button-color button-layout button-tr'
+            className='InfoCloseBtn w-full md:w-[400px] xs:mb-[30px] sm:mb-[30px] md:mb-0 h-[60px] button-color button-layout button-tr'
             onClick={(e) => handleItemInfoClose(e, infoBox)}
         >
           확인하고 나가기

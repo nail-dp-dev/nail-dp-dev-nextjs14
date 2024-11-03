@@ -1,4 +1,4 @@
-export const getChatRoom = async (keyword:string) => {
+export const getChatSearchRoom = async (keyword:string) => {
 
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/search?keyword=${keyword}`, {
