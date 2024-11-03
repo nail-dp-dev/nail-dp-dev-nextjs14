@@ -136,7 +136,7 @@ function PostBox({
               active={isLoggedIn === 'loggedIn'}
             />
           </button>
-          <div className="absolute bottom-2 right-2 z-10 group-hover/button:border-purple hidden md:block">
+          <div className="absolute w-full bottom-2 right-2 z-10 group-hover/button:border-purple hidden md:block">
             <PlusButton
               postId={postId}
               width="24px"

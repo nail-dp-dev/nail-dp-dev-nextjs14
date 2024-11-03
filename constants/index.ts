@@ -363,12 +363,27 @@ export const ManagementMenu = [
 ]
 
 export const SettingElements = [
-  { name: '구독/결제 관리', desc: 'subscribe',menu:'결제수단 비츠' },
+  { name: '구독/결제 관리', desc: 'subscribe',menu:'결제 수단 • 비츠' },
   { name: '내 계정', desc: 'myAccount',menu:'내 계정 관리' },
   { name: '알림 설정', desc: 'alarm',menu:'알림 상세 설정' },
   { name: '채팅 설정', desc: 'chat' ,menu:'채팅방 보기 설정'},
   { name: '테마 설정', desc: 'theme' ,menu:'화면 테마'},
   { name: '언어 설정', desc: 'language',menu:'현재 설정'},
+]
+
+export const SettingMenuElements = [
+  { name: '결제 수단 • 비츠', desc: 'subscribe',menu:'결제 수단 • 비츠' },
+  { name: '결제 내역 보기', desc: 'subscribe',menu:'결제 내역 보기' },
+  { name: '나의 구독', desc: 'subscribe',menu:'나의 구독' },
+  { name: '내 계정 관리', desc: 'myAccount',menu:'내 계정 관리' },
+  { name: '간편 로그인 연동 • 해제', desc: 'myAccount',menu:'간편 로그인 연동 • 해제' },
+  { name: '알림 상세 설정', desc: 'alarm',menu:'알림 상세 설정' },
+  { name: '채팅방 보기 설정', desc: 'chat' ,menu:'채팅방 보기 설정'},
+  { name: '채팅 차단 목록', desc: 'chat' ,menu:'채팅 차단 목록'},
+  { name: '화면 테마', desc: 'theme' ,menu:'화면 테마'},
+  { name: '채팅방 테마', desc: 'theme' ,menu:'채팅방 테마'},
+  { name: '스토어 테마', desc: 'theme' ,menu:'스토어 테마'},
+  { name: '현재 설정', desc: 'language',menu:'현재 설정'},
 ]
 
 export const AlarmSettingElements = [
