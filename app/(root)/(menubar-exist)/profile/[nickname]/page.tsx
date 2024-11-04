@@ -132,6 +132,7 @@ export default function ProfilePage() {
 
   const checkNickName = async () => {
     const data = await getUserData();
+    console.log("a",data);
     console.log(data.data.nickname, decodedNickname);
     if (data.data.nickname === decodedNickname) {
       router.push('/my-page');

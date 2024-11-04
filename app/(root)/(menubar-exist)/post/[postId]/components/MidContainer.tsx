@@ -192,6 +192,7 @@ export default function MidContainer({
       window.removeEventListener('touchmove', handleTouchMove);
     };
   }, [imageBoxWidth, alarmType]);
+  
 
   return (
     <div
@@ -253,8 +254,8 @@ export default function MidContainer({
             <PlusButton
               className="m-2"
               postId={postId}
-              width="24px"
-              height="24px"
+              width="36px"
+              height="36px"
               isClicked={saved}
               active={isLoggedIn === 'loggedIn'}
             />

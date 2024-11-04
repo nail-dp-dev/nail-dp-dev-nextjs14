@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import SearchIcon from '../../../../public/assets/svg/search.svg';
 import Bits from '../../../../public/assets/svg/bits.svg';
 import Plus from '../../../../public/assets/svg/plus.svg';
@@ -25,6 +25,9 @@ import {
   selectDarkMode,
   toggleDarkMode,
 } from '../../../../store/slices/themeSlice';
+import { getAllAlarmSetting } from '../../../../api/setting/getAllAlarmSetting';
+import { patchAllAlarmToggle } from '../../../../api/setting/patchAllAlarmToggle';
+import { patchOneAlarm } from '../../../../api/setting/patchOneAlarm';
 
 export default function SettingPage() {
   const [isCategoryBar, setIsCategoryBar] = useState('subscribe');
@@ -202,6 +205,7 @@ export default function SettingPage() {
 
   const alarmToggle = () => {
     setIsAlarm(!isAlarm);
+    patchAllAlarmToggle(!isAlarm)
   };
 
   const chatMenuSetting = () => {
@@ -230,6 +234,20 @@ export default function SettingPage() {
   const PaymentMenuSetting = () => {
     setIsPaymentMenu(!isPaymentMenu);
   };
+
+  const allAlarmSetting = async () => {
+    const data = await getAllAlarmSetting()
+    console.log("all",data);
+  }  
+
+  const oneAlarmSetting = async (type:string, state:boolean) => {
+    const data = await patchOneAlarm(type, state)
+    console.log("1",data);
+  }
+
+  useEffect(() => {
+    allAlarmSetting()
+  },[])
 
   return (
     <div className="SettingContainer h-full w-full overflow-hidden">
@@ -272,14 +290,12 @@ export default function SettingPage() {
       </div>
       {/* 버튼 메뉴 */}
       <div className={`mb-[20px] flex gap-[20px]`}>
-        <div
-          className={`flex h-[32px] w-full gap-[20px] text-[14px] font-[700]  ${isCategoryBar == 'alarm' ? 'justify-between' : ''}`}
-        >
+        <div className={`flex h-[32px] w-full gap-[20px] text-[14px] font-[700]`}>
           {SettingMenuElements.map((item, index) => {
             if (item.desc === isCategoryBar && item.desc !== 'alarm') {
               return (
                 <button
-                  key={index}
+                  key={item.menu}
                   onClick={(e) => MenuBarClick(e, `${item.menu}`)}
                   className={`text-[12px] xs:text-[10px]  md:text-[14px] ${
                     isMenu === `${item.menu}`
@@ -292,9 +308,8 @@ export default function SettingPage() {
               );
             } else if (item.desc === 'alarm' && isCategoryBar === item.desc) {
               return (
-                <>
+                <div className='flex w-full justify-between' key={index}>
                   <button
-                    key={index}
                     onClick={(e) => MenuBarClick(e, `${item.menu}`)}
                     className={`text-[12px] xs:text-[10px] md:text-[14px] ${
                       isMenu === `${item.menu}`
@@ -319,7 +334,7 @@ export default function SettingPage() {
                       </div>
                     </div>
                   </div>
-                </>
+                </div>
               );
             }
             return null;

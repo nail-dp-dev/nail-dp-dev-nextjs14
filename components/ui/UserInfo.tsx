@@ -2,10 +2,10 @@ import React from 'react';
 
 type UserInfoProps = {
   nickname: string;
-  postsCount?: string;
-  saveCount?: string;
-  followerCount?: string;
-  followCount?: string;
+  postsCount?: number | string;
+  saveCount?: number | string;
+  followerCount?: number | string;
+  followCount?: number | string;
   hoverStyle?: string;
   nicknameStyle?: string;
   statsStyle?: string;

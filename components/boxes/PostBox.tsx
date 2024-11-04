@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeartButton from '../animations/HeartButton';
 import PlusButton from '../animations/PlusButton';
 import Image from 'next/image';
@@ -39,6 +39,10 @@ function PostBox({
   
   const { showGeneralAction, handleToggleClick, boxRef } = useGeneralAction();
   const { isVisible, handleDelete } = useVisibility();
+
+  const [isHeart,setIsHeart] = useState(21)
+  const [isPlus, setIsPlus] = useState(24)
+  const [isCommonButton, setIsCommonButton] = useState(0)
 
   const [isLiked, setIsLiked] = useState(like);
   const [currentBoundary, setCurrentBoundary] = useState<'ALL' | 'FOLLOW' | 'NONE'>(initialBoundary);
@@ -79,6 +83,31 @@ function PostBox({
   const isVideo = photoUrl && (photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov'))
 
   if (!isVisible) return null;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1280) {
+        setIsPlus(36);
+        setIsHeart(33)
+      } else if (window.innerWidth > 1024) {
+        setIsPlus(24);
+        setIsHeart(21)
+        setIsCommonButton(20)
+      } else if (window.innerWidth <= 1024) {
+        setIsPlus(18);
+        setIsHeart(15)
+        setIsCommonButton(14)
+      }
+    };
+
+    // 컴포넌트가 마운트될 때와 창이 리사이즈될 때 크기를 감지
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   return (
     <div
@@ -123,24 +152,24 @@ function PostBox({
         {isVideo && <Video src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${photoUrl}`} width="100%" height="100%" />}
       </button>
 
-      {!tempPost && (
+      {!tempPost && isLoggedIn === 'loggedIn' && (
         <>
           <button
             onClick={handleHeartClick}
-            className="absolute right-4 top-4 z-10 group-hover/button:border-purple hidden md:block"
+            className="absolute right-3 lg:right-4 top-3 lg:top-4 z-10 group-hover/button:border-purple hidden md:block"
           >
             <HeartButton
-              width="21px"
-              height="19px"
+              width={`${isHeart}px`}
+              height={`${isHeart - 3}px`}
               isClicked={isLiked}
               active={isLoggedIn === 'loggedIn'}
             />
           </button>
-          <div className="absolute w-full bottom-2 right-2 z-10 group-hover/button:border-purple hidden md:block">
+          <div className="absolute w-full bottom-1 lg:bottom-2 right-1 lg:right-2 z-10 group-hover/button:border-purple hidden md:block">
             <PlusButton
               postId={postId}
-              width="24px"
-              height="24px"
+              width={`${isPlus}px`}
+              height={`${isPlus}px`}
               isClicked={saved}
               active={isLoggedIn === 'loggedIn'}
             />
@@ -150,9 +179,9 @@ function PostBox({
               type="toggle"
               onClick={handleToggleClick}
               width="4px"
-              height="20px"
+              height={`${isCommonButton}px`}
               showGeneralAction={showGeneralAction}
-              className="absolute left-2 top-2 z-[9] p-2 group-hover/button:border-purple hidden md:block"
+              className="absolute left-1 lg:left-2 top-1 lg:top-2 z-[9] p-2 group-hover/button:border-purple hidden md:block"
               position="nothing"
             />
           )}

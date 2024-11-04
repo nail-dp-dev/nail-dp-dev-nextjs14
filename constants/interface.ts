@@ -233,3 +233,8 @@ export interface profileData {
   profileUrl: string;
   saveCount: number;
 }
+
+export interface allAlarmSetting {
+    notificationType:string,
+    isEnabled:boolean
+}

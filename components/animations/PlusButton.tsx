@@ -22,7 +22,7 @@ import { getArchiveData } from '../../api/archive/getArchiveData';
 import Video from '../ui/Video';
 import Image from 'next/image';
 import { postSetArchive } from '../../api/archive/postSetArchive';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { deletePostArchive } from '../../api/archive/deletePostArchive';
 import { getPostArchive } from '../../api/archive/getPostArchive';
 import NoArchiveImage from '../../public/assets/svg/no-archive.svg';
@@ -50,6 +50,8 @@ export default function PlusButton({
   const { archiveId } = useParams<{ archiveId: string }>();
   const { isCommonModalShow } = useSelector(selectCommonModalStatus);
   const [isTrueArray, setIsTrueArray] = useState(false);
+  const [isPlus,setIsPlus] = useState(false)
+  const pathname = usePathname();
 
   const archiveData = async () => {
     const data = await getArchiveData();
@@ -223,7 +225,6 @@ export default function PlusButton({
         }, 300);
         dispatch(setArchivePost({ postId: 0 }));
       } else {
-        console.log('du');
         dispatch(setPlusState({ state: false }));
         setIsClick(true);
         setIsAnimate(true);
@@ -234,11 +235,17 @@ export default function PlusButton({
     }
   };
 
+  useEffect(() => {
+    if (pathname && pathname.includes("post")) {
+      setIsPlus(true)
+    }
+  },[])
+  
   return (
-    <div className={`buttonPlus absolute bottom-0 right-0 w-full ${className}`}>
+    <div className={`buttonPlus absolute bottom-0 right-0 w-full ${className} z-50`}>
       <button
         onClick={buttonClick}
-        className="absolute bottom-2 right-2 z-[12] transition-all duration-500"
+        className={`absolute bottom-1 lg:bottom-2 right-1 lg:right-2 z-[12] transition-all duration-500`}
       >
         <div className={`width='${width}' height='${height}'`}>
           <motion.svg
@@ -288,31 +295,31 @@ export default function PlusButton({
         </div>
       </button>
       <button
-        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-10 right-2' : 'bottom-2 right-2 opacity-0'}`}
+        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? `${isPlus ? "right-1 lg:right-2 bottom-12 lg:bottom-14":"bottom-7 right-1 lg:bottom-10 lg:right-2 xl:bottom-14"}` : 'bottom-2 right-2 opacity-0'}`}
         onClick={(e) => plusButtonClick()}
       >
         <PlusIcon width={`${width}`} hanging={`${height}`} />
       </button>
       <button
-        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? 'bottom-2 right-10' : 'bottom-2 right-2 opacity-0'}`}
+        className={`absolute z-10 transition-all duration-500 ${postId === ArchivePostId && starState && isClick ? `${isPlus ? "bottom-1 lg:bottom-2 right-12 lg:right-14":"bottom-1 right-7 lg:bottom-2 lg:right-10 xl:right-14"}` : 'bottom-2 right-2 opacity-0'}`}
         onClick={(e) => minusButtonClick()}
       >
         <MinusIcon width={`${width}`} hanging={`${height}`} />
       </button>
       {postState && ArchivePostId === postId && (
         <div
-          className={`absolute ${isClick ? 'bottom-[4.5rem]' : 'bottom-9'} right-0 z-10 mr-[6px] min-h-[69px] w-[calc(100%-24px)] min-w-[202px]`}
+          className={`absolute ${isClick ? `${isPlus ? "bottom-[5.5rem] xl:bottom-[6rem] mr-[6px]":"bottom-[3rem] lg:bottom-[4.5rem] xl:bottom-[6rem]"}` : 'bottom-6 lg:bottom-9'} right-0 z-10 lg:mr-[6px] xl:mr-[12px] min-h-[69px] w-[calc(100%-24px)] min-w-[202px]`}
         >
           <div
             id="scroll"
             className="z-11 absolute bottom-[1.11rem] mt-[1px] flex min-h-[50px] w-full justify-center overflow-y-auto rounded-[20px] bg-white py-[3px]"
           >
-            <div className="flex w-full flex-wrap items-center px-[8px] py-[5px]">
+            <div className="flex w-full justify-center items-center px-[8px] py-[5px]">
               {isArchiveDate.map((item, index) =>
                 item.isPhoto == null ? (
                   <div
                     key={index}
-                    className="group relative m-[2.5px] my-[5px] aspect-square w-[22.5%]"
+                    className="group relative m-[2.5px] my-[5px] aspect-square w-[22.5%] xl:w-[24%]"
                   >
                     {item.archiveImgUrl && (
                       <>
@@ -333,7 +340,7 @@ export default function PlusButton({
                       </>
                     )}
                     <div
-                      className="flex items-center justify-center bg-noArchiveColor"
+                      className="flex items-center justify-center bg-noArchiveColor overflow-hidden rounded-[8px] hover:border-[2px] hover:border-purple"
                       style={{ width: '100%', height: '100%' }}
                     >
                       <NoArchiveImage className="absolute" />

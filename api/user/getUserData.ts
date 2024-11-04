@@ -10,9 +10,6 @@ export const getUserData = async () => {
       credentials: 'include',
     })
 
-    console.log("유저",response);
-    
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
