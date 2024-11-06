@@ -235,6 +235,6 @@ export interface profileData {
 }
 
 export interface allAlarmSetting {
-    notificationType:string,
-    isEnabled:boolean
+  notificationType:string,
+  enabled:boolean
 }

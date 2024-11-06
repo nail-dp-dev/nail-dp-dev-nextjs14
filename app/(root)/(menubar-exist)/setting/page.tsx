@@ -28,6 +28,10 @@ import {
 import { getAllAlarmSetting } from '../../../../api/setting/getAllAlarmSetting';
 import { patchAllAlarmToggle } from '../../../../api/setting/patchAllAlarmToggle';
 import { patchOneAlarm } from '../../../../api/setting/patchOneAlarm';
+import { postAll } from '../../../../api/setting/postAll';
+import { allAlarmSetting } from '../../../../constants/interface';
+import { getLogOut } from '../../../../api/auth/secure/getLogOut';
+import { useRouter } from 'next/navigation';
 
 export default function SettingPage() {
   const [isCategoryBar, setIsCategoryBar] = useState('subscribe');
@@ -49,9 +53,12 @@ export default function SettingPage() {
 
   const [isScreenTheme, setIsScreenTheme] = useState(false);
 
+  const [isAlarmSetting, setIsAlarmSetting] = useState<allAlarmSetting[]>([]);
+
   const darkMode = useSelector(selectDarkMode);
   const isMounted = useIsMounted();
 
+  const router = useRouter();
   const dispatch = useDispatch();
 
   // 버튼을 클릭할 때 상태를 반전시키는 함수
@@ -203,9 +210,9 @@ export default function SettingPage() {
     dispatch(setCommonModal('road-address'));
   };
 
-  const alarmToggle = () => {
+  const alarmToggle = async () => {
     setIsAlarm(!isAlarm);
-    patchAllAlarmToggle(!isAlarm)
+    allAlarmToggle(!isAlarm);
   };
 
   const chatMenuSetting = () => {
@@ -235,19 +242,52 @@ export default function SettingPage() {
     setIsPaymentMenu(!isPaymentMenu);
   };
 
-  const allAlarmSetting = async () => {
-    const data = await getAllAlarmSetting()
-    console.log("all",data);
-  }  
-
-  const oneAlarmSetting = async (type:string, state:boolean) => {
-    const data = await patchOneAlarm(type, state)
-    console.log("1",data);
+  const LogOut = async() => {
+    const data = await getLogOut(dispatch);
+    router.push('/')
   }
 
+  const allAlarmSetting = async () => {
+    const data = await getAllAlarmSetting();
+    if (data.code === 2000) {
+      setIsAlarmSetting(data.data);
+    }
+  };
+
+  const allAlarmToggle = async (state: boolean) => {
+    const data = await patchAllAlarmToggle(state);
+    if (data.code === 2001) {
+      const updatedSettings = isAlarmSetting.map((setting) => ({
+        ...setting,
+        enabled: state,
+      }));
+
+      setIsAlarmSetting(updatedSettings);
+    }
+  };
+
+  const oneAlarmSetting = async (
+    type: string,
+    state: boolean,
+    index: number,
+  ) => {
+    const data = await patchOneAlarm(type, !state);
+    if (data.code === 2001) {
+      const updatedSettings = [...isAlarmSetting];
+      updatedSettings[index] = {
+        ...updatedSettings[index],
+        enabled: !state,
+      };
+      setIsAlarmSetting(updatedSettings);
+
+      const allEnabled = updatedSettings.every((setting) => setting.enabled);
+      setIsAlarm(allEnabled);
+    }
+  };
+
   useEffect(() => {
-    allAlarmSetting()
-  },[])
+    allAlarmSetting();
+  }, []);
 
   return (
     <div className="SettingContainer h-full w-full overflow-hidden">
@@ -290,9 +330,11 @@ export default function SettingPage() {
       </div>
       {/* 버튼 메뉴 */}
       <div className={`mb-[20px] flex gap-[20px]`}>
-        <div className={`flex h-[32px] w-full gap-[20px] text-[14px] font-[700]`}>
+        <div
+          className={`flex h-[32px] w-full gap-[20px] text-[14px] font-[700]`}
+        >
           {SettingMenuElements.map((item, index) => {
-            if (item.desc === isCategoryBar && item.desc !== 'alarm') {
+            if (item.desc === isCategoryBar && item.desc !== 'alarm' && item.name !== "로그아웃") {
               return (
                 <button
                   key={item.menu}
@@ -306,9 +348,25 @@ export default function SettingPage() {
                   {item.name}
                 </button>
               );
+            } else if (
+              item.desc === isCategoryBar && item.name === '로그아웃'
+            ) {
+              return ( // return 추가
+                <button
+                  key={item.menu}
+                  onClick={(e) => LogOut()}
+                  className={`text-[12px] xs:text-[10px]  md:text-[14px] ${
+                    isMenu === `${item.menu}`
+                      ? 'hashtag-layout button-tr-tf button-transition bg-purple text-white active:bg-darkPurple'
+                      : 'hashtag-layout hashtag-hover-active button-tr-tf button-transition bg-lightGray'
+                  }`}
+                >
+                  {item.name}
+                </button>
+              );
             } else if (item.desc === 'alarm' && isCategoryBar === item.desc) {
               return (
-                <div className='flex w-full justify-between' key={index}>
+                <div className="flex w-full justify-between" key={index}>
                   <button
                     onClick={(e) => MenuBarClick(e, `${item.menu}`)}
                     className={`text-[12px] xs:text-[10px] md:text-[14px] ${
@@ -320,16 +378,16 @@ export default function SettingPage() {
                     {item.name}
                   </button>
                   <div className="flex items-center pr-[33px]">
-                    <p className="pr-[20px] text-[14px] md:text-[18px] font-[400] text-textDarkPurple">
+                    <p className="pr-[20px] text-[14px] font-[400] text-textDarkPurple md:text-[18px]">
                       {`모든 알림 ${isAlarm ? '끄기' : '켜기'}`}
                     </p>
                     <div className="flex">
                       <div
-                        className={`flex h-[22px] w-[49px] md:h-[26px] md:w-[53px] cursor-pointer items-center rounded-full border-2 border-lightPurple/80 transition-all duration-300 ${isAlarm ? 'bg-purple' : 'bg-navMenuBotSolidGray'}`}
+                        className={`flex h-[22px] w-[49px] cursor-pointer items-center rounded-full border-2 border-lightPurple/80 transition-all duration-300 md:h-[26px] md:w-[53px] ${isAlarm ? 'bg-purple' : 'bg-navMenuBotSolidGray'}`}
                         onClick={alarmToggle}
                       >
                         <div
-                          className={`h-[20px] w-[20px] md:h-[24px] md:w-[24px] transform rounded-full bg-white shadow-md transition-transform duration-300 ${isAlarm ? 'translate-x-[30px]' : ''}`}
+                          className={`h-[20px] w-[20px] transform rounded-full bg-white shadow-md transition-transform duration-300 md:h-[24px] md:w-[24px] ${isAlarm ? 'translate-x-[30px]' : ''}`}
                         />
                       </div>
                     </div>
@@ -353,16 +411,16 @@ export default function SettingPage() {
             <div className="mr-[16px] flex items-center">
               <div className="flex">
                 <div
-                  className={`flex h-[22px] w-[49px] md:h-[26px] md:w-[53px] cursor-pointer items-center  rounded-full border-2 border-lightPurple/80 transition-all duration-300 ${isOn ? 'bg-purple' : 'bg-navMenuBotSolidGray '}`}
+                  className={`flex h-[22px] w-[49px] cursor-pointer items-center rounded-full border-2  border-lightPurple/80 transition-all duration-300 md:h-[26px] md:w-[53px] ${isOn ? 'bg-purple' : 'bg-navMenuBotSolidGray '}`}
                   onClick={handleToggle}
                 >
                   <div
-                    className={`h-[20px] w-[20px] md:h-[24px] md:w-[24px] transform rounded-full bg-white shadow-md transition-transform duration-300 ${isOn ? 'translate-x-[26px]' : ''}`}
+                    className={`h-[20px] w-[20px] transform rounded-full bg-white shadow-md transition-transform duration-300 md:h-[24px] md:w-[24px] ${isOn ? 'translate-x-[26px]' : ''}`}
                   />
                 </div>
               </div>
               <p
-                className={`${isOn ? 'text-purple' : 'text-darkGray'} ml-[10px] text-[12px] md:text-[14px] font-[700]`}
+                className={`${isOn ? 'text-purple' : 'text-darkGray'} ml-[10px] text-[12px] font-[700] md:text-[14px]`}
               >
                 나의 비츠 잔액 숨기기
               </p>
@@ -371,11 +429,11 @@ export default function SettingPage() {
           <div className="relative mb-[40px] flex h-[110px] w-full rounded-lg border-2 border-purple">
             <div className="ml-[34px] flex items-center gap-[20px]">
               <Bits className="h-[33px] w-[33px] md:h-[44px] md:w-[44px]" />
-              <p className="text-[15px] md:text-[21px] font-[700] text-darkPurple">
+              <p className="text-[15px] font-[700] text-darkPurple md:text-[21px]">
                 {'1,000'} 비츠
               </p>
             </div>
-            <button className="absolute right-[16px] top-[16px] rounded-lg bg-lightPurple/80 px-[12px] py-[4px] text-[12px] md:text-[14px] font-[700] text-darkPurple hover:text-purple">
+            <button className="absolute right-[16px] top-[16px] rounded-lg bg-lightPurple/80 px-[12px] py-[4px] text-[12px] font-[700] text-darkPurple hover:text-purple md:text-[14px]">
               자동 충전
             </button>
           </div>
@@ -385,10 +443,10 @@ export default function SettingPage() {
             </p>
             <div className="flex h-[215px] w-full justify-center rounded-lg border-2 border-purple">
               <div className="flex w-full flex-col items-center">
-                <p className="pb-[40px] pt-[35px] text-[14px] md:text-[18px] font-[500] text-darkPurple">
+                <p className="pb-[40px] pt-[35px] text-[14px] font-[500] text-darkPurple md:text-[18px]">
                   등록된 결제 수단이 없습니다.
                 </p>
-                <button className="relative flex h-[50px] w-[220px] md:h-[55px] md:w-[260px] text-[14px] md:text-[18px] items-center justify-center rounded-full bg-lightGray font-[700] text-darkPurple shadow-md">
+                <button className="relative flex h-[50px] w-[220px] items-center justify-center rounded-full bg-lightGray text-[14px] font-[700] text-darkPurple shadow-md md:h-[55px] md:w-[260px] md:text-[18px]">
                   <Plus className="absolute left-[24px]" />
                   <p>결제 수단 추가</p>
                 </button>
@@ -580,7 +638,7 @@ export default function SettingPage() {
                     key={index}
                     className="flex min-h-[122px] w-full flex-col rounded-lg border-2 border-purple px-[17px] py-[10px]"
                   >
-                    <div className="flex w-[100%] md:w-[40%] text-[14px]">
+                    <div className="flex w-[100%] text-[14px] md:w-[40%]">
                       <p className="mr-[10px] font-[700]">{item.name}</p>
                       <p className="font-[400]">+82 {item.phone}</p>
                     </div>
@@ -717,7 +775,7 @@ export default function SettingPage() {
       {/* 알람 */}
       {isCategoryBar === 'alarm' && (
         <div className="flex h-full w-full flex-col">
-          <div className="max-h-full text-[13px] md:text-[14px] lg:text-[18px] break-keep whitespace-normal">
+          <div className="max-h-full whitespace-normal break-keep text-[13px] md:text-[14px] lg:text-[18px]">
             <div className="flex h-full flex-col items-center overflow-y-scroll rounded-lg border-2 border-purple transition-all">
               {AlarmSettingElements.map((item, index) => {
                 return (
@@ -733,11 +791,17 @@ export default function SettingPage() {
                     </div>
                     <div className="flex items-center pr-[33px]">
                       <div
-                        className={`flex h-[22px] w-[49px] md:h-[26px] md:w-[53px] cursor-pointer items-center  rounded-full border-2 border-lightPurple/80 transition-all duration-300 ${isAlarm ? 'bg-purple' : 'bg-navMenuBotSolidGray '}`}
-                        onClick={alarmToggle}
+                        className={`flex h-[22px] w-[49px] cursor-pointer items-center rounded-full border-2  border-lightPurple/80 transition-all duration-300 md:h-[26px] md:w-[53px] ${isAlarmSetting[index] && isAlarmSetting[index].enabled ? 'bg-purple' : 'bg-navMenuBotSolidGray '}`}
+                        onClick={(e) =>
+                          oneAlarmSetting(
+                            item.menu,
+                            isAlarmSetting[index].enabled,
+                            index,
+                          )
+                        }
                       >
                         <div
-                          className={`h-[20px] w-[20px] md:h-[24px] md:w-[24px] transform rounded-full bg-white shadow-md transition-transform duration-300 ${isAlarm ? 'translate-x-[30px]' : ''}`}
+                          className={`h-[20px] w-[20px] transform rounded-full bg-white shadow-md transition-transform duration-300 md:h-[24px] md:w-[24px] ${isAlarmSetting[index] && isAlarmSetting[index].enabled ? 'translate-x-[30px]' : ''}`}
                         />
                       </div>
                     </div>
@@ -753,7 +817,7 @@ export default function SettingPage() {
       {isCategoryBar === 'chat' && isMenu === '채팅방 보기 설정' && (
         <div className="flex flex-col rounded-lg border-2 border-purple">
           <div
-            className={`flex min-h-[45px] md:min-h-[55px] w-full items-center justify-between text-[12px] md:text-[14px] font-[700] ${isChatSetting ? 'rounded-lg border-b-2 border-lightPurple' : ''}`}
+            className={`flex min-h-[45px] w-full items-center justify-between text-[12px] font-[700] md:min-h-[55px] md:text-[14px] ${isChatSetting ? 'rounded-lg border-b-2 border-lightPurple' : ''}`}
           >
             <p className="pl-[34px]">{isChatState}</p>
             <button onClick={chatMenuSetting} className="pr-[20px]">
@@ -770,7 +834,7 @@ export default function SettingPage() {
                   <button
                     key={index}
                     onClick={(e) => chatMenuClick(item.name)}
-                    className={`flex min-h-[45px] md:min-h-[55px] w-full items-center justify-between rounded-lg text-[14px] font-[700] hover:bg-lightPurple ${isLastItem ? '' : 'rounded-lg border-b-2 border-lightPurple'} `}
+                    className={`flex min-h-[45px] w-full items-center justify-between rounded-lg text-[14px] font-[700] hover:bg-lightPurple md:min-h-[55px] ${isLastItem ? '' : 'rounded-lg border-b-2 border-lightPurple'} `}
                   >
                     <p className="pl-[34px]">{item.name}</p>
                   </button>
@@ -790,7 +854,7 @@ export default function SettingPage() {
       {isCategoryBar === 'theme' && isMenu === '화면 테마' && (
         <div className="flex flex-col rounded-lg border-2 border-purple">
           <div
-            className={`flex min-h-[45px] md:min-h-[55px] w-full items-center justify-between text-[12px] md:text-[14px] font-[700] ${isScreenTheme ? 'rounded-lg border-b-2 border-lightPurple' : ''}`}
+            className={`flex min-h-[45px] w-full items-center justify-between text-[12px] font-[700] md:min-h-[55px] md:text-[14px] ${isScreenTheme ? 'rounded-lg border-b-2 border-lightPurple' : ''}`}
           >
             <p className="pl-[34px]">
               {!darkMode ? '라이트 모드' : '다크 모드'}
@@ -810,7 +874,7 @@ export default function SettingPage() {
                   <button
                     key={index}
                     onClick={modeToggle}
-                    className={`flex min-h-[45px] md:min-h-[55px] w-full items-center justify-between rounded-lg text-[14px] font-[700] hover:bg-lightPurple ${
+                    className={`flex min-h-[45px] w-full items-center justify-between rounded-lg text-[14px] font-[700] hover:bg-lightPurple md:min-h-[55px] ${
                       isLastItem
                         ? ''
                         : 'rounded-lg border-b-2 border-lightPurple'
@@ -840,7 +904,7 @@ export default function SettingPage() {
       {isCategoryBar === 'language' && isMenu === '현재 설정' && (
         <div className="flex flex-col rounded-lg bg-lightPurple">
           <div
-            className={`flex min-h-[45px] md:min-h-[55px] w-full items-center justify-between text-[12px] md:text-[14px] font-[700]`}
+            className={`flex min-h-[45px] w-full items-center justify-between text-[12px] font-[700] md:min-h-[55px] md:text-[14px]`}
           >
             <p className="pl-[34px]">한국어 (기본)</p>
             <button className="pr-[20px]">

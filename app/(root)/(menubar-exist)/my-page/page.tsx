@@ -274,62 +274,80 @@ export default function MyPagePage() {
           <div className="h-[13px] w-full"></div>
         </div>
       </div>
-      <div className="MyPageContainer max-h-full ">
-        <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
-          <PostCreate />
-          {isTempData.length > 0 &&
-            (isTempData[0] !== undefined ? (
-              <PostBox
-                postId={isTempData[0].postId}
-                photoId={isTempData[0].photoId}
-                photoUrl={isTempData[0].photoUrl}
-                saved={false}
-                createdDate={'temp'}
-                tempPost={true}
-                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                setSharedCount={setSharedCount}
-                boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                isOptional={true}
-                showOnlyShareButton={false}
-              />
-            ) : (
-              <div
-                className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
-                style={{ width: postBoxWidths[layoutNum] }}
-                onClick={handleTempClick}
-              >
-                <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
-                  <p className="z-10 text-center text-[16px] ">
-                    임시저장된 게시물
-                  </p>
+      {isCategory === 'myPost' && (
+        <div className="MyPageContainer max-h-full ">
+          <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
+            <PostCreate />
+            {isTempData.length > 0 &&
+              (isTempData[0] !== undefined ? (
+                <PostBox
+                  postId={isTempData[0].postId}
+                  photoId={isTempData[0].photoId}
+                  photoUrl={isTempData[0].photoUrl}
+                  saved={false}
+                  createdDate={'temp'}
+                  tempPost={true}
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  setSharedCount={setSharedCount}
+                  boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                  isOptional={true}
+                  showOnlyShareButton={false}
+                />
+              ) : (
+                <div
+                  className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                  style={{ width: postBoxWidths[layoutNum] }}
+                  onClick={handleTempClick}
+                >
+                  <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                    <p className="z-10 text-center text-[16px] ">
+                      임시저장된 게시물
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          {isMyPageData &&
-            isMyPageData.map((item, index) => {
-              if (item && item.postId) {
-                return (
-                  <PostBox
-                    key={index}
-                    postId={item.postId}
-                    photoId={item.photoId}
-                    photoUrl={item.photoUrl}
-                    like={item.like}
-                    saved={item.saved}
-                    createdDate={item.createdDate}
-                    tempPost={false}
-                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                    setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={true}
-                    showOnlyShareButton={false}
-                  />
-                );
-              }
-              return null;
-            })}
+              ))}
+            {isMyPageData &&
+              isMyPageData.map((item, index) => {
+                if (item && item.postId) {
+                  return (
+                    <PostBox
+                      key={index}
+                      postId={item.postId}
+                      photoId={item.photoId}
+                      photoUrl={item.photoUrl}
+                      like={item.like}
+                      saved={item.saved}
+                      createdDate={item.createdDate}
+                      tempPost={false}
+                      setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                      setSharedCount={setSharedCount}
+                      boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                      isOptional={true}
+                      showOnlyShareButton={false}
+                    />
+                  );
+                }
+                return null;
+              })}
+          </div>
         </div>
-      </div>
+      )}
+      {isCategory === 'reservation' && (
+        <div className="flex h-full w-full flex-col justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-center pb-[300px] text-center">
+            <p>제작중인 페이지 입니다 12월 중 서비스 런칭 계획중 입니다</p>
+            <p>♥️ 많은 관심 부탁드립니다 ♥️</p>
+          </div>
+        </div>
+      )}
+      {isCategory === 'buy' && (
+        <div className="flex h-full w-full flex-col justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-center pb-[300px] text-center">
+            <p>제작중인 페이지 입니다 12월 중 서비스 런칭 계획중 입니다</p>
+            <p>♥️ 많은 관심 부탁드립니다 ♥️</p>
+          </div>
+        </div>
+      )}
     </div>
   ) : (
     <Loading />

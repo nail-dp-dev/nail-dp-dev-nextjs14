@@ -41,7 +41,7 @@ function PostBox({
   const { isVisible, handleDelete } = useVisibility();
 
   const [isHeart,setIsHeart] = useState(21)
-  const [isPlus, setIsPlus] = useState(24)
+  const [isPlus, setIsPlus] = useState(36)
   const [isCommonButton, setIsCommonButton] = useState(0)
 
   const [isLiked, setIsLiked] = useState(like);
@@ -82,7 +82,6 @@ function PostBox({
   const isPhoto = photoUrl && (photoUrl.endsWith('.jpg') || photoUrl.endsWith('.jpeg') || photoUrl.endsWith('.png') || photoUrl.endsWith('.gif'))
   const isVideo = photoUrl && (photoUrl.endsWith('.mp4') || photoUrl.endsWith('.mov'))
 
-  if (!isVisible) return null;
 
   useEffect(() => {
     const handleResize = () => {
@@ -100,7 +99,6 @@ function PostBox({
       }
     };
 
-    // 컴포넌트가 마운트될 때와 창이 리사이즈될 때 크기를 감지
     handleResize();
     window.addEventListener('resize', handleResize);
 
@@ -108,16 +106,18 @@ function PostBox({
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  if (!isVisible) return null;
   
   return (
     <div
       ref={boxRef}
-      className="group/button preload box relative flex items-center justify-center transition-all duration-500 "
+      className="group/button preload box relative flex items-center justify-center transition-all duration-500"
       style={{ width: postBoxWidths[layoutNum] }}
     >
       <button
         type="button"
-        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple"
+        className="absolute inset-0 z-[9] flex items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent transition-all duration-500 group-hover/button:border-purple aspect-square"
         onClick={(e) => { if (!tempPost) handlePostClick(e, postId); }}
 
       >
