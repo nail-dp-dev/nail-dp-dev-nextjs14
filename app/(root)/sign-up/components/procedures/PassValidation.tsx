@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SignUpPhoneNumberProps } from '../../../../../constants/interface';
-import { postIamPortToken } from '../../../../../api/auth/validation/postIamPortToken';
-import { getIamPortCertificate } from '../../../../../api/auth/validation/getIamPortCertificate';
+import { postPortOneCertification } from '../../../../../api/auth/validation/postPortOneCertification';
+import { useRouter } from 'next/navigation';
 
 declare global {
   interface Window {
@@ -27,12 +27,11 @@ declare global {
 
 
 const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNumberProps) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
-    const isPhoneNumberExist = () => {
-
-    }
 
     const jQueryScript = document.createElement('script');
     jQueryScript.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -55,19 +54,19 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
         }, async (rsp) => {
           setIsModalOpen(false);
           console.log(rsp);
-          if (rsp.success) {
-            console.log(rsp.imp_uid);
-            console.log(rsp.merchant_uid);
-                      
+          if (rsp.success && rsp.imp_uid) {
                       
             try {
-              // const getToken = await postIamPortToken(); 
-              // console.log(getToken, 'ㄸㄹㅉㄸㄹㅉㄸㄹ')
-              // const { access_token } = getToken.response; 
-              setProcedure('nickname')
-              const certificationsInfo = await getIamPortCertificate(rsp.imp_uid, '3603401e9443f15208aedac53ff2e95ed5a4f36b')
 
-              console.log(certificationsInfo, '인증정보...!')
+              const certificationsInfo = await postPortOneCertification(rsp.imp_uid)
+
+              if (certificationsInfo.code === 2000) {
+                setFinalPhoneNumber(certificationsInfo.data)
+                setProcedure('nickname')
+              } else if (certificationsInfo.code === 4001) {
+                alert('이미 등록 되어있는 번호입니다.')
+                router.push('/')
+              }
 
             } catch (error) {
               console.error("Error fetching token:", error);

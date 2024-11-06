@@ -22,20 +22,20 @@ export default function PrivacyPolicyComponent({ isSmall }: { isSmall: boolean }
             <span className='font-[350] text-[14px]'>귀하가 네디플을 사용할 때 당사는 일부 개인정보를 요청할 수 있습니다. 여기에는 다음이 포함될 수 있습니다.</span>
           </div>
           <div className='spanDiv w-full min-h-[50px] flex flex-col flex-shrink-0'>
-            <h2 className='font-[500] text-[16px]'>계정 세부정보</h2>
+            <h2 className='font-[500] text-[16px]'>{`[필수]`} 계정 세부정보</h2>
             <span className='font-[350] text-[14px]'><span className='font-[500]'>개인정보 : 회원가입 시 네디플에서 사용하는 이름, 이메일주소, 휴대폰번호, 닉네임</span>을 수집합니다.</span>
             <span className='font-[350] text-[14px]'><span className='font-[500]'>계정 로그인 정보: 사용자의 간편 로그인 정보</span>가  포함됩니다.</span>
           </div>
           <div className='spanDiv w-full min-h-[50px] flex flex-col flex-shrink-0'>
-            <h2 className='font-[500] text-[16px]'>주문 정보</h2>
+            <h2 className='font-[500] text-[16px]'>{`[필수]`} 주문 정보</h2>
             <span className='font-[350] text-[14px]'><span className='font-[500]'>구매 세부정보:</span> 귀하가 구매할 때 당사는 <span className='font-[500]'>귀하가 주문한 품목, 배송 주소, 결제 세부정보</span>에 대한 정보를 수집합니다.</span>
           </div>
           <div className='spanDiv w-full min-h-[50px] flex flex-col flex-shrink-0'>
-            <h2 className='font-[500] text-[16px]'>네일숍 예약 정보</h2>
+            <h2 className='font-[500] text-[16px]'>{`[필수]`} 네일숍 예약 정보</h2>
             <span className='font-[350] text-[14px]'><span className='font-[500]'>예약내역 : 네일샵 예약 시 예약하신 네일샵, 예약시간, 예약금 입금, 추가 예약내역</span> 등의 정보를 수집합니다.</span>
           </div>
           <div className='spanDiv w-full min-h-[50px] flex flex-col flex-shrink-0 mb-[40px]'>
-            <h2 className='font-[500] text-[16px]'>사용 데이터</h2>
+            <h2 className='font-[500] text-[16px]'>{`[특정 기능 사용 시]`} 사용 데이터</h2>
             <span className='font-[350] text-[14px]'><span className='font-[500]'>플랫폼 상호 작용:</span> 당사는 <span className='font-[500]'>귀하가 당사 아카이브에 저장한 이미지와 디자인 생성 기능에 대한 사용 데이터를 포함하여 귀하가 당사 기능을 사용하는 방법에 대한 정보</span>를 수집합니다.</span>
           </div>
           <div className='spanDiv w-full min-h-[50px] flex flex-col flex-shrink-0 mb-[40px]'>

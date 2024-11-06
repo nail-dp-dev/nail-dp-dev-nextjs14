@@ -1,13 +1,14 @@
-export const postIamPortToken = async () => {
+export const postPortOneCertification = async (imp_uid:string) => {
   
   try {
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/portone/token`, {
-      method: "GET",
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/portone/certification`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: 'include',
+      body: JSON.stringify({ imp_uid })
     })
 
     if (!response.ok) {
@@ -15,7 +16,7 @@ export const postIamPortToken = async () => {
       throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorMessage}`);
     }
     
-    return response;
+    return await response.json();
 
   } catch (error) {
 

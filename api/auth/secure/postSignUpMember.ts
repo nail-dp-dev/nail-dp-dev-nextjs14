@@ -4,7 +4,9 @@ import { PostSignUpData } from '../../../types/dataType'
 export const postSignUpMember = async ({ nickname, finalPhoneNumber, finalAgreement, router, dispatch }:PostSignUpData) => {
   
   try {
-
+    
+    console.log(finalPhoneNumber)
+    
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
       method: 'POST',
       headers: {
