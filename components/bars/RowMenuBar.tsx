@@ -61,14 +61,17 @@ export default function RowMenuBar() {
             <div className="w-full h-full flex items-center justify-between gap-[6px] md:gap-[0px] overflow-hidden overflow-x-scroll hide-scrollbar snap-x snap-mandatory rounded-[200px]">
               <div className='flex items-center gap-[20px]'>
                 <button 
-                  onClick={(e)=>{clickProfileImage(e)}}
-                  className='w-[40px] h-[40px] rounded-full overflow-hidden'>
-                  <Image
-                    src={userProfileUrl}
-                    alt={'profileIamge'}
-                    width={40}
-                    height={40}
-                  />
+                onClick={(e) => { clickProfileImage(e) }}
+                className={`{!userData && 'hidden'} w-[40px] h-[40px] rounded-full overflow-hidden`}>
+                  {
+                    userProfileUrl &&
+                      <Image
+                        src={userProfileUrl}
+                        alt={'profileIamge'}
+                        width={40}
+                        height={40}
+                      />
+                  }
                 </button>
                 <div className='flex items-center justify-center gap-[10px]'>
                   <Bits width={24} height={24}/>
