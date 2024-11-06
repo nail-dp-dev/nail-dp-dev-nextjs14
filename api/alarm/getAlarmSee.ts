@@ -59,3 +59,12 @@ function displayNotification(message: string) {
     console.log('알림 권한이 없어 푸시 알림을 표시할 수 없습니다.');
   }
 }
+
+requestNotificationPermission().then((hasPermission) => {
+  if (hasPermission) {
+    getAlarmSee();
+    setInterval(getAlarmSee, 10 * 60 * 1000);
+  } else {
+    console.log('알림 권한이 없어 알림을 받을 수 없습니다.');
+  }
+});

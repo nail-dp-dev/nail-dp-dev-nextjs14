@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { postSignUpMember } from '../../../../../api/auth/secure/postSignUpMember';
 import { getIsNickNameExist } from '../../../../../api/auth/helper/getIsNIckNameExist';
 import { useDispatch } from 'react-redux';
+import { getAlarmSee } from '../../../../../api/alarm/getAlarmSee';
 
 
 
@@ -56,6 +57,7 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
       return
     }
     postSignUpMember({nickname, finalPhoneNumber, finalAgreement, router, dispatch})
+    getAlarmSee();
   }
 
   console.log(nicknameError);
