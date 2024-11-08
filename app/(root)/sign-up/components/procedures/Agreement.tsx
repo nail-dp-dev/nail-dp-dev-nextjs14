@@ -58,7 +58,7 @@ export default function Agreement({setProcedure, setFinalAgreement}:SignUpAgreem
     e.preventDefault()
     e.stopPropagation()
     if (checkedItems[0] && checkedItems[1] && checkedItems[2]) {
-      setProcedure('phone')
+      setProcedure('nickname')
       setFinalAgreement(checkedItems[3])
     } else {
       alert('필수 동의항목에 동의가 필요합니다.')
