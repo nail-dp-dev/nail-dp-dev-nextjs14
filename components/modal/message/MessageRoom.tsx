@@ -131,7 +131,7 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
   // console.log(activateChatRoomId, '여기여기 활성화된 룸아이디')
   
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws-stomp');
+    const socket = new SockJS('https://localhost:8080/ws-stomp');
     const stompClient = new Client({
       webSocketFactory: () => socket,
       // debug: (str) => console.log(str),
