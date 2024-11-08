@@ -2,7 +2,7 @@ export const getAlarm = async () => {
     
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/notifications`,
+      `${process.env.NEXT_PUBLIC_API_URL}/notifications`,
       {
         method: 'Get',
         headers: {

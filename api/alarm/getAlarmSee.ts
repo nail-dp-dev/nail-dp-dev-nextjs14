@@ -1,55 +1,33 @@
-export const getAlarmSee = async () => {
-  const hasPermission = await requestNotificationPermission();
-  if (!hasPermission) {
-    console.log('알림 권한이 없어 알림을 받을 수 없습니다.');
-    return;
-  }
+import { AppDispatch } from '../../store/store';
+import { connectSSE, disconnectSSE, setSSEError } from '../../store/slices/sseSlice';
 
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'text/event-stream',
-        },
-        credentials: 'include',
-      }
-    );
+export const getAlarmSee = (dispatch: AppDispatch) => {
 
-    if (!response.ok) {
-      throw new Error('알림 구독에 실패했습니다.');
+  const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`, {
+    withCredentials: true,
+  });
+
+  eventSource.onopen = () => {
+    dispatch(connectSSE());
+  };
+
+   eventSource.onmessage = (e) => {
+    const message = e.data;
+    if (message.includes("EventStream")) {
+      return;
     }
+    displayNotification(message);
+  };
 
-    const reader = response.body!.getReader();
-    const readStream = () => {
-      reader.read().then(({ done, value }) => {
-        if (done) {
-          console.log('스트림이 종료되었습니다.');
-          return;
-        }
-        const text = new TextDecoder().decode(value);
-        displayNotification(text);
-        readStream();
-      });
-    };
+  eventSource.onerror = () => {
+    dispatch(setSSEError("SSE 연결 오류"));
+    eventSource.close();
+    getAlarmSee(dispatch);
+  };
 
-    readStream();
-  } catch (error) {
-    console.error('알림 요청 중 에러 발생:', error);
-  }
+  return eventSource;
 };
 
-// 알림 권한 요청
-async function requestNotificationPermission() {
-  if (Notification.permission === 'default') {
-    const permission = await Notification.requestPermission();
-    return permission === 'granted';
-  }
-  return Notification.permission === 'granted';
-}
-
-// 알림 표시 함수
 function displayNotification(message: string) {
   if (Notification.permission === 'granted') {
     new Notification('새 알림이 도착했습니다!', {
@@ -59,12 +37,3 @@ function displayNotification(message: string) {
     console.log('알림 권한이 없어 푸시 알림을 표시할 수 없습니다.');
   }
 }
-
-requestNotificationPermission().then((hasPermission) => {
-  if (hasPermission) {
-    getAlarmSee();
-    setInterval(getAlarmSee, 10 * 60 * 1000);
-  } else {
-    console.log('알림 권한이 없어 알림을 받을 수 없습니다.');
-  }
-});

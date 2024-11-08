@@ -11,7 +11,6 @@ import CloseIcon from '../../../../public/assets/svg/close.svg';
 import RingIcon from '../../../../public/assets/svg/ring-icon.svg';
 import BusinessIcon from '../../../../public/assets/svg/shop-icon.svg';
 import { getAlarm } from '../../../../api/alarm/getAlarm';
-import { getAlarmSee } from '../../../../api/alarm/getAlarmSee';
 import { PatchAlarm } from '../../../../api/alarm/PatchAlarm';
 
 interface alarmData {
@@ -47,27 +46,20 @@ export default function AlarmModal() {
     const alarmData = await getAlarm();
     setIsAlarmData(alarmData.data.content);
     const data = alarmData.data.content;
+    console.log("알림 데이터",data);
     const patchData = data
       .filter((item: { isRead: boolean }) => item.isRead === false)
       .map((item: { notificationId: number }) => item.notificationId);
     PatchAlarm(patchData);
   };
 
-  const fetchAlarmDataSee = async () => {
-    const fetchAlarmDataSee = await getAlarmSee();
-    console.log(fetchAlarmDataSee);
-  };
-
   useEffect(() => {
     fetchAlarmData();
-    fetchAlarmDataSee();
   }, []);
 
   const line = isAlarmData
     .filter((item: { isRead: boolean }) => item.isRead === false)
     .map((item: { notificationId: number }) => item.notificationId);
-
-  console.log(line.length);
 
   return (
     whichCommonModal === 'alarm-notice' &&

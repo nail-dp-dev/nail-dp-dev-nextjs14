@@ -13,7 +13,6 @@ import { PostArray } from '../../../../types/dataType';
 import { getLikedPosts } from '../../../../api/post/getLikedPostsData';
 import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
-import Head from 'next/head';
 
 export default function ArchivePage() {
 
@@ -245,7 +244,6 @@ export default function ArchivePage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
-
 
   const itemsToRender = postsData
     ? postsData.length <= layoutNum
