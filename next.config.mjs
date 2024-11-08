@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  output: "standalone",
+  output: 'standalone',
   crossOrigin: 'anonymous',
 
   eslint: {
@@ -67,7 +67,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'd22v4unr65uoec.cloudfront.net',
       },
-
+      {
+        protocol: 'https',
+        hostname: 'phinf.pstatic.net',
+      },
     ],
     formats: ['image/webp'],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

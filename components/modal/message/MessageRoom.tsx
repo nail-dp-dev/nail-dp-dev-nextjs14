@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { UUID } from 'crypto';
 import { postFileChat } from '../../../api/chat/postFileChat';
+import { setActivateChatRoomId } from '../../../store/slices/messageSlice';
 
 interface ChatMessage {
   content: string;
@@ -127,40 +128,28 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     }
   };
 
+  // console.log(activateChatRoomId, '여기여기 활성화된 룸아이디')
+  
   useEffect(() => {
-    if (clientRef.current) {
-      clientRef.current.deactivate();
-    }
-
-    const socket = new SockJS('http://localhost:8080/ws-stomp');
+    const socket = new SockJS('https://www.naildp.com/api/ws-stomp');
     const stompClient = new Client({
       webSocketFactory: () => socket,
-      debug: (str) => {
-      },
+      // debug: (str) => console.log(str),
     });
 
-    const getBeforeChat = async (chatRoomId: string) => {
-      try {
-        const result = await getChat(chatRoomId);
-        if (result) {
-          setMessages(result.data.contents);
-          setFirstUnreadMessageId(result.data.firstUnreadMessageId);
-          setChatUserInfo(result.data.chatUserInfo);
-        }
-      } catch (error) {
-        console.error("Error fetching chat messages:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getBeforeChat(activateChatRoomId);
-
     stompClient.onConnect = () => {
+      stompClient.subscribe(`/topic/chat/${userNickName}/newRoom`, (message: Message) => {
+        const receivedMessage: ChatMessage = JSON.parse(message.body);
+        if (activateChatRoomId !== receivedMessage.toString()) {
+          setActivateChatRoomId(receivedMessage.toString());
+          console.log(receivedMessage, '챗룸 아이디가 변경되었습니다.');
+        }
+      });
 
       stompClient.subscribe(`/sub/chat/${activateChatRoomId}`, (message: Message) => {
         const receivedMessage: ChatMessage = JSON.parse(message.body);
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        console.log('챗룸 내용 가져오기 sub')
       });
     };
 
@@ -170,13 +159,35 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
     return () => {
       if (clientRef.current) {
         clientRef.current.deactivate();
+        clientRef.current = null;
       }
     };
-  }, [activateChatRoomId]);
+  }, [activateChatRoomId, userNickName]);
 
   useEffect(() => {
     scrollToBottomAuto();
   }, [messages]);
+
+  useEffect(() => {
+    const fetchChat = async () => {
+      try {
+        setIsLoading(true);
+        const result = await getChat(activateChatRoomId);
+        if (result) {
+          setMessages(result.data.contents);
+          setChatUserInfo(result.data.chatUserInfo);
+        }
+      } catch (error) {
+        console.error("Error fetching chat messages:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (activateChatRoomId) {
+      fetchChat();
+    }
+  }, [activateChatRoomId]);
   
   const sendMessage = () => {
     if (clientRef.current && inputMessage.trim()) {
@@ -186,11 +197,11 @@ const ChatComponent = ({ clickCloseChatRoom, isChatModalMax }: ChatComponentProp
         mention: [],
         messageType: 'TEXT',
         chatRoomId: activateChatRoomId,
-        media: []
+        media: [],
       };
 
       clientRef.current.publish({
-        destination: `/pub/chat/${activateChatRoomId}/message`,
+        destination: `/pub/chat/${activateChatRoomId}/message`, 
         body: JSON.stringify(messageDto),
       });
 
