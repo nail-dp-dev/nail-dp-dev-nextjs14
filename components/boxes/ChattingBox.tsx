@@ -362,7 +362,7 @@ useEffect(() => {
       clientRef.current.deactivate();
     }
 
-    const socket = new SockJS('https://www.naildp.com/api/ws-stomp');
+    const socket = new SockJS('https://www.naildp.com/ws-stomp');
     const stompClient = new Client({
       webSocketFactory: () => socket,
     });
