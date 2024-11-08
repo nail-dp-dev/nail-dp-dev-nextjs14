@@ -82,10 +82,10 @@ export default function MyArchiveModal() {
   ) => {
     if (isName.length > 0) {
       const success = await postArchiveCreate(isName, isBoundary);
-      if (success.data) {
+      if (success.code === 2001 && postId) {
         setArchive(success.data, postId);
-      } else {
-        console.log('백엔드 아카이브 제한을 확인해주세요.');
+      }else{
+        closeModal();
       }
     } else {
       console.log('모달로 변경: 아카이브이름을 입력해주세요!');
@@ -311,13 +311,13 @@ export default function MyArchiveModal() {
                   <p className="text-[1rem] text-textDarkPurple">
                     최대 4개의 아카이브를 무료로 생성할 수 있습니다.
                   </p>
-                  <button className="flex h-[28px] w-[138px] items-center justify-center rounded-full border-[2px] border-purple text-[0.9rem] text-purple">
+                  {/* <button className="flex h-[28px] w-[138px] items-center justify-center rounded-full border-[2px] border-purple text-[0.9rem] text-purple">
                     <YellowIcon />
                     <p className="pl-[7px]">무제한 아카이브</p>
-                  </button>
+                  </button> */}
                 </div>
                 <div className="flex h-[160px] pt-[18px]">
-                  <div className="flex h-full w-[148px] flex-col pl-[16px] pr-[36px]">
+                  <div className="flex h-full w-[148px] flex-col pl-[16px] pr-[36px] hidden lg:flex">
                     <p className="pb-[10px] text-[0.9rem]">
                       (남은 개수: {4 - isArchive.length}개)
                     </p>
