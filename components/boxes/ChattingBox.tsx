@@ -365,6 +365,7 @@ useEffect(() => {
     const socket = new SockJS(`https://localhost/ws-stomp`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
+      debug: (str) => console.log(str),
     });
 
 
