@@ -362,7 +362,8 @@ useEffect(() => {
       clientRef.current.deactivate();
     }
 
-    const socket = new SockJS('http://localhost/ws-stomp');
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socket = new SockJS(`${protocol}://localhost/ws-stomp`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
     });
