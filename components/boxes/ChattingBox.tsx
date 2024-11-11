@@ -362,9 +362,10 @@ useEffect(() => {
       clientRef.current.deactivate();
     }
 
-    const socket = new SockJS('https://www.naildp.com/api/ws-stomp');
+    const socket = new SockJS(`https://www.naildp.com/ws-stomp`);
     const stompClient = new Client({
       webSocketFactory: () => socket,
+      debug: (str) => console.log(str),
     });
 
 
@@ -391,6 +392,10 @@ useEffect(() => {
   // 채팅방 만들기 컴포넌트 여는 버튼 눌렀을 때 실행하는 초기화 useEffect
   useEffect(() => {
 
+    if (!searchBoxOpen) {
+      return;
+    }
+
     const fetchRecentUserList = async () => {
       try {
         const result = await getChatRecent();
@@ -412,7 +417,7 @@ useEffect(() => {
     fetchRecentUserList()
     fetchRecommendUserList()
   
-  }, [])
+  }, [searchBoxOpen])
   
   useEffect(() => {
     if (chatAddedUser.length === 0) {
