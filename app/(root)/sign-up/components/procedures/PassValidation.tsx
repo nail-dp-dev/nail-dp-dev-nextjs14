@@ -25,14 +25,11 @@ declare global {
   }
 }
 
-
 const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNumberProps) => {
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter()
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-
     const jQueryScript = document.createElement('script');
     jQueryScript.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
     document.body.appendChild(jQueryScript);
@@ -46,37 +43,36 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
 
         setIsModalOpen(true);
 
-        IMP.certification({
-          channelKey: process.env.NEXT_PUBLIC_IMP_CHANNEL_KEY || '',
-          merchant_uid: 'merchant_test1' + Date(),
-          company: process.env.NEXT_PUBLIC_IMP_COMPANY || '',
-          popup: false,
-        }, async (rsp) => {
-          setIsModalOpen(false);
-          console.log(rsp);
-          if (rsp.success && rsp.imp_uid) {
-                      
-            try {
+        IMP.certification(
+          {
+            channelKey: process.env.NEXT_PUBLIC_IMP_CHANNEL_KEY || '',
+            merchant_uid: 'merchant_test1' + Date(),
+            company: process.env.NEXT_PUBLIC_IMP_COMPANY || '',
+            popup: false,
+          },
+          async (rsp) => {
+            setIsModalOpen(false);
 
-              const certificationsInfo = await postPortOneCertification(rsp.imp_uid)
+            if (rsp.success && rsp.imp_uid) {
+              try {
+                const certificationsInfo = await postPortOneCertification(rsp.imp_uid);
 
-              if (certificationsInfo.code === 2000) {
-                setFinalPhoneNumber(certificationsInfo.data)
-                setProcedure('nickname')
-              } else if (certificationsInfo.code === 4001) {
-                alert('이미 등록 되어있는 번호입니다.')
-                router.push('/')
+                if (certificationsInfo.code === 2000) {
+                  setFinalPhoneNumber(certificationsInfo.data);
+                  setProcedure('nickname');
+                } else if (certificationsInfo.code === 4001) {
+                  alert('이미 등록 되어있는 번호입니다.');
+                  router.push('/');
+                }
+              } catch (error) {
+                console.error('Error fetching token:', error);
               }
-
-            } catch (error) {
-              console.error("Error fetching token:", error);
+            } else {
+              const msg = `인증에 실패하였습니다. 에러내용: ${rsp.error_msg}`;
+              alert(msg);
             }
-
-          } else {
-            const msg = `인증에 실패하였습니다. 에러내용: ${rsp.error_msg}`;
-            alert(msg);
           }
-        });
+        );
       }
     };
 
@@ -85,6 +81,8 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
     return () => {
       document.body.removeChild(jQueryScript);
       document.body.removeChild(iamportScript);
+      // Cleanup 시 홈으로 리다이렉트
+      router.push('/');
     };
   }, []);
 
