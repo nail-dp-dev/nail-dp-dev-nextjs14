@@ -24,7 +24,7 @@ export default function ContentContainer({ editContent,onContentChange }:editDat
 
   return (
     <div className="flex h-[23vh] min-h-[156px] flex-col px-[16px] py-[12px]">
-      <div className="pb-[8px] text-[1rem]">
+      <div className="pb-[8px] text-[14px] md:text-[1rem]">
         <span className="font-bold">내용</span>
       </div>
       <div className="h-full w-full overflow-hidden rounded-lg border border-postInputGray focus-within:border-purple">

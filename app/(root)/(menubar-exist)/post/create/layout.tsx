@@ -1,4 +1,3 @@
-import MenuBar from '../../../../../components/bars/MenuBar';
 import NotLoginNotice from '../../../../../components/notice/NotLoginNotice';
 
 export default function PostCreateLayout({

@@ -245,7 +245,6 @@ export default function ArchivePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [likedButtonState]);
 
-
   const itemsToRender = postsData
     ? postsData.length <= layoutNum
       ? postsData
@@ -262,7 +261,7 @@ export default function ArchivePage() {
       <div className="ForYouContainer h-dvh overflow-hidden relative">
           <div
             ref={boxRef}
-            className="outBox relative flex h-full flex-wrap items-center gap-[0.7%] overflow-auto overflow-y-scroll transition-all"
+            className={`outBox relative flex h-full flex-wrap ${likedButtonState ? "":"items-center"} gap-[0.7%] overflow-auto overflow-y-scroll transition-all`}
           >
             {!likedButtonState &&
               isContentExist &&

@@ -362,7 +362,7 @@ export const ManagementMenu = [
 ]
 
 export const SettingElements = [
-  { name: '구독/결제 관리', desc: 'subscribe',menu:'결제수단 비츠' },
+  { name: '구독/결제 관리', desc: 'subscribe',menu:'결제 수단 • 비츠' },
   { name: '내 계정', desc: 'myAccount',menu:'내 계정 관리' },
   { name: '알림 설정', desc: 'alarm',menu:'알림 상세 설정' },
   { name: '채팅 설정', desc: 'chat' ,menu:'채팅방 보기 설정'},
@@ -370,18 +370,34 @@ export const SettingElements = [
   { name: '언어 설정', desc: 'language',menu:'현재 설정'},
 ]
 
+export const SettingMenuElements = [
+  { name: '결제 수단 • 비츠', desc: 'subscribe',menu:'결제 수단 • 비츠' },
+  { name: '결제 내역 보기', desc: 'subscribe',menu:'결제 내역 보기' },
+  { name: '나의 구독', desc: 'subscribe',menu:'나의 구독' },
+  { name: '내 계정 관리', desc: 'myAccount',menu:'내 계정 관리' },
+  { name: '간편 로그인 연동 • 해제', desc: 'myAccount',menu:'간편 로그인 연동 • 해제' },
+  { name: '로그아웃', desc: 'myAccount', menu:'로그아웃' },
+  { name: '알림 상세 설정', desc: 'alarm',menu:'알림 상세 설정' },
+  { name: '채팅방 보기 설정', desc: 'chat' ,menu:'채팅방 보기 설정'},
+  { name: '채팅 차단 목록', desc: 'chat' ,menu:'채팅 차단 목록'},
+  { name: '화면 테마', desc: 'theme' ,menu:'화면 테마'},
+  { name: '채팅방 테마', desc: 'theme' ,menu:'채팅방 테마'},
+  { name: '스토어 테마', desc: 'theme' ,menu:'스토어 테마'},
+  { name: '현재 설정', desc: 'language',menu:'현재 설정'},
+]
+
 export const AlarmSettingElements = [
-  { name: '게시글 저장 알림', desc: '누군가 내 게시글을 저장하면 알림을 표시합니다.' },
-  { name: '게시글 하트 알림', desc: '내 게시글에 하트가 눌리면 알림을 표시합니다.' },
-  { name: '게시글 언급 알림', desc: '누군가 게시글에 나를 언급하면 알림을 표시합니다.' },
-  { name: '게시글 댓글 알림', desc: '내 게시글에 댓글이 달리면 알림을 표시합니다.' },
-  { name: '댓글 하트 알림', desc: '내 댓글에 하트가 눌리면 알림을 표시합니다.'},
-  { name: '댓글 언급 알림', desc: '나를 언급한 댓글이 생기면 알림을 표시합니다.'},
-  { name: '팔로워 알림', desc: '누군가가 나를 팔로우하면 알림을 표시합니다.' },
-  { name: '팔로잉 알림', desc: '내가 팔로잉한 사람이 게시글을 올리면 알림을 표시합니다.' },
-  { name: '예약 알림', desc: '네일숍 예약시 알림을 표시합니다.' },
-  { name: '배송 알림', desc: '제품의 배송현황에 따라 알림을 표시합니다.' },
-  { name: '이벤트 알림', desc: '이벤트가 생기면 알림을 표시합니다.'},
+  { name: '게시글 저장 알림', desc: '누군가 내 게시글을 저장하면 알림을 표시합니다.',menu:'SAVE_POST' },
+  { name: '게시글 하트 알림', desc: '내 게시글에 하트가 눌리면 알림을 표시합니다.' ,menu:'POST_LIKE'},
+  // { name: '게시글 언급 알림', desc: '누군가 게시글에 나를 언급하면 알림을 표시합니다.',menu:'채팅방 테마' },
+  { name: '게시글 댓글 알림', desc: '내 게시글에 댓글이 달리면 알림을 표시합니다.' ,menu:'COMMENT'},
+  { name: '댓글 하트 알림', desc: '내 댓글에 하트가 눌리면 알림을 표시합니다.',menu:'COMMENT_LIKE'},
+  // { name: '댓글 언급 알림', desc: '나를 언급한 댓글이 생기면 알림을 표시합니다.',menu:'채팅방 테마'},
+  // { name: '팔로워 알림', desc: '누군가가 나를 팔로우하면 알림을 표시합니다.' ,menu:'채팅방 테마'},
+  { name: '팔로잉 알림', desc: '내가 팔로잉한 사람이 게시글을 올리면 알림을 표시합니다.' ,menu:'FOLLOW'},
+  // { name: '예약 알림', desc: '네일숍 예약시 알림을 표시합니다.' ,menu:'채팅방 테마'},
+  // { name: '배송 알림', desc: '제품의 배송현황에 따라 알림을 표시합니다.' ,menu:'채팅방 테마'},
+  // { name: '이벤트 알림', desc: '이벤트가 생기면 알림을 표시합니다.',menu:'채팅방 테마'},
 ]
 
 export const ChatViewElements = [

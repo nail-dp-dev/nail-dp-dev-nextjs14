@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLoginStatus } from '../../../../../store/slices/loginSlice';
-import { setCommonModal } from '../../../../../store/slices/modalSlice';
+import { setArchivePage, setCommonModal } from '../../../../../store/slices/modalSlice';
 
 export default function MyArchiveTopBar() {
   
@@ -12,6 +12,7 @@ export default function MyArchiveTopBar() {
   const makeNewArchive = (e:any) => {
     e.stopPropagation()
     dispatch(setCommonModal("archive"))
+    dispatch(setArchivePage({ state: 'archiveCreate' }));
   }
 
   return (

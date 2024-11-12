@@ -67,7 +67,7 @@ export default function MyPagePage() {
       setTimeout(() => {
         setIsHeartMark(false);
       }, 2000);
-    }else{
+    } else {
       setIsExclamationMark(true);
       setTimeout(() => {
         setIsExclamationMark(false);
@@ -78,7 +78,7 @@ export default function MyPagePage() {
   const explanationEnter = (str: string) => {
     if (str == 'heart') {
       setIsHeartMark(true);
-    }else{
+    } else {
       setIsExclamationMark(true);
     }
   };
@@ -86,7 +86,7 @@ export default function MyPagePage() {
   const explanationLeave = (str: string) => {
     if (str == 'heart') {
       setIsHeartMark(false);
-    }else{
+    } else {
       setIsExclamationMark(false);
     }
   };
@@ -100,6 +100,15 @@ export default function MyPagePage() {
       setIsMyPageData(postData.data.postSummaryList.content);
       setIsPostsLoading(true);
     }
+  };
+
+  const formatCount = (count: number) => {
+    if (count >= 10_000) {
+      return (count / 10_000).toFixed(1).replace(/\.0$/, '') + 'm';
+    } else if (count >= 1_000) {
+      return (count / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+    }
+    return count.toString();
   };
 
   const fetchPostTempData = async () => {
@@ -154,6 +163,8 @@ export default function MyPagePage() {
     }
   }, [isNickname, isLading, isCursorId, layoutNum]);
 
+  console.log(userData?.data.followingCount);
+
   return isPostsLoading ? (
     <div
       id="scroll1"
@@ -164,19 +175,20 @@ export default function MyPagePage() {
           <UserImage
             src={userData.data.profileUrl}
             alt="프로필이미지"
-            width={128}
-            height={128}
+            width={80}
+            height={80}
           />
-          <div className="ml-[16px] flex-1">
+
+          <div className="ml-[16px] flex-1 ">
             <UserInfo
               nickname={userData.data.nickname}
-              postsCount={userData.data.postsCount}
-              saveCount={userData.data.saveCount}
-              followerCount={userData.data.followerCount}
-              followCount={userData.data.followingCount}
+              postsCount={formatCount(userData.data.postsCount)}
+              saveCount={formatCount(userData.data.saveCount)}
+              followerCount={formatCount(userData.data.followerCount)}
+              followCount={formatCount(userData.data.followingCount ?? 0)}
               hoverStyle=""
-              nicknameStyle="text-[22px] font-bold"
-              statsStyle="text-sm font-normal"
+              nicknameStyle="text-[14px] md:text-[22px] font-bold"
+              statsStyle="font-normal text-[11px] md:text-[14px]"
             />
           </div>
         </div>
@@ -184,7 +196,7 @@ export default function MyPagePage() {
       <div className={`sticky top-0 z-[17] w-full bg-white`}>
         <div className="categoryBar flex h-[66px] w-full flex-col items-start justify-between px-[5px]">
           <div className="categoryDiv flex h-[53px] w-full items-center justify-between border-b-[1px] border-navBotSolidGray">
-            <div className="flex h-[53px] gap-[32px]">
+            <div className="flex h-[53px]  gap-[20px] xs:gap-[20px] md:gap-[32px]">
               {myPageCategoryElements.map((item, index) => {
                 return (
                   <button
@@ -199,33 +211,37 @@ export default function MyPagePage() {
                 );
               })}
             </div>
-            <div className="flex items-center">
-              {isExclamationMark && (
-                <p className="pr-[5px] text-darkPurple">
-                  비공개 처리된 게시물은 표시되지 않습니다.
-                </p>
-              )}
-              <button
-                className="pr-[32px]"
-                onClick={(e) => explanationClick('exclamation-mark')}
-                onMouseEnter={(e) => explanationEnter('exclamation-mark')}
-                onMouseLeave={(e) => explanationLeave('exclamation-mark')}
-              >
-                <ExclamationMark width={24} hanging={24}
-                  fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
-                />
-              </button>
+            <div className="flex items-center gap-[20px] xs:gap-[20px] md:gap-[32px]">
+              <div className="flex">
+                {isExclamationMark && (
+                  <p className="pr-[5px] text-darkPurple xs:hidden">
+                    비공개 처리된 게시물은 표시되지 않습니다.
+                  </p>
+                )}
+                <button
+                  className="hidden xs:hidden lg:flex"
+                  onClick={(e) => explanationClick('exclamation-mark')}
+                  onMouseEnter={(e) => explanationEnter('exclamation-mark')}
+                  onMouseLeave={(e) => explanationLeave('exclamation-mark')}
+                >
+                  <ExclamationMark
+                    width={24}
+                    hanging={24}
+                    fill={`${isExclamationMark ? '#B98CE0' : '#E0DEE3'}`}
+                  />
+                </button>
+              </div>
               <button
                 onClick={() => dispatch(increaseBoxes())}
                 disabled={numberOfBoxes >= 7}
-                className="h-[24px] pr-[32px]"
+                className="h-[24px] xs:hidden"
               >
                 <MinusSVG />
               </button>
               <button
                 onClick={() => dispatch(decreaseBoxes())}
                 disabled={numberOfBoxes <= 3}
-                className="h-[24px] pr-[32px]"
+                className="h-[24px] xs:hidden"
               >
                 <PlusSVG />
               </button>
@@ -244,7 +260,7 @@ export default function MyPagePage() {
                 </div>
               )}
               {isHeartMark && (
-                <div className="absolute bottom-14 right-1">
+                <div className="absolute bottom-14 right-1 hidden xs:hidden lg:flex">
                   <div className="relative">
                     <SpeechBubble />
                     <p className="absolute bottom-[10px] px-[12px] text-[11px] text-darkPurple">
@@ -258,62 +274,80 @@ export default function MyPagePage() {
           <div className="h-[13px] w-full"></div>
         </div>
       </div>
-      <div className="MyPageContainer max-h-full ">
-        <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
-          <PostCreate />
-          {isTempData.length > 0 &&
-            (isTempData[0] !== undefined ? (
-              <PostBox
-                postId={isTempData[0].postId}
-                photoId={isTempData[0].photoId}
-                photoUrl={isTempData[0].photoUrl}
-                saved={false}
-                createdDate={'temp'}
-                tempPost={true}
-                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                setSharedCount={setSharedCount}
-                boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                isOptional={true}
-                showOnlyShareButton={false}
-              />
-            ) : (
-              <div
-                className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
-                style={{ width: postBoxWidths[layoutNum] }}
-                onClick={handleTempClick}
-              >
-                <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
-                  <p className="z-10 text-center text-[16px] ">
-                    임시저장된 게시물
-                  </p>
+      {isCategory === 'myPost' && (
+        <div className="MyPageContainer max-h-full ">
+          <div className="outBox flex h-full flex-wrap items-center gap-[0.7%] rounded-[20px] transition-all">
+            <PostCreate />
+            {isTempData.length > 0 &&
+              (isTempData[0] !== undefined ? (
+                <PostBox
+                  postId={isTempData[0].postId}
+                  photoId={isTempData[0].photoId}
+                  photoUrl={isTempData[0].photoUrl}
+                  saved={false}
+                  createdDate={'temp'}
+                  tempPost={true}
+                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                  setSharedCount={setSharedCount}
+                  boundary={isTempData[0].boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                  isOptional={true}
+                  showOnlyShareButton={false}
+                />
+              ) : (
+                <div
+                  className="box relative flex cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-[5px] border-transparent p-[5px] transition-all duration-500 hover:border-purple"
+                  style={{ width: postBoxWidths[layoutNum] }}
+                  onClick={handleTempClick}
+                >
+                  <div className="absolute flex h-full w-full flex-col justify-center bg-lightGray">
+                    <p className="z-10 text-center text-[16px] ">
+                      임시저장된 게시물
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          {isMyPageData &&
-            isMyPageData.map((item, index) => {
-              if (item && item.postId) {
-                return (
-                  <PostBox
-                    key={index}
-                    postId={item.postId}
-                    photoId={item.photoId}
-                    photoUrl={item.photoUrl}
-                    like={item.like}
-                    saved={item.saved}
-                    createdDate={item.createdDate}
-                    tempPost={false}
-                    setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                    setSharedCount={setSharedCount}
-                    boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
-                    isOptional={true}
-                    showOnlyShareButton={false}
-                  />
-                );
-              }
-              return null;
-            })}
+              ))}
+            {isMyPageData &&
+              isMyPageData.map((item, index) => {
+                if (item && item.postId) {
+                  return (
+                    <PostBox
+                      key={index}
+                      postId={item.postId}
+                      photoId={item.photoId}
+                      photoUrl={item.photoUrl}
+                      like={item.like}
+                      saved={item.saved}
+                      createdDate={item.createdDate}
+                      tempPost={false}
+                      setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                      setSharedCount={setSharedCount}
+                      boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                      isOptional={true}
+                      showOnlyShareButton={false}
+                    />
+                  );
+                }
+                return null;
+              })}
+          </div>
         </div>
-      </div>
+      )}
+      {isCategory === 'reservation' && (
+        <div className="flex h-full w-full flex-col justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-center pb-[300px] text-center">
+            <p>제작중인 페이지 입니다 12월 중 서비스 런칭 계획중 입니다</p>
+            <p>♥️ 많은 관심 부탁드립니다 ♥️</p>
+          </div>
+        </div>
+      )}
+      {isCategory === 'buy' && (
+        <div className="flex h-full w-full flex-col justify-center">
+          <div className="flex h-full w-full flex-col items-center justify-center pb-[300px] text-center">
+            <p>제작중인 페이지 입니다 12월 중 서비스 런칭 계획중 입니다</p>
+            <p>♥️ 많은 관심 부탁드립니다 ♥️</p>
+          </div>
+        </div>
+      )}
     </div>
   ) : (
     <Loading />
