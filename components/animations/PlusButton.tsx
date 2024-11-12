@@ -77,13 +77,14 @@ export default function PlusButton({
     const data = await postSetArchive(postId, archiveId);
     if (data.code === 2001) {
       dispatch(setPlusState({ state: false }));
+      dispatch(setArchivePost({ postId: 0 }));
+      console.log('a');
       setIsClick(true);
       setIsAnimate(true);
       setTimeout(() => {
         setIsBackGround(true);
       }, 300);
-      dispatch(setArchivePost({ postId: 0 }));
-      alert(data.message);
+      // alert(data.message);
     } else {
       alert(data.message);
     }
@@ -241,15 +242,13 @@ export default function PlusButton({
     }
   }, []);
 
-  console.log(isArchiveDate[0]);
-
   return (
     <div
       className={`buttonPlus absolute bottom-0 right-0 w-full ${className} z-50`}
     >
       <button
         onClick={buttonClick}
-        className={`absolute bottom-1 right-1 z-[12] transition-all duration-500 lg:bottom-2 lg:right-2`}
+        className={`absolute bottom-1 right-2 z-[12] transition-all duration-500 lg:bottom-2 lg:right-2`}
       >
         <div className={`width='${width}' height='${height}'`}>
           <motion.svg
@@ -322,30 +321,30 @@ export default function PlusButton({
               {isArchiveDate.map((item, index) =>
                 item.archiveId == null ? (
                   <div
-                    key={index}
+                    key={`archive-add-${index}`}
                     className="group relative m-[2.5px] my-[5px] aspect-square w-[22.5%] xl:w-[24%]"
                   >
-                    <>
-                      <ArchivePlus />
-                      <button
-                        onClick={(e) => modalOpen()}
-                        className="absolute inset-0 flex items-center justify-center"
-                      >
-                        <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
-                          <div className="relative h-[30%] w-[30%] rounded-full bg-white">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="h-[80%] w-[1px] rounded-full bg-purple"></div>
-                              <div className="absolute h-[1px] w-[80%] rounded-full bg-purple"></div>
-                            </div>
+                    <ArchivePlus />
+                    <button
+                      onClick={(e) => modalOpen()}
+                      className="absolute inset-0 flex items-center justify-center"
+                    >
+                      <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
+                        <div className="relative h-[30%] w-[30%] rounded-full bg-white">
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="h-[80%] w-[1px] rounded-full bg-purple"></div>
+                            <div className="absolute h-[1px] w-[80%] rounded-full bg-purple"></div>
                           </div>
                         </div>
-                      </button>
-                    </>
+                      </div>
+                    </button>
                   </div>
-                ) : item.archiveImgUrl.endsWith('.mov') ||
-                  item.archiveImgUrl.endsWith('.mp4') ? (
+                ) : (item.archiveImgUrl &&
+                    item.archiveImgUrl.endsWith('.mov')) ||
+                  (item.archiveImgUrl &&
+                    item.archiveImgUrl.endsWith('.mp4')) ? (
                   <button
-                    key={index}
+                    key={`archive-video-${item.archiveId}`}
                     className="relative mx-[2.5px] my-[5px] aspect-square w-[22.5%] overflow-hidden rounded-[8px] bg-lightGray"
                     onClick={(e) => archiveSet(item.archiveId)}
                   >
@@ -358,54 +357,42 @@ export default function PlusButton({
                       height={'100'}
                     />
                   </button>
+                ) : item.archiveImgUrl ? (
+                  <button
+                    key={`archive-image-${item.archiveId}`}
+                    className={`relative mx-[2.5px] my-[5px] aspect-square w-[22.5%] overflow-hidden rounded-[8px]`}
+                    onClick={(e) => archiveSet(item.archiveId)}
+                  >
+                    <div
+                      className={`absolute left-0 top-0 z-10 h-full w-full rounded-[8px] hover:border-[2px] hover:border-purple hover:bg-purple/20`}
+                    ></div>
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
+                      alt="postImage"
+                      fill
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      sizes="100vw, 50vw, 33vw"
+                      quality={100}
+                    />
+                  </button>
                 ) : (
-                  // <button
-                  //   key={index}
-                  //   className="relative mx-[2.5px] my-[5px] aspect-square w-[22.5%] overflow-hidden rounded-[8px]"
-                  //   onClick={(e) => archiveSet(item.archiveId)}
-                  // >
-                  //   <div
-                  //     className={`absolute left-0 top-0 z-10 h-full w-full rounded-[8px] hover:border-[2px] hover:border-purple hover:bg-purple/20`}
-                  //   ></div>
-                  //   <Image
-                  //     src={`${process.env.NEXT_PUBLIC_CLOUDFRONT_URL}/${item.archiveImgUrl}`}
-                  //     alt="postImage"
-                  //     fill
-                  //     style={{
-                  //       width: '100%',
-                  //       height: '100%',
-                  //     }}
-                  //     sizes="100vw, 50vw, 33vw"
-                  //     quality={100}
-                  //   />
-                  // </button>
-                  <button
-                    onClick={(e) => modalOpen()}
-                    className="flex items-center justify-center overflow-hidden rounded-[8px] bg-noArchiveColor hover:border-[2px] hover:border-purple"
-                    style={{ width: '100%', height: '100%' }}
+                  <div
+                    key={`no-archive-${index}`}
+                    className={`group relative m-[2.5px] my-[5px] aspect-square w-[22%] ${item.archiveImgUrl ? 'hidden' : ''}`}
                   >
-                    <NoArchiveImage className="absolute" />
-                    <NoArchiveFont className="absolute translate-y-[10px]" />
-                  </button>
+                    <button
+                      onClick={(e) => archiveSet(item.archiveId)}
+                      className="relative flex items-center justify-center overflow-hidden rounded-[8px] bg-noArchiveColor hover:border-[2px] hover:border-purple group-hover:scale-110"
+                      style={{ width: '100%', height: '100%' }}
+                    >
+                      <NoArchiveImage className="absolute" />
+                      <NoArchiveFont className="absolute translate-y-[10px]" />
+                    </button>
+                  </div>
                 ),
-              )}
-              {isTrueArray && (
-                <div className="group relative m-[2.5px] my-[5px] aspect-square w-[22%]">
-                  <ArchivePlus />
-                  <button
-                    onClick={(e) => modalOpen()}
-                    className="absolute inset-0 flex items-center justify-center"
-                  >
-                    <div className="flex h-full w-full items-center justify-center rounded-[8px] bg-addFolderGray group-hover:scale-110 group-hover:bg-purple">
-                      <div className="relative h-[30%] w-[30%] rounded-full bg-white">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="h-[80%] w-[1px] rounded-full bg-purple"></div>
-                          <div className="absolute h-[1px] w-[80%] rounded-full bg-purple"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
               )}
             </div>
           </div>

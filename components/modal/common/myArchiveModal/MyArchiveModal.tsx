@@ -5,6 +5,7 @@ import {
   commonModalClose,
   selectArchiveModalStatus,
   selectCommonModalStatus,
+  setArchivePost,
   setArchiveState,
 } from '../../../../store/slices/modalSlice';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
@@ -97,6 +98,7 @@ export default function MyArchiveModal() {
     const success = await postSetArchive(postId, archiveId);
     if (success.code == 2001) {
       dispatch(setArchiveState({ state: true }));
+      dispatch(setArchivePost({ postId: 0 }));
       closeModal();
     } else {
       setIsBell(true);
