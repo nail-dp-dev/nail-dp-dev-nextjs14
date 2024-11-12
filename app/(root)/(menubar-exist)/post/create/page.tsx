@@ -97,7 +97,7 @@ export default function PostCreate() {
             onClick={() => handleTempChange(true)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+            className={`mr-[12px] h-[30px] lg:h-[40px] w-[80px] lg:w-[124px] rounded-full ${!tempButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
             disabled={!tempButton}
           >
             임시저장
@@ -106,14 +106,14 @@ export default function PostCreate() {
             onClick={() => handleTempChange(false)}
             type="submit"
             form="postCreateForm"
-            className={`mr-[12px] h-[40px] w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
+            className={`mr-[12px] h-[30px] lg:h-[40px] w-[80px] lg:w-[124px] rounded-full ${!uploadButton ? 'cursor-pointer bg-buttonLightGray' : 'button-color  hover:button-hover'}`}
             disabled={!uploadButton}
           >
             업로드
           </button>
         </div>
         <form
-          className="w-[55%] min-w-[512px] md:min-w-[410px]"
+          className="w-[55%] min-w-[360px] md:min-w-[410px]"
           id="postCreateForm"
           onSubmit={(e) => handleSubmit(e, isTemp)}
         >

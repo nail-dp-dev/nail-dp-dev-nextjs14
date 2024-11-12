@@ -12,6 +12,7 @@ import Bits from '../../public/assets/svg/bits.svg';
 import BitsChargeIcon from '../../public/assets/svg/bits-charge-plus.svg'
 import SettingIcon from '../../public/assets/svg/setting.svg'
 import Image from 'next/image';
+import test from '../../public/assets/img/noArchiveImage.png'
 
 export default function RowMenuBar() {
   const path = usePathname();
@@ -35,7 +36,6 @@ export default function RowMenuBar() {
     e.stopPropagation()
     router.push('/setting')
   }
-
 
   return (
     <div className={`${path === '/sign-up' && 'hidden'} xsMenuDiv snap-x snap-mandatory w-full h-[13%] max-h-[80px] flex items-center justify-start overflow-x-auto hide-scrollbar sm:hidden z-40 px-[10px] pb-[10px] gap-[20px]`}>

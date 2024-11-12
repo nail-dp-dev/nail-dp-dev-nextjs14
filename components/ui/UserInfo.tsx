@@ -2,10 +2,10 @@ import React from 'react';
 
 type UserInfoProps = {
   nickname: string;
-  postsCount?: number;
-  saveCount?: number;
-  followerCount?: number;
-  followCount?: number;
+  postsCount?: number | string;
+  saveCount?: number | string;
+  followerCount?: number | string;
+  followCount?: number | string;
   hoverStyle?: string;
   nicknameStyle?: string;
   statsStyle?: string;
@@ -27,7 +27,7 @@ export default function UserInfo({
   isMenuBar,
 }: UserInfoProps) {
   return (
-    <div className="flex-1 flex-col items-start hidden md:flex">
+    <div className="flex-1 flex-col items-start">
       <div className="flex w-full items-center justify-between">
         <p
           className={`${nicknameStyle} ${hoverStyle} ${isMenuBar && 'font-[500]'}`}

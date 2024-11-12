@@ -58,6 +58,9 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
     postSignUpMember({nickname, finalPhoneNumber, finalAgreement, router, dispatch})
   }
 
+  console.log(nicknameError);
+  
+
   return (
     <div className='w-[350px] h-[400px] md:w-[440px] md:h-[450px] p-[20px] mt-[20px] md:mt-0 flex flex-col items-start justify-start bg-white rounded-[20px] shadow-signup-modal-shadow'>
       <div className='w-full h-[50px] px-[8px] flex items-center justify-between mb-[5px]'>
