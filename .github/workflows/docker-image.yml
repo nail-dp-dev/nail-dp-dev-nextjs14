@@ -9,7 +9,6 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -39,7 +38,6 @@ jobs:
           NEXT_PUBLIC_IMP_INIT: ${{ secrets.NEXT_PUBLIC_IMP_INIT }}
           NEXT_PUBLIC_IMP_CHANNEL_KEY: ${{ secrets.NEXT_PUBLIC_IMP_CHANNEL_KEY }}
           NEXT_PUBLIC_IMP_COMPANY: ${{ secrets.NEXT_PUBLIC_IMP_COMPANY }}
-          
     
     - name: Login to DockerHub
       uses: docker/login-action@v1
@@ -54,7 +52,14 @@ jobs:
          file: DockerFile
          push: true
          tags: lkw9/ndp-fe:latest
-        
+
+    - name: Clean Up Docker Images and Cache
+      run: |
+        # Remove dangling Docker images and unused containers
+        docker system prune -a -f
+        # Clean apt cache to save disk space
+        sudo apt clean
+
     - name: Deploy 1
       uses: appleboy/ssh-action@master
       env:
@@ -94,7 +99,7 @@ jobs:
           sudo usermod -aG docker ${{ secrets.REMOTE_SSH_ID_1 }}
           newgrp docker
 
-          sudo mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
+          mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           cd /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
@@ -141,7 +146,7 @@ jobs:
           sudo usermod -aG docker ${{ secrets.REMOTE_SSH_ID_1 }}
           newgrp docker
 
-          sudo mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
+          mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           cd /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
