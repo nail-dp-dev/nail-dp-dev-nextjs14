@@ -94,7 +94,7 @@ jobs:
           sudo usermod -aG docker ${{ secrets.REMOTE_SSH_ID_1 }}
           newgrp docker
 
-          mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
+          sudo mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           cd /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
@@ -141,7 +141,7 @@ jobs:
           sudo usermod -aG docker ${{ secrets.REMOTE_SSH_ID_1 }}
           newgrp docker
 
-          mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
+          sudo mkdir -p /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           cd /home/${{ secrets.REMOTE_SSH_ID_1 }}/compose
           echo ${{ secrets.COMPOSE }} | base64 --decode > ./docker-compose.yml  
           echo ${{ secrets.NGINX_CONF}} | base64 --decode > ./nginx.conf 
