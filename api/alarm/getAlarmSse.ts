@@ -1,26 +1,34 @@
 import { AppDispatch } from '../../store/store';
-import { connectSSE, disconnectSSE, setSSEError } from '../../store/slices/sseSlice';
+import {
+  connectSSE,
+  disconnectSSE,
+  setSSEError,
+} from '../../store/slices/sseSlice';
 
 export const getAlarmSse = (dispatch: AppDispatch) => {
-
-  const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`, {
-    withCredentials: true,
-  });
+  const eventSource = new EventSource(
+    `${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`,
+    {
+      withCredentials: true,
+    },
+  );
 
   eventSource.onopen = () => {
     dispatch(connectSSE());
   };
 
-   eventSource.onmessage = (e) => {
+  eventSource.onmessage = (e) => {
     const message = e.data;
-    if (message.includes("EventStream")) {
+    if (message.includes('EventStream')) {
       return;
     }
     displayNotification(message);
   };
 
-  eventSource.onerror = () => {
-    dispatch(setSSEError("SSE 연결 오류"));
+  eventSource.onerror = (e) => {
+    console.log('SSE 연결 오류 발생:', e);
+    console.log('EventSource 상태:', eventSource.readyState);
+    dispatch(setSSEError('SSE 연결 오류'));
     eventSource.close();
     getAlarmSse(dispatch);
   };

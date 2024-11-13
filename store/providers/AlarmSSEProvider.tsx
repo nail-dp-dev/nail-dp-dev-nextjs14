@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store';
 import { getAlarmSse } from '../../api/alarm/getAlarmSse';
+import { selectLoginStatus } from '../slices/loginSlice';
 
 export default function AlarmSSEProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
+  const isLoggedIn = useSelector(selectLoginStatus);
 
   useEffect(() => {
     async function requestNotificationPermission() {
@@ -19,20 +21,24 @@ export default function AlarmSSEProvider({ children }: { children: React.ReactNo
 
     async function initializeSSE() {
       const hasPermission = await requestNotificationPermission();
-      if (hasPermission) {
+      if (hasPermission && isLoggedIn === 'loggedIn') {
         const eventSource = getAlarmSse(dispatch);
-
+        console.log(eventSource);
         return () => {
+          console.log('에러 발생 종료');
           eventSource.close();
         };
-      } else {
+      } else if(isLoggedIn === "pending"){
+        console.log('pending 입니다.');
+      }else{
         console.log('알림 권한이 없어 SSE 연결을 시작하지 않습니다.');
+
       }
     }
 
     initializeSSE();
 
-  }, [dispatch]);
+  }, [dispatch, isLoggedIn]);
 
   return <>{children}</>;
 }
