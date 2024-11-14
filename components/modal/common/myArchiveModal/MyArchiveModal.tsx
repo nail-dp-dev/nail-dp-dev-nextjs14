@@ -57,9 +57,9 @@ export default function MyArchiveModal() {
     dispatch(commonModalClose());
   };
 
-  const inputClear = () =>{
-    setIsName("")
-  }
+  const inputClear = () => {
+    setIsName('');
+  };
 
   const archiveMenuChange = (menu: string) => {
     setIsArchiveMenu(menu);
@@ -85,7 +85,7 @@ export default function MyArchiveModal() {
       const success = await postArchiveCreate(isName, isBoundary);
       if (success.code === 2001 && postId) {
         setArchive(success.data, postId);
-      }else{
+      } else {
         closeModal();
       }
     } else {
@@ -178,7 +178,7 @@ export default function MyArchiveModal() {
   );
 
   console.log(ArchivePostId);
-  
+
   useEffect(() => {
     archiveData();
   }, [isArchiveMenu]);
@@ -225,7 +225,7 @@ export default function MyArchiveModal() {
       <div
         className={`commonModal ${!isCommonModalShow && 'hidden'} pointer-events-auto absolute z-50 flex h-screen w-screen items-center justify-center bg-modalBackgroundColor`}
       >
-        <div className="flex h-[370px] w-[800px] flex-col items-center justify-start overflow-hidden rounded-[20px] border-[1px] border-purple bg-white">
+        <div className="flex min-h-[370px] md:h-[370px] w-[400px] md:w-[800px] flex-col items-center justify-start overflow-hidden rounded-[20px] border-[1px] border-purple bg-white">
           <div className="bg-gray flex h-[55px] w-full items-center border-b-[1px] border-navMenuBotSolidGray">
             <div className="flex h-full w-[20%] min-w-[155px] items-center pl-[20px]">
               <MyArchiveFolder />
@@ -234,10 +234,10 @@ export default function MyArchiveModal() {
               </p>
             </div>
             {
-              <div className="flex flex-1 items-center justify-between">
+              <div className={`flex flex-1 items-center ${isArchiveMenu == 'myArchive' ? " justify-end":" justify-between"}`}>
                 {isArchiveMenu == 'myArchive' &&
                   ArchivePage !== 'deletePost' && (
-                    <div className="ml-[31px] flex h-[40px] w-[300px] items-center overflow-hidden rounded-full border-[1px] border-navMenuBotSolidGray shadow-sm">
+                    <div className="ml-[31px] hidden md:flex h-[40px] w-[300px] items-center overflow-hidden rounded-full border-[1px] border-navMenuBotSolidGray shadow-sm">
                       <SearchIcon className="ml-[16px]" />
                       <input
                         className="ml-[10px] h-[24px] w-[240px] border-none text-[0.9rem] outline-none"
@@ -287,8 +287,25 @@ export default function MyArchiveModal() {
               </div>
             }
           </div>
-          <div className="flex w-full flex-1">
-            <div className="h-full w-[20%] min-w-[155px] bg-menuLightGray px-[10px] text-[0.9rem] font-bold">
+          <div className="flex w-full flex-1 flex-col md:flex-row">
+            <div className="flex pl-[20px] w-full h-[48px] md:hidden bg-menuLightGray py-[10px] text-[0.9rem] font-bold gap-[5px]">
+                {archiveModalElements.map((item: any, index: number) => {
+                  return (
+                    <button
+                      key={index}
+                      className={`md:mt-[5px] h-[28px] min-w-[150px] ${isArchiveMenu == 'deletePost' ? 'myArchive' == item.name && 'rounded-full bg-darkPurple' : isArchiveMenu == item.name ? 'rounded-full bg-darkPurple' : 'rounded-full bg-darkGray'}`}
+                      onClick={(e) => archiveMenuChange(item.name)}
+                    >
+                      <p
+                        className={`${isArchiveMenu == 'deletePost' ? 'myArchive' == item.name && 'text-white' : isArchiveMenu == item.name ? 'text-white' : ''}`}
+                      >
+                        {item.desc}
+                      </p>
+                    </button>
+                  );
+                })}
+            </div>
+            <div className="hidden h-full w-[20%] min-w-[155px] bg-menuLightGray px-[10px] text-[0.9rem] font-bold md:flex">
               <div className="mt-[5px]">
                 {archiveModalElements.map((item: any, index: number) => {
                   return (
@@ -308,7 +325,7 @@ export default function MyArchiveModal() {
               </div>
             </div>
             {isArchiveMenu == 'archiveCreate' && (
-              <div className="flex flex-1 flex-col px-[80px]">
+              <div className="flex flex-1 flex-col items-center md:items-start md:px-[80px]">
                 <div className="flex justify-between pt-[20px]">
                   <p className="text-[1rem] text-textDarkPurple">
                     최대 4개의 아카이브를 무료로 생성할 수 있습니다.
@@ -319,7 +336,7 @@ export default function MyArchiveModal() {
                   </button> */}
                 </div>
                 <div className="flex h-[160px] pt-[18px]">
-                  <div className="flex h-full w-[148px] flex-col pl-[16px] pr-[36px] hidden lg:flex">
+                  <div className="flex hidden h-full w-[148px] flex-col pl-[16px] pr-[36px] lg:flex">
                     <p className="pb-[10px] text-[0.9rem]">
                       (남은 개수: {4 - isArchive.length}개)
                     </p>
@@ -332,7 +349,7 @@ export default function MyArchiveModal() {
                     <div className="relative flex items-center">
                       <input
                         onInput={(e) => handleOnInput(e, 8)}
-                        className={`my-[16px] h-[40px] w-[320px] rounded-full border-none ${isName.length == 0 ? "bg-darkGray":"bg-purple/20"} pl-[12px] text-[0.9rem] outline-none`}
+                        className={`my-[16px] h-[40px] w-[320px] rounded-full border-none ${isName.length == 0 ? 'bg-darkGray' : 'bg-purple/20'} pl-[12px] text-[0.9rem] outline-none`}
                         type="text"
                         placeholder="폴더 이름을 입력해주세요.(최대 8글자)"
                         value={isName}
@@ -403,9 +420,9 @@ export default function MyArchiveModal() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-1 justify-center pt-[25px]">
+                <div className="flex flex-1 justify-center py-[25px] md:pt-[25px]">
                   <button
-                    className={`${isName.length >= 1 ? 'bg-purple text-white' : 'text-darkModeGray bg-lightGray'} h-[40px] w-[250px] rounded-full font-bold`}
+                    className={`${isName.length >= 1 ? 'bg-purple text-white' : 'bg-lightGray text-darkModeGray'} h-[40px] w-[250px] rounded-full font-bold`}
                     onClick={(e) =>
                       createArchive(isName, isBoundary, ArchivePostId!)
                     }
