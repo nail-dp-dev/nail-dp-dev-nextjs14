@@ -14,8 +14,14 @@ export const getAlarmSse = (dispatch: AppDispatch) => {
   );
 
   eventSource.onopen = () => {
+    console.log('SSE 연결이 열렸습니다.');
     dispatch(connectSSE());
   };
+
+  eventSource.addEventListener('sse', (e) => {
+    const message = e.data;
+    displayNotification(message);
+  });
 
   eventSource.onmessage = (e) => {
     const message = e.data;
@@ -37,6 +43,7 @@ export const getAlarmSse = (dispatch: AppDispatch) => {
 };
 
 async function displayNotification(message: string) {
+  console.log("a");
   if (Notification.permission === 'granted') {
     new Notification('새 알림이 도착했습니다!', {
       body: message,
