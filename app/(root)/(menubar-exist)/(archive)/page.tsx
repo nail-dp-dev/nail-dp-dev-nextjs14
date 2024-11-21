@@ -119,14 +119,12 @@ export default function ArchivePage() {
     setIsLast(false);
   };
 
-  useEffect(() => {
-    // foryou 개발 완료시 주석 해제할 것.
-    
-    // if (isLoggedIn === 'loggedIn') {
-    //   setCategory('for-you');
-    // } else if (isLoggedIn === 'loggedOut') {
-    //   setCategory('trending');
-    // }
+  useEffect(() => {    
+    if (isLoggedIn === 'loggedIn') {
+      setCategory('for-you');
+    } else if (isLoggedIn === 'loggedOut') {
+      setCategory('trending');
+    }
   }, [isLoggedIn]);
 
   useEffect(() => {
