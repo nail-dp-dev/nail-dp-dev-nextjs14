@@ -30,6 +30,7 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
   const router = useRouter();
 
   useEffect(() => {
+    setIsModalOpen(true);
     const jQueryScript = document.createElement('script');
     jQueryScript.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
     document.body.appendChild(jQueryScript);
@@ -41,7 +42,6 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
       if (IMP) {
         IMP.init(process.env.NEXT_PUBLIC_IMP_INIT || '');
 
-        setIsModalOpen(true);
 
         IMP.certification(
           {
