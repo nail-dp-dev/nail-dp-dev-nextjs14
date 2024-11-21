@@ -37,6 +37,7 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
 
     const iamportScript = document.createElement('script');
     iamportScript.src = 'https://cdn.iamport.kr/js/iamport.payment-1.1.6.js';
+    iamportScript.async = true;
     iamportScript.onload = () => {
       const { IMP } = window;
       if (IMP) {
@@ -51,8 +52,6 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
             popup: false,
           },
           async (rsp) => {
-            setIsModalOpen(false);
-
             if (rsp.success && rsp.imp_uid) {
               try {
                 const certificationsInfo = await postPortOneCertification(rsp.imp_uid);
@@ -60,6 +59,7 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
                 if (certificationsInfo.code === 2000) {
                   setFinalPhoneNumber(certificationsInfo.data);
                   setProcedure('nickname');
+
                 } else if (certificationsInfo.code === 4001) {
                   alert('이미 등록 되어있는 번호입니다.');
                   router.push('/');
@@ -78,12 +78,6 @@ const CertificationPage = ({ setProcedure, setFinalPhoneNumber }: SignUpPhoneNum
 
     document.body.appendChild(iamportScript);
 
-    return () => {
-      document.body.removeChild(jQueryScript);
-      document.body.removeChild(iamportScript);
-      // Cleanup 시 홈으로 리다이렉트
-      router.push('/');
-    };
   }, []);
 
   return (
