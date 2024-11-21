@@ -247,11 +247,11 @@ export const getPostsNumber: {
 };
 
 export const getArchivePath: {
-  // '/': { result: string };
+  '/': { result: string };
   '/new': { result: string };
   '/trending': { result: string };
 } = {
-  // '/': { result: 'FORYOU' },
+  '/': { result: 'FORYOU' },
   '/new': { result: 'NEW' },
   '/trending': { result: 'TRENDING' },
 };
