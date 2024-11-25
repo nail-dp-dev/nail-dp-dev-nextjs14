@@ -71,6 +71,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'phinf.pstatic.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'ssl.pstatic.net'
+
+      }
     ],
     formats: ['image/webp'],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

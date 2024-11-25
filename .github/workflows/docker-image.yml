@@ -1,15 +1,14 @@
 name: FE Docker Hub Image
 
-on:
+on: 
   push:
     branches: [ "main" ] 
   pull_request:
     branches: [ "main" ]
-
+    
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +21,11 @@ jobs:
          echo "NEXT_PUBLIC_NAVER_REDIRECT_URI=$NEXT_PUBLIC_NAVER_REDIRECT_URI" >> .env
          echo "NEXT_PUBLIC_FORBIDDENWORDS=$NEXT_PUBLIC_FORBIDDENWORDS" >> .env
          echo "NEXT_PUBLIC_KAKAO_API_KEY=$NEXT_PUBLIC_KAKAO_API_KEY" >> .env
+         echo "NEXT_PUBLIC_CLOUDFRONT_URL=$NEXT_PUBLIC_CLOUDFRONT_URL" >> .env
          echo "DOCKER_TAG=$DOCKER_TAG" >> .env
+         echo "NEXT_PUBLIC_IMP_INIT=$NEXT_PUBLIC_IMP_INIT" >> .env
+         echo "NEXT_PUBLIC_IMP_CHANNEL_KEY=$NEXT_PUBLIC_IMP_CHANNEL_KEY" >> .env
+         echo "NEXT_PUBLIC_IMP_COMPANY=$NEXT_PUBLIC_IMP_COMPANY" >> .env
       env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_KAKAO_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_KAKAO_REDIRECT_URI }}
@@ -30,7 +33,11 @@ jobs:
           NEXT_PUBLIC_NAVER_REDIRECT_URI: ${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
           NEXT_PUBLIC_FORBIDDENWORDS: ${{ secrets.NEXT_PUBLIC_FORBIDDENWORDS }}
           NEXT_PUBLIC_KAKAO_API_KEY: ${{ secrets.NEXT_PUBLIC_KAKAO_API_KEY }}
+          NEXT_PUBLIC_CLOUDFRONT_URL: ${{ secrets.NEXT_PUBLIC_CLOUDFRONT_URL }}
           DOCKER_TAG: ${{ secrets.DOCKER_TAG }}
+          NEXT_PUBLIC_IMP_INIT: ${{ secrets.NEXT_PUBLIC_IMP_INIT }}
+          NEXT_PUBLIC_IMP_CHANNEL_KEY: ${{ secrets.NEXT_PUBLIC_IMP_CHANNEL_KEY }}
+          NEXT_PUBLIC_IMP_COMPANY: ${{ secrets.NEXT_PUBLIC_IMP_COMPANY }}
     
     - name: Login to DockerHub
       uses: docker/login-action@v1
@@ -45,7 +52,14 @@ jobs:
          file: DockerFile
          push: true
          tags: lkw9/ndp-fe:latest
-        
+
+    - name: Clean Up Docker Images and Cache
+      run: |
+        # Remove dangling Docker images and unused containers
+        docker system prune -a -f
+        # Clean apt cache to save disk space
+        sudo apt clean
+
     - name: Deploy 1
       uses: appleboy/ssh-action@master
       env:

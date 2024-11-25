@@ -18,7 +18,6 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 
 
 
-
 ## 1. Team Member
 
 - CEO : Chief Executive Officer <br/>
@@ -132,11 +131,7 @@ $$\color{transparent}\fbox{\Huge \color{pink}{Nail art Design Platform Project}}
 ## 4. Architecture
 
   <br>
-  <br>
-  <br>
-[Request] Project Architecture 작성 요망.
-  <br>
-  <br>
+  <img width="923" alt="image" src="https://github.com/user-attachments/assets/a83a6d55-e537-4bc8-ae0f-066eb905d7bd">
   <br>
 
 <br>
