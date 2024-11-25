@@ -106,8 +106,7 @@ export const rowMenuElements = [
 ]
 
 export const archiveCategoryElements = [
-  // foryou 개발 완료 시 주석 제거
-  // { name: 'For You', desc: 'for-you' },
+  { name: 'For You', desc: 'foryou' },
   { name: 'Trending', desc: 'trending' },
   { name: 'New', desc: 'new' },
 ];
@@ -247,11 +246,11 @@ export const getPostsNumber: {
 };
 
 export const getArchivePath: {
-  // '/': { result: string };
+  '/': { result: string };
   '/new': { result: string };
   '/trending': { result: string };
 } = {
-  // '/': { result: 'FORYOU' },
+  '/': { result: 'FORYOU' },
   '/new': { result: 'NEW' },
   '/trending': { result: 'TRENDING' },
 };
