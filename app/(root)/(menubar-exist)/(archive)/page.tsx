@@ -15,14 +15,13 @@ import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 
 export default function ArchivePage() {
-
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
 
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
-  
+
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
   const [category, setCategory] = useState<string>('');
   const [isLast, setIsLast] = useState<boolean>(false);
@@ -52,9 +51,19 @@ export default function ArchivePage() {
   const fetchMorePosts = async () => {
     const currentCursorId = cursorId;
 
-    let data = await getAllPostsData({ category, size, cursorId: currentCursorId, isFirstRendering });
+    let data = await getAllPostsData({
+      category,
+      size,
+      cursorId: currentCursorId,
+      isFirstRendering,
+    });
 
-    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0 && isLoggedIn === 'loggedIn' || 'loggedOut') {
+    if (
+      (data.code === 2000 &&
+        data.data.postSummaryList.content.length !== 0 &&
+        isLoggedIn === 'loggedIn') ||
+      'loggedOut'
+    ) {
       setIsLoading(true);
       setCursorId(data.data.cursorId);
       setPostsData((prev: PostArray[]) => [
@@ -79,10 +88,14 @@ export default function ArchivePage() {
   };
 
   const fetchMorePostsByLikedButton = async () => {
-
     const currentCursorId = cursorLikedId;
 
-    let data = await getLikedPosts({ category, size, cursorLikedId:currentCursorId, isLikedPostsFirstRendering});
+    let data = await getLikedPosts({
+      category,
+      size,
+      cursorLikedId: currentCursorId,
+      isLikedPostsFirstRendering,
+    });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
@@ -118,7 +131,7 @@ export default function ArchivePage() {
     setIsLast(false);
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (isLoggedIn === 'loggedIn') {
       setCategory('foryou');
     } else if (isLoggedIn === 'loggedOut') {
@@ -135,6 +148,20 @@ export default function ArchivePage() {
       boxRef.current.scrollTop = 0;
     }
   }, [category, likedButtonState]);
+
+  const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
 
   useEffect(() => {
     if (likedButtonState) {
@@ -153,7 +180,7 @@ export default function ArchivePage() {
           !isLast &&
           !isLoading &&
           isContentExist &&
-          !likedButtonState 
+          !likedButtonState
         ) {
           fetchMorePosts();
         }
@@ -212,15 +239,10 @@ export default function ArchivePage() {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLikedPostsLoading,
-    cursorLikedId,
-    isLikedPostsLast,
-    likedButtonState,
-  ]);
+  }, [isLikedPostsLoading, cursorLikedId, isLikedPostsLast, likedButtonState]);
 
   useEffect(() => {
-    if (!likedButtonState ) {
+    if (!likedButtonState) {
       setCursorId(0);
       setMessage('');
       setIsContentExist(false);
@@ -230,7 +252,7 @@ export default function ArchivePage() {
       setIsLast(false);
     }
 
-    if (likedButtonState ) {
+    if (likedButtonState) {
       setCursorLikedId(0);
       setLikedPostsMessage('');
       setIsLikedPostsContentExist(false);
@@ -248,6 +270,75 @@ export default function ArchivePage() {
       : postsData.slice(0, postsData.length - (postsData.length % layoutNum))
     : [];
 
+  useEffect(() => {
+    const registerServiceWorker = async () => {
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+          const registration = await navigator.serviceWorker.register('/sw.js');
+          console.log('Service Worker registered:', registration);
+
+          // VAPID Public Key는 Base64로 변환된 키를 사용합니다.
+          const applicationServerKey =
+            'BGXt3rdP1Kas3S2P8k5jxzIynme_i5ywPG-6fXhFL6DVkr9XTmGquoPz-_EJ7fEFtF7vbKpdps5X5RyCP7B0mcU';
+
+          // 디바이스 토큰을 재시도하면서 가져오는 함수
+          const retryGetDeviceToken = async (
+            retries: number,
+          ): Promise<void> => {
+            try {
+              const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey:
+                  urlBase64ToUint8Array(applicationServerKey),
+              });
+              console.log('Push Subscription:', subscription);
+              const authKey = subscription.getKey('auth') || new ArrayBuffer(0);
+              const p256dhKey =
+                subscription.getKey('p256dh') || new ArrayBuffer(0);
+
+              const authBase64 = btoa(
+                String.fromCharCode(...Array.from(new Uint8Array(authKey))),
+              );
+              const p256dhBase64 = btoa(
+                String.fromCharCode(...Array.from(new Uint8Array(p256dhKey))),
+              );
+
+              await fetch( `${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  endpoint: subscription.endpoint,
+                  auth: authBase64,
+                  p256dh: p256dhBase64,
+                }),
+                credentials: 'include',
+              });
+            } catch (error) {
+              if (retries === 0) {
+                console.error('최대 재시도 횟수 초과:', error);
+                throw error;
+              } else {
+                console.warn(
+                  `getDeviceToken 재시도 중... 남은 횟수: ${retries}`,
+                );
+                return retryGetDeviceToken(retries - 1);
+              }
+            }
+          };
+
+          // 최대 3번까지 디바이스 토큰 가져오기 시도
+          await retryGetDeviceToken(3);
+        } catch (error) {
+          console.error('Error during Service Worker registration:', error);
+        }
+      }
+    };
+
+    registerServiceWorker();
+  }, []);
+
   return (
     <>
       <CategoryBar
@@ -255,74 +346,74 @@ export default function ArchivePage() {
         category={category}
         setCategory={setCategory}
       />
-      <div className="ForYouContainer h-dvh overflow-hidden relative">
-          <div
-            ref={boxRef}
-            className={`outBox relative flex h-full flex-wrap ${likedButtonState ? "":"items-center"} gap-[0.7%] overflow-auto overflow-y-scroll transition-all`}
-          >
-            {!likedButtonState &&
-              isContentExist &&
-              !isLoading &&
-              itemsToRender.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  setSharedCount={setSharedCount}
-                  isOptional={true}
-                  showOnlyShareButton={true}
-                />
-              ))}
-            {!likedButtonState && !isContentExist && isLoading && <Loading />}
-            {!likedButtonState && !isContentExist && !isLoading && (
-              <div>{message}</div>
-            )}
-            {likedButtonState &&
-              isLikedPostsContentExist &&
-              !isLikedPostsLoading &&
-              likedPostsData.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  setSharedCount={setSharedCount}
-                  isOptional={true}
-                  showOnlyShareButton={true}
-                />
-              ))}
-            {likedButtonState &&
-              !isLikedPostsContentExist &&
-              isLikedPostsLoading && <Loading />}
-            {likedButtonState &&
-              !isLikedPostsContentExist &&
+      <div className="ForYouContainer relative h-dvh overflow-hidden">
+        <div
+          ref={boxRef}
+          className={`outBox relative flex h-full flex-wrap ${likedButtonState ? '' : 'items-center'} gap-[0.7%] overflow-auto overflow-y-scroll transition-all`}
+        >
+          {!likedButtonState &&
+            isContentExist &&
+            !isLoading &&
+            itemsToRender.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                isOptional={true}
+                showOnlyShareButton={true}
+              />
+            ))}
+          {!likedButtonState && !isContentExist && isLoading && <Loading />}
+          {!likedButtonState && !isContentExist && !isLoading && (
+            <div>{message}</div>
+          )}
+          {likedButtonState &&
+            isLikedPostsContentExist &&
+            !isLikedPostsLoading &&
+            likedPostsData.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                isOptional={true}
+                showOnlyShareButton={true}
+              />
+            ))}
+          {likedButtonState &&
+            !isLikedPostsContentExist &&
+            isLikedPostsLoading && <Loading />}
+          {likedButtonState &&
+            !isLikedPostsContentExist &&
             !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
-          {
-            !likedButtonState && !isLast &&
-            <div ref={bottomRef} className="w-full h-[1px]"></div>
-          }
-          {
-            likedButtonState && !isLikedPostsLast &&
-            <div ref={likedBottomRef} className="w-full h-[1px]"></div>
-          }
-          {
-            isLast  && !likedButtonState &&
-            <div className='w-full h-[50px] flex items-center justify-center'> 
-              <span className='font-[300] text-gray'> 마지막 게시글입니다. </span>
+          {!likedButtonState && !isLast && (
+            <div ref={bottomRef} className="h-[1px] w-full"></div>
+          )}
+          {likedButtonState && !isLikedPostsLast && (
+            <div ref={likedBottomRef} className="h-[1px] w-full"></div>
+          )}
+          {isLast && !likedButtonState && (
+            <div className="flex h-[50px] w-full items-center justify-center">
+              <span className="text-gray font-[300]">
+                {' '}
+                마지막 게시글입니다.{' '}
+              </span>
             </div>
-          }
-          </div>
+          )}
+        </div>
       </div>
       {isSuggestLoginModalShow && <LoginSuggestModal />}
     </>
