@@ -149,20 +149,6 @@ export default function ArchivePage() {
     }
   }, [category, likedButtonState]);
 
-  const urlBase64ToUint8Array = (base64String: string) => {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-  };
-
   useEffect(() => {
     if (likedButtonState) {
       return;
@@ -269,75 +255,6 @@ export default function ArchivePage() {
       ? postsData
       : postsData.slice(0, postsData.length - (postsData.length % layoutNum))
     : [];
-
-  useEffect(() => {
-    const registerServiceWorker = async () => {
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        try {
-          const registration = await navigator.serviceWorker.register('/sw.js');
-          console.log('Service Worker registered:', registration);
-
-          // VAPID Public Key는 Base64로 변환된 키를 사용합니다.
-          const applicationServerKey =
-            'BGXt3rdP1Kas3S2P8k5jxzIynme_i5ywPG-6fXhFL6DVkr9XTmGquoPz-_EJ7fEFtF7vbKpdps5X5RyCP7B0mcU';
-
-          // 디바이스 토큰을 재시도하면서 가져오는 함수
-          const retryGetDeviceToken = async (
-            retries: number,
-          ): Promise<void> => {
-            try {
-              const subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey:
-                  urlBase64ToUint8Array(applicationServerKey),
-              });
-              console.log('Push Subscription:', subscription);
-              const authKey = subscription.getKey('auth') || new ArrayBuffer(0);
-              const p256dhKey =
-                subscription.getKey('p256dh') || new ArrayBuffer(0);
-
-              const authBase64 = btoa(
-                String.fromCharCode(...Array.from(new Uint8Array(authKey))),
-              );
-              const p256dhBase64 = btoa(
-                String.fromCharCode(...Array.from(new Uint8Array(p256dhKey))),
-              );
-
-              await fetch( `${process.env.NEXT_PUBLIC_API_URL}/notifications/subscribe`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  endpoint: subscription.endpoint,
-                  auth: authBase64,
-                  p256dh: p256dhBase64,
-                }),
-                credentials: 'include',
-              });
-            } catch (error) {
-              if (retries === 0) {
-                console.error('최대 재시도 횟수 초과:', error);
-                throw error;
-              } else {
-                console.warn(
-                  `getDeviceToken 재시도 중... 남은 횟수: ${retries}`,
-                );
-                return retryGetDeviceToken(retries - 1);
-              }
-            }
-          };
-
-          // 최대 3번까지 디바이스 토큰 가져오기 시도
-          await retryGetDeviceToken(3);
-        } catch (error) {
-          console.error('Error during Service Worker registration:', error);
-        }
-      }
-    };
-
-    registerServiceWorker();
-  }, []);
 
   return (
     <>
