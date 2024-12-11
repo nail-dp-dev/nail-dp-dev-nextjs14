@@ -20,7 +20,7 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
   const validateNickname = (nickname: string) => {
     const nicknameRegex = /^[가-힣a-zA-Z]{4,15}$/;
     if (!nicknameRegex.test(nickname)) {
-      return '닉네임은 4~15자 한글 또는 영문 대소문자만 가능합니다.'
+      return '닉네임은 4~15자 한글 또는 영문 소문자만 가능합니다.'
     }
     for (let word of forbiddenWords) {
       if (nickname.toLowerCase().includes(word)) {
