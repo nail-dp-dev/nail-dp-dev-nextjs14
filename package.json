@@ -30,7 +30,8 @@
     "reselect": "^5.1.1",
     "sharp": "0.32.6",
     "sockjs-client": "^1.6.1",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@types/node": "^20",

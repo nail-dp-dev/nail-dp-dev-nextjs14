@@ -20,7 +20,7 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
   const validateNickname = (nickname: string) => {
     const nicknameRegex = /^[가-힣a-zA-Z]{4,15}$/;
     if (!nicknameRegex.test(nickname)) {
-      return '닉네임은 4~15자 한글 또는 영문 대소문자만 가능합니다.'
+      return '닉네임은 4~15자 한글 또는 영문 소문자만 가능합니다.'
     }
     for (let word of forbiddenWords) {
       if (nickname.toLowerCase().includes(word)) {
@@ -86,7 +86,7 @@ export default function NickNameValidation({ finalAgreement, finalPhoneNumber }:
           <span className='text-[0.6875rem] text-red font-[400]'>이미 존재하는 닉네임입니다.</span>
         )}
         {!nicknameError && isNicknameAvailable && (
-          <span className='text-[0.6875rem] text-[#3f56ff] font-[400]'>사용 가능한 닉네임입니다.</span>
+          <span className='text-[0.6875rem] text-[#B98CE0] font-[400]'>사용 가능한 닉네임입니다.</span>
         )}
       </div>
       <div className='w-[301px] h-[48px] mb-[19px] text-textDarkPurple text-[1rem]'>

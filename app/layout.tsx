@@ -4,7 +4,7 @@ import StoreProvider from '../store/providers/StoreProvider';
 import LoggedInProvider from '../store/providers/LoggedInProvider';
 import ThemeProvider from '../store/providers/ThemeProvider';
 import KakaoScript from '../components/external/KakaoScript';
-import AlarmSSEProvider from '../store/providers/AlarmSSEProvider';
+import AlarmProvider from '../store/providers/AlarmProvider';
 
 export const metadata: Metadata = {
   title: '네디플',
@@ -22,9 +22,9 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <StoreProvider>
           <LoggedInProvider>
-            <AlarmSSEProvider>
+            <AlarmProvider>
               <ThemeProvider>{children}</ThemeProvider>
-            </AlarmSSEProvider>
+            </AlarmProvider>
           </LoggedInProvider>
         </StoreProvider>
       </body>

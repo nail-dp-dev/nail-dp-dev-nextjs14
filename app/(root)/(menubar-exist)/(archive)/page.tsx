@@ -15,14 +15,13 @@ import PostBox from '../../../../components/boxes/PostBox';
 import { selectLoginStatus } from '../../../../store/slices/loginSlice';
 
 export default function ArchivePage() {
-
   const isLoggedIn = useSelector(selectLoginStatus);
   const layoutNum = useSelector(selectNumberOfBoxes);
   const size = getPostsNumber[layoutNum].number;
 
   const [isSuggestLoginModalShow, setIsSuggestLoginModalShow] =
     useState<boolean>(false);
-  
+
   const [isFirstRendering, setIsFirstRendering] = useState<boolean>(true);
   const [category, setCategory] = useState<string>('');
   const [isLast, setIsLast] = useState<boolean>(false);
@@ -52,9 +51,19 @@ export default function ArchivePage() {
   const fetchMorePosts = async () => {
     const currentCursorId = cursorId;
 
-    let data = await getAllPostsData({ category, size, cursorId: currentCursorId, isFirstRendering });
+    let data = await getAllPostsData({
+      category,
+      size,
+      cursorId: currentCursorId,
+      isFirstRendering,
+    });
 
-    if (data.code === 2000 && data.data.postSummaryList.content.length !== 0 && isLoggedIn === 'loggedIn' || 'loggedOut') {
+    if (
+      (data.code === 2000 &&
+        data.data.postSummaryList.content.length !== 0 &&
+        isLoggedIn === 'loggedIn') ||
+      'loggedOut'
+    ) {
       setIsLoading(true);
       setCursorId(data.data.cursorId);
       setPostsData((prev: PostArray[]) => [
@@ -79,10 +88,14 @@ export default function ArchivePage() {
   };
 
   const fetchMorePostsByLikedButton = async () => {
-
     const currentCursorId = cursorLikedId;
 
-    let data = await getLikedPosts({ category, size, cursorLikedId:currentCursorId, isLikedPostsFirstRendering});
+    let data = await getLikedPosts({
+      category,
+      size,
+      cursorLikedId: currentCursorId,
+      isLikedPostsFirstRendering,
+    });
 
     if (data.code === 2000 && data.data.postSummaryList.content.length !== 0) {
       setIsLikedPostsLoading(true);
@@ -118,7 +131,7 @@ export default function ArchivePage() {
     setIsLast(false);
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (isLoggedIn === 'loggedIn') {
       setCategory('foryou');
     } else if (isLoggedIn === 'loggedOut') {
@@ -153,7 +166,7 @@ export default function ArchivePage() {
           !isLast &&
           !isLoading &&
           isContentExist &&
-          !likedButtonState 
+          !likedButtonState
         ) {
           fetchMorePosts();
         }
@@ -212,15 +225,10 @@ export default function ArchivePage() {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isLikedPostsLoading,
-    cursorLikedId,
-    isLikedPostsLast,
-    likedButtonState,
-  ]);
+  }, [isLikedPostsLoading, cursorLikedId, isLikedPostsLast, likedButtonState]);
 
   useEffect(() => {
-    if (!likedButtonState ) {
+    if (!likedButtonState) {
       setCursorId(0);
       setMessage('');
       setIsContentExist(false);
@@ -230,7 +238,7 @@ export default function ArchivePage() {
       setIsLast(false);
     }
 
-    if (likedButtonState ) {
+    if (likedButtonState) {
       setCursorLikedId(0);
       setLikedPostsMessage('');
       setIsLikedPostsContentExist(false);
@@ -255,74 +263,74 @@ export default function ArchivePage() {
         category={category}
         setCategory={setCategory}
       />
-      <div className="ForYouContainer h-dvh overflow-hidden relative">
-          <div
-            ref={boxRef}
-            className={`outBox relative flex h-full flex-wrap ${likedButtonState ? "":"items-center"} gap-[0.7%] overflow-auto overflow-y-scroll transition-all`}
-          >
-            {!likedButtonState &&
-              isContentExist &&
-              !isLoading &&
-              itemsToRender.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  setSharedCount={setSharedCount}
-                  isOptional={true}
-                  showOnlyShareButton={true}
-                />
-              ))}
-            {!likedButtonState && !isContentExist && isLoading && <Loading />}
-            {!likedButtonState && !isContentExist && !isLoading && (
-              <div>{message}</div>
-            )}
-            {likedButtonState &&
-              isLikedPostsContentExist &&
-              !isLikedPostsLoading &&
-              likedPostsData.map((item, index) => (
-                <PostBox
-                  key={index}
-                  postId={item.postId}
-                  photoId={item.photoId}
-                  photoUrl={item.photoUrl}
-                  like={item.like}
-                  saved={item.saved}
-                  createdDate={item.createdDate}
-                  boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'} 
-                  setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
-                  setSharedCount={setSharedCount}
-                  isOptional={true}
-                  showOnlyShareButton={true}
-                />
-              ))}
-            {likedButtonState &&
-              !isLikedPostsContentExist &&
-              isLikedPostsLoading && <Loading />}
-            {likedButtonState &&
-              !isLikedPostsContentExist &&
+      <div className="ForYouContainer relative h-dvh overflow-hidden">
+        <div
+          ref={boxRef}
+          className={`outBox relative flex h-full flex-wrap ${likedButtonState ? '' : 'items-center'} gap-[0.7%] overflow-auto overflow-y-scroll transition-all`}
+        >
+          {!likedButtonState &&
+            isContentExist &&
+            !isLoading &&
+            itemsToRender.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                isOptional={true}
+                showOnlyShareButton={true}
+              />
+            ))}
+          {!likedButtonState && !isContentExist && isLoading && <Loading />}
+          {!likedButtonState && !isContentExist && !isLoading && (
+            <div>{message}</div>
+          )}
+          {likedButtonState &&
+            isLikedPostsContentExist &&
+            !isLikedPostsLoading &&
+            likedPostsData.map((item, index) => (
+              <PostBox
+                key={index}
+                postId={item.postId}
+                photoId={item.photoId}
+                photoUrl={item.photoUrl}
+                like={item.like}
+                saved={item.saved}
+                createdDate={item.createdDate}
+                boundary={item.boundary as 'ALL' | 'FOLLOW' | 'NONE'}
+                setIsSuggestLoginModalShow={setIsSuggestLoginModalShow}
+                setSharedCount={setSharedCount}
+                isOptional={true}
+                showOnlyShareButton={true}
+              />
+            ))}
+          {likedButtonState &&
+            !isLikedPostsContentExist &&
+            isLikedPostsLoading && <Loading />}
+          {likedButtonState &&
+            !isLikedPostsContentExist &&
             !isLikedPostsLoading && <div>{likedPostsMessage}</div>}
-          {
-            !likedButtonState && !isLast &&
-            <div ref={bottomRef} className="w-full h-[1px]"></div>
-          }
-          {
-            likedButtonState && !isLikedPostsLast &&
-            <div ref={likedBottomRef} className="w-full h-[1px]"></div>
-          }
-          {
-            isLast  && !likedButtonState &&
-            <div className='w-full h-[50px] flex items-center justify-center'> 
-              <span className='font-[300] text-gray'> 마지막 게시글입니다. </span>
+          {!likedButtonState && !isLast && (
+            <div ref={bottomRef} className="h-[1px] w-full"></div>
+          )}
+          {likedButtonState && !isLikedPostsLast && (
+            <div ref={likedBottomRef} className="h-[1px] w-full"></div>
+          )}
+          {isLast && !likedButtonState && (
+            <div className="flex h-[50px] w-full items-center justify-center">
+              <span className="text-gray font-[300]">
+                {' '}
+                마지막 게시글입니다.{' '}
+              </span>
             </div>
-          }
-          </div>
+          )}
+        </div>
       </div>
       {isSuggestLoginModalShow && <LoginSuggestModal />}
     </>
